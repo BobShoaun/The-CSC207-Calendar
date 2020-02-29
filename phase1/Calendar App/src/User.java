@@ -1,5 +1,6 @@
 /**
  * User class
+ * @author Ng Bob Shoaun
  */
 public class User {
 

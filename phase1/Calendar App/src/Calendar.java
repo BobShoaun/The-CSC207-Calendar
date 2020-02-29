@@ -3,9 +3,6 @@
  */
 public class Calendar {
 
-    private Event[] events;
-    private Series[] series;
-
     public Calendar () {
 
     }
