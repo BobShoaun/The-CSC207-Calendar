@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -46,7 +45,7 @@ public class Calendar {
      * @param date Date during which the event should occur
      * @return A list of events which occur at that time
      */
-    public List<Event> getEvents(LocalDate date){
+    public List<Event> getEvents(Date date){
         List<Event> toReturn = new ArrayList<>();
 
         for (EventCollection eventCollection :
@@ -63,7 +62,7 @@ public class Calendar {
      * @param end Latest time for an event to end
      * @return List of all events where start point <= end and end point >= start
      */
-    public List<Event> getEvents(LocalDate start, LocalDate end){
+    public List<Event> getEvents(Date start, Date end){
         List<Event> toReturn = new ArrayList<>();
 
         for (EventCollection eventCollection :
@@ -80,18 +79,25 @@ public class Calendar {
      * @param start The earlist possible start time of the returned events
      * @return Null if no event collections exist, otherwise an Iterator<Event>
      */
-    public Iterator<Event> getFutureEvents(LocalDate start){
+    public Iterator<Event> getFutureEvents(Date start){
         if(eventCollections.size() == 0) {
             return null;
         }
         return new EventIterator(start);
     }
 
+    public Event getEvent(String id){
+        for (EventCollection eventCollection :
+                eventCollections) {
+            Event event = eventCollection.getEvent(id);
+        }
+    }
+
     /**
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
-        LocalDate current;
+        Date current;
         List<Iterator<Event>> eventCollectionEventIterators;
         List<Event> possibleNext;
 
@@ -101,7 +107,7 @@ public class Calendar {
          * This will not observe changes to the number of event collections so a new one must be created after that occurs
          * @param start The earliest possible time for an event
          */
-        public EventIterator(LocalDate start){
+        public EventIterator(Date start){
             current = start;
             eventCollectionEventIterators = new ArrayList<>();
             possibleNext = new ArrayList<>();
@@ -156,7 +162,7 @@ public class Calendar {
             for (Event event :
                     possibleNext) {
                 if (event != null){
-                    if(first == null || first.getStartDate().isAfter(event.getStartDate())){
+                    if(first == null || first.getStartDate().after(event.getStartDate())){
                         first = event;
                         index = possibleNext.indexOf(event);
                     }
