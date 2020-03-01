@@ -1,10 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Calendar class
  */
 public class Calendar {
 
-    public Calendar () {
+    List<EventCollection> eventCollections;
+    List<AlertCollection> alertCollections;
+    List<MT> memos;
+    List<MT> tags;
 
+    public Calendar () {
+        eventCollections = new ArrayList<>();
+        alertCollections = new ArrayList<>();
+        memos = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     public void getPastEvents () {}
