@@ -1,17 +1,17 @@
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Event class
  */
 public class Event {
 
-    private int id;
+    private String id;
     private String name;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
 
-    public Event (int id, String name, LocalDate startDate, LocalDate endDate) {
+    public Event (String id, String name, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -22,5 +22,5 @@ public class Event {
         return name;
     }
 
-    public LocalDate getStartDate() {return startDate; }
+    public Date getStartDate() {return startDate; }
 }
