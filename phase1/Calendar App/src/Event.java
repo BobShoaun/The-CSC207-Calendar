@@ -22,4 +22,5 @@ public class Event {
         return name;
     }
 
+    public LocalDate getStartDate() {return startDate; }
 }
