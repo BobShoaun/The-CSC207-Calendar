@@ -1,7 +1,6 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class EventCollection implements Serializable
 {
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> events;
     private String name;
 
     /**
