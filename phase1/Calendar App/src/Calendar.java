@@ -147,40 +147,40 @@ public class Calendar {
 
     /**
      * Add a single alert to an event
-     * @param name The name of the alert to be added
+     * @param alertName The name of the alert to be added
      * @param time The time of the alert to be added
      * @param eventId id of connected event
      */
-    public void addAlert(String name, Date time, String eventId){
+    public void addAlert(String alertName, Date time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)) {
-                alertCollection.addAlert(name, time);
+            if (alertCollection.getEventId().equals(eventId) && alertCollection.getName().equals(alertName)) {
+                alertCollection.addAlert(time);
                 return;
             }
         }
-        AlertCollection alertCollection = new AlertCollection(eventId);
-        alertCollection.addAlert(name, time);
+        AlertCollection alertCollection = new AlertCollection(alertName);
+        alertCollection.addAlert(time);
         alertCollections.add(alertCollection);
     }
 
     /**
      * Add a repeating alert to the event
-     * @param name The name of the alert
+     * @param alertName The name of the alert
      * @param start The relative start time of the alert
      * @param period The time between repeating alerts starting from the relative start time
      * @param eventId The event this alert should be linked to
      */
-    public void addAlert(String name, Date start, Date period, String eventId){
+    public void addAlert(String alertName, Date start, Date period, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)) {
-                alertCollection.addAlert(name, start, period);
+            if (alertCollection.getEventId().equals(eventId) && alertCollection.getName().equals(alertName)) {
+                alertCollection.addAlert(start, period);
                 return;
             }
         }
-        AlertCollection alertCollection = new AlertCollection(eventId);
-        alertCollection.addAlert(name, start, period);
+        AlertCollection alertCollection = new AlertCollection(eventId, alertName);
+        alertCollection.addAlert(start, period);
         alertCollections.add(alertCollection);
     }
 

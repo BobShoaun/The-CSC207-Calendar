@@ -27,7 +27,7 @@ public class AlertCollection {
         manAlerts.add(a);
     }
 
-    public void addAlert(String name, Date time) {
+    public void addAlert(Date time) {
         throw new NotImplementedException();
     }
 
@@ -39,7 +39,7 @@ public class AlertCollection {
         throw new NotImplementedException();
     }
 
-    public void addAlert(String name, Date start, Date period) {
+    public void addAlert(Date start, Date period) {
         throw new NotImplementedException();
     }
 
