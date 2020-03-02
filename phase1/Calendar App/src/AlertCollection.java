@@ -14,25 +14,37 @@ public class AlertCollection {
     private String name;
     private DateGenerator dg;
 
-    public AlertCollection(String eventId, String name, DateGenerator dg) {
+    public AlertCollection(String eventId, String name) {
         this.eventId = eventId;
         this.name = name;
-        this.dg = dg;
     }
 
-    public String getEventId(){return eventId;}
+    public String getEventId() {
+        return eventId;
+    }
 
     public void addAlert(Alert a) {
         manAlerts.add(a);
     }
 
-    public void addAlert(String name, Date time){throw new NotImplementedException();}
+    public void addAlert(String name, Date time) {
+        throw new NotImplementedException();
+    }
 
     public boolean removeAlert(Alert a) {
         return manAlerts.remove(a);
     }
 
-    public List<Alert> getAlerts(Date start, Date end){ throw new NotImplementedException(); }
+    public List<Alert> getAlerts(Date start, Date end) {
+        throw new NotImplementedException();
+    }
 
-    public void addAlert(String name, Date start, Date period) { throw new NotImplementedException(); }
+    public void addAlert(String name, Date start, Date period) {
+        throw new NotImplementedException();
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }
