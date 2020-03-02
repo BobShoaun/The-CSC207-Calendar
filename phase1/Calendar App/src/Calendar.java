@@ -108,15 +108,15 @@ public class Calendar {
      * @param event Event to add
      * @param seriesId Series to add to
      */
-    public void createEvent(Event event, String seriesId){
+    public void createEvent(Event event, String seriesId) throws InvalidArgumentException {
         for (EventCollection eventCollection :
                 eventCollections) {
-            if (eventCollection.getName() == seriesId) {
+            if (eventCollection.getName().equals(seriesId)) {
                 eventCollection.addEvent(event);
-                return
+                return;
             }
         }
-        throw new InvalidArgumentException();
+        throw new InvalidArgumentException(new String[0]);
     }
 
     /**
@@ -154,7 +154,7 @@ public class Calendar {
             // Checks if any event is still cached
             for (Event event :
                     possibleNext) {
-                if (event != null)){
+                if (event != null){
                     return true;
                 }
             }
