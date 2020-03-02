@@ -12,8 +12,11 @@ public class EventCollection implements Serializable
     private ArrayList<Event> events = new ArrayList<>();
     private String name = null;
 
+    public String getName(){return name;}
+
     public Event getEvent(String id){ throw new NotImplementedException(); };
     public List<Event> getEvents(Date date) {throw new NotImplementedException(); }
     public List<Event> getEvents(Date start, Date end) {throw new NotImplementedException();}
     public Iterator<Event> getEventIterator(Date start) {throw new NotImplementedException();}
+    public void addEvent(Event event){throw new NotImplementedException();}
 }

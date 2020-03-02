@@ -1,3 +1,5 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.*;
 
 /**
@@ -86,11 +88,35 @@ public class Calendar {
         return new EventIterator(start);
     }
 
+    /**
+     * Will return the event with the given id.
+     * @param id ID of the requested event
+     * @return Return the event, if not found return null;
+     */
     public Event getEvent(String id){
         for (EventCollection eventCollection :
                 eventCollections) {
             Event event = eventCollection.getEvent(id);
+            if(event != null)
+                return event;
         }
+        return null;
+    }
+
+    /**
+     * Add an event to the correct event collection
+     * @param event Event to add
+     * @param seriesId Series to add to
+     */
+    public void createEvent(Event event, String seriesId){
+        for (EventCollection eventCollection :
+                eventCollections) {
+            if (eventCollection.getName() == seriesId) {
+                eventCollection.addEvent(event);
+                return
+            }
+        }
+        throw new InvalidArgumentException();
     }
 
     /**
