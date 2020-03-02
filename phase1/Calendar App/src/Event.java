@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.Date;
 
 /**
@@ -23,4 +25,8 @@ public class Event {
     }
 
     public Date getStartDate() {return startDate; }
+
+    public boolean hasTag(MT tag) {
+        throw new NotImplementedException();
+    }
 }
