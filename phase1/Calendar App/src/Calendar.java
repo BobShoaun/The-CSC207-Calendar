@@ -1,4 +1,6 @@
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import org.omg.CORBA.DynAnyPackage.Invalid;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -18,6 +20,7 @@ public class Calendar {
      */
     public Calendar() {
         eventCollections = new ArrayList<>();
+        eventCollections.add(new EventCollection("", new ArrayList<>()));
         alertCollections = new ArrayList<>();
         memos = new ArrayList<>();
         tags = new ArrayList<>();
@@ -159,7 +162,7 @@ public class Calendar {
                 return;
             }
         }
-        AlertCollection alertCollection = new AlertCollection(alertName);
+        AlertCollection alertCollection = new AlertCollection(eventId, alertName);
         alertCollection.addAlert(time);
         alertCollections.add(alertCollection);
     }
@@ -184,6 +187,102 @@ public class Calendar {
         alertCollections.add(alertCollection);
     }
 
+    /**
+     * Move an event to a series from another series. If the event is already part of that series nothing changes
+     * @param eventId The id of the event to move
+     * @param seriesName The name of the new series to add it to
+     */
+    public void addToSeries(String eventId, String seriesName) throws InvalidArgumentException {
+        EventCollection from = null;
+        EventCollection eventCollection = null;
+        Event event = null;
+        for (EventCollection eC :
+                eventCollections) {
+            if(eC.getName().equals(seriesName)){
+                eventCollection = eC;
+            }
+            if(eC.getEvent(eventId) != null){
+                from = eC;
+                event = eC.getEvent(eventId);
+            }
+        }
+        if(eventCollection == null || event == null){
+            throw new InvalidArgumentException(new String[0]);
+        }
+        from.removeEvent(event);
+        eventCollection.addEvent(event);
+    }
+
+    /**
+     * Remove an event from a series and put in the collection series with no name
+     * @param eventId The event to move
+     * @throws InvalidArgumentException If the event collection or the event can not be found
+     */
+    public void removeFromSeries(String eventId) throws InvalidArgumentException{
+        EventCollection from = null;
+        EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
+        Event event = null;
+        for (EventCollection eventCollection :
+                eventCollections) {
+            event = eventCollection.getEvent(eventId);
+            if(event != null){
+                from = eventCollection;
+                break;
+            }
+        }
+        if(event == null){
+            throw new InvalidArgumentException(new String[0]);
+        }
+        from.removeEvent(event);
+        to.addEvent(event);
+    }
+
+    /**
+     * Add an event series either to an existing series or it creates a new series
+     * @param name Name of the event collection it is added to
+     * @param start Time of the first repeating event
+     * @param end No event will occur after this time. Can be null if event will go on for ever
+     * @param difference The time difference between two created events
+     * @param baseEvent The event on which the other events will be based
+     */
+    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent){
+        for (EventCollection eventCollection :
+                eventCollections) {
+            if (eventCollection.getName().equals(name)) {
+                eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
+                return;
+            }
+        }
+        EventCollection eventCollection = new EventCollection(name, new ArrayList<>());
+        eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
+        eventCollections.add(eventCollection);
+    }
+
+    /**
+     * Make an event within an existing series into a new repeating event either within the same series or within a new one
+     * @param eventId Id of the event
+     * @param end No event will be created after this time. Can be null if there is no end time
+     * @param difference The time difference between two created events
+     * @throws InvalidArgumentException Will throw when no event collection was found
+     */
+    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws InvalidArgumentException {
+        for (EventCollection eventCollection :
+                eventCollections) {
+            if (eventCollection.getEvent(eventId) != null)
+            {
+                if(!eventCollection.getName().equals(seriesName)){
+                    Event event =  eventCollection.getEvent(eventId);
+                    eventCollection.removeEvent(event);
+                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>());
+                    addEventSeries(seriesName, event.getStartDate(), end, difference, event);
+                } else{
+                    eventCollection.makeEventToSeries(eventId, end, difference);
+                }
+                return;
+            }
+        }
+        throw new InvalidArgumentException(new String[0]);
+    }
 
     /**
      * Get all memos stored in this calendar
@@ -193,7 +292,6 @@ public class Calendar {
     public List<MT> getMemos() {
         return memos;
     }
-
 
     /**
      * Event Iterator is used to iterate over the individual event collections to get the next time

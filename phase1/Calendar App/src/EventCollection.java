@@ -57,4 +57,14 @@ public class EventCollection implements Serializable
      * @param event the event to be added
      */
     public void addEvent(Event event){this.events.add(event);}
+
+    public void removeEvent(Event event){throw new NotImplementedException();}
+
+    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) {
+        throw new NotImplementedException();
+    }
+
+    public void makeEventToSeries(String eventId, Date end, Date frequency) {
+        throw new NotImplementedException();
+    }
 }
