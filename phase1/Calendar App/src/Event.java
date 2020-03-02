@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import javax.lang.model.element.NestingKind;
 import java.util.Date;
 import java.util.Observable;
@@ -72,8 +74,9 @@ public class Event implements Observer{
      */
     public Date getDuration() {
         long dur = startDate.getTime() - endDate.getTime();
-        Date durDate = new Date(dur);
+        return new Date(dur);
     }
 
+    public void update(Observable o, Object arg) { throw new NotImplementedException(); }
 
 }
