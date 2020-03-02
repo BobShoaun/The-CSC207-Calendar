@@ -106,7 +106,7 @@ public class Calendar {
     /**
      * Add an event to the correct event collection
      * @param event Event to add
-     * @param seriesId Series to add to
+     * @param seriesId Series to add event to
      */
     public void createEvent(Event event, String seriesId) throws InvalidArgumentException {
         for (EventCollection eventCollection :
@@ -117,6 +117,33 @@ public class Calendar {
             }
         }
         throw new InvalidArgumentException(new String[0]);
+    }
+
+    /**
+     * Return sorted alerts which occur in [start, end]
+     * @param start The inclusive start time
+                * @param end The inclusive end time
+     * @return All alerts in sorted order
+     */
+        public List<Alert> getAlerts(Date start, Date end){
+            List<Alert> alerts = new ArrayList<>();
+
+            for (AlertCollection alertCollection :
+                    alertCollections) {
+                alerts.addAll(alertCollection.getAlerts(start, end));
+            }
+
+            alerts.sort(new AlertComparator());
+
+        return alerts;
+    }
+
+    /**
+     * Get all memos stored in this calendar
+     * @return An unsorted list of memos
+     */
+    public List<MT> getMemos(){
+        return memos;
     }
 
     /**
@@ -146,7 +173,7 @@ public class Calendar {
         }
 
         /**
-         * Returns true if any of the indiviudal event collection event iterators still has an item
+         * Returns true if any of the individualS event collection event iterators still has an item
          * @return If there are further events in the future
          */
         @Override
