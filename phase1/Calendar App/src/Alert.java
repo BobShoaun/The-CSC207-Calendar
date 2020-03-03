@@ -9,9 +9,8 @@ public class Alert {
 
     private GregorianCalendar time;
 
-    public Alert(Date time) {
-        this.time = new GregorianCalendar();
-        this.time.setTime(time);
+    public Alert(GregorianCalendar time) {
+        this.time = time;
     }
 
     public Date getTime() {
