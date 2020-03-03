@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.lang.model.element.NestingKind;
 import java.util.Date;
 import java.util.Observable;
@@ -83,7 +81,7 @@ public class Event implements Observer{
      * @param arg
      */
     public void update(Observable o, Object arg) {
-        throw new NotImplementedException();
+
     }
 
     public String getId() {

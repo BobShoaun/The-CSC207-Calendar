@@ -1,10 +1,15 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * UserManager class
  * @author Ng Bob Shoaun
  */
-public class UserManager {
+public class UserManager extends TextFileSerializer{
 
     private ArrayList<User> users;
     private User currentUser;
@@ -14,8 +19,36 @@ public class UserManager {
         currentUser = null;
     }
 
-    private void loadUsers () {
+    public void loadUsers () {
+        Scanner scanner = loadScannerFromFile("Resources/users.txt");
+        while (scanner.hasNext())
+            users.add(new User(scanner.nextLine()));
+    }
 
+    public void saveUsers() {
+        List<String> parsedUsers = new ArrayList<>();
+        for (User user : users)
+            parsedUsers.add(user.parse());
+        saveToFile("Resources/users.txt", parsedUsers);
+    }
+
+    public void displayUsers () {
+        for (User user : users)
+            System.out.println(user);
+    }
+
+    public static void main (String[] args) {
+        System.out.println("Hello calendar");
+        UserManager um = new UserManager();
+        um.loadUsers();
+        um.displayUsers();
+        try {
+            um.registerUser("Dog", "woofwoofwoof", "woofwoofwoof");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        um.displayUsers();
+        um.saveUsers();
     }
 
     public boolean loginUser (String username, String password) {
@@ -34,7 +67,7 @@ public class UserManager {
             throw new PasswordMismatchException();
 
         for (User user : users)
-            if (user.getName() == username)
+            if (user.getName().equals(username))
                 throw new UsernameTakenException ();
 
         users.add(new User(username, password, new Calendar()));

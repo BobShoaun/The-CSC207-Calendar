@@ -1,4 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -16,11 +15,11 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     // end==null means forever? up to implementation
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
-        throw new NotImplementedException();
+
     }
 
     public void addPeriod(Duration period) {
-        throw new NotImplementedException();
+
     }
 
     @Override

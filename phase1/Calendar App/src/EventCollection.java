@@ -1,4 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class EventCollection implements Serializable
 
     public String getName(){return name;}
 
-    public Event getEvent(String id){ throw new NotImplementedException(); };
+    public Event getEvent(String id){  throw new UnsupportedOperationException();}
 
     /**
      * Returns all events that is
@@ -49,8 +48,13 @@ public class EventCollection implements Serializable
         }
         return ret;
     }
-    public List<Event> getEvents(Date start, Date end) {throw new NotImplementedException();}
-    public Iterator<Event> getEventIterator(Date start) {throw new NotImplementedException();}
+    public List<Event> getEvents(Date start, Date end) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Iterator<Event> getEventIterator(Date start) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * add an event to this list
@@ -58,17 +62,19 @@ public class EventCollection implements Serializable
      */
     public void addEvent(Event event){this.events.add(event);}
 
-    public void removeEvent(Event event){throw new NotImplementedException();}
+    public void removeEvent(Event event){
+
+    }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) {
-        throw new NotImplementedException();
+
     }
 
     public void makeEventToSeries(String eventId, Date end, Date frequency) {
-        throw new NotImplementedException();
+
     }
 
     public void addTag(String eventId, MT tag) {
-        throw new NotImplementedException();
+
     }
 }
