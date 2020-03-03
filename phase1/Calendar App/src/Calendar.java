@@ -1,5 +1,6 @@
 import java.lang.IllegalArgumentException;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -135,7 +136,7 @@ public class Calendar {
      * @param end   The inclusive end time
      * @return All alerts in sorted order
      */
-    public List<Alert> getAlerts(Date start, Date end) {
+    public List<Alert> getAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new ArrayList<>();
 
         for (AlertCollection alertCollection :
@@ -150,39 +151,42 @@ public class Calendar {
 
     /**
      * Add a single alert to an event
-     * @param alertName The name of the alert to be added
      * @param time The time of the alert to be added
      * @param eventId id of connected event
      */
-    public void addAlert(String alertName, Date time, String eventId){
+    public void addAlert(GregorianCalendar time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.getEventId().equals(eventId) && alertCollection.getName().equals(alertName)) {
+            if (alertCollection.getEventId().equals(eventId)) {
                 alertCollection.addAlert(time);
                 return;
             }
         }
-        AlertCollection alertCollection = new AlertCollection(eventId, alertName);
+
+        AlertCollection alertCollection = new AlertCollection(getEvent(eventId));
         alertCollection.addAlert(time);
         alertCollections.add(alertCollection);
     }
 
     /**
      * Add a repeating alert to the event
-     * @param alertName The name of the alert
      * @param start The relative start time of the alert
      * @param period The time between repeating alerts starting from the relative start time
      * @param eventId The event this alert should be linked to
      */
-    public void addAlert(String alertName, Date start, Date period, String eventId){
+    public void addAlert(GregorianCalendar start, Duration period, String eventId) throws IteratorAlreadySetException {
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.getEventId().equals(eventId) && alertCollection.getName().equals(alertName)) {
+            if (alertCollection.getEventId().equals(eventId)) {
                 alertCollection.addAlert(start, period);
                 return;
             }
         }
-        AlertCollection alertCollection = new AlertCollection(eventId, alertName);
+        Event event = getEvent(eventId);
+        if(event == null){
+            throw new IllegalArgumentException();
+        }
+        AlertCollection alertCollection = new AlertCollection(event);
         alertCollection.addAlert(start, period);
         alertCollections.add(alertCollection);
     }
@@ -317,7 +321,7 @@ public class Calendar {
      * @return The iterator overall events. This will become invalid if new event collections or individual events are manipulated
      */
     public Iterator<Event> searchEvents(Date start, MT tag){
-        return new EventIterator(start, e -> e.hasTag(tag));
+        return new EventIterator(start, e -> tag.hasEvent(e.getName()));
     }
 
     /**
@@ -326,7 +330,7 @@ public class Calendar {
      * @throws IllegalArgumentException If a memo with the same text already exists
      */
     public void addMemo(String text) throws IllegalArgumentException {
-        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch()){
+        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch(mt -> true)){
             throw new IllegalArgumentException();
         }
         memos.add(new MT(text));
