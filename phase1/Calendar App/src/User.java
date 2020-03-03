@@ -1,8 +1,10 @@
+import java.io.Serializable;
+
 /**
  * User class
  * @author Ng Bob Shoaun
  */
-public class User {
+public class User implements TextFileSerializable<User> {
 
     private String name;
     private String password;
@@ -20,4 +22,13 @@ public class User {
         return this.name == name && this.password == password;
     }
 
+    @Override
+    public User deserialize(String text) {
+
+    }
+
+    @Override
+    public String serialize(User obj) {
+
+    }
 }
