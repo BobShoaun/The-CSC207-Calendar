@@ -1,4 +1,4 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
+import java.lang.IllegalArgumentException;
 import org.omg.CORBA.DynAnyPackage.Invalid;
 import sun.java2d.pipe.hw.AccelDeviceEventNotifier;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -120,7 +120,7 @@ public class Calendar {
      * @param event    Event to add
      * @param seriesId Series to add event to
      */
-    public void createEvent(Event event, String seriesId) throws InvalidArgumentException {
+    public void createEvent(Event event, String seriesId) throws IllegalArgumentException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getName().equals(seriesId)) {
@@ -128,7 +128,7 @@ public class Calendar {
                 return;
             }
         }
-        throw new InvalidArgumentException(new String[0]);
+        throw new IllegalArgumentException(new String[0]);
     }
 
     /**
@@ -195,7 +195,7 @@ public class Calendar {
      * @param eventId The id of the event to move
      * @param seriesName The name of the new series to add it to
      */
-    public void addToSeries(String eventId, String seriesName) throws InvalidArgumentException {
+    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException {
         EventCollection from = null;
         EventCollection eventCollection = null;
         Event event = null;
@@ -210,7 +210,7 @@ public class Calendar {
             }
         }
         if(eventCollection == null || event == null){
-            throw new InvalidArgumentException(new String[0]);
+            throw new IllegalArgumentException(new String[0]);
         }
         from.removeEvent(event);
         eventCollection.addEvent(event);
@@ -219,9 +219,9 @@ public class Calendar {
     /**
      * Remove an event from a series and put in the collection series with no name
      * @param eventId The event to move
-     * @throws InvalidArgumentException If the event collection or the event can not be found
+     * @throws IllegalArgumentException If the event collection or the event can not be found
      */
-    public void removeFromSeries(String eventId) throws InvalidArgumentException{
+    public void removeFromSeries(String eventId) throws IllegalArgumentException{
         EventCollection from = null;
         EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
         Event event = null;
@@ -234,7 +234,7 @@ public class Calendar {
             }
         }
         if(event == null){
-            throw new InvalidArgumentException(new String[0]);
+            throw new IllegalArgumentException(new String[0]);
         }
         from.removeEvent(event);
         to.addEvent(event);
@@ -266,9 +266,9 @@ public class Calendar {
      * @param eventId Id of the event
      * @param end No event will be created after this time. Can be null if there is no end time
      * @param difference The time difference between two created events
-     * @throws InvalidArgumentException Will throw when no event collection was found
+     * @throws IllegalArgumentException Will throw when no event collection was found
      */
-    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws InvalidArgumentException {
+    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getEvent(eventId) != null)
@@ -284,16 +284,16 @@ public class Calendar {
                 return;
             }
         }
-        throw new InvalidArgumentException(new String[0]);
+        throw new IllegalArgumentException(new String[0]);
     }
 
     /**
      * Creates a new tag or add an existing tag to an event
      * @param eventId Event the tag is added to
      * @param tagName Name of the tag to be added
-     * @throws InvalidArgumentException If the event cannot be found
+     * @throws IllegalArgumentException If the event cannot be found
      */
-    public void tagEvent(String eventId, String tagName) throws InvalidArgumentException {
+    public void tagEvent(String eventId, String tagName) throws IllegalArgumentException {
         MT tag;
         Optional<MT> optionalTag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny();
         if(!optionalTag.isPresent()){
@@ -310,7 +310,7 @@ public class Calendar {
                 return;
             }
         }
-        throw new InvalidArgumentException(new String[0]);
+        throw new IllegalArgumentException(new String[0]);
     }
 
     /**
@@ -326,11 +326,11 @@ public class Calendar {
     /**
      * Add a new memo to the system
      * @param text The text of the new memo
-     * @throws InvalidArgumentException If a memo with the same text already exists
+     * @throws IllegalArgumentException If a memo with the same text already exists
      */
-    public void addMemo(String text) throws InvalidArgumentException {
+    public void addMemo(String text) throws IllegalArgumentException {
         if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch()){
-            throw new InvalidArgumentException(new String[0]);
+            throw new IllegalArgumentException(new String[0]);
         }
         memos.add(new MT(text));
     }
@@ -339,12 +339,12 @@ public class Calendar {
      * Link new event to a memo
      * @param memoText The memo to add the event to. The memo must already exist
      * @param eventId The id of the event. It must exist
-     * @throws InvalidArgumentException if the event or the memo does not exist
+     * @throws IllegalArgumentException if the event or the memo does not exist
      */
-    public void linkMemo(String memoText, String eventId) throws InvalidArgumentException {
+    public void linkMemo(String memoText, String eventId) throws IllegalArgumentException {
         MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
-            throw new InvalidArgumentException(new String[0]);
+            throw new IllegalArgumentException(new String[0]);
         }
         memo.addEvent(eventId);
     }
@@ -353,12 +353,12 @@ public class Calendar {
      * Remove link between event and memo
      * @param memoText The memo. It must exist
      * @param eventId The id of the event. It must exist
-     * @throws InvalidArgumentException if the event or the memo does not exist
+     * @throws IllegalArgumentException if the event or the memo does not exist
      */
-    public void unlinkMemo(String memoText, String eventId) throws InvalidArgumentException {
+    public void unlinkMemo(String memoText, String eventId) throws IllegalArgumentException {
         MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
-            throw new InvalidArgumentException(new String[0]);
+            throw new IllegalArgumentException(new String[0]);
         }
         memo.removeEvent(eventId);
     }

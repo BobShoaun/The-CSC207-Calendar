@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.util.*;
 
 public class AlertCollection {
-    // List is only for manually created Alerts.
     private List<Alert> manAlerts;
     private String eventId;
     private Date eventTime;
