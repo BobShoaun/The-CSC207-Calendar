@@ -71,10 +71,7 @@ public class AlertCollection implements Observer {
      * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(GregorianCalendar d) {
-        boolean result = removeManualAlert(d) || removeGeneratedAlert(d);
-        if (result) {
-        }
-        return result;
+        return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
     private boolean removeGeneratedAlert(GregorianCalendar d) {
@@ -94,9 +91,10 @@ public class AlertCollection implements Observer {
             return false;
         }
         GregorianCalendar newStart = new GregorianCalendar();
-        newStart.setTime(cg.getStartTime().getTime());
+        long newMillis = cg.getStartTime().getTimeInMillis() + newEventTime.getTimeInMillis() - eventTime.getTimeInMillis(); //TODO: check
+        newStart.setTimeInMillis(newMillis);
 
-        //  this.cg = new CalendarGenerator();
+        this.cg.setStartTime(newStart);
         return true;
     }
 

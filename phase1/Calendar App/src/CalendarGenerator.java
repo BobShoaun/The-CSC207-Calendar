@@ -44,4 +44,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         return endTime;
     }
 
+    public void setStartTime(GregorianCalendar startTime) {
+        this.startTime = startTime;
+    }
 }
