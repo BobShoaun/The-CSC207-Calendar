@@ -86,4 +86,7 @@ public class Event implements Observer{
         throw new NotImplementedException();
     }
 
+    public String getId() {
+        return id;
+    }
 }
