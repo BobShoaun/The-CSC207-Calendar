@@ -1,5 +1,4 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.lang.model.element.NestingKind;
 import java.util.Date;
 import java.util.Observable;
@@ -23,7 +22,7 @@ public class Event implements Observer{
      * @param startDate start time of the Event
      * @param endDate end time of the Event
      */
-    public Event (String id, String name, Date startDate, Date endDate) {
+    public Event(String id, String name, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -34,8 +33,16 @@ public class Event implements Observer{
      * Return the name of the Event
      * @return the name of the Event
      */
-    public String getName () {
+    public String getName() {
         return name;
+    }
+
+    /**
+     * Return the id of the Event
+     * @return the id of the Event
+     */
+    public String getId() {
+        return id;
     }
 
     /**
@@ -80,13 +87,11 @@ public class Event implements Observer{
     /**
      * Updates from the observable AlertCollection
      * @param o the observable AlertCollection
-     * @param arg
+     * @param arg the argument passed in from AlertCollection
      */
     public void update(Observable o, Object arg) {
         throw new NotImplementedException();
     }
 
-    public String getId() {
-        return id;
-    }
+
 }
