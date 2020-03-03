@@ -77,6 +77,13 @@ public class Event implements Observer{
         return new Date(dur);
     }
 
-    public void update(Observable o, Object arg) { throw new NotImplementedException(); }
+    /**
+     * Updates from the observable AlertCollection
+     * @param o the observable AlertCollection
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+        throw new NotImplementedException();
+    }
 
 }
