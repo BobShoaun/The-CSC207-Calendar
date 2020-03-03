@@ -128,7 +128,7 @@ public class Calendar {
                 return;
             }
         }
-        throw new IllegalArgumentException(new String[0]);
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -210,7 +210,7 @@ public class Calendar {
             }
         }
         if(eventCollection == null || event == null){
-            throw new IllegalArgumentException(new String[0]);
+            throw new IllegalArgumentException();
         }
         from.removeEvent(event);
         eventCollection.addEvent(event);
@@ -234,7 +234,7 @@ public class Calendar {
             }
         }
         if(event == null){
-            throw new IllegalArgumentException(new String[0]);
+            throw new IllegalArgumentException();
         }
         from.removeEvent(event);
         to.addEvent(event);
@@ -284,7 +284,7 @@ public class Calendar {
                 return;
             }
         }
-        throw new IllegalArgumentException(new String[0]);
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -310,7 +310,7 @@ public class Calendar {
                 return;
             }
         }
-        throw new IllegalArgumentException(new String[0]);
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -330,7 +330,7 @@ public class Calendar {
      */
     public void addMemo(String text) throws IllegalArgumentException {
         if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch()){
-            throw new IllegalArgumentException(new String[0]);
+            throw new IllegalArgumentException();
         }
         memos.add(new MT(text));
     }
@@ -344,7 +344,7 @@ public class Calendar {
     public void linkMemo(String memoText, String eventId) throws IllegalArgumentException {
         MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
-            throw new IllegalArgumentException(new String[0]);
+            throw new IllegalArgumentException();
         }
         memo.addEvent(eventId);
     }
@@ -358,7 +358,7 @@ public class Calendar {
     public void unlinkMemo(String memoText, String eventId) throws IllegalArgumentException {
         MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
-            throw new IllegalArgumentException(new String[0]);
+            throw new IllegalArgumentException();
         }
         memo.removeEvent(eventId);
     }
