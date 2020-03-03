@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.time.Duration;
 import java.util.*;
 
@@ -16,6 +14,7 @@ public class AlertCollection implements Observer {
 
     /**
      * Creates a new Alert group (possibly repeating)
+     *
      * @param e The Event attached to the Alert.
      */
     public AlertCollection(Event e) {
@@ -48,19 +47,21 @@ public class AlertCollection implements Observer {
             if (a.getTime().equals(time.getTime()))
                 return false;
         }
-        return manAlerts.add(new Alert(time));
+        manAlerts.add(new Alert(time));
+        manAlerts.sort(new AlertComparator());
+        return true;
     }
 
     /**
      * Add a recurring Alert until the Event occurs
      *
-     * @param start  The start time
-     * @param period The time between each alert
+     * @param start   The start time
+     * @param periods The time between each alert
      */
-    public void addAlert(GregorianCalendar start, Duration period) throws IteratorAlreadySetException {
+    public void addAlert(GregorianCalendar start, List<Duration> periods) throws IteratorAlreadySetException {
         if (cg != null)
             throw new IteratorAlreadySetException();
-        this.cg = new CalendarGenerator(start, period, eventTime);
+        this.cg = new CalendarGenerator(start, periods, eventTime);
     }
 
     /**
@@ -94,7 +95,7 @@ public class AlertCollection implements Observer {
         }
         GregorianCalendar newTime = (GregorianCalendar) cg.getStartTime().clone();
         newTime.add(field, amount);
-        this.cg = new CalendarGenerator(newTime, cg.getPeriod(), cg.getEndTime());
+        this.cg = new CalendarGenerator(newTime, cg.getPeriods(), cg.getEndTime());
         return true;
     }
 
@@ -126,6 +127,7 @@ public class AlertCollection implements Observer {
     public List<Alert> getAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = getManualAlerts(start, end);
         alerts.addAll(getGeneratedAlerts(start, end));
+        alerts.sort(new AlertComparator());
         return alerts;
     }
 
@@ -147,7 +149,8 @@ public class AlertCollection implements Observer {
         return alerts;
     }
 
-    public void update(Observer o, Object arg) {
-        throw new NotImplementedException();
+    @Override
+    public void update(Observable o, Object arg) {
+        //TODO: complete
     }
 }
