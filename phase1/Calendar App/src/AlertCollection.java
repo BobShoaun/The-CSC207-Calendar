@@ -86,16 +86,15 @@ public class AlertCollection implements Observer {
         return manAlerts.removeIf(a -> a.getTime().equals(d.getTime()));
     }
 
-    public boolean shiftAlerts(GregorianCalendar newEventTime) {
+    public void shiftAlerts(GregorianCalendar newEventTime) {
         if (cg == null) {
-            return false;
+            throw new IllegalStateException();
         }
         GregorianCalendar newStart = new GregorianCalendar();
-        long newMillis = cg.getStartTime().getTimeInMillis() + newEventTime.getTimeInMillis() - eventTime.getTimeInMillis(); //TODO: check
+        long diff = newEventTime.getTimeInMillis() - eventTime.getTimeInMillis();
+        long newMillis = cg.getStartTime().getTimeInMillis() + diff;
         newStart.setTimeInMillis(newMillis);
-
         this.cg.setStartTime(newStart);
-        return true;
     }
 
     /**
