@@ -55,13 +55,13 @@ public class AlertCollection implements Observer {
     /**
      * Add a recurring Alert until the Event occurs
      *
-     * @param start   The start time
-     * @param periods The time between each alert
+     * @param start  The start time
+     * @param period The time between each alert
      */
-    public void addAlert(GregorianCalendar start, List<Duration> periods) throws IteratorAlreadySetException {
+    public void addAlert(GregorianCalendar start, Duration period) throws IteratorAlreadySetException {
         if (cg != null)
             throw new IteratorAlreadySetException();
-        this.cg = new CalendarGenerator(start, periods, eventTime);
+        this.cg.addPeriod(period);
     }
 
     /**
