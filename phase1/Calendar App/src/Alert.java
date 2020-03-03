@@ -5,12 +5,11 @@
 import java.util.Date;
 
 public class Alert {
-    private Date time;
-    private String alertText;
 
-    public Alert(Date time, String alertText) {
+    private Date time;
+
+    public Alert(Date time) {
         this.time = time;
-        this.alertText = alertText;
     }
 
     public Date getTime() {
@@ -21,11 +20,4 @@ public class Alert {
         this.time = time;
     }
 
-    public String getAlertText() {
-        return alertText;
-    }
-
-    public void setAlertText(String alertText) {
-        this.alertText = alertText;
-    }
 }
