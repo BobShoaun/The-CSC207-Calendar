@@ -59,12 +59,31 @@ public class AlertCollection {
     }
 
     /**
-     * Remove a manually created Alert.
+     * Remove a single Alert.
+     *
      * @param d The date of the Alert to be removed
      * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(Date d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
+    }
+
+    /**
+     * Replace the current DateGenerator with a new one.
+     *
+     * @param dg The new DateGenerator
+     */
+    public void setDateGenerator(DateGenerator dg) {
+        this.dg = dg;
+    }
+
+    /**
+     * Get the current DateGenerator.
+     *
+     * @return The current DateGenerator
+     */
+    public DateGenerator getDateGenerator() {
+        return dg;
     }
 
     private boolean removeGeneratedAlert(Date d) {
