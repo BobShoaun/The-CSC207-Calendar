@@ -1,8 +1,11 @@
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.omg.CORBA.DynAnyPackage.Invalid;
+import sun.java2d.pipe.hw.AccelDeviceEventNotifier;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Calendar class
@@ -92,7 +95,7 @@ public class Calendar {
         if (eventCollections.size() == 0) {
             return null;
         }
-        return new EventIterator(start);
+        return new EventIterator(start, null);
     }
 
     /**
@@ -285,6 +288,91 @@ public class Calendar {
     }
 
     /**
+     * Creates a new tag or add an existing tag to an event
+     * @param eventId Event the tag is added to
+     * @param tagName Name of the tag to be added
+     * @throws InvalidArgumentException If the event cannot be found
+     */
+    public void tagEvent(String eventId, String tagName) throws InvalidArgumentException {
+        MT tag;
+        Optional<MT> optionalTag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny();
+        if(!optionalTag.isPresent()){
+            tag = new MT(tagName);
+            tags.add(tag);
+        } else{
+            tag = optionalTag.get();
+        }
+        for (EventCollection eventCollection :
+                eventCollections) {
+            if (eventCollection.getEvent(eventId) != null)
+            {
+                eventCollection.addTag(eventId, tag);
+                return;
+            }
+        }
+        throw new InvalidArgumentException(new String[0]);
+    }
+
+    /**
+     * Returns an iterator overall events sorted by start time, which have a certain tag
+     * @param start The earliest time for the events to start at
+     * @param tag The tag to search by
+     * @return The iterator overall events. This will become invalid if new event collections or individual events are manipulated
+     */
+    public Iterator<Event> searchEvents(Date start, MT tag){
+        return new EventIterator(start, e -> e.hasTag(tag));
+    }
+
+    /**
+     * Add a new memo to the system
+     * @param text The text of the new memo
+     * @throws InvalidArgumentException If a memo with the same text already exists
+     */
+    public void addMemo(String text) throws InvalidArgumentException {
+        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch()){
+            throw new InvalidArgumentException(new String[0]);
+        }
+        memos.add(new MT(text));
+    }
+
+    /**
+     * Link new event to a memo
+     * @param memoText The memo to add the event to. The memo must already exist
+     * @param eventId The id of the event. It must exist
+     * @throws InvalidArgumentException if the event or the memo does not exist
+     */
+    public void linkMemo(String memoText, String eventId) throws InvalidArgumentException {
+        MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        if(getEvent(eventId) == null){
+            throw new InvalidArgumentException(new String[0]);
+        }
+        memo.addEvent(eventId);
+    }
+
+    /**
+     * Remove link between event and memo
+     * @param memoText The memo. It must exist
+     * @param eventId The id of the event. It must exist
+     * @throws InvalidArgumentException if the event or the memo does not exist
+     */
+    public void unlinkMemo(String memoText, String eventId) throws InvalidArgumentException {
+        MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        if(getEvent(eventId) == null){
+            throw new InvalidArgumentException(new String[0]);
+        }
+        memo.removeEvent(eventId);
+    }
+
+    /**
+     * Return all memos which are attributed with a certain event
+     * @param eventId The event which memos must be linked to
+     * @return Unsorted list of memos
+     */
+    public List<MT> getMemos(String eventId){
+        return memos.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
+    }
+
+    /**
      * Get all memos stored in this calendar
      *
      * @return An unsorted list of memos
@@ -294,12 +382,21 @@ public class Calendar {
     }
 
     /**
+     * Return all events linked to a memo
+     * @param memo The memo to search by
+     * @return List of events with memo
+     */
+    public List<Event> getLinkedEvents(MT memo){
+        return memo.getEvents();
+    }
+
+    /**
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
-        Date current;
-        List<Iterator<Event>> eventCollectionEventIterators;
-        List<Event> possibleNext;
+        private Predicate<Event> isValid;
+        private List<Iterator<Event>> eventCollectionEventIterators;
+        private List<Event> possibleNext;
 
         /**
          * Initialise a new event iterator which iterates overall event collections at once returning events by their
@@ -307,9 +404,13 @@ public class Calendar {
          * This will not observe changes to the number of event collections so a new one must be created after that occurs
          *
          * @param start The earliest possible time for an event
+         * @param isValid A predicate to filer events by. Can be null
          */
-        public EventIterator(Date start) {
-            current = start;
+        public EventIterator(Date start, Predicate<Event> isValid) {
+            if(isValid == null)
+                this.isValid = e -> true;
+            else
+                this.isValid = isValid;
             eventCollectionEventIterators = new ArrayList<>();
             possibleNext = new ArrayList<>();
 
@@ -355,7 +456,16 @@ public class Calendar {
             //Update the possible next list to include values from all event collection iterators which still have events
             for (int i = 0; i < possibleNext.size(); i++) {
                 if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
-                    possibleNext.set(i, eventCollectionEventIterators.get(i).next());
+                    Event next = null;
+                    while (eventCollectionEventIterators.get(i).hasNext()){
+                        Event possible = eventCollectionEventIterators.get(i).next();
+                        if(isValid.test(possible)){
+                            next = possible;
+                            break;
+                        }
+                    }
+                    if(next != null)
+                        possibleNext.set(i, next);
                 }
             }
 

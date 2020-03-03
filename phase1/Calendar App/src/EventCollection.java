@@ -67,4 +67,8 @@ public class EventCollection implements Serializable
     public void makeEventToSeries(String eventId, Date end, Date frequency) {
         throw new NotImplementedException();
     }
+
+    public void addTag(String eventId, MT tag) {
+        throw new NotImplementedException();
+    }
 }

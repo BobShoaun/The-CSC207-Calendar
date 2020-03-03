@@ -4,6 +4,7 @@
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,12 +12,15 @@ public class AlertCollection {
     // List is only for manually created Alerts.
     private List<Alert> manAlerts;
     private String eventId;
-    private String name;
     private DateGenerator dg;
 
-    public AlertCollection(String eventId, String name) {
+    /**
+     * Creates a new Alert group (possibly repeating)
+     * @param eventId The ID of the Event attached to the Alert.
+     */
+    public AlertCollection(String eventId) {
         this.eventId = eventId;
-        this.name = name;
+        manAlerts = new ArrayList<>();
     }
 
     public String getEventId() {
@@ -28,6 +32,10 @@ public class AlertCollection {
     }
 
     public void addAlert(Date time) {
+        manAlerts.add(new Alert(time));
+    }
+
+    public void addAlert(Date start, Date period) {
         throw new NotImplementedException();
     }
 
@@ -37,14 +45,6 @@ public class AlertCollection {
 
     public List<Alert> getAlerts(Date start, Date end) {
         throw new NotImplementedException();
-    }
-
-    public void addAlert(Date start, Date period) {
-        throw new NotImplementedException();
-    }
-
-    public String getName() {
-        return name;
     }
 
 }
