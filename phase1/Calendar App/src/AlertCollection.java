@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.time.Duration;
 import java.util.*;
 
@@ -6,7 +8,7 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection extends Observable {
+public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
@@ -46,8 +48,6 @@ public class AlertCollection extends Observable {
             if (a.getTime().equals(time.getTime()))
                 return false;
         }
-        setChanged();
-        notifyObservers("Added a manual alert at " + time.toString());
         return manAlerts.add(new Alert(time));
     }
 
@@ -61,8 +61,6 @@ public class AlertCollection extends Observable {
         if (cg != null)
             throw new IteratorAlreadySetException();
         this.cg = new CalendarGenerator(start, period, eventTime);
-        setChanged();
-        notifyObservers("Added a new recurring Alert");
     }
 
     /**
@@ -74,8 +72,6 @@ public class AlertCollection extends Observable {
     public boolean removeAlert(GregorianCalendar d) {
         boolean result = removeManualAlert(d) || removeGeneratedAlert(d);
         if (result) {
-            setChanged();
-            notifyObservers("Alert at " + d.toString() + "removed.");
         }
         return result;
     }
@@ -99,8 +95,6 @@ public class AlertCollection extends Observable {
         GregorianCalendar newTime = (GregorianCalendar) cg.getStartTime().clone();
         newTime.add(field, amount);
         this.cg = new CalendarGenerator(newTime, cg.getPeriod(), cg.getEndTime());
-        setChanged();
-        notifyObservers("Shifted alerts");
         return true;
     }
 
@@ -111,8 +105,6 @@ public class AlertCollection extends Observable {
      */
     public void setCalendarGenerator(CalendarGenerator cg) {
         this.cg = cg;
-        setChanged();
-        notifyObservers("Swapped CalendarGenerator");
     }
 
     /**
@@ -153,6 +145,16 @@ public class AlertCollection extends Observable {
                 alerts.add(new Alert(d));
         }
         return alerts;
+    }
+
+    /**
+     * Updates from the observable AlertCollection
+     * @param o the observable AlertCollection
+     * @param arg the argument passed in from AlertCollection
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new NotImplementedException();
     }
 
 }

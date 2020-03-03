@@ -7,7 +7,7 @@ import java.util.Observer;
 /**
  * Event class
  */
-public class Event implements Observer{
+public class Event extends Observable{
 
     private String id;
     private String name;
@@ -49,7 +49,7 @@ public class Event implements Observer{
      * Return the start time of the Event
      * @return the startDate of the Event
      */
-    public Date getStartDate() {return startDate; }
+    public Date getStartDate() { return startDate; }
 
     /**
      * Set the name of the Event
@@ -67,13 +67,21 @@ public class Event implements Observer{
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
-    public void setStartDate(Date newStart) { this.startDate = newStart; }
+    public void setStartDate(Date newStart) {
+        this.startDate = newStart;
+        setChanged();
+        notifyObservers("Changed the start time of the event to " + newStart.toString());
+    }
 
     /**
      * Set the end time of the Event
      * @param newEnd the new endDate of the Event
      */
-    public void setEndDate(Date newEnd) { this.endDate = newEnd; }
+    public void setEndDate(Date newEnd) {
+        this.endDate = newEnd;
+        setChanged();
+        notifyObservers("Changed the end time of the event to " + newEnd.toString());
+    }
 
     /**
      * Return the duration of the Event in Date
@@ -84,14 +92,6 @@ public class Event implements Observer{
         return new Date(dur);
     }
 
-    /**
-     * Updates from the observable AlertCollection
-     * @param o the observable AlertCollection
-     * @param arg the argument passed in from AlertCollection
-     */
-    public void update(Observable o, Object arg) {
-        throw new NotImplementedException();
-    }
 
 
 }
