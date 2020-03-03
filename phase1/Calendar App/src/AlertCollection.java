@@ -89,13 +89,14 @@ public class AlertCollection implements Observer {
         return manAlerts.removeIf(a -> a.getTime().equals(d.getTime()));
     }
 
-    public boolean shiftAlerts(int field, int amount) {
+    public boolean shiftAlerts(GregorianCalendar newEventTime) {
         if (cg == null) {
             return false;
         }
-        GregorianCalendar newTime = (GregorianCalendar) cg.getStartTime().clone();
-        newTime.add(field, amount);
-        this.cg = new CalendarGenerator(newTime, cg.getPeriods(), cg.getEndTime());
+        GregorianCalendar newStart = new GregorianCalendar();
+        newStart.setTime(cg.getStartTime().getTime());
+
+        //  this.cg = new CalendarGenerator();
         return true;
     }
 
@@ -151,6 +152,9 @@ public class AlertCollection implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        //TODO: complete
+        if (arg instanceof GregorianCalendar)
+            shiftAlerts((GregorianCalendar) arg);
+        else
+            throw new IllegalArgumentException();
     }
 }
