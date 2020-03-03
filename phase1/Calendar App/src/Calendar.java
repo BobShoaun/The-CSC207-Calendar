@@ -320,7 +320,7 @@ public class Calendar {
      * @return The iterator overall events. This will become invalid if new event collections or individual events are manipulated
      */
     public Iterator<Event> searchEvents(Date start, MT tag){
-        return new EventIterator(start, e -> e.hasTag(tag));
+        return new EventIterator(start, e -> tag.hasEvent(e.getName()));
     }
 
     /**
@@ -329,7 +329,7 @@ public class Calendar {
      * @throws IllegalArgumentException If a memo with the same text already exists
      */
     public void addMemo(String text) throws IllegalArgumentException {
-        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch()){
+        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch(mt -> true)){
             throw new IllegalArgumentException();
         }
         memos.add(new MT(text));
