@@ -1,18 +1,17 @@
-//******************************************************
-//  AlertCollection.java    Author: Colin De Vlieghere
-//******************************************************
-
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class AlertCollection {
+/**
+ * A collection/group of one alert.
+ *
+ * @author colin
+ */
+public class AlertCollection extends Observable {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
     private CalendarGenerator cg;
+
     /**
      * Creates a new Alert group (possibly repeating)
      * @param e The Event attached to the Alert.
@@ -47,6 +46,8 @@ public class AlertCollection {
             if (a.getTime().equals(time.getTime()))
                 return false;
         }
+        setChanged();
+        notifyObservers("Added a manual alert at " + time.toString());
         return manAlerts.add(new Alert(time));
     }
 
@@ -60,6 +61,8 @@ public class AlertCollection {
         if (cg != null)
             throw new IteratorAlreadySetException();
         this.cg = new CalendarGenerator(start, period, eventTime);
+        setChanged();
+        notifyObservers("Added a new recurring Alert");
     }
 
     /**
@@ -69,35 +72,12 @@ public class AlertCollection {
      * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(GregorianCalendar d) {
-        return removeManualAlert(d) || removeGeneratedAlert(d);
-    }
-
-    public boolean shiftAlerts(int field, int amount) {
-        if (cg == null) {
-            return false;
+        boolean result = removeManualAlert(d) || removeGeneratedAlert(d);
+        if (result) {
+            setChanged();
+            notifyObservers("Alert at " + d.toString() + "removed.");
         }
-        GregorianCalendar newTime = (GregorianCalendar) cg.getStartTime().clone();
-        newTime.add(field, amount);
-        this.cg = new CalendarGenerator(newTime, cg.getPeriod(), cg.getEndTime());
-        return true;
-    }
-
-    /**
-     * Replace the current CalendarGenerator with a new one.
-     *
-     * @param cg The new CalendarGenerator
-     */
-    public void setCalendarGenerator(CalendarGenerator cg) {
-        this.cg = cg;
-    }
-
-    /**
-     * Get the current CalendarGenerator.
-     *
-     * @return The current CalendarGenerator
-     */
-    public CalendarGenerator getCalendarGenerator() {
-        return cg;
+        return result;
     }
 
     private boolean removeGeneratedAlert(GregorianCalendar d) {
@@ -110,6 +90,38 @@ public class AlertCollection {
 
     private boolean removeManualAlert(GregorianCalendar d) {
         return manAlerts.removeIf(a -> a.getTime().equals(d.getTime()));
+    }
+
+    public boolean shiftAlerts(int field, int amount) {
+        if (cg == null) {
+            return false;
+        }
+        GregorianCalendar newTime = (GregorianCalendar) cg.getStartTime().clone();
+        newTime.add(field, amount);
+        this.cg = new CalendarGenerator(newTime, cg.getPeriod(), cg.getEndTime());
+        setChanged();
+        notifyObservers("Shifted alerts");
+        return true;
+    }
+
+    /**
+     * Replace the current CalendarGenerator with a new one.
+     *
+     * @param cg The new CalendarGenerator
+     */
+    public void setCalendarGenerator(CalendarGenerator cg) {
+        this.cg = cg;
+        setChanged();
+        notifyObservers("Swapped CalendarGenerator");
+    }
+
+    /**
+     * Get the current CalendarGenerator.
+     *
+     * @return The current CalendarGenerator
+     */
+    public CalendarGenerator getCalendarGenerator() {
+        return cg;
     }
 
     /**
