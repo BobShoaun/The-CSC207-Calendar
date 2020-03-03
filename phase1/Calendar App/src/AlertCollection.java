@@ -48,7 +48,9 @@ public class AlertCollection extends Observable {
         }
         setChanged();
         notifyObservers("Added a manual alert at " + time.toString());
-        return manAlerts.add(new Alert(time));
+        manAlerts.add(new Alert(time));
+        manAlerts.sort(new AlertComparator());
+        return true;
     }
 
     /**
@@ -134,6 +136,7 @@ public class AlertCollection extends Observable {
     public List<Alert> getAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = getManualAlerts(start, end);
         alerts.addAll(getGeneratedAlerts(start, end));
+        alerts.sort(new AlertComparator());
         return alerts;
     }
 
