@@ -58,10 +58,13 @@ public class AlertCollection implements Observer {
      * @param start  The start time
      * @param period The time between each alert
      */
-    public void addAlert(GregorianCalendar start, Duration period) throws IteratorAlreadySetException {
-        if (cg != null)
-            throw new IteratorAlreadySetException();
+    public boolean addAlert(GregorianCalendar start, Duration period) {
+        if (this.cg == null)
+            return false;
+        else if (this.cg.getPeriods().contains(period))
+            return false;
         this.cg.addPeriod(period);
+        return true;
     }
 
     /**
