@@ -16,4 +16,8 @@ public class User {
         this.calendar = calendar;
     }
 
+    public boolean authenticate (String name, String password) {
+        return this.name == name && this.password == password;
+    }
+
 }
