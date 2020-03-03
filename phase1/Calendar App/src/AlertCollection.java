@@ -5,10 +5,7 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class AlertCollection {
     // List is only for manually created Alerts.
@@ -16,7 +13,6 @@ public class AlertCollection {
     private String eventId;
     private Date eventTime;
     private DateGenerator dg;
-
     /**
      * Creates a new Alert group (possibly repeating)
      * @param e The Event attached to the Alert.
@@ -70,14 +66,25 @@ public class AlertCollection {
      * @return      The list of Alerts between start and end time.
      */
     public List<Alert> getAlerts(Date start, Date end) {
-//        throw new NotImplementedException();
-        // TODO: complete
-        List<Alert> alerts = new LinkedList<>();
+        List<Alert> alerts = getManualAlerts(start, end);
+        alerts.addAll(getGeneratedAlerts(start, end));
+        return alerts;
+    }
 
-        // Add manually created alerts
+    private List<Alert> getManualAlerts(Date start, Date end) {
+        List<Alert> alerts = new LinkedList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().compareTo(start) >= 0 && a.getTime().compareTo(end) <= 0)
                 alerts.add(a);
+        }
+        return alerts;
+    }
+
+    private List<Alert> getGeneratedAlerts(Date start, Date end) {
+        List<Alert> alerts = new LinkedList<>();
+        for (Date d : dg) {
+            if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
+                alerts.add(new Alert(d));
         }
         return alerts;
     }
