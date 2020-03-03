@@ -2,15 +2,17 @@
 //  AlertCollection.java    Author: Colin De Vlieghere
 //******************************************************
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AlertCollection {
     private List<Alert> manAlerts;
     private String eventId;
-    private Date eventTime;
+    private GregorianCalendar eventTime;
     private DateGenerator dg;
     /**
      * Creates a new Alert group (possibly repeating)
@@ -18,7 +20,8 @@ public class AlertCollection {
      */
     public AlertCollection(Event e) {
         this.eventId = e.getId();
-        this.eventTime = e.getStartDate();
+        this.eventTime = new GregorianCalendar();
+        this.eventTime.setTime(e.getStartDate());
         manAlerts = new ArrayList<>();
     }
 
@@ -55,7 +58,7 @@ public class AlertCollection {
     public void addAlert(Date start, Duration period) throws IteratorAlreadySetException {
         if (dg != null)
             throw new IteratorAlreadySetException();
-        this.dg = new DateGenerator(start, period, eventTime);
+        this.dg = new DateGenerator(start, period, eventTime.getTime());
     }
 
     /**
@@ -66,6 +69,17 @@ public class AlertCollection {
      */
     public boolean removeAlert(Date d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
+    }
+
+    public boolean shiftAlerts(int field, int amount) {
+        if (dg == null) {
+            return false;
+        }
+        GregorianCalendar newTime = new GregorianCalendar();
+        newTime.setTime(dg.getStartTime());
+        newTime.add(field, amount);
+        this.dg = new DateGenerator(newTime.getTime(), dg.getPeriod(), dg.getEndTime());
+        return true;
     }
 
     /**
