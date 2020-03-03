@@ -34,9 +34,18 @@ public class AlertCollection {
     /**
      * Add an alert manually by setting the time.
      * @param time The time of the Alert to be added.
+     * @return Whether or not the Alert could be added.
      */
-    public void addAlert(Date time) {
-        manAlerts.add(new Alert(time));
+    public boolean addAlert(Date time) {
+        for (Date d : dg) {
+            if (d.equals(time))
+                return false;
+        }
+        for (Alert a : manAlerts) {
+            if (a.getTime().equals(time))
+                return false;
+        }
+        return manAlerts.add(new Alert(time));
     }
 
     /**
@@ -56,6 +65,18 @@ public class AlertCollection {
      * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(Date d) {
+        return removeManualAlert(d) || removeGeneratedAlert(d);
+    }
+
+    private boolean removeGeneratedAlert(Date d) {
+        for (Date ignored : dg.getIgnoreList()) {
+            if (d.equals(ignored))
+                return false;
+        }
+        return dg.getIgnoreList().add(d);
+    }
+
+    private boolean removeManualAlert(Date d) {
         return manAlerts.removeIf(a -> a.getTime().equals(d));
     }
 
