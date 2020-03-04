@@ -20,7 +20,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
     public AlertCollection(Event e) {
         this.eventId = e.getId();
         this.eventTime = new GregorianCalendar();
-        this.eventTime.setTime(e.getStartDate());
+        this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
     }
 
