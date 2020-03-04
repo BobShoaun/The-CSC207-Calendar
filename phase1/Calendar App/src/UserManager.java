@@ -1,3 +1,5 @@
+import exceptions.PasswordMismatchException;
+import exceptions.UsernameTakenException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

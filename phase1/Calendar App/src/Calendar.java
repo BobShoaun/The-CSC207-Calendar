@@ -13,7 +13,6 @@ public class Calendar {
     List<MT> memos;
     List<MT> tags;
 
-
     /**
      * Constructor for creating a new calendar with no data
      */
@@ -278,7 +277,7 @@ public class Calendar {
                     Event event =  eventCollection.getEvent(eventId);
                     eventCollection.removeEvent(event);
                     EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>());
-                    addEventSeries(seriesName, event.getStartDate(), end, difference, event);
+                    addEventSeries(seriesName, event.getStartDate().getTime(), end, difference, event);
                 } else{
                     eventCollection.makeEventToSeries(eventId, end, difference);
                 }
