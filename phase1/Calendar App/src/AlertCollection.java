@@ -1,4 +1,5 @@
 import exceptions.PeriodAlreadyExistsException;
+
 import java.time.Duration;
 import java.util.*;
 
@@ -211,25 +212,25 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @return String representation of all the data in this AC, including the CalendarGenerator.
      */
     public String getString() {
-        String result = eventId + "\n" + eventTime.getTimeInMillis() + "\n";
+        StringBuilder result = new StringBuilder(eventId + "\n" + eventTime.getTimeInMillis() + "\n");
         for (Alert a : getManAlerts()) {
-            result += a.getString() + " ";
+            result.append(a.getString()).append(" ");
         }
-        result += "\n" + calGen.getString();
-        return result;
+        result.append("\n").append(calGen.getString());
+        return result.toString();
     }
 
     @Override
     public String toString() {
-        String result = "Alert for EventID " + eventId
-                + ", which occurs at " + eventTime.getTime().toString() + ".\n";
-        result += "===== MANUALLY CREATED ALERTS =====\n";
+        StringBuilder result = new StringBuilder("Alert for EventID " + eventId
+                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
+        result.append("===== MANUALLY CREATED ALERTS =====\n");
         for (Alert a : manAlerts) {
-            result += a.toString() + "\n";
+            result.append(a.toString()).append("\n");
         }
-        result += "===== REPEATING ALERTS =====\n";
-        result += calGen.toString();
-        return result;
+        result.append("===== REPEATING ALERTS =====\n");
+        result.append(calGen.toString());
+        return result.toString();
     }
 
     /**

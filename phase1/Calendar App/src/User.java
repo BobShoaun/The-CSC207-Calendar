@@ -22,7 +22,7 @@ public class User implements StringParsable {
     }
 
     public boolean authenticate (String name, String password) {
-        return this.name == name && this.password == password;
+        return this.name.equals(name) && this.password.equals(password);
     }
 
     @Override

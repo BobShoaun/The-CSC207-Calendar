@@ -1,5 +1,6 @@
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -62,7 +63,7 @@ public class UserManager extends TextFileSerializer {
 
     public boolean registerUser (String username, String password, String confirmPassword)
             throws UsernameTakenException, PasswordMismatchException {
-        if (password != confirmPassword)
+        if (!password.equals(confirmPassword))
             throw new PasswordMismatchException();
 
         for (User user : users)
