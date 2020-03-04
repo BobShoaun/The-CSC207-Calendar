@@ -1,3 +1,5 @@
+import exceptions.PeriodAlreadyExistsException;
+
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
@@ -173,7 +175,7 @@ public class Calendar {
      * @param period  The time between repeating alerts starting from the relative start time
      * @param eventId The event this alert should be linked to
      */
-    public void addAlert(GregorianCalendar start, Duration period, String eventId) {
+    public void addAlert(GregorianCalendar start, Duration period, String eventId) throws PeriodAlreadyExistsException {
         for (AlertCollection alertCollection :
                 alertCollections) {
             if (alertCollection.getEventId().equals(eventId)) {
@@ -271,8 +273,7 @@ public class Calendar {
     public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException {
         for (EventCollection eventCollection :
                 eventCollections) {
-            if (eventCollection.getEvent(eventId) != null)
-            {
+            if (eventCollection.getEvent(eventId) != null) {
                 if(!eventCollection.getName().equals(seriesName)){
                     Event event =  eventCollection.getEvent(eventId);
                     eventCollection.removeEvent(event);
@@ -304,8 +305,7 @@ public class Calendar {
         }
         for (EventCollection eventCollection :
                 eventCollections) {
-            if (eventCollection.getEvent(eventId) != null)
-            {
+            if (eventCollection.getEvent(eventId) != null) {
                 eventCollection.addTag(eventId, tag);
                 return;
             }
