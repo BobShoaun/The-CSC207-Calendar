@@ -1,15 +1,18 @@
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
-public class EventCollection implements Serializable
+public class EventCollection implements Serializable // TODO: shouldn't this be TextFileSerializer?
 {
     private ArrayList<Event> events;
     private String name;
 
     /**
      * constructor for a series, or a list of regular events if name == null
-     * @param name name of series
+     *
+     * @param name   name of series
      * @param events list of events of the series
      */
     public EventCollection(String name, ArrayList<Event> events)
@@ -46,12 +49,12 @@ public class EventCollection implements Serializable
      * @param date date of events demanded
      * @return a list of events that is on the same day as <date></>
      */
-    public List<Event> getEvents(Date date)
-    {
+    public List<Event> getEvents(Date date) {
         //find alternative
-        Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
-        Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
-        return getEvents(startTime, endTime);
+//        Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
+//        Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
+//        return getEvents(startTime, endTime);
+        return null;
     }
 
     public List<Event> getEvents(Date start, Date end) {
