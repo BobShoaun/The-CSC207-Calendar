@@ -17,7 +17,7 @@ public class UserManager extends TextFileSerializer {
     }
 
     public void loadUsers () {
-        Scanner scanner = loadScannerFromFile("Resources/users.txt");
+        Scanner scanner = loadScannerFromFile("resources/users.txt");
         while (scanner.hasNext())
             users.add(new User(scanner.nextLine()));
     }
@@ -26,7 +26,7 @@ public class UserManager extends TextFileSerializer {
         List<String> parsedUsers = new ArrayList<>();
         for (User user : users)
             parsedUsers.add(user.parse());
-        saveToFile("Resources/users.txt", parsedUsers);
+        saveToFile("resources/users.txt", parsedUsers);
     }
 
     public void displayUsers () {

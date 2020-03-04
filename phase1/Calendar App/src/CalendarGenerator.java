@@ -8,23 +8,47 @@ import java.util.List;
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     private List<GregorianCalendar> ignoreList = new ArrayList<>();
-
     private GregorianCalendar startTime;
     private List<Duration> periods;
     private GregorianCalendar endTime;
 
     // end==null means forever? up to implementation
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
+        this.startTime = start;
+        this.periods = periods;
+        this.endTime = end;
+    }
+
+    /**
+     * Create a CalendarGenerator from a String.
+     *
+     * @param input
+     */
+    public CalendarGenerator(String input) {
 
     }
 
     public void addPeriod(Duration period) {
+        //TODO: complete
+    }
 
+    @Override
+    public String toString() {
+        String result = "" + startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n";
+        for (Duration period : periods) {
+            result += period.getSeconds() + " ";
+        }
+        result += "\n";
+        for (GregorianCalendar ignored : ignoreList) {
+            result += ignored.getTimeInMillis() + " ";
+        }
+        return result;
     }
 
     @Override
     public Iterator<GregorianCalendar> iterator() {
         return null;
+        // TODO: complete
     }
 
     public List<GregorianCalendar> getIgnoreList() {

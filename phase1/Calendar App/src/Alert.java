@@ -14,12 +14,22 @@ public class Alert {
         this.time = time;
     }
 
+    public Alert(String string) {
+        this.time = new GregorianCalendar();
+        this.time.setTimeInMillis(Long.parseLong(string));
+    }
+
     public Date getTime() {
         return time.getTime();
     }
 
     public void setTime(Date time) {
         this.time.setTime(time);
+    }
+
+    @Override
+    public String toString() {
+        return "" + time.getTimeInMillis();
     }
 
 }
