@@ -48,13 +48,17 @@ public class Alert {
     }
 
     /**
-     * Get a string representation of this Alert.
+     * Get a string of data in of this Alert.
      *
      * @return The time in milliseconds for the Alert
      */
+    public String getString() {
+        return "" + time.getTimeInMillis();
+    }
+
     @Override
     public String toString() {
-        return "" + time.getTimeInMillis();
+        return "" + time.getTime().toString();
     }
 
 }

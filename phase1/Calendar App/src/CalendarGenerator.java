@@ -32,8 +32,12 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         //TODO: complete
     }
 
-    @Override
-    public String toString() {
+    /**
+     * Outputs all data in this CG into a String.
+     *
+     * @return String representation of the data
+     */
+    public String getString() {
         String result = "" + startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n";
         for (Duration period : periods) {
             result += period.getSeconds() + " ";
@@ -43,6 +47,14 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             result += ignored.getTimeInMillis() + " ";
         }
         return result;
+    }
+
+    @Override
+    /**
+     * A user friendly String representation of this CG (for UI purposes)
+     */
+    public String toString() {
+        return "";
     }
 
     @Override

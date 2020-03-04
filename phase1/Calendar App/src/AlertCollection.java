@@ -201,17 +201,29 @@ public class AlertCollection extends TextFileSerializer implements Observer {
     }
 
     /**
-     * toString method.
+     * Get a String representation of data in this AlertCollection.
      *
      * @return String representation of all the data in this AC, including the CalendarGenerator.
      */
-    @Override
-    public String toString() {
+    public String getString() {
         String result = eventId + "\n" + eventTime.getTimeInMillis() + "\n";
         for (Alert a : getManAlerts()) {
-            result += a.toString() + " ";
+            result += a.getString() + " ";
         }
-        result += "\n" + cg.toString();
+        result += "\n" + cg.getString();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        String result = "Alert for EventID " + eventId
+                + ", which occurs at " + eventTime.getTime().toString() + ".\n";
+        result += "===== MANUALLY CREATED ALERTS =====\n";
+        for (Alert a : manAlerts) {
+            result += a.toString() + "\n";
+        }
+        result += "===== REPEATING ALERTS =====\n";
+        result += cg.toString();
         return result;
     }
 
@@ -246,7 +258,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      */
     public void save(String filePath) {
         filePath = filePath + "/" + eventId + ".txt";
-        List<String> contents = Arrays.asList(toString().split("\\s+"));
+        List<String> contents = Arrays.asList(getString().split("\\s+"));
         saveToFile(filePath, contents);
     }
 
