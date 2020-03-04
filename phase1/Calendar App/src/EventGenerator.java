@@ -3,15 +3,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class EventRepetition
-{
+public class EventGenerator {
     private Event baseEvent;
     private Date start;
     private Date end;
     private Date frequency;
 
-    public EventRepetition(Event baseEvent, Date start, Date end, Date frequency)
-    {
+    public EventGenerator(Event baseEvent, Date start, Date end, Date frequency) {
         this.baseEvent = baseEvent;
         this.start = start;
         this.end = end;
