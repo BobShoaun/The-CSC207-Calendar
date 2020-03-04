@@ -1,5 +1,3 @@
-import java.lang.IllegalArgumentException;
-
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
@@ -154,6 +152,7 @@ public class Calendar {
      * @param time The time of the alert to be added
      * @param eventId id of connected event
      */
+    //TODO: use boolean return value of addAlert
     public void addAlert(GregorianCalendar time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
@@ -170,11 +169,12 @@ public class Calendar {
 
     /**
      * Add a repeating alert to the event
-     * @param start The relative start time of the alert
-     * @param period The time between repeating alerts starting from the relative start time
+     *
+     * @param start   The relative start time of the alert
+     * @param period  The time between repeating alerts starting from the relative start time
      * @param eventId The event this alert should be linked to
      */
-    public void addAlert(GregorianCalendar start, Duration period, String eventId) throws IteratorAlreadySetException {
+    public void addAlert(GregorianCalendar start, Duration period, String eventId) {
         for (AlertCollection alertCollection :
                 alertCollections) {
             if (alertCollection.getEventId().equals(eventId)) {
@@ -183,7 +183,7 @@ public class Calendar {
             }
         }
         Event event = getEvent(eventId);
-        if(event == null){
+        if (event == null) {
             throw new IllegalArgumentException();
         }
         AlertCollection alertCollection = new AlertCollection(event);
