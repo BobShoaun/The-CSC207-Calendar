@@ -44,15 +44,20 @@ public class EventCollection implements Serializable
      */
     public List<Event> getEvents(Date date)
     {
+        Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
+        Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
+        return getEvents(startTime, endTime);
+    }
+
+    public List<Event> getEvents(Date start, Date end) {
         List<Event> ret = new ArrayList<>();
         for (Event e:this.events)
         {
-            //omitted for now
+            if(isOnDate(e,start, end)){
+                ret.add(e);
+            }
         }
         return ret;
-    }
-    public List<Event> getEvents(Date start, Date end) {
-        throw new UnsupportedOperationException();
     }
 
     public Iterator<Event> getEventIterator(Date start) {
@@ -81,14 +86,19 @@ public class EventCollection implements Serializable
 
     }
 
-    private boolean isOnDate(Event event, Date date)
+    /**
+     *
+     * @param event
+     * @param date
+     * @return
+     */
+    private boolean isOnDate(Event event, Date startTime, Date endTime)
     {
-        Date start = event.getStartDate();
-        Date end = event.getEndDate();
-        Date am = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
-        Date pm = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
-        boolean within1 = (am.before(start) && pm.after(start)) || (am.after(start) && am.before(end));
-        boolean within2 = (am.before(end) && pm.after(end)||(pm.after(start) && pm.before(end)));
+        Date startEvent = event.getStartDate();
+        Date endEvent = event.getEndDate();
+
+        boolean within1 = (startTime.before(startEvent) && endTime.after(startEvent)) || (startTime.after(startEvent) && startTime.before(endEvent));
+        boolean within2 = (startTime.before(endEvent) && endTime.after(endEvent)||(endTime.after(startEvent) && endTime.before(endEvent)));
         return within1 && within2;
     }
 }
