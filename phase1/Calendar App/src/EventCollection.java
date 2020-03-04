@@ -1,12 +1,6 @@
-
-import org.apache.commons.lang3.time.DateUtils;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class EventCollection implements Serializable
 {
