@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,7 +6,7 @@ import java.util.Scanner;
  * UserManager class
  * @author Ng Bob Shoaun
  */
-public class UserManager extends TextFileSerializer{
+public class UserManager extends TextFileSerializer {
 
     private ArrayList<User> users;
     private User currentUser;
