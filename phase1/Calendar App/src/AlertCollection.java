@@ -6,7 +6,7 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection implements Observer {
+public class AlertCollection extends TextFileSerializer implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
@@ -26,10 +26,15 @@ public class AlertCollection implements Observer {
 
     /**
      * Get the ID of the event associated with this AlertCollection
+     *
      * @return The ID of the event
      */
     public String getEventId() {
         return eventId;
+    }
+
+    public List<Alert> getManAlerts() {
+        return manAlerts;
     }
 
     /**
@@ -55,13 +60,16 @@ public class AlertCollection implements Observer {
     /**
      * Add a recurring Alert until the Event occurs
      *
-     * @param start   The start time
-     * @param periods The time between each alert
+     * @param start  The start time
+     * @param period The time between each alert
      */
-    public void addAlert(GregorianCalendar start, List<Duration> periods) throws IteratorAlreadySetException {
-        if (cg != null)
-            throw new IteratorAlreadySetException();
-        this.cg = new CalendarGenerator(start, periods, eventTime);
+    public boolean addAlert(GregorianCalendar start, Duration period) {
+        if (this.cg == null)
+            return false;
+        else if (this.cg.getPeriods().contains(period))
+            return false;
+        this.cg.addPeriod(period);
+        return true;
     }
 
     /**
@@ -71,13 +79,16 @@ public class AlertCollection implements Observer {
      * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(GregorianCalendar d) {
-        boolean result = removeManualAlert(d) || removeGeneratedAlert(d);
-        if (result) {
-        }
-        return result;
+        return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
-    private boolean removeGeneratedAlert(GregorianCalendar d) {
+    /**
+     * Remove an automatically generated Alert.
+     *
+     * @param d The time of the alert being removed.
+     * @return Whether the alert could be removed
+     */
+    public boolean removeGeneratedAlert(GregorianCalendar d) {
         for (GregorianCalendar ignored : cg.getIgnoreList()) {
             if (d.equals(ignored))
                 return false;
@@ -85,19 +96,30 @@ public class AlertCollection implements Observer {
         return cg.getIgnoreList().add(d);
     }
 
-    private boolean removeManualAlert(GregorianCalendar d) {
+    /**
+     * Remove a manually created Alert.
+     *
+     * @param d The time of the alert being removed.
+     * @return Whether the alert could be removed
+     */
+    public boolean removeManualAlert(GregorianCalendar d) {
         return manAlerts.removeIf(a -> a.getTime().equals(d.getTime()));
     }
 
-    public boolean shiftAlerts(GregorianCalendar newEventTime) {
+    /**
+     * Shift the time of all Alerts in this AlertCollection.
+     *
+     * @param newEventTime The new time of the Event
+     */
+    public void shiftAlerts(GregorianCalendar newEventTime) {
         if (cg == null) {
-            return false;
+            throw new IllegalStateException();
         }
         GregorianCalendar newStart = new GregorianCalendar();
-        newStart.setTime(cg.getStartTime().getTime());
-
-        //  this.cg = new CalendarGenerator();
-        return true;
+        long diff = newEventTime.getTimeInMillis() - eventTime.getTimeInMillis();
+        long newMillis = cg.getStartTime().getTimeInMillis() + diff;
+        newStart.setTimeInMillis(newMillis);
+        this.cg.setStartTime(newStart);
     }
 
     /**
@@ -132,7 +154,14 @@ public class AlertCollection implements Observer {
         return alerts;
     }
 
-    private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
+    /**
+     * Get manually created Alerts for the event between a set of times.
+     *
+     * @param start The start time delimiter
+     * @param end   The end time delimiter
+     * @return The list of Alerts between start and end time.
+     */
+    public List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().compareTo(start.getTime()) >= 0 && a.getTime().compareTo(end.getTime()) <= 0)
@@ -141,7 +170,14 @@ public class AlertCollection implements Observer {
         return alerts;
     }
 
-    private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
+    /**
+     * Get automatically generated Alerts for the event between a set of times.
+     *
+     * @param start The start time delimiter
+     * @param end   The end time delimiter
+     * @return The list of Alerts between start and end time.
+     */
+    public List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (GregorianCalendar d : cg) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
@@ -150,6 +186,12 @@ public class AlertCollection implements Observer {
         return alerts;
     }
 
+    /**
+     * Update this AC when its associated event changes date.
+     *
+     * @param o   The event being updated.
+     * @param arg The new time for the event.
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof GregorianCalendar)
@@ -157,4 +199,67 @@ public class AlertCollection implements Observer {
         else
             throw new IllegalArgumentException();
     }
+
+    /**
+     * Get a String representation of data in this AlertCollection.
+     *
+     * @return String representation of all the data in this AC, including the CalendarGenerator.
+     */
+    public String getString() {
+        String result = eventId + "\n" + eventTime.getTimeInMillis() + "\n";
+        for (Alert a : getManAlerts()) {
+            result += a.getString() + " ";
+        }
+        result += "\n" + cg.getString();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        String result = "Alert for EventID " + eventId
+                + ", which occurs at " + eventTime.getTime().toString() + ".\n";
+        result += "===== MANUALLY CREATED ALERTS =====\n";
+        for (Alert a : manAlerts) {
+            result += a.toString() + "\n";
+        }
+        result += "===== REPEATING ALERTS =====\n";
+        result += cg.toString();
+        return result;
+    }
+
+    /**
+     * Load the data into this AlertCollection.
+     *
+     * @param filePath The user's directory, without the trailing /
+     * @param eventId  The ID of the event for which the Alerts are being loaded
+     */
+    public void load(String filePath, String eventId) {
+        List<String> strings = loadStringsFromFile(filePath + "/" + eventId + ".txt");
+
+        this.eventId = strings.get(0).trim();
+
+        String[] manTimes = strings.get(1).trim().split("\\s+");
+        for (String timeStr : manTimes) {
+            manAlerts.add(new Alert(timeStr));
+        }
+
+        StringBuilder cgStr = new StringBuilder();
+        for (int i = 2; i < strings.size(); i++) {
+            cgStr.append(strings.get(i));
+        }
+        this.cg = new CalendarGenerator(cgStr.toString());
+
+    }
+
+    /**
+     * Save this AlertCollection's data into a text file.
+     *
+     * @param filePath The user's directory.
+     */
+    public void save(String filePath) {
+        filePath = filePath + "/" + eventId + ".txt";
+        List<String> contents = Arrays.asList(getString().split("\\s+"));
+        saveToFile(filePath, contents);
+    }
+
 }

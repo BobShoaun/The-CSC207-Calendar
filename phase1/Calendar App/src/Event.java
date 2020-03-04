@@ -1,20 +1,20 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import javax.lang.model.element.NestingKind;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Event class
  */
-public class Event extends Observable{
+public class Event implements Observer{
 
     private String id;
     private String name;
     private String description;
-    private GregorianCalendar startDate;
-    private GregorianCalendar endDate;
+    private Date startDate;
+    private Date endDate;
 
     /**
      * Constructor for a new Event
@@ -23,7 +23,7 @@ public class Event extends Observable{
      * @param startDate start time of the Event
      * @param endDate end time of the Event
      */
-    public Event(String id, String name, GregorianCalendar startDate, GregorianCalendar endDate) {
+    public Event (String id, String name, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -34,23 +34,15 @@ public class Event extends Observable{
      * Return the name of the Event
      * @return the name of the Event
      */
-    public String getName() {
+    public String getName () {
         return name;
-    }
-
-    /**
-     * Return the id of the Event
-     * @return the id of the Event
-     */
-    public String getId() {
-        return id;
     }
 
     /**
      * Return the start time of the Event
      * @return the startDate of the Event
      */
-    public GregorianCalendar getStartDate() { return startDate; }
+    public Date getStartDate() {return startDate; }
 
     /**
      * Set the name of the Event
@@ -68,38 +60,33 @@ public class Event extends Observable{
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
-    public void setStartDate(GregorianCalendar newStart) {
-        this.startDate = newStart;
-        setChanged();
-        notifyObservers(newStart);
-    }
+    public void setStartDate(Date newStart) { this.startDate = newStart; }
 
     /**
      * Set the end time of the Event
      * @param newEnd the new endDate of the Event
      */
-    public void setEndDate(GregorianCalendar newEnd) {
-        this.endDate = newEnd;
-        setChanged();
-        notifyObservers(newEnd);
-    }
+    public void setEndDate(Date newEnd) { this.endDate = newEnd; }
 
     /**
      * Return the duration of the Event in Date
      * @return duration of the Event
      */
-    public GregorianCalendar getDuration() {
-        //long dur = startDate.getTime() - endDate.getTime();
-        //return new Date(dur);
-        //if (startDate.equals(endDate)) {
-        //    return new GregorianCalendar();
-        //} else {
-            //long dur = startDate.getInstance().getTime().getTime() - endDate.getInstance().getTime().getTime();
+    public Date getDuration() {
+        long dur = startDate.getTime() - endDate.getTime();
+        return new Date(dur);
+    }
 
-        //}
+    /**
+     * Updates from the observable AlertCollection
+     * @param o the observable AlertCollection
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
         throw new NotImplementedException();
     }
 
-
-
+    public String getId() {
+        return id;
+    }
 }

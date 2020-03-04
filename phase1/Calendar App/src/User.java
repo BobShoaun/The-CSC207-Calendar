@@ -1,10 +1,9 @@
-import java.io.Serializable;
 
 /**
  * User class
  * @author Ng Bob Shoaun
  */
-public class User implements TextFileSerializable<User> {
+public class User implements StringParsable {
 
     private String name;
     private String password;
@@ -18,17 +17,29 @@ public class User implements TextFileSerializable<User> {
         this.calendar = calendar;
     }
 
+    public User (String string) {
+        unparse(string);
+    }
+
     public boolean authenticate (String name, String password) {
         return this.name == name && this.password == password;
     }
 
     @Override
-    public User deserialize(String text) {
-
+    public void unparse(String string) {
+        String[] split = string.split("\\s+"); // split text by whitespaces
+        this.name = split[0];
+        this.password = split[1];
     }
 
     @Override
-    public String serialize(User obj) {
-
+    public String parse() {
+        return toString();
     }
+
+    @Override
+    public String toString () {
+        return name + " " + password;
+    }
+
 }
