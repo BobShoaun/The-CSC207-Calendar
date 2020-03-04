@@ -186,6 +186,12 @@ public class AlertCollection extends TextFileSerializer implements Observer {
         return alerts;
     }
 
+    /**
+     * Update this AC when its associated event changes date.
+     *
+     * @param o   The event being updated.
+     * @param arg The new time for the event.
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof GregorianCalendar)
@@ -194,6 +200,11 @@ public class AlertCollection extends TextFileSerializer implements Observer {
             throw new IllegalArgumentException();
     }
 
+    /**
+     * toString method.
+     *
+     * @return String representation of all the data in this AC, including the CalendarGenerator.
+     */
     @Override
     public String toString() {
         String result = eventId + "\n" + eventTime.getTimeInMillis() + "\n";
