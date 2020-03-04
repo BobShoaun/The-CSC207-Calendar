@@ -53,6 +53,12 @@ public class Event extends Observable{
     public GregorianCalendar getStartDate() { return startDate; }
 
     /**
+     * Return the end time of the Event
+     * @return the endDate of the Event
+     */
+    public GregorianCalendar getEndDate() {return endDate;}
+
+    /**
      * Set the name of the Event
      * @param newName the new name of the Event
      */
@@ -89,15 +95,16 @@ public class Event extends Observable{
      * @return duration of the Event
      */
     public GregorianCalendar getDuration() {
-        //long dur = startDate.getTime() - endDate.getTime();
-        //return new Date(dur);
-        //if (startDate.equals(endDate)) {
-        //    return new GregorianCalendar();
-        //} else {
-        //long dur = startDate.getInstance().getTime().getTime() - endDate.getInstance().getTime().getTime();
-
-        //}
-        throw new NotImplementedException();
+        GregorianCalendar newGC = new GregorianCalendar();
+        if (startDate.equals(endDate)) {
+            Date d1 = new Date(0);
+            newGC.setGregorianChange(d1);
+        } else {
+            long dur = startDate.getTime().getTime() - endDate.getTime().getTime();
+            Date d2 = new Date(dur);
+            newGC.setGregorianChange(d2);
+        }
+        return newGC;
     }
 
 
