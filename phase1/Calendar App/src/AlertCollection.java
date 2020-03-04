@@ -228,6 +228,11 @@ public class AlertCollection extends TextFileSerializer implements Observer {
 
     }
 
+    /**
+     * Save this AlertCollection's data into a text file.
+     *
+     * @param filePath The user's directory.
+     */
     public void save(String filePath) {
         filePath = filePath + "/" + eventId + ".txt";
         List<String> contents = Arrays.asList(toString().split("\\s+"));
