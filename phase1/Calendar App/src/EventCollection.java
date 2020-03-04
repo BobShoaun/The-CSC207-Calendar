@@ -1,6 +1,9 @@
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -76,5 +79,16 @@ public class EventCollection implements Serializable
 
     public void addTag(String eventId, MT tag) {
 
+    }
+
+    private boolean isOnDate(Event event, Date date)
+    {
+        Date start = event.getStartDate();
+        Date end = event.getEndDate();
+        Date am = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
+        Date pm = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
+        boolean within1 = (am.before(start) && pm.after(start)) || (am.after(start) && am.before(end));
+        boolean within2 = (am.before(end) && pm.after(end)||(pm.after(start) && pm.before(end)));
+        return within1 && within2;
     }
 }

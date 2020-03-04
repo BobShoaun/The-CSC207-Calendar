@@ -43,6 +43,15 @@ public class Event implements Observer{
     public Date getStartDate() {return startDate; }
 
     /**
+     * Return the end time of the Event
+     * @return the endDate of the Event
+     */
+    public Date getEndDate()
+    {
+        return endDate;
+    }
+
+    /**
      * Set the name of the Event
      * @param newName the new name of the Event
      */
