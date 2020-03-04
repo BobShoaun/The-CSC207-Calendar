@@ -1,6 +1,7 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.lang.model.element.NestingKind;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,8 +13,8 @@ public class Event extends Observable{
     private String id;
     private String name;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private GregorianCalendar startDate;
+    private GregorianCalendar endDate;
 
     /**
      * Constructor for a new Event
@@ -22,7 +23,7 @@ public class Event extends Observable{
      * @param startDate start time of the Event
      * @param endDate end time of the Event
      */
-    public Event(String id, String name, Date startDate, Date endDate) {
+    public Event(String id, String name, GregorianCalendar startDate, GregorianCalendar endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -49,7 +50,7 @@ public class Event extends Observable{
      * Return the start time of the Event
      * @return the startDate of the Event
      */
-    public Date getStartDate() { return startDate; }
+    public GregorianCalendar getStartDate() { return startDate; }
 
     /**
      * Set the name of the Event
@@ -67,29 +68,36 @@ public class Event extends Observable{
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
-    public void setStartDate(Date newStart) {
+    public void setStartDate(GregorianCalendar newStart) {
         this.startDate = newStart;
         setChanged();
-        notifyObservers("Changed the start time of the event to " + newStart.toString());
+        notifyObservers(newStart);
     }
 
     /**
      * Set the end time of the Event
      * @param newEnd the new endDate of the Event
      */
-    public void setEndDate(Date newEnd) {
+    public void setEndDate(GregorianCalendar newEnd) {
         this.endDate = newEnd;
         setChanged();
-        notifyObservers("Changed the end time of the event to " + newEnd.toString());
+        notifyObservers(newEnd);
     }
 
     /**
      * Return the duration of the Event in Date
      * @return duration of the Event
      */
-    public Date getDuration() {
-        long dur = startDate.getTime() - endDate.getTime();
-        return new Date(dur);
+    public GregorianCalendar getDuration() {
+        //long dur = startDate.getTime() - endDate.getTime();
+        //return new Date(dur);
+        //if (startDate.equals(endDate)) {
+        //    return new GregorianCalendar();
+        //} else {
+            //long dur = startDate.getInstance().getTime().getTime() - endDate.getInstance().getTime().getTime();
+
+        //}
+        throw new NotImplementedException();
     }
 
 
