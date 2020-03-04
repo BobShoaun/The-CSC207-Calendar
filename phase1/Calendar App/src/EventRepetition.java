@@ -22,13 +22,13 @@ public class EventRepetition
     {
         String eventName = baseEvent.getName();
         List<Event> ret = new ArrayList<>();
-        Date curr = this.start;
-        while(curr.compareTo(this.end)<=0){
-            Date currNext = addTime(curr, frequency);
-            Event e = new Event("", eventName, curr, currNext);
-            ret.add(e);
-            curr=currNext;
-        }
+//        Date curr = this.start;
+//        while(curr.compareTo(this.end)<=0){
+//            Date currNext = addTime(curr, frequency);
+//            Event e = new Event("", eventName, curr, currNext);
+//            ret.add(e);
+//            curr=currNext;
+//        }
         return ret;
     }
 

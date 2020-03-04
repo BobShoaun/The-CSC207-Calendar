@@ -112,11 +112,12 @@ public class EventCollection implements Serializable
     private boolean isOnTime(Event event, Date startTime, Date endTime)
     {
         //find alternative
-        Date startEvent = event.getStartDate();
-        Date endEvent = event.getEndDate();
-
-        boolean within1 = (startTime.before(startEvent) && endTime.after(startEvent)) || (startTime.after(startEvent) && startTime.before(endEvent));
-        boolean within2 = (startTime.before(endEvent) && endTime.after(endEvent)||(endTime.after(startEvent) && endTime.before(endEvent)));
-        return within1 && within2;
+//        Date startEvent = event.getStartDate();
+//        Date endEvent = event.getEndDate();
+//
+//        boolean within1 = (startTime.before(startEvent) && endTime.after(startEvent)) || (startTime.after(startEvent) && startTime.before(endEvent));
+//        boolean within2 = (startTime.before(endEvent) && endTime.after(endEvent)||(endTime.after(startEvent) && endTime.before(endEvent)));
+//        return within1 && within2;
+        return true;
     }
 }
