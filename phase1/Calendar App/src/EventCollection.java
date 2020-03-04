@@ -53,7 +53,7 @@ public class EventCollection implements Serializable
         List<Event> ret = new ArrayList<>();
         for (Event e:this.events)
         {
-            if(isOnDate(e,start, end)){
+            if(isOnTime(e,start, end)){
                 ret.add(e);
             }
         }
@@ -71,7 +71,8 @@ public class EventCollection implements Serializable
     public void addEvent(Event event){this.events.add(event);}
 
     public void removeEvent(Event event){
-
+        String eventId = event.getId();
+        this.events.removeIf(e -> e.getId().equals(eventId));
     }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) {
@@ -88,11 +89,12 @@ public class EventCollection implements Serializable
 
     /**
      *
-     * @param event
-     * @param date
-     * @return
+     * @param event the event to br checked
+     * @param startTime start time
+     * @param endTime end time
+     * @return true iff the event time period is within the start and end time
      */
-    private boolean isOnDate(Event event, Date startTime, Date endTime)
+    private boolean isOnTime(Event event, Date startTime, Date endTime)
     {
         Date startEvent = event.getStartDate();
         Date endEvent = event.getEndDate();
