@@ -19,7 +19,7 @@ public class Calendar {
      */
     public Calendar() {
         eventCollections = new ArrayList<>();
-        eventCollections.add(new EventCollection("", new ArrayList<>()));
+        eventCollections.add(new EventCollection(null, new ArrayList<>()));
         alertCollections = new ArrayList<>();
         memos = new ArrayList<>();
         tags = new ArrayList<>();

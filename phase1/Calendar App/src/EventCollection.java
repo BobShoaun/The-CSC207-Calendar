@@ -14,16 +14,7 @@ public class EventCollection implements Serializable
     private String name;
 
     /**
-     * constructor for list of regular events
-     * @param events list of regular events
-     */
-    public EventCollection(ArrayList<Event> events)
-    {
-        this.events = events;
-    }
-
-    /**
-     * constructor for a series
+     * constructor for a series, or a list of regular events if name == null
      * @param name name of series
      * @param events list of events of the series
      */
@@ -33,9 +24,28 @@ public class EventCollection implements Serializable
         this.events = events;
     }
 
+    /**
+     *
+     * @return name of this EventCollection
+     */
     public String getName(){return name;}
 
-    public Event getEvent(String id){  throw new UnsupportedOperationException();}
+    /**
+     * return a event in the list with the given id
+     * @param id of the event to be searched for
+     * @return event with given id
+     */
+    public Event getEvent(String id){
+        Event ret = null;
+        for (Event e:this.events) {
+            if(e.getId().equals(id))
+            {
+                ret = e;
+                break;
+            }
+        }
+        return ret;
+    }
 
     /**
      * Returns all events that is
@@ -44,6 +54,7 @@ public class EventCollection implements Serializable
      */
     public List<Event> getEvents(Date date)
     {
+        //find alternative
         Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
         Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
         return getEvents(startTime, endTime);
@@ -70,9 +81,13 @@ public class EventCollection implements Serializable
      */
     public void addEvent(Event event){this.events.add(event);}
 
+    /**
+     * remove the given event from events
+     * @param event the event to br removed
+     */
     public void removeEvent(Event event){
-        String eventId = event.getId();
-        this.events.removeIf(e -> e.getId().equals(eventId));
+            String eventId = event.getId();
+            this.events.removeIf(e -> e.getId().equals(eventId));
     }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) {
@@ -96,6 +111,7 @@ public class EventCollection implements Serializable
      */
     private boolean isOnTime(Event event, Date startTime, Date endTime)
     {
+        //find alternative
         Date startEvent = event.getStartDate();
         Date endEvent = event.getEndDate();
 
