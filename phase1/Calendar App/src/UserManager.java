@@ -79,6 +79,7 @@ public class UserManager extends TextFileSerializer {
                 throw new UsernameTakenException();
 
         users.add(new User(username, password, new Calendar()));
+        //TODO: this should also create a user directory in resources/
     }
 
 }
