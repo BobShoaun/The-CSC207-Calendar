@@ -1,6 +1,14 @@
 import exceptions.PeriodAlreadyExistsException;
+import javafx.scene.Group;
+import javafx.scene.canvas.GraphicsContext;
+import sun.awt.OSInfo;
+import sun.misc.OSEnvironment;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,7 +20,7 @@ public class Calendar {
 
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;
-    List<Tag> memos;
+    List<Memo> memos;
     List<Tag> tags;
     private DataSaver dataSaver;
 
@@ -24,8 +32,7 @@ public class Calendar {
         eventCollections = new ArrayList<>();
         eventCollections.add(new EventCollection(null, new ArrayList<>()));
         alertCollections = new ArrayList<>();
-        memos = new ArrayList<>();
-        tags = new ArrayList<>();
+        load();
     }
 
     /**
@@ -33,18 +40,14 @@ public class Calendar {
      *
      * @param eventCollections List of  event collections for new calendar
      * @param alertCollections List of alert collections for new calendar
-     * @param memos            List of memos for new calendar
-     * @param tags             List of tags for new calendar
      */
-    public Calendar(List<EventCollection> eventCollections, List<AlertCollection> alertCollections, List<Tag> memos,
-                    List<Tag> tags) {
-        if (eventCollections == null || alertCollections == null || memos == null || tags == null) {
+    public Calendar(List<EventCollection> eventCollections, List<AlertCollection> alertCollections) {
+        if (eventCollections == null || alertCollections == null) {
             throw new NullPointerException();
         }
         this.eventCollections = eventCollections;
         this.alertCollections = alertCollections;
-        this.memos = memos;
-        this.tags = tags;
+        load();
     }
 
 
@@ -155,12 +158,10 @@ public class Calendar {
      * @param time The time of the alert to be added
      * @param eventId id of connected event
      */
-    //TODO: use boolean return value of addAlert
     public void addAlert(GregorianCalendar time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)) {
-                alertCollection.addAlert(time);
+            if (alertCollection.addAlert(time)) {
                 return;
             }
         }
@@ -309,6 +310,26 @@ public class Calendar {
                 eventCollections) {
             if (eventCollection.getEvent(eventId) != null) {
                 eventCollection.addTag(eventId, tag);
+                save();
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * Remove tag to an event
+     * @param eventId Event the tag is removed from
+     * @param tagName Name of the tag to be removed
+     * @throws IllegalArgumentException If the event or the tag cannot be found
+     */
+    public void removeTagFromEvent(String eventId, String tagName) throws IllegalArgumentException {
+        Tag tag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny().orElseThrow(null);
+        for (EventCollection eventCollection :
+                eventCollections) {
+            if (eventCollection.getEvent(eventId) != null) {
+                eventCollection.removeTag(eventId, tag);
+                save();
                 return;
             }
         }
@@ -331,11 +352,12 @@ public class Calendar {
      * @param text The text of the new memo
      * @throws IllegalArgumentException If a memo with the same text already exists
      */
-    public void addMemo(String text) throws IllegalArgumentException {
+    public void addMemo(String title, String text) throws IllegalArgumentException {
         if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch(mt -> true)){
             throw new IllegalArgumentException();
         }
-        memos.add(new Tag(text));
+        memos.add(new Memo(title, text));
+        save();
     }
 
     /**
@@ -350,6 +372,7 @@ public class Calendar {
             throw new IllegalArgumentException();
         }
         memo.addEvent(eventId);
+        save();
     }
 
     /**
@@ -364,6 +387,7 @@ public class Calendar {
             throw new IllegalArgumentException();
         }
         memo.removeEvent(eventId);
+        save();
     }
 
     /**
@@ -381,7 +405,7 @@ public class Calendar {
      *
      * @return An unsorted list of memos
      */
-    public List<Tag> getMemos() {
+    public List<Memo> getMemos() {
         return memos;
     }
 
@@ -392,7 +416,77 @@ public class Calendar {
      * @return List of events with memo
      */
     public List<Event> getLinkedEvents(Tag memo) {
-        return memo.getEvents();
+        return memo.getEvents().stream().map(this::getEvent).collect(Collectors.toList());
+    }
+
+    private void save(){
+        // save memos
+        StringBuilder memoData = new StringBuilder();
+        for (Memo memo :
+                memos) {
+            StringBuilder ids = new StringBuilder();
+            for (String id :
+                    memo.getEvents()) {
+                ids.append(id).append("|");
+            }
+            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("$").append(ids.toString()).append(String.format("%n"));
+        }
+        try {
+            dataSaver.saveToFile("memos.txt", memoData.toString());
+        } catch (IOException ignored) {
+
+        }
+
+        // save tags
+        StringBuilder tagsData = new StringBuilder();
+        for (Tag tag :
+                tags) {
+            StringBuilder ids = new StringBuilder();
+            for (String id :
+                    tag.getEvents()) {
+                ids.append(id).append(",");
+            }
+            memoData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
+        }
+        try {
+            dataSaver.saveToFile("tags.txt", memoData.toString());
+        } catch (IOException ignored) {
+
+        }
+    }
+
+    /**
+     *
+     */
+    private void load(){
+        //load memos
+        try {
+            memos = new ArrayList<>();
+            Scanner scanner = dataSaver.loadScannerFromFile("memos.txt");
+            while (scanner.hasNext()){
+                String memoData = scanner.nextLine();
+                String[] parts = memoData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                memos.add(new Memo(parts[0], parts[1], idStrings));
+            }
+        } catch (FileNotFoundException e) {
+
+        }
+        //load tags
+        try {
+            tags = new ArrayList<>();
+            Scanner scanner = dataSaver.loadScannerFromFile("tags.txt");
+            while (scanner.hasNext()){
+                String tagData = scanner.nextLine();
+                String[] parts = tagData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                tags.add(new Tag(parts[0], idStrings));
+            }
+        } catch (FileNotFoundException e) {
+
+        }
     }
 
     /**
@@ -492,5 +586,9 @@ public class Calendar {
 
             return first;
         }
+    }
+
+    public GregorianCalendar getTime(){
+        return (GregorianCalendar)GregorianCalendar.getInstance();
     }
 }

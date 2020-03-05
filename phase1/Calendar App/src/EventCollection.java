@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.Calendar;
@@ -211,6 +213,10 @@ public class EventCollection implements Iterable<Event>
             }
             else {throw new NoSuchElementException();}
         }
+    }
+
+    public void removeTag(String eventId, Tag tag) {
+        throw new NotImplementedException();
     }
 
 }

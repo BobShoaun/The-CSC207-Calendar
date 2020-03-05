@@ -18,7 +18,7 @@ public class UserManager extends DataSaver {
     public User getCurrentUser () { return currentUser; }
 
     public UserManager () {
-        super("");
+        super("", false);
         users = new ArrayList<> ();
         currentUser = null;
     }

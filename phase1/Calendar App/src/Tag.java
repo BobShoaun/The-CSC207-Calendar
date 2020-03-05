@@ -9,6 +9,10 @@ public class Tag {
         this.text = text;
     }
 
+    public Tag(String text, List<String> eventIds) {
+
+    }
+
     public String getText() {
         return text;
     }

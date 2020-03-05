@@ -1,3 +1,7 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * User class
@@ -17,7 +21,7 @@ public class User implements StringParsable {
     public User (String name, String password) {
         this.name = name;
         this.password = password;
-        dataSaver = new DataSaver(name);
+        dataSaver = new DataSaver(name, true);
         this.calendar = new Calendar(dataSaver);
     }
 
@@ -34,7 +38,7 @@ public class User implements StringParsable {
         String[] split = string.split("\\s+"); // split text by whitespaces
         this.name = split[0];
         this.password = split[1];
-        this.calendar = new Calendar(new DataSaver(name));
+        this.calendar = new Calendar(new DataSaver(name, true));
     }
 
     @Override
@@ -47,4 +51,11 @@ public class User implements StringParsable {
         return name + " " + password;
     }
 
+    public GregorianCalendar getLastLoginTime(){
+        GregorianCalendar gregorianCalendar= new GregorianCalendar();
+        gregorianCalendar.set(2000, 1, 1, 1, 0);
+        return gregorianCalendar;
+    }
+
+    public void updateLastLoginTime(){throw new NotImplementedException();}
 }
