@@ -2,3 +2,4 @@
 phase1/Calendar App/out/production/Calendar App/META-INF/Calendar App.kotlin_module
 *.txt
 /phase1/Calendar App/.idea/misc.xml
+*.xml
