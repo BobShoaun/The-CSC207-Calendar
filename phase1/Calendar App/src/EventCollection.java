@@ -1,6 +1,6 @@
 import java.io.Serializable;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 public class EventCollection implements Serializable // TODO: shouldn't this be TextFileSerializer?
 {
@@ -92,7 +92,7 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
 
     }
 
-    public void addTag(String eventId, MT tag) {
+    public void addTag(String eventId, Tag tag) {
 
     }
 
