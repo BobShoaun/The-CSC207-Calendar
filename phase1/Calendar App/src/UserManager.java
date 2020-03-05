@@ -1,9 +1,9 @@
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * UserManager class
@@ -14,22 +14,28 @@ public class UserManager extends TextFileSerializer {
     private List<User> users;
     private User currentUser;
 
+    public User getCurrentUser () { return currentUser; }
+
     public UserManager () {
         users = new ArrayList<> ();
         currentUser = null;
     }
 
-    public void loadUsers () {
-        Scanner scanner = loadScannerFromFile("resources/users.txt");
-        while (scanner.hasNext())
-            users.add(new User(scanner.nextLine()));
+    public void loadUsers() {
+        File[] files = getFilesInDirectory("users/");
+        for (File file : files) {
+            String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
+            users.add(new User(userCredentials, file.getPath()));
+        }
     }
 
     public void saveUsers() {
-        List<String> parsedUsers = new ArrayList<>();
         for (User user : users)
-            parsedUsers.add(user.parse());
-        saveToFile("resources/users.txt", parsedUsers);
+            saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
+    }
+
+    public void saveUser(User user) {
+        saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
     }
 
     public void displayUsers() {
@@ -53,11 +59,12 @@ public class UserManager extends TextFileSerializer {
             throw new PasswordMismatchException();
 
         for (User user : users)
-            if (user.getName().equals(username))
+            if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();
 
-        users.add(new User(username, password, new Calendar()));
-        //TODO: this should also create a user directory in resources/
+        User newUser = new User(username, password, new Calendar());
+        users.add(newUser);
+        saveUser(newUser);
     }
 
 }
