@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * Calendar class
  */
-public class Calendar {
+public class Calendar { //TODO shud be TextFileSerializer too to load memo and tags
 
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;

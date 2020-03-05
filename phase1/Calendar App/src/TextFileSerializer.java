@@ -1,14 +1,11 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-public abstract class TextFileSerializer {
+public class TextFileSerializer {
 
     /**
      *
@@ -60,11 +57,20 @@ public abstract class TextFileSerializer {
      * @param path
      * @param contents
      */
-    public void saveToFile (String path, String contents) {
+    public void saveToFile (String path, List<String> contents) {
         try (PrintWriter out = new PrintWriter(path)) {
-            out.println(contents);
+            for (String line : contents)
+                out.println(line);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            // file and/or directory doesnt exist
+            File newFile = new File(path);
+            newFile.getParentFile().mkdirs(); // create whole directory
+            try {
+                newFile.createNewFile();
+                saveToFile(path, contents);
+            } catch (IOException ee) {
+                ee.printStackTrace();
+            }
         }
     }
 
@@ -73,13 +79,27 @@ public abstract class TextFileSerializer {
      * @param path
      * @param contents
      */
-    public void saveToFile (String path, List<String> contents) {
-        try (PrintWriter out = new PrintWriter(path)) {
-            for (String line : contents)
-                out.println(line);
+    public void saveToFile (String path, String contents) {
+        try (FileWriter fileWriter = new FileWriter(path)) {
+            fileWriter.write(contents);
         } catch (FileNotFoundException e) {
+            // file and/or directory doesnt exist
+            File newFile = new File(path);
+            newFile.getParentFile().mkdirs(); // create whole directory
+            try {
+                newFile.createNewFile();
+                saveToFile(path, contents);
+            } catch (IOException ee) {
+                ee.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public File[] getFilesInDirectory (String path) {
+        return new File(path).listFiles();
+    }
+
 
 }
