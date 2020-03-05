@@ -1,5 +1,6 @@
 import exceptions.PeriodAlreadyExistsException;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 
@@ -9,7 +10,7 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection extends TextFileSerializer implements Observer {
+public class AlertCollection extends DataSaver implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
@@ -21,6 +22,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @param e The Event attached to the Alert.
      */
     public AlertCollection(Event e) {
+        super ("");
         this.eventId = e.getId();
         this.eventTime = new GregorianCalendar();
         this.eventTime.setTime(e.getStartDate().getTime());
@@ -240,7 +242,12 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @param eventId  The ID of the event for which the Alerts are being loaded
      */
     public void load(String filePath, String eventId) {
-        List<String> strings = loadStringsFromFile(filePath + "/" + eventId + ".txt");
+        List<String> strings = null;
+        try {
+            strings = loadStringsFromFile(filePath + "/" + eventId + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.eventId = strings.get(0).trim();
 
@@ -265,7 +272,11 @@ public class AlertCollection extends TextFileSerializer implements Observer {
     public void save(String filePath) {
         filePath = filePath + "/" + eventId + ".txt";
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        saveToFile(filePath, contents);
+        try {
+            saveToFile(filePath, contents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

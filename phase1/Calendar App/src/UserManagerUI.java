@@ -1,4 +1,3 @@
-import com.sun.javaws.IconUtil;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
@@ -17,6 +16,7 @@ public class UserManagerUI extends UserInterface {
 
     @Override
     public void display() {
+        userManager.displayUsers();
         System.out.println("\n" +
                 " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
                 "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
