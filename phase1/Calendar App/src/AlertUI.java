@@ -1,7 +1,7 @@
 /**
  * Terminal interface for AlertCollection.
  */
-public class AlertUI {
+public class AlertUI extends UserInterface {
 
     private AlertCollection alerts;
 
@@ -9,4 +9,13 @@ public class AlertUI {
         alerts = ac;
     }
 
+    @Override
+    public void display() {
+        System.out.println(alerts.toString());
+    }
+
+    @Override
+    public void show() {
+
+    }
 }

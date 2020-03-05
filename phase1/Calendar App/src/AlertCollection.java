@@ -58,7 +58,7 @@ public class AlertCollection implements Observer {
             if (a.getTime().equals(time.getTime()))
                 return false;
         }
-        manAlerts.add(new Alert(time));
+        manAlerts.add(new Alert(eventId, time));
         manAlerts.sort(new AlertComparator());
         return true;
     }
@@ -190,7 +190,7 @@ public class AlertCollection implements Observer {
         List<Alert> alerts = new LinkedList<>();
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
-                alerts.add(new Alert(d));
+                alerts.add(new Alert(eventId, d));
         }
         return alerts;
     }
@@ -225,7 +225,7 @@ public class AlertCollection implements Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Alert for EventID " + eventId
+        StringBuilder result = new StringBuilder("Alert for EventID " + getEventId()
                 + ", which occurs at " + eventTime.getTime().toString() + ".\n");
         result.append("===== MANUALLY CREATED ALERTS =====\n");
         for (Alert a : manAlerts) {
@@ -248,7 +248,7 @@ public class AlertCollection implements Observer {
 
         String[] manTimes = strings.get(1).trim().split("\\s+");
         for (String timeStr : manTimes) {
-            manAlerts.add(new Alert(timeStr));
+            manAlerts.add(new Alert(eventId, timeStr));
         }
 
         StringBuilder cgStr = new StringBuilder();

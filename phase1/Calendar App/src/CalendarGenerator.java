@@ -50,9 +50,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     }
 
     @Override
-    /**
-     * A user friendly String representation of this CG (for UI purposes)
-     */
     public String toString() {
         return "";
     }
