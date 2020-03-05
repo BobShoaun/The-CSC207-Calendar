@@ -591,4 +591,14 @@ public class Calendar {
     public GregorianCalendar getTime(){
         return (GregorianCalendar)GregorianCalendar.getInstance();
     }
+
+    public void editMemoName(String memoName, String newMemoName){
+        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
+        memo.setTitle(newMemoName);
+    }
+
+    public void editMemoText(String memoName, String newMemoText){
+        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
+        memo.setText(newMemoText);
+    }
 }
