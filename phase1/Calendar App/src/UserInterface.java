@@ -4,27 +4,31 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+/**
+ * User interface class representing an abstract user interface
+ * @author Ng Bob Shoaun
+ */
 public abstract class UserInterface {
 
     private Scanner scanner = new Scanner(System.in);
 
     public abstract void display();
 
-    public abstract void showUI();
+    public abstract void show();
 
-    public String getStringInput() {
+    protected String getStringInput() {
         return scanner.nextLine();
     }
 
-    public int getIntInput() {
+    protected int getIntInput() {
         return scanner.nextInt();
     }
 
-    public String getDurationInput() {
+    protected String getDurationInput() {
         return scanner.nextLine();
     }
 
-    public GregorianCalendar getDateInput () {
+    protected GregorianCalendar getDateInput () {
         // DD/MM/YYYY HH:MM:SS
         System.out.println("Please enter a date in the format DD/MM/YYYY HH:MM:SS :");
         GregorianCalendar calendar = new GregorianCalendar();
@@ -39,8 +43,4 @@ public abstract class UserInterface {
         return calendar;
     }
 
-
-
 }
-
-
