@@ -1,5 +1,6 @@
 import exceptions.PeriodAlreadyExistsException;
 
+import javax.swing.text.html.Option;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
@@ -602,5 +603,9 @@ public class Calendar {
 
     public void removeMemo(Memo memo){
         memos.remove(memo);
+    }
+
+    public Memo getMemo(String name){
+        return memos.stream().filter(m -> m.getTitle() == name).findAny().orElse(null);
     }
 }
