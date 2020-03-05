@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
@@ -9,7 +11,6 @@ public class Event extends Observable{
 
     private String id;
     private String name;
-    private String description;
     private GregorianCalendar startDate;
     private GregorianCalendar endDate;
 
@@ -62,12 +63,6 @@ public class Event extends Observable{
     public void setName(String newName) { this.name = newName; }
 
     /**
-     * Set the description of the Event
-     * @param d the Event description
-     */
-    public void setDescription(String d) { this.description = d; }
-
-    /**
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
@@ -104,5 +99,8 @@ public class Event extends Observable{
         return newGC;
     }
 
+    public String toString() {
+        throw new NotImplementedException();
+    }
 
 }
