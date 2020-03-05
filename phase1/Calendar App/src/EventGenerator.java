@@ -9,6 +9,7 @@ import java.util.Calendar;
 public class EventGenerator {
     private Event baseEvent;
     private CalendarGenerator calGen;
+    private Duration dur;
 
     /**
      * EventGenerator for finite repeating events events
@@ -45,8 +46,14 @@ public class EventGenerator {
 
     public List<Event> generateFiniteEvents() throws InvalidDateException
     {
-        for (GregorianCalendar c : calGen) {
+        List<Event> ret = new ArrayList<>();
 
+        for (GregorianCalendar GC : calGen) {
+            String id = baseEvent.getName()+GC.getTime();
+            String name = baseEvent.getName();
+            GregorianCalendar curr = (GregorianCalendar) GC.clone();
+            GC.add(Calendar.MILLISECOND,(int)this.dur.toMillis());
+            Event e = new Event(id, name, curr, GC);
         }
         return null;
     }
