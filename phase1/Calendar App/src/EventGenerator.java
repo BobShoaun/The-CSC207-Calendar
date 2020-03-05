@@ -1,8 +1,7 @@
 import exceptions.InvalidDateException;
 
-import java.security.InvalidParameterException;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 public class EventGenerator {
     private Event baseEvent;

@@ -1,14 +1,8 @@
 import exceptions.PeriodAlreadyExistsException;
-import javafx.scene.Group;
-import javafx.scene.canvas.GraphicsContext;
-import sun.awt.OSInfo;
-import sun.misc.OSEnvironment;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -161,7 +155,8 @@ public class Calendar {
     public void addAlert(GregorianCalendar time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.addAlert(time)) {
+            if (alertCollection.getEventId().equals(eventId)) {
+                alertCollection.addAlert(time);
                 return;
             }
         }
@@ -179,17 +174,17 @@ public class Calendar {
      * @param eventId The event this alert should be linked to
      */
     public void addAlert(GregorianCalendar start, Duration period, String eventId) throws PeriodAlreadyExistsException {
-        for (AlertCollection alertCollection :
-                alertCollections) {
+        Event event = getEvent(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException();
+        }
+        for (AlertCollection alertCollection : alertCollections) {
             if (alertCollection.getEventId().equals(eventId)) {
                 alertCollection.addAlert(start, period);
                 return;
             }
         }
-        Event event = getEvent(eventId);
-        if (event == null) {
-            throw new IllegalArgumentException();
-        }
+
         AlertCollection alertCollection = new AlertCollection(event, new DataSaver(""));
         alertCollection.addAlert(start, period);
         alertCollections.add(alertCollection);
