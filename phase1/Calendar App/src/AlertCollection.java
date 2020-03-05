@@ -1,8 +1,11 @@
+import exceptions.PeriodAlreadyExistsException;
+
 import java.time.Duration;
 import java.util.*;
 
 /**
- * A collection/group of one alert.
+ * A collection/group of one alert. Has a list of manually created alerts and possibly
+ * a CalendarGenerator for repeating Alerts.
  *
  * @author colin
  */
@@ -10,7 +13,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
-    private CalendarGenerator cg;
+    private CalendarGenerator calGen;
 
     /**
      * Creates a new Alert group (possibly repeating)
@@ -44,7 +47,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @return Whether or not the Alert could be added.
      */
     public boolean addAlert(GregorianCalendar time) {
-        for (GregorianCalendar c : cg) {
+        for (GregorianCalendar c : calGen) {
             if (c.equals(time))
                 return false;
         }
@@ -59,17 +62,20 @@ public class AlertCollection extends TextFileSerializer implements Observer {
 
     /**
      * Add a recurring Alert until the Event occurs
-     *
-     * @param start  The start time
+     *  @param start  The start time
      * @param period The time between each alert
      */
-    public boolean addAlert(GregorianCalendar start, Duration period) {
-        if (this.cg == null)
-            return false;
-        else if (this.cg.getPeriods().contains(period))
-            return false;
-        this.cg.addPeriod(period);
-        return true;
+    public void addAlert(GregorianCalendar start, Duration period) throws PeriodAlreadyExistsException {
+        if (this.calGen == null) {
+            ArrayList<Duration> d = new ArrayList<>();
+            d.add(period);
+            this.calGen = new CalendarGenerator(start, d, eventTime);
+        }
+        else if (this.calGen.getPeriods().contains(period)) {
+            throw new PeriodAlreadyExistsException();
+        }
+        else
+            this.calGen.addPeriod(period);
     }
 
     /**
@@ -89,11 +95,11 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @return Whether the alert could be removed
      */
     public boolean removeGeneratedAlert(GregorianCalendar d) {
-        for (GregorianCalendar ignored : cg.getIgnoreList()) {
+        for (GregorianCalendar ignored : calGen.getIgnoreList()) {
             if (d.equals(ignored))
                 return false;
         }
-        return cg.getIgnoreList().add(d);
+        return calGen.getIgnoreList().add(d);
     }
 
     /**
@@ -112,14 +118,14 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @param newEventTime The new time of the Event
      */
     public void shiftAlerts(GregorianCalendar newEventTime) {
-        if (cg == null) {
+        if (calGen == null) {
             throw new IllegalStateException();
         }
         GregorianCalendar newStart = new GregorianCalendar();
         long diff = newEventTime.getTimeInMillis() - eventTime.getTimeInMillis();
-        long newMillis = cg.getStartTime().getTimeInMillis() + diff;
+        long newMillis = calGen.getStartTime().getTimeInMillis() + diff;
         newStart.setTimeInMillis(newMillis);
-        this.cg.setStartTime(newStart);
+        this.calGen.setStartTime(newStart);
     }
 
     /**
@@ -128,7 +134,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @param cg The new CalendarGenerator
      */
     public void setCalendarGenerator(CalendarGenerator cg) {
-        this.cg = cg;
+        this.calGen = cg;
     }
 
     /**
@@ -137,7 +143,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @return The current CalendarGenerator
      */
     public CalendarGenerator getCalendarGenerator() {
-        return cg;
+        return calGen;
     }
 
     /**
@@ -179,7 +185,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      */
     public List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
-        for (GregorianCalendar d : cg) {
+        for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
                 alerts.add(new Alert(d));
         }
@@ -206,25 +212,25 @@ public class AlertCollection extends TextFileSerializer implements Observer {
      * @return String representation of all the data in this AC, including the CalendarGenerator.
      */
     public String getString() {
-        String result = eventId + "\n" + eventTime.getTimeInMillis() + "\n";
+        StringBuilder result = new StringBuilder(eventId + "\n" + eventTime.getTimeInMillis() + "\n");
         for (Alert a : getManAlerts()) {
-            result += a.getString() + " ";
+            result.append(a.getString()).append(" ");
         }
-        result += "\n" + cg.getString();
-        return result;
+        result.append("\n").append(calGen.getString());
+        return result.toString();
     }
 
     @Override
     public String toString() {
-        String result = "Alert for EventID " + eventId
-                + ", which occurs at " + eventTime.getTime().toString() + ".\n";
-        result += "===== MANUALLY CREATED ALERTS =====\n";
+        StringBuilder result = new StringBuilder("Alert for EventID " + eventId
+                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
+        result.append("===== MANUALLY CREATED ALERTS =====\n");
         for (Alert a : manAlerts) {
-            result += a.toString() + "\n";
+            result.append(a.toString()).append("\n");
         }
-        result += "===== REPEATING ALERTS =====\n";
-        result += cg.toString();
-        return result;
+        result.append("===== REPEATING ALERTS =====\n");
+        result.append(calGen.toString());
+        return result.toString();
     }
 
     /**
@@ -247,7 +253,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
         for (int i = 2; i < strings.size(); i++) {
             cgStr.append(strings.get(i));
         }
-        this.cg = new CalendarGenerator(cgStr.toString());
+        this.calGen = new CalendarGenerator(cgStr.toString());
 
     }
 

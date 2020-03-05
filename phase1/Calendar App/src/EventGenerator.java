@@ -1,17 +1,13 @@
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
-public class EventRepetition
-{
+public class EventGenerator {
     private Event baseEvent;
     private Date start;
     private Date end;
     private Date frequency;
 
-    public EventRepetition(Event baseEvent, Date start, Date end, Date frequency)
-    {
+    public EventGenerator(Event baseEvent, Date start, Date end, Date frequency) {
         this.baseEvent = baseEvent;
         this.start = start;
         this.end = end;
@@ -25,7 +21,7 @@ public class EventRepetition
         Date curr = this.start;
         while(curr.compareTo(this.end)<=0){
             Date currNext = addTime(curr, frequency);
-            Event e = new Event("", eventName, curr, currNext);
+            Event e = new Event("", eventName, dateToGC(curr), dateToGC(currNext));
             ret.add(e);
             curr=currNext;
         }
@@ -39,5 +35,10 @@ public class EventRepetition
         //Adding the time to offset each event
         c.add(Calendar.MILLISECOND, 1);
         return c.getTime();
+    }
+    private GregorianCalendar dateToGC(Date date) {
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return calendar;
     }
 }

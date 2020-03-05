@@ -1,21 +1,16 @@
-
-import org.apache.commons.lang3.time.DateUtils;
-
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
-public class EventCollection implements Serializable
+public class EventCollection implements Serializable // TODO: shouldn't this be TextFileSerializer?
 {
     private ArrayList<Event> events;
     private String name;
 
     /**
      * constructor for a series, or a list of regular events if name == null
-     * @param name name of series
+     *
+     * @param name   name of series
      * @param events list of events of the series
      */
     public EventCollection(String name, ArrayList<Event> events)
@@ -52,11 +47,10 @@ public class EventCollection implements Serializable
      * @param date date of events demanded
      * @return a list of events that is on the same day as <date></>
      */
-    public List<Event> getEvents(Date date)
-    {
+    public List<Event> getEvents(Date date) {
         //find alternative
-        Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
-        Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
+        Date startTime = roundUp(date);
+        Date endTime = roundDown(date);
         return getEvents(startTime, endTime);
     }
 
@@ -111,12 +105,33 @@ public class EventCollection implements Serializable
      */
     private boolean isOnTime(Event event, Date startTime, Date endTime)
     {
-        //find alternative
-        Date startEvent = event.getStartDate();
-        Date endEvent = event.getEndDate();
+        Date startEvent = GCToDate(event.getStartDate());
+        Date endEvent = GCToDate(event.getEndDate());
+        boolean within1 = startTime.before(startEvent) && endTime.after(startEvent);
+        boolean within2 = startTime.before(endEvent) && endTime.after(endEvent);
+        return  within1 && within2;
 
-        boolean within1 = (startTime.before(startEvent) && endTime.after(startEvent)) || (startTime.after(startEvent) && startTime.before(endEvent));
-        boolean within2 = (startTime.before(endEvent) && endTime.after(endEvent)||(endTime.after(startEvent) && endTime.before(endEvent)));
-        return within1 && within2;
+    }
+    private Date GCToDate(GregorianCalendar calendar)
+    {
+        return calendar.getTime();
+    }
+    private Date roundUp(Date date){
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.set(Calendar.HOUR_OF_DAY, 23);
+        cl.set(Calendar.MINUTE, 59);
+        cl.set(Calendar.SECOND, 59);
+        cl.set(Calendar.MILLISECOND, 999);
+        return cl.getTime();
+    }
+    private Date roundDown(Date date){
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.set(Calendar.HOUR_OF_DAY, 23);
+        cl.set(Calendar.MINUTE, 59);
+        cl.set(Calendar.SECOND, 59);
+        cl.set(Calendar.MILLISECOND, 999);
+        return cl.getTime();
     }
 }

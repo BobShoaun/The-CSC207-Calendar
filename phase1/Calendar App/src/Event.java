@@ -1,9 +1,6 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import javax.lang.model.element.NestingKind;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Event class

@@ -1,3 +1,6 @@
+import exceptions.PasswordMismatchException;
+import exceptions.UsernameTakenException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,14 +38,22 @@ public class UserManager extends TextFileSerializer {
     }
 
     public static void main (String[] args) {
-        System.out.println("Hello calendar");
+        System.out.println("\n" +
+                " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
+                "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
+                "██║     ███████║██║     █████╗  ██╔██╗ ██║██║  ██║███████║██████╔╝\n" +
+                "██║     ██╔══██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══██║██╔══██╗\n" +
+                "╚██████╗██║  ██║███████╗███████╗██║ ╚████║██████╔╝██║  ██║██║  ██║\n" +
+                " ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
+        
         UserManager um = new UserManager();
         um.loadUsers();
-        um.displayUsers();
         try {
-            um.registerUser("Dog", "woofwoofwoof", "woofwoofwoof");
-        } catch (Exception e) {
-            e.printStackTrace();
+            um.registerUser("Cat", "meow123", "meow123");
+        } catch (UsernameTakenException e) {
+            System.out.println("Username already taken!");
+        } catch (PasswordMismatchException e) {
+            System.out.println("Password mismatch!");
         }
         um.displayUsers();
         um.saveUsers();
@@ -58,17 +69,17 @@ public class UserManager extends TextFileSerializer {
         return false;
     }
 
-    public boolean registerUser (String username, String password, String confirmPassword)
+    public void registerUser(String username, String password, String confirmPassword)
             throws UsernameTakenException, PasswordMismatchException {
-        if (password != confirmPassword)
+        if (!password.equals(confirmPassword))
             throw new PasswordMismatchException();
 
         for (User user : users)
             if (user.getName().equals(username))
-                throw new UsernameTakenException ();
+                throw new UsernameTakenException();
 
         users.add(new User(username, password, new Calendar()));
-        return true;
+        //TODO: this should also create a user directory in resources/
     }
 
 }

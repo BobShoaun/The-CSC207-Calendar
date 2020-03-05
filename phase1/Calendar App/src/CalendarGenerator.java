@@ -38,15 +38,15 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * @return String representation of the data
      */
     public String getString() {
-        String result = "" + startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n";
+        StringBuilder result = new StringBuilder("" + startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n");
         for (Duration period : periods) {
-            result += period.getSeconds() + " ";
+            result.append(period.getSeconds()).append(" ");
         }
-        result += "\n";
+        result.append("\n");
         for (GregorianCalendar ignored : ignoreList) {
-            result += ignored.getTimeInMillis() + " ";
+            result.append(ignored.getTimeInMillis()).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     @Override
