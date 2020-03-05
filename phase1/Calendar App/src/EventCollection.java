@@ -1,10 +1,11 @@
 import java.io.Serializable;
 import java.util.*;
 import java.util.Calendar;
+import java.util.function.Consumer;
 
-public class EventCollection implements Serializable // TODO: shouldn't this be TextFileSerializer?
+public class EventCollection implements Iterable<Event>
 {
-    private ArrayList<Event> events;
+    private List<Event> events;
     private String name;
 
     /**
@@ -65,8 +66,23 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
         return ret;
     }
 
+    /**
+     *
+     * @param start the earliest start date of events in this iterator
+     * @return a iterator containing all events but ones that have start dates before <start></>
+     */
     public Iterator<Event> getEventIterator(Date start) {
-        throw new UnsupportedOperationException();
+        Iterator<Event> ite = events.iterator();
+        while(ite.hasNext())
+        {
+            Event curr = ite.next();
+            Date startDate = curr.getStartDate().getTime();
+            if (startDate.compareTo(start)<=0)
+            {
+                ite.remove();
+            }
+        }
+        return ite;
     }
 
     /**
@@ -138,4 +154,63 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
         cl.set(Calendar.MILLISECOND, 999);
         return cl.getTime();
     }
+
+    /**
+     * Returns an iterator over elements of type {@code Event}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<Event> iterator() {return new EventCollectionIterator();}
+
+    private class EventCollectionIterator implements Iterator<Event>{
+        /** The index of the next Event to return. */
+        private int current = 0;
+
+        /**
+         * Returns whether there is another Event to return.
+         *
+         * @return whether there is another Event to return.
+         */
+        @Override
+        public boolean hasNext() {
+            return current < events.size();
+        }
+
+        /**
+         * Returns the next Event.
+         *
+         * @return the next Event.
+         */
+        @Override
+        public Event next() {
+            Event res;
+
+            // List.get(i) throws an IndexOutBoundsException if
+            // we call it with i >= contacts.size().
+            // But Iterator's next() needs to throw a
+            // NoSuchElementException if there are no more elements.
+            try {
+                res = events.get(current);
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException();
+            }
+            current += 1;
+            return res;
+        }
+
+        /**
+         * Removes the Event just returned.
+         */
+        @Override
+        public void remove() {
+            if(events.size()!=0)
+            {
+                events.remove(current-1);
+                current=-1;
+            }
+            else {throw new NoSuchElementException();}
+        }
+    }
+
 }
