@@ -25,6 +25,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * Create a CalendarGenerator from a String.
      * @param input
      */
+
     public CalendarGenerator(String input) {
         String[] information = input.split("\n");
         startTime = new GregorianCalendar();
@@ -35,10 +36,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
         periods = Arrays.stream(information[2].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
         periods = Arrays.stream(information[3].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
-    }
-
-    public void addPeriod(Duration period) {
-        //TODO: complete
     }
 
     /**
@@ -60,13 +57,20 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     @Override
     public String toString() {
-        return "Start: " + startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ";
+        StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ");
+        for (Duration period : periods) {
+            result.append(period.getSeconds()).append(", ");
+        }
+        return result.toString();
     }
 
     @Override
     public Iterator<GregorianCalendar> iterator() {
-        return null;
-        // TODO: complete
+        return new CGI();
+    }
+
+    public void addPeriod(Duration period) {
+        periods.add(period);
     }
 
     public void addIgnore(GregorianCalendar newIgnoreTime){
@@ -95,5 +99,59 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     public void setStartTime(GregorianCalendar startTime) {
         this.startTime = startTime;
+    }
+
+    private class CGI implements Iterator<GregorianCalendar>{
+        GregorianCalendar currentTime;
+
+        public CGI() {
+            currentTime = startTime;
+        }
+
+        public GregorianCalendar add(GregorianCalendar cal, Duration dur){
+            GregorianCalendar result = new GregorianCalendar();
+            result.setTime(new Date(cal.getTimeInMillis() + dur.getSeconds()));
+            return result;
+        }
+
+        public List<GregorianCalendar> nextSet(){
+            ArrayList<GregorianCalendar> candiates = new ArrayList<>();
+
+            for(Duration period : periods){
+                GregorianCalendar newTime = startTime;
+                while (currentTime.after(newTime)){
+                    newTime = add(newTime, period);
+                }
+
+                candiates.add(newTime);
+            }
+
+            candiates.removeIf(candiate -> ignoreList.contains(candiate) || (endTime != null && candiate.after(endTime)));
+
+            return candiates;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return this.nextSet().size() != 0;
+        }
+
+        @Override
+        public GregorianCalendar next() {
+            if(hasNext()){
+                GregorianCalendar result = null;
+
+                for(GregorianCalendar time : nextSet()){
+                    if (result == null || result.after(time)){
+                        result = time;
+                    }
+                }
+
+                currentTime = result;
+                return result;
+            } else {
+                return null;
+            }
+        }
     }
 }
