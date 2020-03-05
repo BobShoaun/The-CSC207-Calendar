@@ -3,20 +3,16 @@ import java.util.ArrayList;
 
 public class Tag {
     private String text;
-    private ArrayList<String> ids;
+    private List<String> ids;
 
     public Tag(String text) {
         this.text = text;
         ids = new ArrayList<>();
     }
 
-    public Tag(String text, ArrayList<String> ids) {
+    public Tag(String text, List<String> ids) {
         this.text = text;
         this.ids = ids;
-    }
-
-    public Tag(String text, List<String> eventIds) {
-
     }
 
     public String getText() {

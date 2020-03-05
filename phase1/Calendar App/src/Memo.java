@@ -5,7 +5,7 @@ public class Memo {
 
     private String title;
     private String text;
-    private ArrayList<String> ids;
+    private List<String> ids;
 
     public Memo(String title, String text) {
         this.text = text;
@@ -13,7 +13,7 @@ public class Memo {
         ids = new ArrayList<>();
     }
 
-    public Memo(String title, String text, ArrayList<String> ids) {
+    public Memo(String title, String text, List<String> ids) {
         this.text = text;
         this.title = title;
         this.ids = ids;
