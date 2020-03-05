@@ -165,7 +165,7 @@ public class Calendar {
             }
         }
 
-        AlertCollection alertCollection = new AlertCollection(getEvent(eventId));
+        AlertCollection alertCollection = new AlertCollection(getEvent(eventId), new DataSaver(""));
         alertCollection.addAlert(time);
         alertCollections.add(alertCollection);
     }
@@ -189,7 +189,7 @@ public class Calendar {
         if (event == null) {
             throw new IllegalArgumentException();
         }
-        AlertCollection alertCollection = new AlertCollection(event);
+        AlertCollection alertCollection = new AlertCollection(event, new DataSaver(""));
         alertCollection.addAlert(start, period);
         alertCollections.add(alertCollection);
     }

@@ -16,7 +16,7 @@ public class UserManagerUI extends UserInterface {
 
     @Override
     public void display() {
-        userManager.displayUsers();
+//        userManager.displayUsers();
         System.out.println("\n" +
                 " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
                 "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
