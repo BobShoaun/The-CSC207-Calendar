@@ -65,7 +65,7 @@ public abstract class UserInterface {
 
     protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
-        System.out.print(prompt);
+        System.out.print(prompt + " (DD/MM/YYYY HH:MM:SS)");
         GregorianCalendar calendar = new GregorianCalendar();
         String dateString = scanner.nextLine();
         try {
@@ -74,7 +74,7 @@ public abstract class UserInterface {
         } catch (ParseException e) {
             if(allowNull && dateString.equals(""))
                 return null;
-            return getDateInput("Please re-enter a valid date: ");
+            return getDateInput("Please re-enter a valid date: (DD/MM/YYYY HH:MM:SS)");
         }
         return calendar;
     }

@@ -29,7 +29,7 @@ public class AlertUI extends UserInterface {
                 break;
             case 1:
                 boolean result = alerts.addAlert(
-                        getDateInput("Enter a time for the alert, in DD/MM/YYYY hh:mm:ss format: "));
+                        getDateInput("Enter a time for the alert: "));
                 while (!result) {
                     result = alerts.addAlert(
                             getDateInput("Alert already exists. Please try again: "));
@@ -52,7 +52,7 @@ public class AlertUI extends UserInterface {
                 boolean works = false;
                 while (!works) {
                     works = alerts.removeAlert(
-                            getDateInput("Enter the date of the alert to be removed, in DD/MM/YYYY hh:mm:ss format: ")
+                            getDateInput("Enter the date of the alert to be removed: ")
                     );
                 }
                 break;
