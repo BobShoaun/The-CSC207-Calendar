@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 public class UserManager extends TextFileSerializer {
 
-    private ArrayList<User> users;
+    private List<User> users;
     private User currentUser;
 
     public UserManager () {
@@ -34,19 +34,6 @@ public class UserManager extends TextFileSerializer {
             System.out.println(user);
     }
 
-    public static void main (String[] args) {
-        System.out.println("Hello calendar");
-        UserManager um = new UserManager();
-        um.loadUsers();
-        um.displayUsers();
-        try {
-            um.registerUser("Dog", "woofwoofwoof", "woofwoofwoof");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        um.displayUsers();
-        um.saveUsers();
-    }
 
     public boolean loginUser (String username, String password) {
         for (User user : users) {
