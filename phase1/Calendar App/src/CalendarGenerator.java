@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Date;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
@@ -24,7 +27,15 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * @param input
      */
     public CalendarGenerator(String input) {
+        String[] information = input.split("\n");
+        startTime = new GregorianCalendar();
+        startTime.setTime(new Date(Integer.parseInt(information[0])));
 
+        endTime = (new GregorianCalendar());
+        endTime.setTime(new Date(Integer.parseInt(information[1])));
+
+        periods = Arrays.stream(information[2].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
+        periods = Arrays.stream(information[3].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
     }
 
     public void addPeriod(Duration period) {
@@ -37,7 +48,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * @return String representation of the data
      */
     public String getString() {
-        StringBuilder result = new StringBuilder("" + startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n");
+        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(" ");
         }
@@ -50,7 +61,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     @Override
     public String toString() {
-        return "";
+        return "Start: " + startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ";
     }
 
     @Override
@@ -59,20 +70,28 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         // TODO: complete
     }
 
-    public List<GregorianCalendar> getIgnoreList() {
-        return ignoreList;
+    public void addIgnore(GregorianCalendar newIgnoreTime){
+        ignoreList.add(newIgnoreTime);
     }
 
-    public GregorianCalendar getStartTime() {
-        return startTime;
+    public List<GregorianCalendar> getIgnoreList() {
+        return ignoreList;
     }
 
     public List<Duration> getPeriods() {
         return periods;
     }
 
+    public GregorianCalendar getStartTime() {
+        return startTime;
+    }
+
     public GregorianCalendar getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(GregorianCalendar endTime) {
+        this.endTime = endTime;
     }
 
     public void setStartTime(GregorianCalendar startTime) {

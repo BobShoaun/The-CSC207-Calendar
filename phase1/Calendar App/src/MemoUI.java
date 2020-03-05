@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 public class MemoUI extends UserInterface {
     Memo memo;
     Calendar calendar;
@@ -18,8 +16,11 @@ public class MemoUI extends UserInterface {
     public void show() {
         boolean running = true;
         while (running) {
-            int option = getOptionsInput(new String[]{"Edit Title", "Edit Text", "Show Events", "Delete", "Exit"});
+            int option = getOptionsInput(new String[]{"Exit", "Edit Title", "Edit Text", "Show Events", "Delete"});
             switch (option) {
+                case 0:
+                    running = false;
+
                 case 1:
                     memo.setTitle(this.getStringInput("Enter new title: "));
 
@@ -28,15 +29,11 @@ public class MemoUI extends UserInterface {
 
                 case 3:
                     for(String id : memo.getEvents()){
-                        Event event = calendar.getEvent(id);
-                        System.out.println(event.getName() + event.getStartDate().toString());
+                        System.out.println(calendar.getEvent(id).toString());
                     }
 
                 case 4:
                     calendar.removeMemo(memo);
-
-                case 5:
-                    running = false;
             }
         }
     }
