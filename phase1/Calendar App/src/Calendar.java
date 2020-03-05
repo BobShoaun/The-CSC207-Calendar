@@ -607,6 +607,10 @@ public class Calendar {
     }
 
     public Memo getMemo(String name){
-        return memos.stream().filter(m -> m.getTitle() == name).findAny().orElse(null);
+        return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
+    }
+
+    public void removeEvent(Event event){
+        eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 }

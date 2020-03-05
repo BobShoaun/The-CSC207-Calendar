@@ -1,3 +1,4 @@
+import exceptions.InvalidDateException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
@@ -48,7 +49,7 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "View memos", "View memo"});
+            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event"});
             switch (command){
                 case 0:
                     return;
@@ -70,10 +71,14 @@ public class CalendarUI extends UserInterface{
                     eventUI.show();
                     break;
                 case 3:
+                    relativeId = getIntInput("Relative id:", 0, visibleEvents.size());
+                    calendar.removeEvent(visibleEvents.get(relativeId).getEvent());
+                    break;
+                case 4:
                     ListUIView<Memo> memoUiView = new ListUIView<>(calendar.getMemos().iterator(), Memo::getTitle);
                     memoUiView.show();
                     break;
-                case 4:
+                case 5:
                     String memoName = getStringInput("Memo name:");
                     Memo memo = calendar.getMemo(memoName);
                     if(memo == null){
@@ -81,6 +86,30 @@ public class CalendarUI extends UserInterface{
                     }
                     MemoUI memoUI = new MemoUI(memo, calendar);
                     memoUI.show();
+                    break;
+                case 6:
+                    memoName = getStringInput("Memo name:");
+                    memo = calendar.getMemo(memoName);
+                    if(memo == null){
+                        System.out.println("Memo not found!");
+                    }
+                    calendar.removeMemo(calendar.getMemo(memoName));
+                    break;
+                case 7:
+                    GregorianCalendar time = calendar.getTime();
+                    GregorianCalendar endTime = (GregorianCalendar)time.clone();
+                    endTime.roll(6, 1);
+                    String eventName = getStringInput("Name of new event: ");
+                    Event event = null;
+                    try {
+                        event = new Event(time.getTime().toString()+eventName, eventName, time, endTime);
+                    } catch (InvalidDateException e) {
+                        System.out.println("Creating event failed... Try again!");
+                    }
+                    calendar.createEvent(event,"");
+                    EventUI newEventUi = new EventUI(event);
+                    newEventUi.show();
+                    break;
                 default:
                     throw new NotImplementedException();
             }
