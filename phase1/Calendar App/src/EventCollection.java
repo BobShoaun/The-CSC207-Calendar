@@ -1,8 +1,6 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.Calendar;
 
 public class EventCollection implements Serializable // TODO: shouldn't this be TextFileSerializer?
 {
@@ -51,10 +49,9 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
      */
     public List<Event> getEvents(Date date) {
         //find alternative
-//        Date startTime = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
-//        Date endTime = DateUtils.ceiling(date, Calendar.DAY_OF_MONTH);
-//        return getEvents(startTime, endTime);
-        return null;
+        Date startTime = roundUp(date);
+        Date endTime = roundDown(date);
+        return getEvents(startTime, endTime);
     }
 
     public List<Event> getEvents(Date start, Date end) {
@@ -108,13 +105,33 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
      */
     private boolean isOnTime(Event event, Date startTime, Date endTime)
     {
-        //find alternative
-//        Date startEvent = event.getStartDate();
-//        Date endEvent = event.getEndDate();
-//
-//        boolean within1 = (startTime.before(startEvent) && endTime.after(startEvent)) || (startTime.after(startEvent) && startTime.before(endEvent));
-//        boolean within2 = (startTime.before(endEvent) && endTime.after(endEvent)||(endTime.after(startEvent) && endTime.before(endEvent)));
-//        return within1 && within2;
-        return true;
+        Date startEvent = GCToDate(event.getStartDate());
+        Date endEvent = GCToDate(event.getEndDate());
+        boolean within1 = startTime.before(startEvent) && endTime.after(startEvent);
+        boolean within2 = startTime.before(endEvent) && endTime.after(endEvent);
+        return  within1 && within2;
+
+    }
+    private Date GCToDate(GregorianCalendar calendar)
+    {
+        return calendar.getTime();
+    }
+    private Date roundUp(Date date){
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.set(Calendar.HOUR_OF_DAY, 23);
+        cl.set(Calendar.MINUTE, 59);
+        cl.set(Calendar.SECOND, 59);
+        cl.set(Calendar.MILLISECOND, 999);
+        return cl.getTime();
+    }
+    private Date roundDown(Date date){
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.set(Calendar.HOUR_OF_DAY, 23);
+        cl.set(Calendar.MINUTE, 59);
+        cl.set(Calendar.SECOND, 59);
+        cl.set(Calendar.MILLISECOND, 999);
+        return cl.getTime();
     }
 }

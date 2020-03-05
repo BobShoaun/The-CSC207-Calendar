@@ -1,7 +1,5 @@
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class EventGenerator {
     private Event baseEvent;
@@ -20,13 +18,13 @@ public class EventGenerator {
     {
         String eventName = baseEvent.getName();
         List<Event> ret = new ArrayList<>();
-//        Date curr = this.start;
-//        while(curr.compareTo(this.end)<=0){
-//            Date currNext = addTime(curr, frequency);
-//            Event e = new Event("", eventName, curr, currNext);
-//            ret.add(e);
-//            curr=currNext;
-//        }
+        Date curr = this.start;
+        while(curr.compareTo(this.end)<=0){
+            Date currNext = addTime(curr, frequency);
+            Event e = new Event("", eventName, dateToGC(curr), dateToGC(currNext));
+            ret.add(e);
+            curr=currNext;
+        }
         return ret;
     }
 
@@ -37,5 +35,10 @@ public class EventGenerator {
         //Adding the time to offset each event
         c.add(Calendar.MILLISECOND, 1);
         return c.getTime();
+    }
+    private GregorianCalendar dateToGC(Date date) {
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return calendar;
     }
 }
