@@ -1,3 +1,4 @@
+import exceptions.InvalidDateException;
 import exceptions.PeriodAlreadyExistsException;
 
 import javax.swing.text.html.Option;
@@ -25,7 +26,7 @@ public class Calendar {
     public Calendar(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
-        eventCollections.add(new EventCollection(null, new ArrayList<>()));
+        eventCollections.add(new EventCollection(null, new ArrayList<>(), dataSaver));
         alertCollections = new ArrayList<>();
         load();
     }
@@ -249,7 +250,7 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @param baseEvent The event on which the other events will be based
      */
-    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent){
+    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getName().equals(name)) {
@@ -257,7 +258,7 @@ public class Calendar {
                 return;
             }
         }
-        EventCollection eventCollection = new EventCollection(name, new ArrayList<>());
+        EventCollection eventCollection = new EventCollection(name, new ArrayList<>(), dataSaver);
         eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
         eventCollections.add(eventCollection);
     }
@@ -269,14 +270,14 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @throws IllegalArgumentException Will throw when no event collection was found
      */
-    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException {
+    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException, InvalidDateException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getEvent(eventId) != null) {
                 if(!eventCollection.getName().equals(seriesName)){
                     Event event =  eventCollection.getEvent(eventId);
                     eventCollection.removeEvent(event);
-                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>());
+                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>(), dataSaver);
                     addEventSeries(seriesName, event.getStartDate().getTime(), end, difference, event);
                 } else{
                     eventCollection.makeEventToSeries(eventId, end, difference);
