@@ -93,7 +93,11 @@ public class EventCollection implements Serializable // TODO: shouldn't this be 
     }
 
     public void addTag(String eventId, MT tag) {
-
+        for (Event e:this.events){
+            if (e.getId().equals(eventId)){
+                tag.addEvent(eventId);
+            }
+        }
     }
 
     /**
