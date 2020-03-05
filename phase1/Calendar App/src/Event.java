@@ -77,7 +77,7 @@ public class Event extends Observable{
     public void setStartDate(GregorianCalendar newStart) {
         this.startDate = newStart;
         setChanged();
-        notifyObservers(newStart);
+        notifyObservers(this.getDuration());
     }
 
     /**
@@ -87,7 +87,7 @@ public class Event extends Observable{
     public void setEndDate(GregorianCalendar newEnd) {
         this.endDate = newEnd;
         setChanged();
-        notifyObservers(newEnd);
+        notifyObservers(this.getDuration());
     }
 
     /**
@@ -106,7 +106,6 @@ public class Event extends Observable{
         }
         return newGC;
     }
-
 
 
 }
