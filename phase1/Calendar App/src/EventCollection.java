@@ -1,5 +1,7 @@
+import exceptions.InvalidDateException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Calendar;
@@ -9,6 +11,8 @@ public class EventCollection implements Iterable<Event>
 {
     private List<Event> events;
     private String name;
+    private boolean infinite = false;
+    private DataSaver saver;
 
     /**
      * constructor for a series, or a list of regular events if name == null
@@ -16,10 +20,11 @@ public class EventCollection implements Iterable<Event>
      * @param name   name of series
      * @param events list of events of the series
      */
-    public EventCollection(String name, ArrayList<Event> events)
+    public EventCollection(String name, ArrayList<Event> events, DataSaver saver)
     {
         this.name = name;
         this.events = events;
+        this.saver = saver;
     }
 
     /**
@@ -102,12 +107,17 @@ public class EventCollection implements Iterable<Event>
             this.events.removeIf(e -> e.getId().equals(eventId));
     }
 
-    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) {
-
+    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException
+    {
+        EventGenerator eGen = new EventGenerator(baseEvent, start, end, frequency);
+        this.events.addAll(eGen.generateFiniteEvents());
     }
 
-    public void makeEventToSeries(String eventId, Date end, Date frequency) {
-
+    public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException
+    {
+        Event base = getEvent(eventId);
+        EventGenerator eGen = new EventGenerator(base, base.getStartDate().getTime(), end, frequency);
+        this.events.addAll(eGen.generateFiniteEvents());
     }
 
     public void addTag(String eventId, Tag tag) {
@@ -116,6 +126,91 @@ public class EventCollection implements Iterable<Event>
                 tag.addEvent(eventId);
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+//        StringBuilder result = new StringBuilder("Alert for EventID " + getEventId()
+//                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
+//        result.append("===== MANUALLY CREATED ALERTS =====\n");
+//        for (Alert a : manAlerts) {
+//            result.append(a.toString()).append("\n");
+//        }
+//        result.append("===== REPEATING ALERTS =====\n");
+//        result.append(calGen.toString());
+//        return result.toString();
+        return "";
+    }
+
+    private String regularEventsToString()
+    {
+        StringBuilder result = new StringBuilder("Events\n");
+        result.append("===== YOUR EVENTS =====\n");
+        for (Event e: this.events) {
+            result.append(e.toString()+"\n");
+        }
+        return result.toString();
+    }
+
+    private String finiteSeriesToString()
+    {
+        StringBuilder result = new StringBuilder("Events for Series "+name+"\n");
+        result.append("===== YOUR SERIES =====\n");
+        for (Event e: this.events) {
+            result.append(e.toString()+"\n");
+        }
+        return result.toString();
+    }
+
+    private String infiniteSeriesToString()
+    {
+
+        StringBuilder result = new StringBuilder("Events for Series "+name+"\n");
+//        result.append("===== YOUR SERIES =====\n");
+//        List<Event> infiniteList= new EventGenerator();
+//        for (Event e: this.events) {
+//            result.append(e.toString()+"\n");
+//        }
+        return result.toString();
+    }
+
+
+    /**
+     * Load the data into this EventCollection.
+     *
+     * @param eventId The ID of the event for which the Alerts are being loaded
+     */
+    public void load(String filePath, String eventId) {
+//        List<String> strings = null;
+//        try {
+//            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        this.eventId = strings.get(0).trim();
+//
+//        String[] manTimes = strings.get(1).trim().split("\\s+");
+//        for (String timeStr : manTimes) {
+//            manAlerts.add(new Alert(eventId, timeStr));
+//        }
+//
+//        StringBuilder cgStr = new StringBuilder();
+//        for (int i = 2; i < strings.size(); i++) {
+//            cgStr.append(strings.get(i));
+//        }
+//        this.calGen = new CalendarGenerator(cgStr.toString());
+    }
+
+    /**
+     * Save this EventCollection's data into a text file.
+     */
+    public void save() throws IOException
+    {
+//        List<String> contents = Arrays.asList(getString().split("\\s+"));
+//        saver.saveToFile("/events/" + eventId + ".txt", contents);
     }
 
     /**
