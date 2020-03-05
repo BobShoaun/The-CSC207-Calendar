@@ -387,6 +387,9 @@ public class Calendar {
             throw new IllegalArgumentException();
         }
         memo.removeEvent(eventId);
+        if(memo.getEvents().size() == 0){
+            memos.remove(memo);
+        }
         save();
     }
 
@@ -600,5 +603,9 @@ public class Calendar {
     public void editMemoText(String memoName, String newMemoText){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
+    }
+
+    public void removeMemo(Memo memo){
+        memos.remove(memo);
     }
 }
