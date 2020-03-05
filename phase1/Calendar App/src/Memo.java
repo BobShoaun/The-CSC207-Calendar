@@ -16,6 +16,10 @@ public class Memo {
         title = newTitle;
     }
 
+    public void setText(String newText) {
+        text = newText;
+    }
+
     public String getText() {
         return text;
     }
