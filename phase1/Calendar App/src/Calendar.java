@@ -489,6 +489,16 @@ public class Calendar {
         }
     }
 
+    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) {
+        List<Event> events = eventIds.stream().map(id -> getEvent(id)).collect(Collectors.toList());
+        events.forEach(e -> removeFromSeries(e.getId()));
+        eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
+    }
+
+    public EventCollection getEventCollection(String eventSeriesName) {
+        return eventCollections.stream().filter(eC -> eC.getName().equals(eventSeriesName)).findAny().orElse(null);
+    }
+
     /**
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
@@ -612,5 +622,9 @@ public class Calendar {
 
     public void removeEvent(Event event){
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
+    }
+
+    public List<String> getEventSeriesNames(){
+        return eventCollections.stream().map(EventCollection::getName).filter(f -> !f.equals("")).collect(Collectors.toList());
     }
 }

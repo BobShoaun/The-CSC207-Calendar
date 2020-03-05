@@ -20,7 +20,7 @@ public class EventCollection implements Iterable<Event>
      * @param name   name of series
      * @param events list of events of the series
      */
-    public EventCollection(String name, ArrayList<Event> events, DataSaver saver)
+    public EventCollection(String name, List<Event> events, DataSaver saver)
     {
         this.name = name;
         this.events = events;
