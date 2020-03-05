@@ -108,7 +108,7 @@ public class EventCollection implements Iterable<Event>
 
     }
 
-    public void addTag(String eventId, MT tag) {
+    public void addTag(String eventId, Tag tag) {
         for (Event e:this.events){
             if (e.getId().equals(eventId)){
                 tag.addEvent(eventId);
