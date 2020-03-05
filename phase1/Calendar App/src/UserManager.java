@@ -32,34 +32,34 @@ public class UserManager extends TextFileSerializer {
         saveToFile("resources/users.txt", parsedUsers);
     }
 
-    public void displayUsers () {
+    public void displayUsers() {
         for (User user : users)
             System.out.println(user);
     }
 
-    public static void main (String[] args) {
-        System.out.println("\n" +
-                " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
-                "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
-                "██║     ███████║██║     █████╗  ██╔██╗ ██║██║  ██║███████║██████╔╝\n" +
-                "██║     ██╔══██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══██║██╔══██╗\n" +
-                "╚██████╗██║  ██║███████╗███████╗██║ ╚████║██████╔╝██║  ██║██║  ██║\n" +
-                " ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
-        
-        UserManager um = new UserManager();
-        um.loadUsers();
-        try {
-            um.registerUser("Cat", "meow123", "meow123");
-        } catch (UsernameTakenException e) {
-            System.out.println("Username already taken!");
-        } catch (PasswordMismatchException e) {
-            System.out.println("Password mismatch!");
-        }
-        um.displayUsers();
-        um.saveUsers();
-    }
+//    public static void main (String[] args) {
+//        System.out.println("\n" +
+//                " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
+//                "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
+//                "██║     ███████║██║     █████╗  ██╔██╗ ██║██║  ██║███████║██████╔╝\n" +
+//                "██║     ██╔══██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══██║██╔══██╗\n" +
+//                "╚██████╗██║  ██║███████╗███████╗██║ ╚████║██████╔╝██║  ██║██║  ██║\n" +
+//                " ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
+//
+//        UserManager um = new UserManager();
+//        um.loadUsers();
+//        try {
+//            um.registerUser("Cat", "meow123", "meow123");
+//        } catch (UsernameTakenException e) {
+//            System.out.println("Username already taken!");
+//        } catch (PasswordMismatchException e) {
+//            System.out.println("Password mismatch!");
+//        }
+//        um.displayUsers();
+//        um.saveUsers();
+//    }
 
-    public boolean loginUser (String username, String password) {
+    public boolean loginUser(String username, String password) {
         for (User user : users) {
             if (user.authenticate(username, password)) {
                 currentUser = user;
