@@ -6,6 +6,7 @@ public class MemoUI extends UserInterface {
 
     public MemoUI(Memo memo, Calendar calendar){
         this.memo = memo;
+        this.calendar = calendar;
     }
 
     @Override
@@ -17,7 +18,7 @@ public class MemoUI extends UserInterface {
     public void show() {
         boolean running = true;
         while (running) {
-            int option = getOptionsInput(new String[]{"Edit Title", "Edit Text", "Delete", "Exit"});
+            int option = getOptionsInput(new String[]{"Edit Title", "Edit Text", "Show Events", "Delete", "Exit"});
             switch (option) {
                 case 1:
                     memo.setTitle(this.getStringInput("Enter new title: "));
@@ -26,9 +27,15 @@ public class MemoUI extends UserInterface {
                     memo.setText(this.getStringInput("Enter new text: "));
 
                 case 3:
-                    calendar.removeMemo(memo);
+                    for(String id : memo.getEvents()){
+                        Event event = calendar.getEvent(id);
+                        System.out.println(event.getName() + event.getStartDate().toString());
+                    }
 
                 case 4:
+                    calendar.removeMemo(memo);
+
+                case 5:
                     running = false;
             }
         }
