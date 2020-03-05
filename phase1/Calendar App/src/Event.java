@@ -112,6 +112,10 @@ public class Event extends Observable{
         return newGC;
     }
 
+    /**
+     * Return the String representation of this Event
+     * @return the String representation of the Event
+     */
     public String toString() {
         String start = startDate.getTime().toString();
         String end = endDate.getTime().toString();

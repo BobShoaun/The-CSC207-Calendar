@@ -19,6 +19,8 @@ public class Tag {
         return text;
     }
 
+    public void setText(String newText) { this.text = newText; }
+
     public void addEvent(String eventId) {
         ids.add(eventId);
     }
