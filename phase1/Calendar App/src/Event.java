@@ -1,18 +1,17 @@
-import javax.lang.model.element.NestingKind;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Event class
  */
-public class Event implements Observer{
+public class Event extends Observable{
 
     private String id;
     private String name;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private GregorianCalendar startDate;
+    private GregorianCalendar endDate;
 
     /**
      * Constructor for a new Event
@@ -21,7 +20,7 @@ public class Event implements Observer{
      * @param startDate start time of the Event
      * @param endDate end time of the Event
      */
-    public Event (String id, String name, Date startDate, Date endDate) {
+    public Event(String id, String name, GregorianCalendar startDate, GregorianCalendar endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -32,15 +31,29 @@ public class Event implements Observer{
      * Return the name of the Event
      * @return the name of the Event
      */
-    public String getName () {
+    public String getName() {
         return name;
+    }
+
+    /**
+     * Return the id of the Event
+     * @return the id of the Event
+     */
+    public String getId() {
+        return id;
     }
 
     /**
      * Return the start time of the Event
      * @return the startDate of the Event
      */
-    public Date getStartDate() {return startDate; }
+    public GregorianCalendar getStartDate() { return startDate; }
+
+    /**
+     * Return the end time of the Event
+     * @return the endDate of the Event
+     */
+    public GregorianCalendar getEndDate() {return endDate;}
 
     /**
      * Set the name of the Event
@@ -58,33 +71,38 @@ public class Event implements Observer{
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
-    public void setStartDate(Date newStart) { this.startDate = newStart; }
+    public void setStartDate(GregorianCalendar newStart) {
+        this.startDate = newStart;
+        setChanged();
+        notifyObservers(this.getDuration());
+    }
 
     /**
      * Set the end time of the Event
      * @param newEnd the new endDate of the Event
      */
-    public void setEndDate(Date newEnd) { this.endDate = newEnd; }
+    public void setEndDate(GregorianCalendar newEnd) {
+        this.endDate = newEnd;
+        setChanged();
+        notifyObservers(this.getDuration());
+    }
 
     /**
      * Return the duration of the Event in Date
      * @return duration of the Event
      */
-    public Date getDuration() {
-        long dur = startDate.getTime() - endDate.getTime();
-        return new Date(dur);
+    public GregorianCalendar getDuration() {
+        GregorianCalendar newGC = new GregorianCalendar();
+        if (startDate.equals(endDate)) {
+            Date d1 = new Date(0);
+            newGC.setGregorianChange(d1);
+        } else {
+            long dur = startDate.getTime().getTime() - endDate.getTime().getTime();
+            Date d2 = new Date(dur);
+            newGC.setGregorianChange(d2);
+        }
+        return newGC;
     }
 
-    /**
-     * Updates from the observable AlertCollection
-     * @param o the observable AlertCollection
-     * @param arg
-     */
-    public void update(Observable o, Object arg) {
 
-    }
-
-    public String getId() {
-        return id;
-    }
 }
