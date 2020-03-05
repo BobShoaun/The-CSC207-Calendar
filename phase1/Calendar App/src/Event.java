@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
@@ -100,7 +98,7 @@ public class Event extends Observable{
     }
 
     public String toString() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }

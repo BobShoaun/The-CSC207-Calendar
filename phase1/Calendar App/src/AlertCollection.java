@@ -241,8 +241,14 @@ public class AlertCollection implements Observer {
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
-    public void load(String eventId) throws IOException {
-        List<String> strings = saver.loadStringsFromFile("/events/" + eventId + ".txt");
+    public void load(String filePath, String eventId) {
+        List<String> strings = null;
+        try {
+            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         this.eventId = strings.get(0).trim();
 
