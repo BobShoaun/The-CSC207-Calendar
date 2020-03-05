@@ -367,7 +367,7 @@ public class Calendar {
      * @throws IllegalArgumentException if the event or the memo does not exist
      */
     public void linkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        Tag memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        Memo memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
             throw new IllegalArgumentException();
         }
@@ -382,7 +382,7 @@ public class Calendar {
      * @throws IllegalArgumentException if the event or the memo does not exist
      */
     public void unlinkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        Tag memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        Memo memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
             throw new IllegalArgumentException();
         }
@@ -396,7 +396,7 @@ public class Calendar {
      * @param eventId The event which memos must be linked to
      * @return Unsorted list of memos
      */
-    public List<Tag> getMemos(String eventId) {
+    public List<Memo> getMemos(String eventId) {
         return memos.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
     }
 
