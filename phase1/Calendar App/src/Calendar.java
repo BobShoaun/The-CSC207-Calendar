@@ -8,17 +8,19 @@ import java.util.stream.Collectors;
 /**
  * Calendar class
  */
-public class Calendar { //TODO shud be TextFileSerializer too to load memo and tags
+public class Calendar {
 
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;
-    List<MT> memos;
-    List<MT> tags;
+    List<Tag> memos;
+    List<Tag> tags;
+    private DataSaver dataSaver;
 
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar() {
+    public Calendar(DataSaver dataSaver) {
+        this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
         eventCollections.add(new EventCollection(null, new ArrayList<>()));
         alertCollections = new ArrayList<>();
@@ -34,8 +36,8 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
      * @param memos            List of memos for new calendar
      * @param tags             List of tags for new calendar
      */
-    public Calendar(List<EventCollection> eventCollections, List<AlertCollection> alertCollections, List<MT> memos,
-                    List<MT> tags) {
+    public Calendar(List<EventCollection> eventCollections, List<AlertCollection> alertCollections, List<Tag> memos,
+                    List<Tag> tags) {
         if (eventCollections == null || alertCollections == null || memos == null || tags == null) {
             throw new NullPointerException();
         }
@@ -295,12 +297,12 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
      * @throws IllegalArgumentException If the event cannot be found
      */
     public void tagEvent(String eventId, String tagName) throws IllegalArgumentException {
-        MT tag;
-        Optional<MT> optionalTag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny();
-        if(!optionalTag.isPresent()){
-            tag = new MT(tagName);
+        Tag tag;
+        Optional<Tag> optionalTag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny();
+        if (!optionalTag.isPresent()) {
+            tag = new Tag(tagName);
             tags.add(tag);
-        } else{
+        } else {
             tag = optionalTag.get();
         }
         for (EventCollection eventCollection :
@@ -315,11 +317,12 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
 
     /**
      * Returns an iterator overall events sorted by start time, which have a certain tag
+     *
      * @param start The earliest time for the events to start at
-     * @param tag The tag to search by
+     * @param tag   The tag to search by
      * @return The iterator overall events. This will become invalid if new event collections or individual events are manipulated
      */
-    public Iterator<Event> searchEvents(Date start, MT tag){
+    public Iterator<Event> searchEvents(Date start, Tag tag) {
         return new EventIterator(start, e -> tag.hasEvent(e.getName()));
     }
 
@@ -332,7 +335,7 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
         if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch(mt -> true)){
             throw new IllegalArgumentException();
         }
-        memos.add(new MT(text));
+        memos.add(new Tag(text));
     }
 
     /**
@@ -342,7 +345,7 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
      * @throws IllegalArgumentException if the event or the memo does not exist
      */
     public void linkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        Tag memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
             throw new IllegalArgumentException();
         }
@@ -356,7 +359,7 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
      * @throws IllegalArgumentException if the event or the memo does not exist
      */
     public void unlinkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        MT memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+        Tag memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
             throw new IllegalArgumentException();
         }
@@ -365,10 +368,11 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
 
     /**
      * Return all memos which are attributed with a certain event
+     *
      * @param eventId The event which memos must be linked to
      * @return Unsorted list of memos
      */
-    public List<MT> getMemos(String eventId){
+    public List<Tag> getMemos(String eventId) {
         return memos.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
     }
 
@@ -377,16 +381,17 @@ public class Calendar { //TODO shud be TextFileSerializer too to load memo and t
      *
      * @return An unsorted list of memos
      */
-    public List<MT> getMemos() {
+    public List<Tag> getMemos() {
         return memos;
     }
 
     /**
      * Return all events linked to a memo
+     *
      * @param memo The memo to search by
      * @return List of events with memo
      */
-    public List<Event> getLinkedEvents(MT memo){
+    public List<Event> getLinkedEvents(Tag memo) {
         return memo.getEvents();
     }
 

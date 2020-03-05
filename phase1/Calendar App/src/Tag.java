@@ -1,10 +1,11 @@
 import java.util.List;
 
-public class MT {
-    public MT(String text){
+public class Tag {
+    public Tag(String text) {
 
     }
-    public String getText(){
+
+    public String getText() {
         throw new UnsupportedOperationException();
     }
 

@@ -1,5 +1,8 @@
+import com.sun.javaws.IconUtil;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
+
+import java.io.IOException;
 
 /**
  * UserManagerUI, the starting point of the program
@@ -33,7 +36,11 @@ public class UserManagerUI extends UserInterface {
                     break;
                 case 3:
                     running = false;
-                    userManager.saveUsers();
+                    try {
+                        userManager.saveUsers();
+                    } catch (IOException ee){
+                        System.out.println("Failed to save users!");
+                    }
                     break;
             }
         }
@@ -71,12 +78,18 @@ public class UserManagerUI extends UserInterface {
         } catch (PasswordMismatchException e) {
             System.out.println("Password mismatch!");
             showRegisterMenu();
+        } catch (IOException ee){
+            System.out.println("Failed to create user:" + ee.toString());
         }
     }
 
     public static void main (String[] args) {
         UserManager userManager = new UserManager();
-        userManager.loadUsers();
+        try {
+            userManager.loadUsers();
+        } catch(IOException ee){
+            System.out.print("Unhandled exception: " + ee.toString());
+        }
         new UserManagerUI(userManager).show();
     }
 

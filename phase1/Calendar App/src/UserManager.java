@@ -2,6 +2,7 @@ import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * UserManager class
  * @author Ng Bob Shoaun
  */
-public class UserManager extends TextFileSerializer {
+public class UserManager extends DataSaver{
 
     private List<User> users;
     private User currentUser;
@@ -17,11 +18,12 @@ public class UserManager extends TextFileSerializer {
     public User getCurrentUser () { return currentUser; }
 
     public UserManager () {
+        super("");
         users = new ArrayList<> ();
         currentUser = null;
     }
 
-    public void loadUsers() {
+    public void loadUsers() throws IOException {
         File[] files = getFilesInDirectory("users/");
         for (File file : files) {
             String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
@@ -29,12 +31,12 @@ public class UserManager extends TextFileSerializer {
         }
     }
 
-    public void saveUsers() {
+    public void saveUsers() throws IOException {
         for (User user : users)
             saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user) throws IOException {
         saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
     }
 
@@ -54,7 +56,7 @@ public class UserManager extends TextFileSerializer {
     }
 
     public void registerUser(String username, String password, String confirmPassword)
-            throws UsernameTakenException, PasswordMismatchException {
+            throws UsernameTakenException, PasswordMismatchException, IOException {
         if (!password.equals(confirmPassword))
             throw new PasswordMismatchException();
 
@@ -62,7 +64,7 @@ public class UserManager extends TextFileSerializer {
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();
 
-        User newUser = new User(username, password, new Calendar());
+        User newUser = new User(username, password);
         users.add(newUser);
         saveUser(newUser);
     }
