@@ -1,4 +1,4 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import exceptions.InvalidDateException;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,11 +21,16 @@ public class Event extends Observable{
      * @param startDate start time of the Event
      * @param endDate end time of the Event
      */
-    public Event(String id, String name, GregorianCalendar startDate, GregorianCalendar endDate) {
+    public Event (String id, String name, GregorianCalendar startDate, GregorianCalendar endDate)
+            throws InvalidDateException{
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        if ( startDate.after(endDate) ) {
+            throw new InvalidDateException();
+        } else {
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
     }
 
     /**
@@ -66,20 +71,28 @@ public class Event extends Observable{
      * Set the start time of the Event
      * @param newStart the new startDate of the Event
      */
-    public void setStartDate(GregorianCalendar newStart) {
-        this.startDate = newStart;
-        setChanged();
-        notifyObservers(this.getDuration());
+    public void setStartDate(GregorianCalendar newStart) throws InvalidDateException {
+       if ( newStart.after(endDate) ) {
+           throw new InvalidDateException();
+       } else {
+           this.startDate = newStart;
+           setChanged();
+           notifyObservers(this.getDuration());
+       }
     }
 
     /**
      * Set the end time of the Event
      * @param newEnd the new endDate of the Event
      */
-    public void setEndDate(GregorianCalendar newEnd) {
-        this.endDate = newEnd;
-        setChanged();
-        notifyObservers(this.getDuration());
+    public void setEndDate(GregorianCalendar newEnd) throws InvalidDateException {
+        if ( newEnd.before(startDate) ) {
+            throw new InvalidDateException();
+        } else {
+            this.endDate = newEnd;
+            setChanged();
+            notifyObservers(this.getDuration());
+        }
     }
 
     /**
@@ -100,7 +113,9 @@ public class Event extends Observable{
     }
 
     public String toString() {
-        return name + " from " + startDate.getTime().toString() + " to " + endDate.getTime().toString();
+        String start = startDate.getTime().toString();
+        String end = endDate.getTime().toString();
+        return name + " from " + start + " to " + end;
     }
 
 }

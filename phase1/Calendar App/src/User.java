@@ -1,3 +1,7 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * User class
@@ -47,4 +51,11 @@ public class User implements StringParsable {
         return name + " " + password;
     }
 
+    public GregorianCalendar getLastLoginTime(){
+        GregorianCalendar gregorianCalendar= new GregorianCalendar();
+        gregorianCalendar.set(2000, 1, 1, 1, 0);
+        return gregorianCalendar;
+    }
+
+    public void updateLastLoginTime(){throw new NotImplementedException();}
 }

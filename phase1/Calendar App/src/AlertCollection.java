@@ -1,5 +1,6 @@
 import exceptions.PeriodAlreadyExistsException;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 
@@ -9,22 +10,24 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection extends TextFileSerializer implements Observer {
+public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
     private CalendarGenerator calGen;
+    private DataSaver saver;
 
     /**
      * Creates a new Alert group (possibly repeating)
      *
      * @param e The Event attached to the Alert.
      */
-    public AlertCollection(Event e) {
+    public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
         this.eventTime = new GregorianCalendar();
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
+        this.saver = saver;
     }
 
     /**
@@ -55,7 +58,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
             if (a.getTime().equals(time.getTime()))
                 return false;
         }
-        manAlerts.add(new Alert(time));
+        manAlerts.add(new Alert(eventId, time));
         manAlerts.sort(new AlertComparator());
         return true;
     }
@@ -187,7 +190,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
         List<Alert> alerts = new LinkedList<>();
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
-                alerts.add(new Alert(d));
+                alerts.add(new Alert(eventId, d));
         }
         return alerts;
     }
@@ -222,7 +225,7 @@ public class AlertCollection extends TextFileSerializer implements Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Alert for EventID " + eventId
+        StringBuilder result = new StringBuilder("Alert for EventID " + getEventId()
                 + ", which occurs at " + eventTime.getTime().toString() + ".\n");
         result.append("===== MANUALLY CREATED ALERTS =====\n");
         for (Alert a : manAlerts) {
@@ -236,17 +239,22 @@ public class AlertCollection extends TextFileSerializer implements Observer {
     /**
      * Load the data into this AlertCollection.
      *
-     * @param filePath The user's directory, without the trailing /
-     * @param eventId  The ID of the event for which the Alerts are being loaded
+     * @param eventId The ID of the event for which the Alerts are being loaded
      */
     public void load(String filePath, String eventId) {
-        List<String> strings = loadStringsFromFile(filePath + "/" + eventId + ".txt");
+        List<String> strings = null;
+        try {
+            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         this.eventId = strings.get(0).trim();
 
         String[] manTimes = strings.get(1).trim().split("\\s+");
         for (String timeStr : manTimes) {
-            manAlerts.add(new Alert(timeStr));
+            manAlerts.add(new Alert(eventId, timeStr));
         }
 
         StringBuilder cgStr = new StringBuilder();
@@ -254,18 +262,14 @@ public class AlertCollection extends TextFileSerializer implements Observer {
             cgStr.append(strings.get(i));
         }
         this.calGen = new CalendarGenerator(cgStr.toString());
-
     }
 
     /**
      * Save this AlertCollection's data into a text file.
-     *
-     * @param filePath The user's directory.
      */
-    public void save(String filePath) {
-        filePath = filePath + "/" + eventId + ".txt";
+    public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        saveToFile(filePath, contents);
+        saver.saveToFile("/events/" + eventId + ".txt", contents);
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * UserManager class
  * @author Ng Bob Shoaun
  */
-public class UserManager extends DataSaver{
+public class UserManager extends DataSaver {
 
     private List<User> users;
     private User currentUser;
@@ -27,7 +27,7 @@ public class UserManager extends DataSaver{
         File[] files = getFilesInDirectory("users/");
         for (File file : files) {
             String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
-            users.add(new User(userCredentials, file.getPath()));
+            users.add(new User(userCredentials));
         }
     }
 

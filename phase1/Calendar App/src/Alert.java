@@ -9,22 +9,25 @@ import java.util.GregorianCalendar;
 public class Alert {
 
     private GregorianCalendar time;
+    private String eventId;
 
     /**
      * Create an Alert
      *
-     * @param time The time at which the notification goes off
+     * @param time    The time at which the notification goes off
+     * @param eventId The ID of the event
      */
-    public Alert(GregorianCalendar time) {
+    public Alert(String eventId, GregorianCalendar time) {
         this.time = time;
     }
 
     /**
      * Create an Alert from a String representation.
      *
-     * @param string the toString() output, representing time
+     * @param string  the toString() output, representing time
+     * @param eventId The ID of the event
      */
-    public Alert(String string) {
+    public Alert(String eventId, String string) {
         this.time = new GregorianCalendar();
         this.time.setTimeInMillis(Long.parseLong(string));
     }
@@ -61,4 +64,7 @@ public class Alert {
         return "" + time.getTime().toString();
     }
 
+    public String getEventId() {
+        return eventId;
+    }
 }

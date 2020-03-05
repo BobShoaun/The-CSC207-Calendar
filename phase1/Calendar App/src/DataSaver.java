@@ -10,9 +10,8 @@ public class DataSaver {
 
     private String basePath;
 
-    public DataSaver(String userName){
-
-        basePath = "./" + userName + "/";
+    public DataSaver(String basePath){
+        this.basePath = "./" + basePath + "/";
     }
 
     /**
