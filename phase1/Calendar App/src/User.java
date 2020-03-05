@@ -7,24 +7,22 @@ public class User implements StringParsable {
 
     private String name;
     private String password;
-    private String path;
     private Calendar calendar;
+    private DataSaver dataSaver;
 
     public String getName () { return name; }
 
-    public String getPath () { return path; }
-
     public Calendar getCalendar () { return calendar; }
 
-    public User (String name, String password, Calendar calendar) {
+    public User (String name, String password) {
         this.name = name;
         this.password = password;
-        this.calendar = calendar;
+        dataSaver = new DataSaver(name);
+        this.calendar = new Calendar(dataSaver);
     }
 
-    public User (String string, String path) {
+    public User (String string) {
         unparse(string);
-        this.path = path;
     }
 
     public boolean authenticate (String name, String password) {
@@ -36,7 +34,7 @@ public class User implements StringParsable {
         String[] split = string.split("\\s+"); // split text by whitespaces
         this.name = split[0];
         this.password = split[1];
-        this.calendar = new Calendar();
+        this.calendar = new Calendar(new DataSaver(name));
     }
 
     @Override

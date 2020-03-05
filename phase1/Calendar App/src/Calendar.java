@@ -8,17 +8,19 @@ import java.util.stream.Collectors;
 /**
  * Calendar class
  */
-public class Calendar { //TODO shud be TextFileSerializer too to load memo and tags
+public class Calendar {
 
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;
     List<Tag> memos;
     List<Tag> tags;
+    private DataSaver dataSaver;
 
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar() {
+    public Calendar(DataSaver dataSaver) {
+        this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
         eventCollections.add(new EventCollection(null, new ArrayList<>()));
         alertCollections = new ArrayList<>();
