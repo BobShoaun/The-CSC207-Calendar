@@ -6,6 +6,7 @@ public class EventGenerator {
     private Date start;
     private Date end;
     private Date frequency;
+    private CalendarGenerator calGen;
 
     public EventGenerator(Event baseEvent, Date start, Date end, Date frequency) {
         this.baseEvent = baseEvent;

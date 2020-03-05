@@ -10,23 +10,24 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection extends DataSaver implements Observer {
+public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
     private CalendarGenerator calGen;
+    private DataSaver saver;
 
     /**
      * Creates a new Alert group (possibly repeating)
      *
      * @param e The Event attached to the Alert.
      */
-    public AlertCollection(Event e) {
-        super ("");
+    public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
         this.eventTime = new GregorianCalendar();
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
+        this.saver = saver;
     }
 
     /**
@@ -238,16 +239,16 @@ public class AlertCollection extends DataSaver implements Observer {
     /**
      * Load the data into this AlertCollection.
      *
-     * @param filePath The user's directory, without the trailing /
-     * @param eventId  The ID of the event for which the Alerts are being loaded
+     * @param eventId The ID of the event for which the Alerts are being loaded
      */
     public void load(String filePath, String eventId) {
         List<String> strings = null;
         try {
-            strings = loadStringsFromFile(filePath + "/" + eventId + ".txt");
+            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         this.eventId = strings.get(0).trim();
 
@@ -261,22 +262,14 @@ public class AlertCollection extends DataSaver implements Observer {
             cgStr.append(strings.get(i));
         }
         this.calGen = new CalendarGenerator(cgStr.toString());
-
     }
 
     /**
      * Save this AlertCollection's data into a text file.
-     *
-     * @param filePath The user's directory.
      */
-    public void save(String filePath) {
-        filePath = filePath + "/" + eventId + ".txt";
+    public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        try {
-            saveToFile(filePath, contents);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saver.saveToFile("/events/" + eventId + ".txt", contents);
     }
 
 }
