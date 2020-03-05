@@ -23,7 +23,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Create a CalendarGenerator from a String.
-     *
      * @param input
      */
     public CalendarGenerator(String input) {
