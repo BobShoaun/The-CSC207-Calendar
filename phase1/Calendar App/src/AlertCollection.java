@@ -131,23 +131,23 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
         this.calGen.setStartTime(newStart);
     }
 
-    /**
-     * Replace the current CalendarGenerator with a new one.
-     *
-     * @param cg The new CalendarGenerator
-     */
-    public void setCalendarGenerator(CalendarGenerator cg) {
-        this.calGen = cg;
-    }
+//    /**
+//     * Replace the current CalendarGenerator with a new one.
+//     *
+//     * @param cg The new CalendarGenerator
+//     */
+//    public void setCalendarGenerator(CalendarGenerator cg) {
+//        this.calGen = cg;
+//    }
 
-    /**
-     * Get the current CalendarGenerator.
-     *
-     * @return The current CalendarGenerator
-     */
-    public CalendarGenerator getCalendarGenerator() {
-        return calGen;
-    }
+//    /**
+//     * Get the current CalendarGenerator.
+//     *
+//     * @return The current CalendarGenerator
+//     */
+//    public CalendarGenerator getCalendarGenerator() {
+//        return calGen;
+//    }
 
     /**
      * Get all Alerts for the event between a set of times.
@@ -170,7 +170,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param end   The end time delimiter
      * @return The list of Alerts between start and end time.
      */
-    public List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
+    private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().compareTo(start.getTime()) >= 0 && a.getTime().compareTo(end.getTime()) <= 0)
@@ -186,7 +186,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param end   The end time delimiter
      * @return The list of Alerts between start and end time.
      */
-    public List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
+    private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
