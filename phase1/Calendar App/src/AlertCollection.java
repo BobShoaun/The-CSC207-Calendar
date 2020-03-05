@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection implements Observer {
+public class AlertCollection implements Observer { //TODO: AlertFacade
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
@@ -49,7 +49,7 @@ public class AlertCollection implements Observer {
      * @param time The time of the Alert to be added.
      * @return Whether or not the Alert could be added.
      */
-    public boolean addAlert(GregorianCalendar time) {
+    public boolean addAlert(GregorianCalendar time) { // TODO: dependency injection?
         for (GregorianCalendar c : calGen) {
             if (c.equals(time))
                 return false;
@@ -120,7 +120,7 @@ public class AlertCollection implements Observer {
      *
      * @param newEventTime The new time of the Event
      */
-    public void shiftAlerts(GregorianCalendar newEventTime) {
+    private void shiftAlerts(GregorianCalendar newEventTime) {
         if (calGen == null) {
             throw new IllegalStateException();
         }
@@ -131,23 +131,23 @@ public class AlertCollection implements Observer {
         this.calGen.setStartTime(newStart);
     }
 
-    /**
-     * Replace the current CalendarGenerator with a new one.
-     *
-     * @param cg The new CalendarGenerator
-     */
-    public void setCalendarGenerator(CalendarGenerator cg) {
-        this.calGen = cg;
-    }
+//    /**
+//     * Replace the current CalendarGenerator with a new one.
+//     *
+//     * @param cg The new CalendarGenerator
+//     */
+//    public void setCalendarGenerator(CalendarGenerator cg) {
+//        this.calGen = cg;
+//    }
 
-    /**
-     * Get the current CalendarGenerator.
-     *
-     * @return The current CalendarGenerator
-     */
-    public CalendarGenerator getCalendarGenerator() {
-        return calGen;
-    }
+//    /**
+//     * Get the current CalendarGenerator.
+//     *
+//     * @return The current CalendarGenerator
+//     */
+//    public CalendarGenerator getCalendarGenerator() {
+//        return calGen;
+//    }
 
     /**
      * Get all Alerts for the event between a set of times.
@@ -170,7 +170,7 @@ public class AlertCollection implements Observer {
      * @param end   The end time delimiter
      * @return The list of Alerts between start and end time.
      */
-    public List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
+    private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().compareTo(start.getTime()) >= 0 && a.getTime().compareTo(end.getTime()) <= 0)
@@ -186,7 +186,7 @@ public class AlertCollection implements Observer {
      * @param end   The end time delimiter
      * @return The list of Alerts between start and end time.
      */
-    public List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
+    private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
@@ -241,15 +241,16 @@ public class AlertCollection implements Observer {
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
-    public void load(String filePath, String eventId) {
+    public void load(String eventId) {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
+            strings = saver.loadStringsFromFile("/alerts/" + eventId + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
+        assert strings != null;
         this.eventId = strings.get(0).trim();
 
         String[] manTimes = strings.get(1).trim().split("\\s+");
@@ -269,7 +270,7 @@ public class AlertCollection implements Observer {
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        saver.saveToFile("/events/" + eventId + ".txt", contents);
+        saver.saveToFile("/alerts/" + eventId + ".txt", contents);
     }
 
 }

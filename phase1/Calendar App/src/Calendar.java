@@ -1,14 +1,10 @@
+import exceptions.InvalidDateException;
 import exceptions.PeriodAlreadyExistsException;
-import javafx.scene.Group;
-import javafx.scene.canvas.GraphicsContext;
-import sun.awt.OSInfo;
-import sun.misc.OSEnvironment;
 
+import javax.swing.text.html.Option;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,7 +26,7 @@ public class Calendar {
     public Calendar(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
-        eventCollections.add(new EventCollection(null, new ArrayList<>()));
+        eventCollections.add(new EventCollection(null, new ArrayList<>(), dataSaver));
         alertCollections = new ArrayList<>();
         load();
     }
@@ -161,7 +157,8 @@ public class Calendar {
     public void addAlert(GregorianCalendar time, String eventId){
         for (AlertCollection alertCollection :
                 alertCollections) {
-            if (alertCollection.addAlert(time)) {
+            if (alertCollection.getEventId().equals(eventId)) {
+                alertCollection.addAlert(time);
                 return;
             }
         }
@@ -179,17 +176,17 @@ public class Calendar {
      * @param eventId The event this alert should be linked to
      */
     public void addAlert(GregorianCalendar start, Duration period, String eventId) throws PeriodAlreadyExistsException {
-        for (AlertCollection alertCollection :
-                alertCollections) {
+        Event event = getEvent(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException();
+        }
+        for (AlertCollection alertCollection : alertCollections) {
             if (alertCollection.getEventId().equals(eventId)) {
                 alertCollection.addAlert(start, period);
                 return;
             }
         }
-        Event event = getEvent(eventId);
-        if (event == null) {
-            throw new IllegalArgumentException();
-        }
+
         AlertCollection alertCollection = new AlertCollection(event, new DataSaver(""));
         alertCollection.addAlert(start, period);
         alertCollections.add(alertCollection);
@@ -253,7 +250,7 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @param baseEvent The event on which the other events will be based
      */
-    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent){
+    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getName().equals(name)) {
@@ -261,7 +258,7 @@ public class Calendar {
                 return;
             }
         }
-        EventCollection eventCollection = new EventCollection(name, new ArrayList<>());
+        EventCollection eventCollection = new EventCollection(name, new ArrayList<>(), dataSaver);
         eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
         eventCollections.add(eventCollection);
     }
@@ -273,14 +270,14 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @throws IllegalArgumentException Will throw when no event collection was found
      */
-    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException {
+    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException, InvalidDateException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getEvent(eventId) != null) {
                 if(!eventCollection.getName().equals(seriesName)){
                     Event event =  eventCollection.getEvent(eventId);
                     eventCollection.removeEvent(event);
-                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>());
+                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>(), dataSaver);
                     addEventSeries(seriesName, event.getStartDate().getTime(), end, difference, event);
                 } else{
                     eventCollection.makeEventToSeries(eventId, end, difference);
@@ -607,5 +604,9 @@ public class Calendar {
 
     public void removeMemo(Memo memo){
         memos.remove(memo);
+    }
+
+    public Memo getMemo(String name){
+        return memos.stream().filter(m -> m.getTitle() == name).findAny().orElse(null);
     }
 }

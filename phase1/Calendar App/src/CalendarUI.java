@@ -1,6 +1,7 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CalendarUI extends UserInterface{
@@ -47,7 +48,7 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event"});
+            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "View memos", "View memo"});
             switch (command){
                 case 0:
                     return;
@@ -59,29 +60,27 @@ public class CalendarUI extends UserInterface{
                         displayEvents();
                     } else{
                         Iterator<Event> eventIterator = calendar.getFutureEvents(start.getTime());
-                        while (true){
-                            int startInt = visibleEvents.size();
-                            for (int i = 0; i < 10; i++) {
-                                Event event = eventIterator.next();
-                                if(event == null)
-                                    break;
-                                visibleEvents.add(new EventUI(event));
-                            }
-                            for (int i = startInt; i < visibleEvents.size(); i++) {
-                                Event event = visibleEvents.get(i).getEvent();
-                                System.out.println("(" + i + ") " +  event.getName() + " at " + event.getStartDate() + " for " + event.getDuration());
-                            }
-                            command = getOptionsInput(new String[]{"Stop", "Finish"});
-                            if(command == 0){
-                                break;
-                            }
-                        }
+                        ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, (Event e) -> e.getName() + " at " + e.getStartDate() + " for " + e.getDuration());
+                        eventIteratorView.show();
                     }
                     break;
                 case 2:
                     int relativeId = getIntInput("Relative id:", 0, visibleEvents.size());
                     EventUI eventUI = visibleEvents.get(relativeId);
                     eventUI.show();
+                    break;
+                case 3:
+                    ListUIView<Memo> memoUiView = new ListUIView<>(calendar.getMemos().iterator(), Memo::getTitle);
+                    memoUiView.show();
+                    break;
+                case 4:
+                    String memoName = getStringInput("Memo name:");
+                    Memo memo = calendar.getMemo(memoName);
+                    if(memo == null){
+                        System.out.println("Memo not found!");
+                    }
+                    MemoUI memoUI = new MemoUI(memo, calendar);
+                    memoUI.show();
                 default:
                     throw new NotImplementedException();
             }

@@ -1,5 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
@@ -46,22 +47,23 @@ public abstract class UserInterface {
         try {
             int input = Integer.parseInt(scanner.nextLine());
             if (input < min || max < input)
-                throw new Exception ("Number out of Range");
+                throw new Exception("Number out of Range");
             return input;
         } catch (Exception e) {
             return getIntInput("Invalid number, try again: ", min, max);
         }
     }
 
-    protected String getDurationInput() {
-        return scanner.nextLine();
+    protected Duration getDurationInput(String prompt) {
+        // TODO: complete
+        return null;
     }
 
-    protected GregorianCalendar getDateInput (String prompt) {
+    protected GregorianCalendar getDateInput(String prompt) {
         return getDateInput(prompt, false);
     }
 
-    protected GregorianCalendar getDateInput (String prompt, boolean allowNull) {
+    protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
         System.out.print(prompt);
         GregorianCalendar calendar = new GregorianCalendar();
@@ -91,9 +93,9 @@ public abstract class UserInterface {
     protected int getOptionsInput (String[] options) {
         displayLine(70);
         for (int i = 0; i < options.length; i++)
-            System.out.println(i + 1 + ") " + options[i]);
+            System.out.println("[ " + i + " ] " + options[i]);
         displayLine(70);
-        return getIntInput("Choose an option: ", 1, options.length);
+        return getIntInput("Choose an option: ", 0, options.length);
     }
 
 }
