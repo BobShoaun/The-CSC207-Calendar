@@ -49,7 +49,7 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event"});
+            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series"});
             switch (command){
                 case 0:
                     return;
@@ -110,11 +110,17 @@ public class CalendarUI extends UserInterface{
                     EventUI newEventUi = new EventUI(event);
                     newEventUi.show();
                     break;
+                case 8:
+                    String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
+                    calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
+                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
+                    eventCollectionUI.show();
                 default:
                     throw new NotImplementedException();
             }
         }
     }
+
 
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
         visibleEvents = calendar.getEvents(startOfDay.getTime(), nextDay.getTime()).stream().map(EventUI::new).collect(Collectors.toList());

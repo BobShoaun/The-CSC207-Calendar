@@ -1,9 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * User interface class representing an abstract user interface
@@ -18,9 +16,22 @@ public abstract class UserInterface {
     public abstract void show();
 
     protected String getStringInput(String prompt) {
+        return getStringInput(prompt, new ArrayList<>());
+    }
+
+    protected String getStringInput(String prompt, List<String> bannedWords) {
         System.out.print(prompt);
-        String input = scanner.nextLine();
+        String input;
+        boolean first = true;
+        do{
+            if(!first){
+                System.out.println("This input is not valid/has already been chosen");
+            }
+            input = scanner.nextLine();
+            first = false;
+        } while(bannedWords.contains(input));
         return input;
+
     }
 
     /**
@@ -97,5 +108,6 @@ public abstract class UserInterface {
         displayLine(70);
         return getIntInput("Choose an option: ", 0, options.length);
     }
+
 
 }
