@@ -100,7 +100,7 @@ public class Event extends Observable{
     }
 
     public String toString() {
-        throw new NotImplementedException();
+        return name + " from " + startDate.getTime().toString() + " to " + endDate.getTime().toString();
     }
 
 }
