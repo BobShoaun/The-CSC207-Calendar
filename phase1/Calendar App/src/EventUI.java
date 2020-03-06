@@ -35,7 +35,7 @@ public class EventUI extends UserInterface {
         getMemoUIs();
         while (running) {
             int option = getOptionsInput(new String[]{"Exit",
-                    "Show Duration" , "Edit Event",
+                    "Event Duration" , "Edit Event",
                     "Show Alerts", "Edit Alert",
                     "Show Memos", "Edit Memos",
                     "Show Tags", "Edit Tags"});
@@ -43,7 +43,7 @@ public class EventUI extends UserInterface {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // Show duration
+                case 1: // Event duration
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
                     formatter.format(event.getDuration().getTime());
                     System.out.println(event.getName() + " lasts for " + formatter);
@@ -131,7 +131,6 @@ public class EventUI extends UserInterface {
         for (Memo memo: m) {
             memoUIs.add(new MemoUI(memo, calendar));
         }
-        //memoUIs = m.stream().map(ui -> new MemoUI(m, calendar)).collect(Collectors.toList());
     }
 
     private void editTag() {
