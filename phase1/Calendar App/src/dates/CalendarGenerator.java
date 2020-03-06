@@ -122,7 +122,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             for(Duration period : periods){
                 GregorianCalendar newTime = new GregorianCalendar();
                 newTime.setTime(new Date(startTime.getTimeInMillis()));
-                while (currentTime.after(newTime)){
+                while (currentTime.after(newTime) && currentTime.getTimeInMillis() != newTime.getTimeInMillis()){
                     newTime = add(newTime, period);
                 }
 
