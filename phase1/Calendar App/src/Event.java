@@ -123,6 +123,10 @@ public class Event extends Observable{
         return name + " from " + start + " to " + end;
     }
 
+    /**
+     * Return the String representation of this Event with Date as milliseconds
+     * @return
+     */
     public String getString()
     {
         String result = id + "\n" +

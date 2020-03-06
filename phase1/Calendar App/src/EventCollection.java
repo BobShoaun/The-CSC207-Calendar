@@ -218,25 +218,32 @@ public class EventCollection implements Iterable<Event>
     @Override
     public String toString()
     {
-//        StringBuilder result = new StringBuilder("Alert for EventID " + getEventId()
-//                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
-//        result.append("===== MANUALLY CREATED ALERTS =====\n");
-//        for (Alert a : manAlerts) {
-//            result.append(a.toString()).append("\n");
-//        }
-//        result.append("===== REPEATING ALERTS =====\n");
-//        result.append(calGen.toString());
-//        return result.toString();
-        return "";
+        if(name==null)
+        {
+            return regularEventsToString();
+        }else if(eGen == null)
+        {
+            return finiteSeriesToString();
+        }
+        else{
+            try
+            {
+                return infiniteSeriesToString();
+            } catch (InvalidDateException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return "Invalid date";
     }
 
     private String regularEventsToString()
     {
         StringBuilder result = new StringBuilder("Events\n");
-        result.append("===== YOUR EVENTS =====\n");
+        result.append("===== EVENTS =====\n");
         for (Event e : this.events)
         {
-            result.append(e.toString() + "\n");
+            result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
@@ -244,23 +251,32 @@ public class EventCollection implements Iterable<Event>
     private String finiteSeriesToString()
     {
         StringBuilder result = new StringBuilder("Events for Series " + name + "\n");
-        result.append("===== YOUR SERIES =====\n");
+        result.append("===== SERIES =====\n");
         for (Event e : this.events)
         {
-            result.append(e.toString() + "\n");
+            result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
 
-    private String infiniteSeriesToString()
+    private String infiniteSeriesToString() throws InvalidDateException
     {
 
         StringBuilder result = new StringBuilder("Events for Series " + name + "\n");
-//        result.append("===== YOUR SERIES =====\n");
-//        List<Event> infiniteList= new EventGenerator();
-//        for (Event e: this.events) {
-//            result.append(e.toString()+"\n");
-//        }
+        result.append("===== SERIES =====\n");
+        result.append("Here is your manually created events\n");
+        for (Event e : this.events)
+        {
+            result.append(e.toString()).append("\n");
+        }
+        String start = eGen.getCalGen().getStartTime().getTime().toString();
+        String end = eGen.getCalGen().getEndTime().getTime().toString();
+
+        result.append("Here is your repeating events in this series from ").append(start).append(" to ").append(end).append("\n");
+        for(Event e:eGen.generateEvents())
+        {
+            result.append(e.toString());
+        }
         return result.toString();
     }
 
@@ -438,9 +454,14 @@ public class EventCollection implements Iterable<Event>
         }
     }
 
+    /**
+     * Remove the event from the tag
+     * @param eventId the id of the event to be removed
+     * @param tag the tag that needs to remove the event
+     */
     public void removeTag(String eventId, Tag tag)
     {
-        throw new UnsupportedOperationException();
+        tag.removeEvent(eventId);
     }
 
 }
