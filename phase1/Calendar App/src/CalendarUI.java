@@ -40,11 +40,7 @@ public class CalendarUI extends UserInterface{
 
     @Override
     public void show() {
-        try {
-            visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
-        } catch (NullLastLoginException e) {
-
-        }
+        visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
         GregorianCalendar startOfDay = calendar.getTime();
         startOfDay.set(startOfDay.get(java.util.Calendar.YEAR), startOfDay.get(java.util.Calendar.MONTH), startOfDay.get(java.util.Calendar.DATE), 0, 0);
         GregorianCalendar nextDay = (GregorianCalendar)startOfDay.clone();
