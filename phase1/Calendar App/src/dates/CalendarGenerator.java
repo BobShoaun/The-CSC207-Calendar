@@ -107,7 +107,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         GregorianCalendar currentTime = new GregorianCalendar();
 
         public CGI() {
-            currentTime.setTime(new Date(startTime.getTimeInMillis()));
+            currentTime.setTimeInMillis(startTime.getTimeInMillis());
         }
 
         public List<GregorianCalendar> nextSet(){
@@ -115,9 +115,9 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
             for(Duration period : periods){
                 GregorianCalendar newTime = new GregorianCalendar();
-                newTime.setTime(new Date(startTime.getTimeInMillis()));
+                newTime.setTimeInMillis(startTime.getTimeInMillis());
                 while (currentTime.after(newTime) || currentTime.getTimeInMillis() == newTime.getTimeInMillis() || ignoreList.contains(newTime)){
-                    newTime.setTime(new Date(newTime.getTimeInMillis() + period.getSeconds()));
+                    newTime.setTimeInMillis(newTime.getTimeInMillis() + period.getSeconds());
                 }
 
                 if(endTime == null || endTime.after(newTime)){
@@ -142,11 +142,11 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
                 for(GregorianCalendar time : set){
                     if (result.after(time)){
-                        result.setTime(new Date(time.getTimeInMillis()));
+                        result.setTimeInMillis(time.getTimeInMillis());
                     }
                 }
 
-                currentTime.setTime(new Date(result.getTimeInMillis()));
+                currentTime.setTimeInMillis(result.getTimeInMillis());
                 return result;
             } else {
                 throw new IndexOutOfBoundsException("No next date");
