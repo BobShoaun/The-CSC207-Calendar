@@ -49,7 +49,7 @@ public class Tests {
         EventGenerator eg = new EventGenerator(e, date, date2, durs);
 
         List<Event> events = new ArrayList<>(eg.generateEvents());
-        if (events.size() != 19) throw new AssertionError("EventGenerator problem");
+        if (events.size() != 9) throw new AssertionError("EventGenerator problem");
     }
 
     static void testECSave() throws InvalidDateException, IOException {
