@@ -1,12 +1,15 @@
-import event.*;
+import alert.Alert;
+import alert.AlertCollection;
+import dates.CalendarGenerator;
+import dates.EventGenerator;
+import event.Event;
+import event.EventCollection;
 import exceptions.InvalidDateException;
-import alert.*;
-import user.*;
-import dates.*;
+import user.DataSaver;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
-import java.util.Calendar;
 
 public class Tests {
     static void testAlert() {
@@ -83,18 +86,30 @@ public class Tests {
         DataSaver ds = new DataSaver("");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.load("testseries");
-        for (Event e:EC){
+        for (Event e : EC) {
             System.out.println(e);
         }
     }
 
+    static void testCalendarGenerator() {
+        CalendarGenerator cg = new CalendarGenerator(new GregorianCalendar(2020, Calendar.FEBRUARY, 1),
+                Arrays.asList(Duration.ofDays(1)),
+                new GregorianCalendar(2020, Calendar.FEBRUARY, 29));
+        List<GregorianCalendar> dates = new ArrayList<>();
+        for (GregorianCalendar date : cg) {
+            dates.add(date);
+        }
+        assert dates.size() == 29;
+    }
+
     public static void main(String[] args) throws Exception {
+        testCalendarGenerator();
 //        testAlert();
 //        testAlertCollection();
 //        testEventsGenerator();
 //        testLoad();
 //        testECSave();
-        testEventsGenerator();
+//        testEventsGenerator();
     }
 
 }

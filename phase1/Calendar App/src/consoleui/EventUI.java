@@ -42,8 +42,8 @@ public class EventUI extends UserInterface {
         while (running) {
             display();
             int option = getOptionsInput(new String[]{"Exit",
-                    "event.Event Duration", "Edit event.Event",
-                    "Show Alerts", "Edit alert.Alert",
+                    "Event Duration", "Edit Event",
+                    "Show Alerts", "Edit Alert",
                     "Show Memos", "Edit Memos",
                     "Show Tags", "Edit Tags"});
             switch (option) {
@@ -83,7 +83,7 @@ public class EventUI extends UserInterface {
                     System.out.println(result);
                     break;
                 case 6: // Edit memo
-                    int num = getIntInput("mt.Memo no.: ", 0, memoUIs.size() - 1);
+                    int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
                     MemoUI mui = memoUIs.get(num);
                     mui.show();
                     break;
