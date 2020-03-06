@@ -1,4 +1,3 @@
-import exceptions.NullLastLoginException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import java.io.IOException;
@@ -60,9 +59,9 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        try {
+        if(!userManager.getCurrentUser().firstLogin) {
             System.out.println("Welcome back, " + username + "! You last login was on: " + userManager.getCurrentUser().getLastLoginTime().getTime());
-        } catch (NullLastLoginException e) {
+        } else {
             System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
         }
         CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
@@ -76,6 +75,9 @@ public class UserManagerUI extends UserInterface {
         try {
             userManager.registerUser(username, password, confirmPassword);
             System.out.println("User registered successfully...");
+            userManager.loginUser(username, password);
+            CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
+            calendarUI.show();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
             showRegisterMenu();
