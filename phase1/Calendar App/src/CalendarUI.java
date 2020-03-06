@@ -47,8 +47,9 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series", "Search events"});
-            switch (command) {
+            int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos",
+                    "View memo", "Delete memo", "Add event", "Add event series", "Search events", "Show all events"});
+            switch (command){
                 case 0:
                     user.setLastLoginTime(new GregorianCalendar()); // logout
                     return;
@@ -165,7 +166,11 @@ public class CalendarUI extends UserInterface{
                         default:
                             throw new UnsupportedOperationException();
                     }
-
+                    break;
+                case 10:
+                    Iterator<Event> events = calendar.getEvents(new Date(0, 1, 1), new Date(1000, 1, 1)).iterator();
+                    ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString);
+                    listUIView.show();
                     break;
                 default:
                     throw new UnsupportedOperationException();

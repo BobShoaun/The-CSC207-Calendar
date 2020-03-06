@@ -16,6 +16,7 @@ public class ListUIView<T> extends UserInterface{
         elements = new ArrayList<>();
         this.iterator = iterator;
         getMore();
+        end = Math.min(10, elements.size());
     }
 
     private void getMore() {
@@ -35,6 +36,11 @@ public class ListUIView<T> extends UserInterface{
 
     @Override
     public void show() {
+        if(!iterator.hasNext() && elements.size() == 0)
+        {
+            System.out.println("No elements found!");
+            return;
+        }
         do {
             display();
             getMore();
