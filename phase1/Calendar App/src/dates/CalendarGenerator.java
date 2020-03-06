@@ -110,20 +110,14 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             currentTime.setTime(new Date(startTime.getTimeInMillis()));
         }
 
-        public GregorianCalendar add(GregorianCalendar cal, Duration dur){
-            GregorianCalendar result = new GregorianCalendar();
-            result.setTime(new Date(cal.getTimeInMillis() + dur.getSeconds()));
-            return result;
-        }
-
         public List<GregorianCalendar> nextSet(){
             ArrayList<GregorianCalendar> candidates = new ArrayList<>();
 
             for(Duration period : periods){
                 GregorianCalendar newTime = new GregorianCalendar();
                 newTime.setTime(new Date(startTime.getTimeInMillis()));
-                while (currentTime.after(newTime) && currentTime.getTimeInMillis() == newTime.getTimeInMillis()){
-                    newTime = add(newTime, period);
+                while (currentTime.after(newTime) || currentTime.getTimeInMillis() == newTime.getTimeInMillis()){
+                    newTime.setTime(new Date(newTime.getTimeInMillis() + period.getSeconds()));
                 }
 
                 candidates.add(newTime);
