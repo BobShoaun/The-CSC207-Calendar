@@ -1,11 +1,12 @@
-import alert.Alert;
-import alert.AlertCollection;
-import dates.CalendarGenerator;
-import event.Event;
-import user.DataSaver;
-
+import event.*;
+import exceptions.InvalidDateException;
+import alert.*;
+import user.*;
+import dates.*;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
+import java.util.Calendar;
 
 public class Tests {
 
@@ -32,21 +33,68 @@ public class Tests {
         assert get.size() == 9;
     }
 
-    static void testCalendarGenerator() {
-        CalendarGenerator cg = new CalendarGenerator(new GregorianCalendar(2020, Calendar.FEBRUARY, 1),
-                Arrays.asList(Duration.ofDays(1)),
-                new GregorianCalendar(2020, Calendar.FEBRUARY, 29));
-        List<GregorianCalendar> dates = new ArrayList<>();
-        for (GregorianCalendar date : cg) {
-            dates.add(date);
+    static void testEventsGenerator() throws InvalidDateException, IOException {
+        Event e = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+
+
+        Date date = new Date(2020, Calendar.MAY, 12);
+        Date date2 = new Date(2020, Calendar.DECEMBER, 11);
+        List<Duration> durs = new ArrayList<>();
+        durs.add(Duration.ofDays(1));
+        EventGenerator eg = new EventGenerator(e, date, date2, durs);
+        for (Event event : eg.generateEvents()) {
+            System.out.println(event);
         }
-        assert dates.size() == 29;
+    }
+
+    static void testECSave() throws InvalidDateException, IOException {
+        String name = "testseries";
+        Event event = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+
+        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        List<Event> eve = new ArrayList<>();
+        eve.add(event);
+        eve.add(e2);
+        for (Event e:eve) {
+            System.out.println(e);
+        }
+        DataSaver ds = new DataSaver("testPath");
+        EventCollection EC = new EventCollection(name, eve, ds);
+        EC.save();
+    }
+    static void testLoad() throws InvalidDateException {
+        String name = "LETS TEST";
+        Event event = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+
+        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        List<Event> eve = new ArrayList<>();
+        eve.add(event);
+        eve.add(e2);
+//        for (Event e:eve) {
+//            System.out.println(e);
+//        }
+        DataSaver ds = new DataSaver("");
+        EventCollection EC = new EventCollection(name, eve, ds);
+        EC.load("testseries");
+        for (Event e:EC){
+            System.out.println(e);
+        }
     }
 
     public static void main(String[] args) throws Exception {
-        testAlert();
-        testCalendarGenerator();
-        testAlertCollection();
+//        testAlert();
+//        testAlertCollection();
+//        testEventsGenerator();
+        testLoad();
+//        testECSave();
     }
 
 }
