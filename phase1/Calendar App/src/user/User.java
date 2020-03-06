@@ -15,7 +15,6 @@ public class User implements StringParsable {
     private String name;
     private String password;
     private Calendar calendar;
-    private DataSaver dataSaver;
     private GregorianCalendar lastLoginTime;
     boolean firstLogin;
 
@@ -34,7 +33,7 @@ public class User implements StringParsable {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        dataSaver = new DataSaver(name);
+        DataSaver dataSaver = new DataSaver(name);
         this.calendar = new Calendar(dataSaver);
         firstLogin = true;
         lastLoginTime = calendar.getTime();

@@ -136,7 +136,7 @@ public class CalendarUI extends UserInterface {
                 case 8:
                     String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
                     try {
-                        calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
+                        calendar.createEventSeries(eventSeriesName, new ArrayList<>());
                     } catch (IOException e) {
                         System.out.println("Error saving events!");
                         e.printStackTrace();

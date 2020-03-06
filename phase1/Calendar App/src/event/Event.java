@@ -141,10 +141,9 @@ public class Event extends Observable{
      * @return
      */
     public String getString() {
-        String result = id + "\n" +
+        return id + "\n" +
                 name + "\n" +
                 startDate.getTimeInMillis() + "\n" +
                 endDate.getTimeInMillis() + "\n";
-        return result;
     }
 }

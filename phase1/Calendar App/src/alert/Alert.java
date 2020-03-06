@@ -20,6 +20,7 @@ public class Alert {
      * @param eventId The ID of the event
      */
     public Alert(String eventId, GregorianCalendar time) {
+        this.eventId = eventId;
         this.time = time;
     }
 
@@ -30,6 +31,7 @@ public class Alert {
      * @param eventId The ID of the event
      */
     public Alert(String eventId, String string) {
+        this.eventId = eventId;
         this.time = new GregorianCalendar();
         this.time.setTimeInMillis(Long.parseLong(string));
     }

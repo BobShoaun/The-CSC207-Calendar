@@ -21,7 +21,7 @@ public class EventGenerator {
      * @param end       end of repeating events
      * @param Duration  time between occurrence of repeating events
      */
-    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) throws InvalidDateException {
+    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) {
         this.baseEvent = baseEvent;
         this.calGen = new CalendarGenerator(dateToGC(start), Duration, dateToGC(end));
     }
