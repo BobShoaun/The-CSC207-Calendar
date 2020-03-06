@@ -88,7 +88,7 @@ public abstract class UserInterface {
             case "s":
                 return Duration.ofSeconds(amount);
         }
-        return getDurationInput("Invalid duration, try again: ");
+        return getDurationInput("Please re-enter a valid duration <amount> <{w,d,h,m,s}>: ");
     }
 
     protected GregorianCalendar getDateInput(String prompt) {
@@ -106,7 +106,7 @@ public abstract class UserInterface {
         } catch (ParseException e) {
             if(allowNull && dateString.equals(""))
                 return null;
-            return getDateInput("Please re-enter a valid date: (DD/MM/YYYY HH:MM:SS)");
+            return getDateInput("Please re-enter a valid date (DD/MM/YYYY HH:MM:SS): ");
         }
         return calendar;
     }
