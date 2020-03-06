@@ -117,7 +117,7 @@ public class Calendar {
      * @param event    Event to add
      * @param seriesId Series to add event to
      */
-    public void createEvent(Event event, String seriesId) throws IllegalArgumentException {
+    public void createEvent(Event event, String seriesId) throws IllegalArgumentException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getName().equals(seriesId)) {
@@ -197,7 +197,7 @@ public class Calendar {
      * @param eventId    The id of the event to move
      * @param seriesName The name of the new series to add it to
      */
-    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException {
+    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException, IOException {
         EventCollection from = null;
         EventCollection eventCollection = null;
         Event event = null;
@@ -228,7 +228,7 @@ public class Calendar {
      * @param eventId The event to move
      * @throws IllegalArgumentException If the event collection or the event can not be found
      */
-    public void removeFromSeries(String eventId) throws IllegalArgumentException {
+    public void removeFromSeries(String eventId) throws IllegalArgumentException, IOException {
         EventCollection from = null;
         EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
         Event event = null;
@@ -260,7 +260,7 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @param baseEvent The event on which the other events will be based
      */
-    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException {
+    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getName().equals(name)) {
@@ -280,7 +280,7 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @throws IllegalArgumentException Will throw when no event collection was found
      */
-    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException, InvalidDateException {
+    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException, InvalidDateException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection.getEvent(eventId) != null) {
@@ -499,9 +499,11 @@ public class Calendar {
         }
     }
 
-    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) {
-        List<Event> events = eventIds.stream().map(id -> getEvent(id)).collect(Collectors.toList());
-        events.forEach(e -> removeFromSeries(e.getId()));
+    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {
+        List<Event> events = eventIds.stream().map(this::getEvent).collect(Collectors.toList());
+        for (Event e : events) {
+            removeFromSeries(e.getId());
+        }
         eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
     }
 
@@ -638,7 +640,7 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
-    public void removeEvent(Event event) throws InvalidDateException {
+    public void removeEvent(Event event) throws InvalidDateException, IOException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 

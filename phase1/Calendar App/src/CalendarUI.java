@@ -78,6 +78,9 @@ public class CalendarUI extends UserInterface{
                     } catch (InvalidDateException e) {
                         System.out.println("Internal error when removing the event!");
                         e.printStackTrace();
+                    } catch (IOException e) {
+                        System.out.println("Error saving events!");
+                        e.printStackTrace();
                     }
                     break;
                 case 4:
@@ -114,13 +117,23 @@ public class CalendarUI extends UserInterface{
                     } catch (InvalidDateException e) {
                         System.out.println("Creating event failed... Try again!");
                     }
-                    calendar.createEvent(event,"");
+                    try {
+                        calendar.createEvent(event,"");
+                    } catch (IOException e) {
+                        System.out.println("Error saving events!");
+                        e.printStackTrace();
+                    }
                     EventUI newEventUi = new EventUI(event, calendar);
                     newEventUi.show();
                     break;
                 case 8:
                     String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
-                    calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
+                    try {
+                        calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
+                    } catch (IOException e) {
+                        System.out.println("Error saving events!");
+                        e.printStackTrace();
+                    }
                     EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
                     eventCollectionUI.show();
                 case 9:
