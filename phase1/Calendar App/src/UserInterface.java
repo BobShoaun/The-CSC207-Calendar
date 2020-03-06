@@ -1,3 +1,6 @@
+import exceptions.InvalidDateException;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -13,7 +16,7 @@ public abstract class UserInterface {
 
     public abstract void display();
 
-    public abstract void show();
+    public abstract void show() throws IOException, InvalidDateException;
 
     protected String getStringInput(String prompt) {
         return getStringInput(prompt, new ArrayList<>());

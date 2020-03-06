@@ -281,11 +281,11 @@ public class EventCollection implements Iterable<Event>
     }
 
 
-    public void load(String eventId) throws InvalidDateException
+    public void load(String seriesName) throws InvalidDateException
     {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile("/series/" + eventId + ".txt");
+            strings = saver.loadStringsFromFile("/series/" + seriesName + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -297,13 +297,13 @@ public class EventCollection implements Iterable<Event>
         for (String e : eventsDetails) {
             String[] details = e.trim().split("\\n");
             String id = details[0];
-            String name = details[1];
+            String eventName = details[1];
             GregorianCalendar start = new GregorianCalendar();
             start.setTime(new Date(Long.parseLong(details[2])));
             GregorianCalendar end = new GregorianCalendar();
             start.setTime(new Date(Long.parseLong(details[3])));
 
-            this.events.add(new Event(id,name,start,end));
+            this.events.add(new Event(id,eventName,start,end));
         }
 
         StringBuilder cgStr = new StringBuilder();
