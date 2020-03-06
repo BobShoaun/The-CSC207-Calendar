@@ -1,7 +1,5 @@
 import exceptions.InvalidDateException;
-
 import java.time.Duration;
-import java.util.Calendar;
 import java.util.*;
 
 public class EventGenerator {
@@ -10,83 +8,60 @@ public class EventGenerator {
 
     /**
      * EventGenerator for finite repeating events events
-     *
      * @param baseEvent event to be repeated
-     * @param start     start of repeating events
-     * @param end       end of repeating events
-     * @param Duration  time between occurrence of repeating events
+     * @param start start of repeating events
+     * @param end end of repeating events
+     * @param Duration time between occurrence of repeating events
      */
-    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) {
+    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) throws InvalidDateException
+    {
         this.baseEvent = baseEvent;
         this.calGen = new CalendarGenerator(dateToGC(start), Duration, dateToGC(end));
     }
 
+    public Event getBaseEvent()
+    {
+        return baseEvent;
+    }
 
-//    public List<Event> generateInfiniteEvents() throws InvalidDateException
-//////    {// baseEvents and end is null
-//////            List<Event> ret = new ArrayList<>();
-//////                //gives the first 15 sets of event repetition
-//////                for (Event e:baseEvents)
-//////                {
-//////                    ret.addAll(getRepeatingEvents(e));
-//////                }
-//////            return ret;
-//////    }
+    public void setCalGen(CalendarGenerator calGen)
+    {
+        this.calGen = calGen;
+    }
 
-    public List<Event> generateFiniteEvents() throws InvalidDateException
+    public CalendarGenerator getCalGen()
+    {
+        return calGen;
+    }
+
+    /**
+     *
+     * @return
+     * @throws InvalidDateException
+     */
+    public List<Event> generateEvents() throws InvalidDateException
     {
         List<Event> ret = new ArrayList<>();
-        Iterator<GregorianCalendar> itr = calGen.iterator();
-
-        while(itr.hasNext())
+        for (GregorianCalendar GC : calGen)
         {
-            GregorianCalendar curr = itr.next();
-            String id = baseEvent.getName()+curr.getTime();
-            String name = baseEvent.getName();
-            if(itr.hasNext()){
-                GregorianCalendar next = itr.next();
-                Event e = new Event(id, name, curr, next);
-            }
+            String id = baseEvent.getName()+baseEvent.getStartDate().getTime();
+            Event event = new Event(id, baseEvent.getName(),GC,addTime(GC,baseEvent.getDuration()));
+            ret.add(event);
         }
-
-
-        for (GregorianCalendar GC : calGen) {
-
-        }
-        return null;
+        return ret;
     }
 
-
-//    private Event getNextEvent(Date curr) throws InvalidDateException
-//    {
-//        String eventName = baseEvent.getName();
-//        String id = eventName+curr;
-//        Date currNext = addTime(curr, frequency);
-//        return new Event(id, eventName, dateToGC(curr), dateToGC(currNext));
-//    }
-
-//    private List<Event> getRepeatingEvents(Event e) throws InvalidDateException
-//    {
-//        List<Event> ret = new ArrayList<>();
-//        ret.add(e);
-//        Date curr = e.getStartDate().getTime();
-//        for (int i = 0; i <15 ; i++) {
-//            Event nextEvent = getNextEvent(curr);
-//            ret.add(nextEvent);
-//            curr=nextEvent.getEndDate().getTime();
-//        }
-//        return ret;
-//    }
-
-    private Date addTime(Date begin, Date time)
+    private GregorianCalendar addTime(GregorianCalendar begin, GregorianCalendar time)
     {
-        Calendar c = Calendar.getInstance();
-        c.setTime(begin);
         //Adding the time to offset each event
-        c.add(Calendar.MILLISECOND, 1);
-        return c.getTime();
+        GregorianCalendar newGC = new GregorianCalendar();
+        long dur = begin.getTimeInMillis()+time.getTimeInMillis();
+        Date d2 = new Date(dur);
+        newGC.setGregorianChange(d2);
+        return newGC;
     }
     private GregorianCalendar dateToGC(Date date) {
+        if(date==null){return null;}
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return calendar;
