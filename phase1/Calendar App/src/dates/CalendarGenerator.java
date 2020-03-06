@@ -117,10 +117,10 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
                 GregorianCalendar newTime = new GregorianCalendar();
                 newTime.setTimeInMillis(startTime.getTimeInMillis());
                 while (currentTime.after(newTime) || currentTime.getTimeInMillis() == newTime.getTimeInMillis() || ignoreList.contains(newTime)){
-                    newTime.setTimeInMillis(newTime.getTimeInMillis() + period.getSeconds());
+                    newTime.setTimeInMillis(newTime.getTimeInMillis() + period.toMillis());
                 }
 
-                if(endTime == null || endTime.after(newTime)){
+                if(endTime == null || newTime.after(endTime)){
                     candidates.add(newTime);
                 }
             }
@@ -130,7 +130,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
         @Override
         public boolean hasNext() {
-            List<GregorianCalendar> candidates = nextSet();
             return nextSet().size() != 0;
         }
 
