@@ -277,7 +277,11 @@ public class EventCollection implements Iterable<Event> {
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        saver.saveToFile("/series/" + name + ".txt", contents);
+        if(name==null){
+            saver.saveToFile("/series/" + "" + ".txt", contents);
+        }else{
+            saver.saveToFile("/series/" + name + ".txt", contents);
+        }
     }
 
     /**
