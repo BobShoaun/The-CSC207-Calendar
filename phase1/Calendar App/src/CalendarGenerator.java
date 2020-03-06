@@ -14,7 +14,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     private List<Duration> periods;
     private GregorianCalendar endTime;
 
-    // end==null means forever? up to implementation
+    // end==null means forever up to implementation
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
         this.startTime = start;
         this.periods = periods;
@@ -64,11 +64,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         return result.toString();
     }
 
-    @Override
-    public Iterator<GregorianCalendar> iterator() {
-        return new CGI();
-    }
-
     public void addPeriod(Duration period) {
         periods.add(period);
     }
@@ -101,11 +96,16 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         this.startTime = startTime;
     }
 
+    @Override
+    public Iterator<GregorianCalendar> iterator() {
+        return new CGI();
+    }
+
     private class CGI implements Iterator<GregorianCalendar>{
-        GregorianCalendar currentTime;
+        GregorianCalendar currentTime = new GregorianCalendar();
 
         public CGI() {
-            currentTime = startTime;
+            currentTime.setTime(new Date(startTime.getTimeInMillis()));
         }
 
         public GregorianCalendar add(GregorianCalendar cal, Duration dur){
@@ -115,20 +115,21 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         }
 
         public List<GregorianCalendar> nextSet(){
-            ArrayList<GregorianCalendar> candiates = new ArrayList<>();
+            List<GregorianCalendar> candidates = new ArrayList<>();
 
             for(Duration period : periods){
-                GregorianCalendar newTime = startTime;
+                GregorianCalendar newTime = new GregorianCalendar();
+                newTime.setTime(new Date(startTime.getTimeInMillis()));
                 while (currentTime.after(newTime)){
                     newTime = add(newTime, period);
                 }
 
-                candiates.add(newTime);
+                candidates.add(newTime);
             }
 
-            candiates.removeIf(candiate -> ignoreList.contains(candiate) || (endTime != null && candiate.after(endTime)));
+            candidates.removeIf(candidate -> ignoreList.contains(candidate) || (endTime != null && candidate.after(endTime)));
 
-            return candiates;
+            return candidates;
         }
 
         @Override
@@ -139,15 +140,16 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         @Override
         public GregorianCalendar next() {
             if(hasNext()){
-                GregorianCalendar result = null;
+                List<GregorianCalendar> set = nextSet();
+                GregorianCalendar result = set.get(0);
 
-                for(GregorianCalendar time : nextSet()){
-                    if (result == null || result.after(time)){
-                        result = time;
+                for(GregorianCalendar time : set){
+                    if (result.after(time)){
+                        result.setTime(new Date(time.getTimeInMillis()));
                     }
                 }
 
-                currentTime = result;
+                currentTime.setTime(new Date(result.getTimeInMillis()));
                 return result;
             } else {
                 throw new IndexOutOfBoundsException("No next date");
