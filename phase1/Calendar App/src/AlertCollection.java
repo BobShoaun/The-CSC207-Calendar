@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author colin
  */
-public class AlertCollection implements Observer { //TODO: AlertFacade
+public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
     private GregorianCalendar eventTime;
@@ -49,7 +49,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param time The time of the Alert to be added.
      * @return Whether or not the Alert could be added.
      */
-    public boolean addAlert(GregorianCalendar time) throws IOException { // TODO: dependency injection?
+    public boolean addAlert(GregorianCalendar time) {
         if (calGen != null) {
             for (GregorianCalendar c : calGen) {
                 if (c.equals(time))
@@ -72,7 +72,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param start  The start time
      * @param period The time between each alert
      */
-    public void addAlert(GregorianCalendar start, Duration period) throws PeriodAlreadyExistsException, IOException {
+    public void addAlert(GregorianCalendar start, Duration period) throws PeriodAlreadyExistsException {
         if (this.calGen == null) {
             ArrayList<Duration> d = new ArrayList<>();
             d.add(period);
@@ -90,7 +90,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The date of the Alert to be removed
      * @return Whether or not the Alert could be removed.
      */
-    public boolean removeAlert(GregorianCalendar d) throws IOException {
+    public boolean removeAlert(GregorianCalendar d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
@@ -100,7 +100,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
      */
-    public boolean removeGeneratedAlert(GregorianCalendar d) throws IOException {
+    public boolean removeGeneratedAlert(GregorianCalendar d) {
         for (GregorianCalendar ignored : calGen.getIgnoreList()) {
             if (d.equals(ignored))
                 return false;
@@ -115,7 +115,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
      */
-    public boolean removeManualAlert(GregorianCalendar d) throws IOException {
+    public boolean removeManualAlert(GregorianCalendar d) {
         boolean result = manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
         save();
         return result;
@@ -126,7 +126,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      *
      * @param newEventTime The new time of the Event
      */
-    private void shiftAlerts(GregorianCalendar newEventTime) throws IOException {
+    private void shiftAlerts(GregorianCalendar newEventTime) {
         if (calGen == null) {
             throw new IllegalStateException();
         }
@@ -222,11 +222,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof GregorianCalendar) {
-            try {
-                shiftAlerts((GregorianCalendar) arg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            shiftAlerts((GregorianCalendar) arg);
         } else
             throw new IllegalArgumentException();
     }
@@ -290,9 +286,14 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
     /**
      * Save this AlertCollection's data into a text file.
      */
-    public void save() throws IOException {
+    public void save() {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
-        saver.saveToFile("/alerts/" + eventId + ".txt", contents);
+        try {
+            saver.saveToFile("/alerts/" + eventId + ".txt", contents);
+        } catch (IOException e) {
+            System.out.println("Error while saving AlertCollection");
+            e.printStackTrace();
+        }
     }
 
 }
