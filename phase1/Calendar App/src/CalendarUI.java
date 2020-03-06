@@ -49,7 +49,7 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event"});
+            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series", "Search events"});
             switch (command){
                 case 0:
                     return;
@@ -83,6 +83,7 @@ public class CalendarUI extends UserInterface{
                     Memo memo = calendar.getMemo(memoName);
                     if(memo == null){
                         System.out.println("Memo not found!");
+                        break;
                     }
                     MemoUI memoUI = new MemoUI(memo, calendar);
                     memoUI.show();
@@ -92,6 +93,7 @@ public class CalendarUI extends UserInterface{
                     memo = calendar.getMemo(memoName);
                     if(memo == null){
                         System.out.println("Memo not found!");
+                        break;
                     }
                     calendar.removeMemo(calendar.getMemo(memoName));
                     break;
@@ -107,8 +109,64 @@ public class CalendarUI extends UserInterface{
                         System.out.println("Creating event failed... Try again!");
                     }
                     calendar.createEvent(event,"");
-                    EventUI newEventUi = new EventUI(event);
+                    EventUI newEventUi = new EventUI(event, calendar);
                     newEventUi.show();
+                    break;
+                case 8:
+                    String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
+                    calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
+                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
+                    eventCollectionUI.show();
+                case 9:
+                    int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
+                    switch(searchOption){
+                        case 0:
+                            eventName = getStringInput("Event name:");
+                            Iterator<Event> events = calendar.getEvents(eventName);
+                            ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView.show();
+                            break;
+                        case 1:
+                            memoName = getStringInput("Memo name:");
+                            memo = calendar.getMemo(memoName);
+                            if(memo == null){
+                                System.out.println("Memo not found!");
+                                break;
+                            }
+                            events = calendar.getLinkedEvents(memo).iterator();
+                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView.show();
+                            break;
+                        case 2:
+                            eventSeriesName = getStringInput("Event series:");
+                            if(calendar.getEventCollection(eventSeriesName) == null){
+                                System.out.println("That event series does not exist!");
+                                break;
+                            }
+                            events = calendar.getEventCollection(eventSeriesName).getEventIterator(new Date(0));
+                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView.show();
+                            break;
+                        case 3:
+                            GregorianCalendar date = getDateInput("Events at time: ");
+                            events = calendar.getEvents(date.getTime()).iterator();
+                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView.show();
+                            break;
+                        case 4:
+                            String tag = getStringInput("Tag: ");
+                            if(calendar.getTag(tag) == null){
+                                System.out.println("This tag can not be found!");
+                                break;
+                            }
+                            events = calendar.getTag(tag).getEvents().stream().map(id -> calendar.getEvent(id)).iterator();
+                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView.show();
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
                     break;
                 default:
                     throw new NotImplementedException();
@@ -116,7 +174,8 @@ public class CalendarUI extends UserInterface{
         }
     }
 
+
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
-        visibleEvents = calendar.getEvents(startOfDay.getTime(), nextDay.getTime()).stream().map(EventUI::new).collect(Collectors.toList());
+        visibleEvents = calendar.getEvents(startOfDay.getTime(), nextDay.getTime()).stream().map(e -> new EventUI(e, calendar)).collect(Collectors.toList());
     }
 }

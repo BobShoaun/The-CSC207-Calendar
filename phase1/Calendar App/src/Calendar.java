@@ -415,7 +415,7 @@ public class Calendar {
      * @param memo The memo to search by
      * @return List of events with memo
      */
-    public List<Event> getLinkedEvents(Tag memo) {
+    public List<Event> getLinkedEvents(Memo memo) {
         return memo.getEvents().stream().map(this::getEvent).collect(Collectors.toList());
     }
 
@@ -487,6 +487,24 @@ public class Calendar {
         } catch (FileNotFoundException e) {
 
         }
+    }
+
+    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) {
+        List<Event> events = eventIds.stream().map(id -> getEvent(id)).collect(Collectors.toList());
+        events.forEach(e -> removeFromSeries(e.getId()));
+        eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
+    }
+
+    public EventCollection getEventCollection(String eventSeriesName) {
+        return eventCollections.stream().filter(eC -> eC.getName().equals(eventSeriesName)).findAny().orElse(null);
+    }
+
+    public Iterator<Event> getEvents(String eventName) {
+        return new EventIterator(new Date(0), (Event e) -> e.getName().equals(eventName));
+    }
+
+    public Tag getTag(String tag) {
+        return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
     }
 
     /**
@@ -612,5 +630,9 @@ public class Calendar {
 
     public void removeEvent(Event event){
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
+    }
+
+    public List<String> getEventSeriesNames(){
+        return eventCollections.stream().map(EventCollection::getName).filter(f -> !f.equals("")).collect(Collectors.toList());
     }
 }

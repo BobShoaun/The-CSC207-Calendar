@@ -2,16 +2,13 @@ import exceptions.InvalidDateException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.*;
 import java.util.Calendar;
-import java.util.function.Consumer;
 
 public class EventCollection implements Iterable<Event>
 {
     private List<Event> events;
     private String name;
-    private boolean infinite = false;
     private DataSaver saver;
 
     /**
@@ -20,7 +17,7 @@ public class EventCollection implements Iterable<Event>
      * @param name   name of series
      * @param events list of events of the series
      */
-    public EventCollection(String name, ArrayList<Event> events, DataSaver saver)
+    public EventCollection(String name, List<Event> events, DataSaver saver)
     {
         this.name = name;
         this.events = events;
@@ -110,14 +107,14 @@ public class EventCollection implements Iterable<Event>
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException
     {
         EventGenerator eGen = new EventGenerator(baseEvent, start, end, frequency);
-        this.events.addAll(eGen.generateFiniteEvents());
+//        this.events.addAll(eGen.generateFiniteEvents());
     }
 
     public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException
     {
         Event base = getEvent(eventId);
         EventGenerator eGen = new EventGenerator(base, base.getStartDate().getTime(), end, frequency);
-        this.events.addAll(eGen.generateFiniteEvents());
+//        this.events.addAll(eGen.generateFiniteEvents());
     }
 
     public void addTag(String eventId, Tag tag) {
