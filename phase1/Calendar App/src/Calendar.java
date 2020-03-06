@@ -26,7 +26,7 @@ public class Calendar {
     public Calendar(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
-        eventCollections.add(new EventCollection(null, new ArrayList<>(), dataSaver));
+        eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
         alertCollections = new ArrayList<>();
         load();
     }

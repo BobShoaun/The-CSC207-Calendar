@@ -1,6 +1,5 @@
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
-
 import java.io.IOException;
 
 /**
@@ -16,7 +15,6 @@ public class UserManagerUI extends UserInterface {
 
     @Override
     public void display() {
-//        userManager.displayUsers();
         System.out.println("\n" +
                 " ██████╗ █████╗ ██╗     ███████╗███╗   ██╗██████╗  █████╗ ██████╗ \n" +
                 "██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔══██╗\n" +
@@ -24,7 +22,6 @@ public class UserManagerUI extends UserInterface {
                 "██║     ██╔══██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══██║██╔══██╗\n" +
                 "╚██████╗██║  ██║███████╗███████╗██║ ╚████║██████╔╝██║  ██║██║  ██║\n" +
                 " ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
-
     }
 
     @Override
@@ -87,7 +84,7 @@ public class UserManagerUI extends UserInterface {
         } catch (PasswordMismatchException e) {
             System.out.println("Password mismatch!");
             showRegisterMenu();
-        } catch (IOException ee){
+        } catch (IOException ee) {
             System.out.println("Failed to create user:" + ee.toString());
         }
     }
