@@ -1,6 +1,4 @@
 import exceptions.InvalidDateException;
-
-import java.security.InvalidParameterException;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.util.*;
@@ -9,51 +7,51 @@ import java.util.Calendar;
 public class EventGenerator {
     private Event baseEvent;
     private CalendarGenerator calGen;
-    private Duration dur;
 
     /**
      * EventGenerator for finite repeating events events
      * @param baseEvent event to be repeated
      * @param start start of repeating events
      * @param end end of repeating events
-     * @param frequency time between occurrence of repeating events
+     * @param Duration time between occurrence of repeating events
      */
-    public EventGenerator(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException
+    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) throws InvalidDateException
     {
         this.baseEvent = baseEvent;
-        List<Duration> durList = new ArrayList<>();
-        Duration dur = Duration.between((Temporal)frequency, (Temporal)start);
-        Date curr = start;
-        while(curr.compareTo(end)<=0){
-            Date nextDate = (Date)dur.addTo((Temporal)curr);
-            durList.add(dur);
-            curr=nextDate;
-        }
-        this.calGen = new CalendarGenerator(dateToGC(start), durList, dateToGC(end));
+        this.calGen = new CalendarGenerator(dateToGC(start), Duration, dateToGC(end));
     }
 
 
 //    public List<Event> generateInfiniteEvents() throws InvalidDateException
-//    {// baseEvents and end is null
-//            List<Event> ret = new ArrayList<>();
-//                //gives the first 15 sets of event repetition
-//                for (Event e:baseEvents)
-//                {
-//                    ret.addAll(getRepeatingEvents(e));
-//                }
-//            return ret;
-//    }
+//////    {// baseEvents and end is null
+//////            List<Event> ret = new ArrayList<>();
+//////                //gives the first 15 sets of event repetition
+//////                for (Event e:baseEvents)
+//////                {
+//////                    ret.addAll(getRepeatingEvents(e));
+//////                }
+//////            return ret;
+//////    }
 
     public List<Event> generateFiniteEvents() throws InvalidDateException
     {
         List<Event> ret = new ArrayList<>();
+        Iterator<GregorianCalendar> itr = calGen.iterator();
+
+        while(itr.hasNext())
+        {
+            GregorianCalendar curr = itr.next();
+            String id = baseEvent.getName()+curr.getTime();
+            String name = baseEvent.getName();
+            if(itr.hasNext()){
+                GregorianCalendar next = itr.next();
+                Event e = new Event(id, name, curr, next);
+            }
+        }
+
 
         for (GregorianCalendar GC : calGen) {
-            String id = baseEvent.getName()+GC.getTime();
-            String name = baseEvent.getName();
-            GregorianCalendar curr = (GregorianCalendar) GC.clone();
-            GC.add(Calendar.MILLISECOND,(int)this.dur.toMillis());
-            Event e = new Event(id, name, curr, GC);
+
         }
         return null;
     }
@@ -79,6 +77,7 @@ public class EventGenerator {
 //        }
 //        return ret;
 //    }
+
     private Date addTime(Date begin, Date time)
     {
         Calendar c = Calendar.getInstance();
