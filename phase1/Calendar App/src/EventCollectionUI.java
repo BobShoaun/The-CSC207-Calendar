@@ -11,9 +11,8 @@ public class EventCollectionUI extends UserInterface
     private EventCollection events;
     private DataSaver saver;
 
-    public EventCollectionUI(EventCollection eventCollection,DataSaver saver){
+    public EventCollectionUI(EventCollection eventCollection){
         this.events = eventCollection;
-        this.saver = saver;
     }
 
     @Override

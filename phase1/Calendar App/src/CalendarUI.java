@@ -120,7 +120,7 @@ public class CalendarUI extends UserInterface{
                 case 8:
                     String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
                     calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
-                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName), );
+                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
                     eventCollectionUI.show();
                 case 9:
                     int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
