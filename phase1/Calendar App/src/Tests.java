@@ -16,11 +16,11 @@ public class Tests {
         Alert a = new Alert("asdf123", new GregorianCalendar());
         Date d = new Date(120, Calendar.MARCH, 6, 12, 30, 30);
         a.setTime(d);
-        if (!a.getTime().getTime().equals(d)) throw new AssertionError();
-        if (!a.getEventId().equals("asdf123")) throw new AssertionError();
+        if (!a.getTime().getTime().equals(d)) throw new AssertionError("Alert");
+        if (!a.getEventId().equals("asdf123")) throw new AssertionError("Alert");
 
         Alert b = new Alert("id2", "1583515830000");
-        if (!a.getTime().equals(b.getTime())) throw new AssertionError();
+        if (!a.getTime().equals(b.getTime())) throw new AssertionError("Alert");
     }
 
     static void testAlertCollection() throws Exception {
@@ -36,20 +36,20 @@ public class Tests {
         if (get.size() != 9) throw new AssertionError();
     }
 
-    static void testEventsGenerator() throws InvalidDateException, IOException {
+    static void testEventsGenerator() throws InvalidDateException {
         Event e = new Event("test", "Go Shopping",
                 new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
                 new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
 
 
         Date date = new Date(120, Calendar.MAY, 12);
-        Date date2 = new Date(120, Calendar.DECEMBER, 11);
+        Date date2 = new Date(120, Calendar.MAY, 20);
         List<Duration> durs = new ArrayList<>();
         durs.add(Duration.ofDays(1));
         EventGenerator eg = new EventGenerator(e, date, date2, durs);
-//        for (Event event : eg.generateEvents()) {
-//            System.out.println(event);
-//        }
+
+        List<Event> events = new ArrayList<>(eg.generateEvents());
+        if (events.size() != 19) throw new AssertionError("EventGenerator problem");
     }
 
     static void testECSave() throws InvalidDateException, IOException {
@@ -101,11 +101,11 @@ public class Tests {
             dates.add(date);
         }
         int size = dates.size();
-        if (29 != size) throw new AssertionError();
+        if (29 != size) throw new AssertionError("CG Issue");
     }
 
     public static void main(String[] args) throws Exception {
-//        testCalendarGenerator();
+        testCalendarGenerator();
         testAlert();
         testAlertCollection();
         testEventsGenerator();
