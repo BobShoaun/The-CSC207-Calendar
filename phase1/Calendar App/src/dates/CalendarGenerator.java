@@ -1,3 +1,5 @@
+package dates;
+
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,7 +19,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     }
 
     /**
-     * Create a CalendarGenerator from a String.
+     * Create a dates.CalendarGenerator from a String.
      *
      * @param input The string representation of this CG (from toString())
      */

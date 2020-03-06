@@ -1,7 +1,11 @@
+package consoleui;
+
+import alert.Alert;
+import alert.AlertCollection;
 import exceptions.PeriodAlreadyExistsException;
 
 /**
- * Terminal interface for AlertCollection.
+ * Terminal interface for alert.AlertCollection.
  */
 public class AlertUI extends UserInterface {
 
@@ -34,7 +38,7 @@ public class AlertUI extends UserInterface {
                         getDateInput("Enter a time for the alert: "));
                 while (!result) {
                     result = alerts.addAlert(
-                            getDateInput("Alert already exists. Please try again: "));
+                            getDateInput("alert.Alert already exists. Please try again: "));
                 }
                 break;
             case 2:
@@ -53,7 +57,7 @@ public class AlertUI extends UserInterface {
             case 3:
                 Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
                 a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
-                alerts.save();
+                alerts.save(); // TODO: implement editAlert() in AC instead
                 break;
             case 4:
                 boolean works = false;

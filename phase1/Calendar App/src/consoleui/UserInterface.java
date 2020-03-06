@@ -1,3 +1,5 @@
+package consoleui;
+
 import exceptions.InvalidDateException;
 
 import java.io.IOException;
@@ -7,7 +9,8 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * User interface class representing an abstract user interface
+ * user.User interface class representing an abstract user interface
+ *
  * @author Ng Bob Shoaun
  */
 public abstract class UserInterface {

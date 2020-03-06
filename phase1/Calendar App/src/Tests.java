@@ -1,5 +1,10 @@
+import alert.Alert;
+import alert.AlertCollection;
+import dates.CalendarGenerator;
+import event.Event;
+import user.DataSaver;
+
 import java.time.Duration;
-import java.util.Calendar;
 import java.util.*;
 
 public class Tests {

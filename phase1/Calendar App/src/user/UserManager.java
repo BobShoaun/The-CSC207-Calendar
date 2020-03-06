@@ -1,3 +1,5 @@
+package user;
+
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
@@ -8,7 +10,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * UserManager class
+ * user.UserManager class
+ *
  * @author Ng Bob Shoaun
  */
 public class UserManager extends DataSaver {

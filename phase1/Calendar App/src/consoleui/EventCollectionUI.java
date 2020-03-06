@@ -1,3 +1,7 @@
+package consoleui;
+
+import event.Event;
+import event.EventCollection;
 import exceptions.InvalidDateException;
 
 import java.util.GregorianCalendar;
@@ -19,7 +23,7 @@ public class EventCollectionUI extends UserInterface {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Display in Time frame",});
-//                "Edit an Event in Series",});
+//                "Edit an event.Event in Series",});
         switch (option) {
             case 0:
                 break;
@@ -36,7 +40,7 @@ public class EventCollectionUI extends UserInterface {
                 break;
 //            case 2:
 //                String eventName = getStringInput("Enter the name of the event ou want to edit");
-//                Event edit = events.
+//                event.Event edit = events.
 //                break;
             default:
         }
@@ -46,7 +50,7 @@ public class EventCollectionUI extends UserInterface {
 //    {
 //        int option = getOptionsInput(new String[]{"Exit",
 //                "Display in Time frame",
-//                "Edit an Event in Series"});
+//                "Edit an event.Event in Series"});
 //        switch (option)
 //        {
 //            case 0:
@@ -57,18 +61,18 @@ public class EventCollectionUI extends UserInterface {
 //        }
 //    }
 
-//    private List<Event> selectEvents()
+//    private List<event.Event> selectEvents()
 //    {
 //        int option = getOptionsInput(this.events.regularEventDetails());
 //        return null;
 //    }
 //
-//    private Event createEvent() throws InvalidDateException
+//    private event.Event createEvent() throws InvalidDateException
 //    {
-//        String name = getStringInput("Base Event Name:");
-//        GregorianCalendar start = getDateInput("Start Date of Base Event");
-//        GregorianCalendar end = getDateInput("End Date of Base Event");
-//        return new Event(name + start.getTime(), name, start, end);
+//        String name = getStringInput("Base event.Event Name:");
+//        GregorianCalendar start = getDateInput("Start Date of Base event.Event");
+//        GregorianCalendar end = getDateInput("End Date of Base event.Event");
+//        return new event.Event(name + start.getTime(), name, start, end);
 //    }
 //
 //    private List<Duration> getFrequency()

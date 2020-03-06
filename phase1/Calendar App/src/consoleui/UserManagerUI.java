@@ -1,10 +1,13 @@
+package consoleui;
+
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
+import user.UserManager;
 
 import java.io.IOException;
 
 /**
- * UserManagerUI, the starting point of the program
+ * consoleui.UserManagerUI, the starting point of the program
  */
 public class UserManagerUI extends UserInterface {
 
@@ -60,7 +63,7 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        if(!userManager.getCurrentUser().firstLogin) {
+        if (!userManager.getCurrentUser().getFirstLogin()) {
             System.out.println("Welcome back, " + username + "! You last login was on: " + userManager.getCurrentUser().getLastLoginTime().getTime());
         } else {
             System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
@@ -75,7 +78,7 @@ public class UserManagerUI extends UserInterface {
         String confirmPassword = getWordInput("Confirm password: ");
         try {
             userManager.registerUser(username, password, confirmPassword);
-            System.out.println("User registered successfully...");
+            System.out.println("user.User registered successfully...");
             userManager.loginUser(username, password);
             CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
             calendarUI.show();

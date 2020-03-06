@@ -1,3 +1,5 @@
+package user;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -70,8 +72,8 @@ public class DataSaver {
             // file and/or directory doesn't exist
             File newFile = new File(path);
             newFile.getParentFile().mkdirs(); // create whole directory
-                newFile.createNewFile();
-                saveToFile(path, contents);
+            newFile.createNewFile();
+            saveToFile(path, contents);
         }
     }
 

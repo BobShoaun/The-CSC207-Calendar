@@ -1,15 +1,20 @@
+package consoleui;
+
+import mt.Memo;
+import user.Calendar;
+
 public class MemoUI extends UserInterface {
     Memo memo;
     Calendar calendar;
 
-    public MemoUI(Memo memo, Calendar calendar){
+    public MemoUI(Memo memo, Calendar calendar) {
         this.memo = memo;
         this.calendar = calendar;
     }
 
     @Override
     public void display(){
-         System.out.println(memo.getTitle() + "\n\n" + memo.getText());
+        System.out.println(memo.getTitle() + "\n\n" + memo.getText());
     }
 
     @Override

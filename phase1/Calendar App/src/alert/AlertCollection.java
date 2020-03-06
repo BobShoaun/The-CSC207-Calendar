@@ -1,4 +1,9 @@
+package alert;
+
+import dates.CalendarGenerator;
+import event.Event;
 import exceptions.PeriodAlreadyExistsException;
+import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -6,7 +11,7 @@ import java.util.*;
 
 /**
  * A collection/group of one alert. Has a list of manually created alerts and possibly
- * a CalendarGenerator for repeating Alerts.
+ * a dates.CalendarGenerator for repeating Alerts.
  *
  * @author colin
  */
@@ -18,9 +23,9 @@ public class AlertCollection implements Observer {
     private DataSaver saver;
 
     /**
-     * Creates a new Alert group (possibly repeating)
+     * Creates a new alert.Alert group (possibly repeating)
      *
-     * @param e The Event attached to the Alert.
+     * @param e The event.Event attached to the alert.Alert.
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
@@ -31,7 +36,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Get the ID of the event associated with this AlertCollection
+     * Get the ID of the event associated with this alert.AlertCollection
      *
      * @return The ID of the event
      */
@@ -46,8 +51,8 @@ public class AlertCollection implements Observer {
     /**
      * Add an alert manually by setting the time.
      *
-     * @param time The time of the Alert to be added.
-     * @return Whether or not the Alert could be added.
+     * @param time The time of the alert.Alert to be added.
+     * @return Whether or not the alert.Alert could be added.
      */
     public boolean addAlert(GregorianCalendar time) {
         if (calGen != null) {
@@ -67,7 +72,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Add a recurring Alert until the Event occurs
+     * Add a recurring alert.Alert until the event.Event occurs
      *
      * @param start  The start time
      * @param period The time between each alert
@@ -85,17 +90,17 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Remove a single Alert.
+     * Remove a single alert.Alert.
      *
-     * @param d The date of the Alert to be removed
-     * @return Whether or not the Alert could be removed.
+     * @param d The date of the alert.Alert to be removed
+     * @return Whether or not the alert.Alert could be removed.
      */
     public boolean removeAlert(GregorianCalendar d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
     /**
-     * Remove an automatically generated Alert.
+     * Remove an automatically generated alert.Alert.
      *
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
@@ -110,7 +115,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Remove a manually created Alert.
+     * Remove a manually created alert.Alert.
      *
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
@@ -122,9 +127,9 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Shift the time of all Alerts in this AlertCollection.
+     * Shift the time of all Alerts in this alert.AlertCollection.
      *
-     * @param newEventTime The new time of the Event
+     * @param newEventTime The new time of the event.Event
      */
     private void shiftAlerts(GregorianCalendar newEventTime) {
         if (calGen == null) {
@@ -139,20 +144,20 @@ public class AlertCollection implements Observer {
     }
 
 //    /**
-//     * Replace the current CalendarGenerator with a new one.
+//     * Replace the current dates.CalendarGenerator with a new one.
 //     *
-//     * @param cg The new CalendarGenerator
+//     * @param cg The new dates.CalendarGenerator
 //     */
-//    public void setCalendarGenerator(CalendarGenerator cg) {
+//    public void setCalendarGenerator(dates.CalendarGenerator cg) {
 //        this.calGen = cg;
 //    }
 
 //    /**
-//     * Get the current CalendarGenerator.
+//     * Get the current dates.CalendarGenerator.
 //     *
-//     * @return The current CalendarGenerator
+//     * @return The current dates.CalendarGenerator
 //     */
-//    public CalendarGenerator getCalendarGenerator() {
+//    public dates.CalendarGenerator getCalendarGenerator() {
 //        return calGen;
 //    }
 
@@ -228,9 +233,9 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Get a String representation of data in this AlertCollection.
+     * Get a String representation of data in this alert.AlertCollection.
      *
-     * @return String representation of all the data in this AC, including the CalendarGenerator.
+     * @return String representation of all the data in this AC, including the dates.CalendarGenerator.
      */
     public String getString() {
         StringBuilder result = new StringBuilder(eventId + "\n" + eventTime.getTimeInMillis() + "\n");
@@ -243,7 +248,7 @@ public class AlertCollection implements Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Alert for EventID " + getEventId()
+        StringBuilder result = new StringBuilder("alert.Alert for EventID " + getEventId()
                 + ", which occurs at " + eventTime.getTime().toString() + ".\n");
         result.append("===== MANUALLY CREATED ALERTS =====\n");
         for (Alert a : manAlerts) {
@@ -255,7 +260,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Load the data into this AlertCollection.
+     * Load the data into this alert.AlertCollection.
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
@@ -284,14 +289,14 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Save this AlertCollection's data into a text file.
+     * Save this alert.AlertCollection's data into a text file.
      */
     public void save() {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
         try {
             saver.saveToFile("/alerts/" + eventId + ".txt", contents);
         } catch (IOException e) {
-            System.out.println("Error while saving AlertCollection");
+            System.out.println("Error while saving alert.AlertCollection");
             e.printStackTrace();
         }
     }

@@ -1,4 +1,11 @@
+package consoleui;
+
+import alert.AlertCollection;
+import event.Event;
 import exceptions.InvalidDateException;
+import mt.Memo;
+import mt.Tag;
+import user.Calendar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,7 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Terminal interface for Event.
+ * Terminal interface for event.Event.
  */
 
 public class EventUI extends UserInterface {
@@ -35,15 +42,15 @@ public class EventUI extends UserInterface {
         while (running) {
             display();
             int option = getOptionsInput(new String[]{"Exit",
-                    "Event Duration", "Edit Event",
-                    "Show Alerts", "Edit Alert",
+                    "event.Event Duration", "Edit event.Event",
+                    "Show Alerts", "Edit alert.Alert",
                     "Show Memos", "Edit Memos",
                     "Show Tags", "Edit Tags"});
             switch (option) {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // Event duration
+                case 1: // event.Event duration
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
                     formatter.format(event.getDuration().getTime());
                     System.out.println(event.getName() + " lasts for " + formatter);
@@ -52,7 +59,7 @@ public class EventUI extends UserInterface {
                     editEvent();
                     break;
                 case 3: // Show alerts
-                    List<AlertCollection> alertCollections = calendar.alertCollections;
+                    List<AlertCollection> alertCollections = calendar.getAlertCollections();
                     for (AlertCollection ac: alertCollections) {
                         if (ac.getEventId().equals(event.getId())) {
                             System.out.println(ac.toString());
@@ -76,12 +83,12 @@ public class EventUI extends UserInterface {
                     System.out.println(result);
                     break;
                 case 6: // Edit memo
-                    int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
+                    int num = getIntInput("mt.Memo no.: ", 0, memoUIs.size() - 1);
                     MemoUI mui = memoUIs.get(num);
                     mui.show();
                     break;
                 case 7: // Show tags
-                    List<Tag> tags = calendar.tags;
+                    List<Tag> tags = calendar.getTags();
                     for (Tag t: tags) {
                         if ( t.hasEvent(event.getId()) ) {
                             System.out.println(t.getText());
@@ -131,7 +138,7 @@ public class EventUI extends UserInterface {
 
 
     private void editAlert() {
-        for (AlertCollection ac : calendar.alertCollections) {
+        for (AlertCollection ac : calendar.getAlertCollections()) {
             if (ac.getEventId().equals(event.getId())) {
                 AlertUI alertUI = new AlertUI(ac);
                 alertUI.show();
@@ -149,7 +156,7 @@ public class EventUI extends UserInterface {
     }
 
     private void editTag() {
-        List<Tag> tags = calendar.tags;
+        List<Tag> tags = calendar.getTags();
         String tagName = getStringInput("Enter tag name: ");
         for (Tag t: tags) {
             if ( t.getText().equals(tagName) )  {
@@ -158,7 +165,6 @@ public class EventUI extends UserInterface {
             }
         }
     }
-
 
 
 }

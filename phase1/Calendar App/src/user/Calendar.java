@@ -1,5 +1,14 @@
+package user;
+
+import alert.Alert;
+import alert.AlertCollection;
+import alert.AlertComparator;
+import event.Event;
+import event.EventCollection;
 import exceptions.InvalidDateException;
 import exceptions.PeriodAlreadyExistsException;
+import mt.Memo;
+import mt.Tag;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Calendar class
+ * user.Calendar class
  */
 public class Calendar {
 
@@ -45,6 +54,17 @@ public class Calendar {
         load();
     }
 
+    public List<AlertCollection> getAlertCollections() {
+        return alertCollections;
+    }
+
+    public List<EventCollection> getEventCollections() {
+        return eventCollections;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
 
     /**
      * Return all events which occur during at a certain time period
@@ -86,7 +106,7 @@ public class Calendar {
      * [Warning] The iterator will no be updated and become unusable if the number of event collections change
      *
      * @param start The earliest possible start time of the returned events
-     * @return Null if no event collections exist, otherwise an Iterator<Event>
+     * @return Null if no event collections exist, otherwise an Iterator<event.Event>
      */
     public Iterator<Event> getFutureEvents(Date start) {
         if (eventCollections.size() == 0) {
@@ -114,7 +134,7 @@ public class Calendar {
     /**
      * Add an event to the correct event collection
      *
-     * @param event    Event to add
+     * @param event    event.Event to add
      * @param seriesId Series to add event to
      */
     public void createEvent(Event event, String seriesId) throws IllegalArgumentException, IOException {
@@ -300,7 +320,8 @@ public class Calendar {
 
     /**
      * Creates a new tag or add an existing tag to an event
-     * @param eventId Event the tag is added to
+     *
+     * @param eventId event.Event the tag is added to
      * @param tagName Name of the tag to be added
      * @throws IllegalArgumentException If the event cannot be found
      */
@@ -326,7 +347,8 @@ public class Calendar {
 
     /**
      * Remove tag to an event
-     * @param eventId Event the tag is removed from
+     *
+     * @param eventId event.Event the tag is removed from
      * @param tagName Name of the tag to be removed
      * @throws IllegalArgumentException If the event or the tag cannot be found
      */
@@ -520,7 +542,7 @@ public class Calendar {
     }
 
     /**
-     * Event Iterator is used to iterate over the individual event collections to get the next time
+     * event.Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
         private Predicate<Event> isValid;

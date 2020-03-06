@@ -1,17 +1,24 @@
+package consoleui;
+
+import alert.Alert;
+import event.Event;
 import exceptions.InvalidDateException;
+import mt.Memo;
+import user.Calendar;
+import user.User;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CalendarUI extends UserInterface{
+public class CalendarUI extends UserInterface {
     private User user;
     private Calendar calendar;
 
     List<Alert> visibleAlerts = new ArrayList<>();
     List<EventUI> visibleEvents = new ArrayList<>();
 
-    public CalendarUI(User user, Calendar calendar){
+    public CalendarUI(User user, Calendar calendar) {
         this.user = user;
 
         this.calendar = calendar;
@@ -20,12 +27,12 @@ public class CalendarUI extends UserInterface{
     @Override
     public void display() {
         //Show current alerts
-        System.out.println("======= " + user.getName() + "'s Calendar =======");
+        System.out.println("======= " + user.getName() + "'s user.Calendar =======");
         System.out.println("New alerts: ");
         for (int i = 0; i < visibleAlerts.size(); i++) {
             Alert alert = visibleAlerts.get(i);
             Event correspondingEvent = calendar.getEvent(alert.getEventId());
-            System.out.println("(" + i + ") " + alert.getTime().toString() + " - Alert for " + correspondingEvent.getName());
+            System.out.println("(" + i + ") " + alert.getTime().toString() + " - alert.Alert for " + correspondingEvent.getName());
         }
         displayEvents();
     }
@@ -88,20 +95,20 @@ public class CalendarUI extends UserInterface{
                     memoUiView.show();
                     break;
                 case 5:
-                    String memoName = getStringInput("Memo name:");
+                    String memoName = getStringInput("mt.Memo name:");
                     Memo memo = calendar.getMemo(memoName);
                     if(memo == null){
-                        System.out.println("Memo not found!");
+                        System.out.println("mt.Memo not found!");
                         break;
                     }
                     MemoUI memoUI = new MemoUI(memo, calendar);
                     memoUI.show();
                     break;
                 case 6:
-                    memoName = getStringInput("Memo name:");
+                    memoName = getStringInput("mt.Memo name:");
                     memo = calendar.getMemo(memoName);
                     if(memo == null){
-                        System.out.println("Memo not found!");
+                        System.out.println("mt.Memo not found!");
                         break;
                     }
                     calendar.removeMemo(calendar.getMemo(memoName));
@@ -137,19 +144,19 @@ public class CalendarUI extends UserInterface{
                     EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
                     eventCollectionUI.show();
                 case 9:
-                    int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
+                    int searchOption = getOptionsInput(new String[]{"event.Event name", "mt.Memo title", "event.Event series", "Date", "mt.Tag"});
                     switch(searchOption){
                         case 0:
-                            eventName = getStringInput("Event name:");
+                            eventName = getStringInput("event.Event name:");
                             Iterator<Event> events = calendar.getEvents(eventName);
                             ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString);
                             listUIView.show();
                             break;
                         case 1:
-                            memoName = getStringInput("Memo name:");
+                            memoName = getStringInput("mt.Memo name:");
                             memo = calendar.getMemo(memoName);
                             if(memo == null){
-                                System.out.println("Memo not found!");
+                                System.out.println("mt.Memo not found!");
                                 break;
                             }
                             events = calendar.getLinkedEvents(memo).iterator();
@@ -157,7 +164,7 @@ public class CalendarUI extends UserInterface{
                             listUIView.show();
                             break;
                         case 2:
-                            eventSeriesName = getStringInput("Event series:");
+                            eventSeriesName = getStringInput("event.Event series:");
                             if(calendar.getEventCollection(eventSeriesName) == null){
                                 System.out.println("That event series does not exist!");
                                 break;
@@ -173,7 +180,7 @@ public class CalendarUI extends UserInterface{
                             listUIView.show();
                             break;
                         case 4:
-                            String tag = getStringInput("Tag: ");
+                            String tag = getStringInput("mt.Tag: ");
                             if(calendar.getTag(tag) == null){
                                 System.out.println("This tag can not be found!");
                                 break;

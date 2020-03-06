@@ -1,8 +1,10 @@
+package alert;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * An Alert, representing a notification for an Event.
+ * An alert.Alert, representing a notification for an event.Event.
  *
  * @author colin
  */
@@ -12,7 +14,7 @@ public class Alert {
     private String eventId;
 
     /**
-     * Create an Alert
+     * Create an alert.Alert
      *
      * @param time    The time at which the notification goes off
      * @param eventId The ID of the event
@@ -22,7 +24,7 @@ public class Alert {
     }
 
     /**
-     * Create an Alert from a String representation.
+     * Create an alert.Alert from a String representation.
      *
      * @param string  the toString() output, representing time
      * @param eventId The ID of the event
@@ -35,14 +37,14 @@ public class Alert {
     /**
      * Get the alert's time.
      *
-     * @return The time of the Alert.
+     * @return The time of the alert.Alert.
      */
     public GregorianCalendar getTime() {
         return time;
     }
 
     /**
-     * Set the time of this Alert.
+     * Set the time of this alert.Alert.
      *
      * @param time The new time to be set
      */
@@ -51,9 +53,9 @@ public class Alert {
     }
 
     /**
-     * Get a string of data in of this Alert.
+     * Get a string of data in of this alert.Alert.
      *
-     * @return The time in milliseconds for the Alert
+     * @return The time in milliseconds for the alert.Alert
      */
     public String getString() {
         return "" + time.getTimeInMillis();

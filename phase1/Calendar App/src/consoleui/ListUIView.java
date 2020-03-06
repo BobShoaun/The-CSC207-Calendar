@@ -1,9 +1,11 @@
+package consoleui;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-public class ListUIView<T> extends UserInterface{
+public class ListUIView<T> extends UserInterface {
     private Iterator<T> iterator;
     List<String> elements;
     int start = 0;
@@ -11,7 +13,7 @@ public class ListUIView<T> extends UserInterface{
     int size = 10;
     private Function<T, String> converter;
 
-    public ListUIView(Iterator<T> iterator, Function<T, String> converter){
+    public ListUIView(Iterator<T> iterator, Function<T, String> converter) {
         this.converter = converter;
         elements = new ArrayList<>();
         this.iterator = iterator;
@@ -36,8 +38,7 @@ public class ListUIView<T> extends UserInterface{
 
     @Override
     public void show() {
-        if(!iterator.hasNext() && elements.size() == 0)
-        {
+        if (!iterator.hasNext() && elements.size() == 0) {
             System.out.println("No elements found!");
             return;
         }

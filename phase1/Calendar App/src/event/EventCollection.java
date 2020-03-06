@@ -1,10 +1,15 @@
+package event;
+
+import dates.CalendarGenerator;
+import dates.EventGenerator;
 import exceptions.InvalidDateException;
+import mt.Tag;
+import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.util.*;
-import java.util.Calendar;
 
 public class EventCollection implements Iterable<Event> {
     private List<Event> events;
@@ -17,7 +22,7 @@ public class EventCollection implements Iterable<Event> {
      *
      * @param name   name of series
      * @param events list of events of the series
-     * @param saver  saver object to load/save this EventCollection
+     * @param saver  saver object to load/save this event.EventCollection
      */
     public EventCollection(String name, List<Event> events, DataSaver saver) {
         this.name = name;
@@ -29,8 +34,8 @@ public class EventCollection implements Iterable<Event> {
      * Constructor for a repeating/infinite series
      *
      * @param name  name of the series
-     * @param eGen  Event generator for this series
-     * @param saver saver object to load/save this EventCollection
+     * @param eGen  event.Event generator for this series
+     * @param saver saver object to load/save this event.EventCollection
      */
     public EventCollection(String name, EventGenerator eGen, DataSaver saver) {
         this.name = name;
@@ -39,7 +44,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * @return name of this EventCollection
+     * @return name of this event.EventCollection
      */
     public String getName() {
         return name;
@@ -134,7 +139,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * @param oldEvent an Event that has been edited
+     * @param oldEvent an event.Event that has been edited
      * @param newEvent the replacement event
      * @throws InvalidDateException
      */
@@ -273,7 +278,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * Save this EventCollection's data into a text file.
+     * Save this event.EventCollection's data into a text file.
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
@@ -285,9 +290,9 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * Get a String representation of data in this AlertCollection.
+     * Get a String representation of data in this alert.AlertCollection.
      *
-     * @return String representation of all the data in this AC, including the CalendarGenerator.
+     * @return String representation of all the data in this AC, including the dates.CalendarGenerator.
      */
     public String getString() {
         StringBuilder result = new StringBuilder(this.name + "\n ");
@@ -342,23 +347,23 @@ public class EventCollection implements Iterable<Event> {
 
     public List<Event> getEventsBetween(GregorianCalendar start, GregorianCalendar end) throws InvalidDateException {
         List<Event> ret =new ArrayList<>();
-        if(events!=null)
-        {
-            for (Event e:events) {
-                if(isOnTime(e,start.getTime(),end.getTime())){
+        if (events != null) {
+            for (Event e : events) {
+                if (isOnTime(e, start.getTime(), end.getTime())) {
                     ret.add(e);
                 }
             }
         }
-        if(eGen!=null){
+        if (eGen != null) {
             EventGenerator newEG = new EventGenerator(eGen.getBaseEvent(), start.getTime(),
-                    end.getTime() ,eGen.getCalGen().getPeriods());
+                    end.getTime(), eGen.getCalGen().getPeriods());
             ret.addAll(newEG.generateEvents());
         }
         return ret;
     }
+
     /**
-     * Returns an iterator over elements of type {@code Event}.
+     * Returns an iterator over elements of type {@code event.Event}.
      *
      * @return an Iterator.
      */
@@ -369,14 +374,14 @@ public class EventCollection implements Iterable<Event> {
 
     private class EventCollectionIterator implements Iterator<Event> {
         /**
-         * The index of the next Event to return.
+         * The index of the next event.Event to return.
          */
         private int current = 0;
 
         /**
-         * Returns whether there is another Event to return.
+         * Returns whether there is another event.Event to return.
          *
-         * @return whether there is another Event to return.
+         * @return whether there is another event.Event to return.
          */
         @Override
         public boolean hasNext() {
@@ -384,9 +389,9 @@ public class EventCollection implements Iterable<Event> {
         }
 
         /**
-         * Returns the next Event.
+         * Returns the next event.Event.
          *
-         * @return the next Event.
+         * @return the next event.Event.
          */
         @Override
         public Event next() {
@@ -406,7 +411,7 @@ public class EventCollection implements Iterable<Event> {
         }
 
         /**
-         * Removes the Event just returned.
+         * Removes the event.Event just returned.
          */
         @Override
         public void remove() {

@@ -1,14 +1,20 @@
+package dates;
+
+import event.Event;
 import exceptions.InvalidDateException;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class EventGenerator {
     private Event baseEvent;
     private CalendarGenerator calGen;
 
     /**
-     * EventGenerator for finite repeating events events
+     * dates.EventGenerator for finite repeating events events
      *
      * @param baseEvent event to be repeated
      * @param start     start of repeating events

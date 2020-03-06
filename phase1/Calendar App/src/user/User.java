@@ -1,10 +1,13 @@
+package user;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * User class
+ * user.User class
+ *
  * @author Ng Bob Shoaun
  */
 public class User implements StringParsable {
@@ -14,13 +17,21 @@ public class User implements StringParsable {
     private Calendar calendar;
     private DataSaver dataSaver;
     private GregorianCalendar lastLoginTime;
-    boolean firstLogin = false;
+    boolean firstLogin;
 
-    public String getName () { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public Calendar getCalendar () { return calendar; }
+    public Calendar getCalendar() {
+        return calendar;
+    }
 
-    public User (String name, String password) {
+    public boolean getFirstLogin() {
+        return firstLogin;
+    }
+
+    public User(String name, String password) {
         this.name = name;
         this.password = password;
         dataSaver = new DataSaver(name);

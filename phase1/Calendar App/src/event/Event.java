@@ -1,12 +1,13 @@
+package event;
+
 import exceptions.InvalidDateException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
 
 /**
- * Event class
+ * event.Event class
  */
 public class Event extends Observable{
 
@@ -16,11 +17,12 @@ public class Event extends Observable{
     private GregorianCalendar endDate;
 
     /**
-     * Constructor for a new Event
-     * @param id id of the Event
-     * @param name name of the Event
-     * @param startDate start time of the Event
-     * @param endDate end time of the Event
+     * Constructor for a new event.Event
+     *
+     * @param id        id of the event.Event
+     * @param name      name of the event.Event
+     * @param startDate start time of the event.Event
+     * @param endDate   end time of the event.Event
      */
     public Event (String id, String name, GregorianCalendar startDate, GregorianCalendar endDate)
             throws InvalidDateException{
@@ -35,56 +37,66 @@ public class Event extends Observable{
     }
 
     /**
-     * Return the name of the Event
-     * @return the name of the Event
+     * Return the name of the event.Event
+     *
+     * @return the name of the event.Event
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Return the id of the Event
-     * @return the id of the Event
+     * Return the id of the event.Event
+     * @return the id of the event.Event
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Return the start time of the Event
-     * @return the startDate of the Event
+     * Return the start time of the event.Event
+     *
+     * @return the startDate of the event.Event
      */
-    public GregorianCalendar getStartDate() { return startDate; }
-
-    /**
-     * Return the end time of the Event
-     * @return the endDate of the Event
-     */
-    public GregorianCalendar getEndDate() {return endDate;}
-
-    /**
-     * Set the name of the Event
-     * @param newName the new name of the Event
-     */
-    public void setName(String newName) { this.name = newName; }
-
-    /**
-     * Set the start time of the Event
-     * @param newStart the new startDate of the Event
-     */
-    public void setStartDate(GregorianCalendar newStart) throws InvalidDateException {
-       if ( newStart.after(endDate) ) {
-           throw new InvalidDateException();
-       } else {
-           this.startDate = newStart;
-           setChanged();
-           notifyObservers(this.getDuration());
-       }
+    public GregorianCalendar getStartDate() {
+        return startDate;
     }
 
     /**
-     * Set the end time of the Event
-     * @param newEnd the new endDate of the Event
+     * Return the end time of the event.Event
+     *
+     * @return the endDate of the event.Event
+     */
+    public GregorianCalendar getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * Set the name of the event.Event
+     *
+     * @param newName the new name of the event.Event
+     */
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    /**
+     * Set the start time of the event.Event
+     * @param newStart the new startDate of the event.Event
+     */
+    public void setStartDate(GregorianCalendar newStart) throws InvalidDateException {
+        if (newStart.after(endDate)) {
+            throw new InvalidDateException();
+        } else {
+            this.startDate = newStart;
+            setChanged();
+            notifyObservers(this.getDuration());
+        }
+    }
+
+    /**
+     * Set the end time of the event.Event
+     * @param newEnd the new endDate of the event.Event
      */
     public void setEndDate(GregorianCalendar newEnd) throws InvalidDateException {
         if ( newEnd.before(startDate) ) {
@@ -97,8 +109,8 @@ public class Event extends Observable{
     }
 
     /**
-     * Return the duration of the Event in Date
-     * @return duration of the Event
+     * Return the duration of the event.Event in Date
+     * @return duration of the event.Event
      */
     public GregorianCalendar getDuration() {
         GregorianCalendar newGC = new GregorianCalendar();
@@ -114,8 +126,8 @@ public class Event extends Observable{
     }
 
     /**
-     * Return the String representation of this Event
-     * @return the String representation of the Event
+     * Return the String representation of this event.Event
+     * @return the String representation of the event.Event
      */
     public String toString() {
         String start = startDate.getTime().toString();
@@ -124,11 +136,11 @@ public class Event extends Observable{
     }
 
     /**
-     * Return the String representation of this Event with Date as milliseconds
+     * Return the String representation of this event.Event with Date as milliseconds
+     *
      * @return
      */
-    public String getString()
-    {
+    public String getString() {
         String result = id + "\n" +
                 name + "\n" +
                 startDate.getTimeInMillis() + "\n" +
