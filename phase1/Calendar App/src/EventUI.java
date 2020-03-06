@@ -1,6 +1,5 @@
 import exceptions.InvalidDateException;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -30,7 +29,7 @@ public class EventUI extends UserInterface {
     }
 
     @Override
-    public void show() throws IOException {
+    public void show() {
         boolean running = true;
         getMemoUIs();
         while (running) {
@@ -131,7 +130,7 @@ public class EventUI extends UserInterface {
     }
 
 
-    private void editAlert() throws IOException {
+    private void editAlert() {
         for (AlertCollection ac : calendar.alertCollections) {
             if (ac.getEventId().equals(event.getId())) {
                 AlertUI alertUI = new AlertUI(ac);
