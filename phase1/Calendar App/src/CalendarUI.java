@@ -72,7 +72,12 @@ public class CalendarUI extends UserInterface{
                     break;
                 case 3:
                     relativeId = getIntInput("Relative id:", 0, visibleEvents.size());
-                    calendar.removeEvent(visibleEvents.get(relativeId).getEvent());
+                    try {
+                        calendar.removeEvent(visibleEvents.get(relativeId).getEvent());
+                    } catch (InvalidDateException e) {
+                        System.out.println("Internal error when removing the event!");
+                        e.printStackTrace();
+                    }
                     break;
                 case 4:
                     ListUIView<Memo> memoUiView = new ListUIView<>(calendar.getMemos().iterator(), Memo::getTitle);
@@ -115,7 +120,7 @@ public class CalendarUI extends UserInterface{
                 case 8:
                     String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
                     calendar.createEventSeries(eventSeriesName, new ArrayList<String>());
-                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
+                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName), );
                     eventCollectionUI.show();
                 case 9:
                     int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});

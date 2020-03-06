@@ -214,7 +214,11 @@ public class Calendar {
         if(eventCollection == null || event == null){
             throw new IllegalArgumentException();
         }
-        from.removeEvent(event);
+        try {
+            from.removeEvent(event);
+        } catch (InvalidDateException e) {
+            throw new IllegalArgumentException();
+        }
         eventCollection.addEvent(event);
     }
 
@@ -239,7 +243,12 @@ public class Calendar {
         if(event == null){
             throw new IllegalArgumentException();
         }
-        from.removeEvent(event);
+        try {
+            from.removeEvent(event);
+        } catch (InvalidDateException e) {
+            // Date is invalid
+            throw new IllegalArgumentException();
+        }
         to.addEvent(event);
     }
 
@@ -629,7 +638,7 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
-    public void removeEvent(Event event) {
+    public void removeEvent(Event event) throws InvalidDateException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 
