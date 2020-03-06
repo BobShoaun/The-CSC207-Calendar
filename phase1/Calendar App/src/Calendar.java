@@ -1,14 +1,8 @@
 import exceptions.PeriodAlreadyExistsException;
-import javafx.scene.Group;
-import javafx.scene.canvas.GraphicsContext;
-import sun.awt.OSInfo;
-import sun.misc.OSEnvironment;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

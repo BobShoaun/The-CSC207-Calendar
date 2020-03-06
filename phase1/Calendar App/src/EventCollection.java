@@ -1,9 +1,5 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.Serializable;
 import java.util.*;
 import java.util.Calendar;
-import java.util.function.Consumer;
 
 public class EventCollection implements Iterable<Event>
 {
@@ -216,7 +212,7 @@ public class EventCollection implements Iterable<Event>
     }
 
     public void removeTag(String eventId, Tag tag) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }

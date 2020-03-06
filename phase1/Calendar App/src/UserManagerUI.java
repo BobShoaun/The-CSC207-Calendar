@@ -62,6 +62,7 @@ public class UserManagerUI extends UserInterface {
             firstTry = false;
         } while (!userManager.loginUser(username, password));
         System.out.println("Login successful...");
+        new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
         // TODO: create calendarUI object, pass in userManager.getCurrentUser().getCalendar()
     }
 
