@@ -1,6 +1,4 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -57,5 +55,5 @@ public class User implements StringParsable {
         return gregorianCalendar;
     }
 
-    public void updateLastLoginTime(){throw new NotImplementedException();}
+    public void updateLastLoginTime(){throw new UnsupportedOperationException();}
 }

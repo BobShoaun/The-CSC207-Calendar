@@ -66,7 +66,6 @@ public class UserManagerUI extends UserInterface {
         System.out.println("Welcome back, " + username + "!");
         CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
         calendarUI.show();
-        // TODO: create calendarUI object, pass in userManager.getCurrentUser().getCalendar()
     }
 
     private void showRegisterMenu () {

@@ -1,8 +1,5 @@
 import exceptions.InvalidDateException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CalendarUI extends UserInterface{
@@ -164,16 +161,15 @@ public class CalendarUI extends UserInterface{
                             listUIView.show();
                             break;
                         default:
-                            throw new NotImplementedException();
+                            throw new UnsupportedOperationException();
                     }
 
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new UnsupportedOperationException();
             }
         }
     }
-
 
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
         visibleEvents = calendar.getEvents(startOfDay.getTime(), nextDay.getTime()).stream().map(e -> new EventUI(e, calendar)).collect(Collectors.toList());

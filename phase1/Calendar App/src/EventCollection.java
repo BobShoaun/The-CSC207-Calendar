@@ -1,6 +1,4 @@
 import exceptions.InvalidDateException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.Calendar;
@@ -308,7 +306,7 @@ public class EventCollection implements Iterable<Event>
     }
 
     public void removeTag(String eventId, Tag tag) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }
