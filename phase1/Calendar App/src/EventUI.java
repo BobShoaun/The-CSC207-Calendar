@@ -33,6 +33,7 @@ public class EventUI extends UserInterface {
     @Override
     public void show() {
         boolean running = true;
+        display();
         getMemoUIs();
         while (running) {
             int option = getOptionsInput(new String[]{"Exit",

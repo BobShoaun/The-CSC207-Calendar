@@ -1,5 +1,7 @@
 import exceptions.InvalidDateException;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.Calendar;
 
@@ -103,16 +105,18 @@ public class EventCollection implements Iterable<Event>
     }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException
-    {
-        EventGenerator eGen = new EventGenerator(baseEvent, start, end, frequency);
-//        this.events.addAll(eGen.generateFiniteEvents());
+    {// this is generate finite events
+        EventGenerator eGen = new EventGenerator(baseEvent, start, end, dateToDuration(start, frequency));
+        this.events.addAll(eGen.generateFiniteEvents());
+        // if end=null generate infinite events
     }
 
     public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException
     {
         Event base = getEvent(eventId);
-        EventGenerator eGen = new EventGenerator(base, base.getStartDate().getTime(), end, frequency);
-//        this.events.addAll(eGen.generateFiniteEvents());
+        Date start = base.getStartDate().getTime();
+        EventGenerator eGen = new EventGenerator(base, start, end, dateToDuration(start, frequency));
+        this.events.addAll(eGen.generateFiniteEvents());
     }
 
     public void addTag(String eventId, Tag tag) {
@@ -121,6 +125,13 @@ public class EventCollection implements Iterable<Event>
                 tag.addEvent(eventId);
             }
         }
+    }
+
+    private List<Duration> dateToDuration(Date start, Date end)
+    {
+        List<Duration> durList = new ArrayList<>();
+        Duration dur = Duration.between((Temporal)start, (Temporal)end);
+        return durList;
     }
 
     @Override
