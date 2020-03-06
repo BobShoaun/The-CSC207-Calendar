@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.Calendar;
 
 public class Tests {
-
     static void testAlert() {
         Alert a = new Alert("asdf123", new GregorianCalendar());
         Date d = new Date(2020, Calendar.APRIL, 6, 12, 30, 30);
@@ -93,8 +92,9 @@ public class Tests {
 //        testAlert();
 //        testAlertCollection();
 //        testEventsGenerator();
-        testLoad();
+//        testLoad();
 //        testECSave();
+        testEventsGenerator();
     }
 
 }
