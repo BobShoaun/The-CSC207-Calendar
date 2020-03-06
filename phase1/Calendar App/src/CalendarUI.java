@@ -55,6 +55,7 @@ public class CalendarUI extends UserInterface{
             int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series", "Search events"});
             switch (command){
                 case 0:
+                    user.setLastLoginTime(new GregorianCalendar()); // logout
                     return;
                 case 1:
                     GregorianCalendar start = getDateInput("Start date: ");

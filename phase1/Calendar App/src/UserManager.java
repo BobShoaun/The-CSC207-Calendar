@@ -59,8 +59,7 @@ public class UserManager extends DataSaver {
     public void logoutCurrentUser () {
         if (currentUser == null)
             return;
-        GregorianCalendar c = new GregorianCalendar();
-        currentUser.setLastLoginTime(c); // by default it is the current time
+        currentUser.setLastLoginTime(new GregorianCalendar()); // by default it is the current time
     }
 
     public void registerUser(String username, String password, String confirmPassword)

@@ -37,7 +37,6 @@ public class UserManagerUI extends UserInterface {
             switch (option) {
                 case 0:
                     running = false;
-                    userManager.logoutCurrentUser();
                     try {
                         userManager.saveUsers();
                     } catch (IOException ee) {
