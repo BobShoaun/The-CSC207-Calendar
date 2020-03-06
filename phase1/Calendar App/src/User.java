@@ -26,6 +26,7 @@ public class User implements StringParsable {
         dataSaver = new DataSaver(name);
         this.calendar = new Calendar(dataSaver);
         firstLogin = true;
+        lastLoginTime = calendar.getTime();
     }
 
     public User (String string) {
