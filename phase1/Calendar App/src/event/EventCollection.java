@@ -17,6 +17,11 @@ public class EventCollection implements Iterable<Event> {
     private String name;
     private DataSaver saver;
 
+    //temporary
+    public EventCollection(){
+
+    }
+
     /**
      * constructor for a finite/manually created series, or a list of regular events if name == null
      *
@@ -245,21 +250,27 @@ public class EventCollection implements Iterable<Event> {
         return result.toString();
     }
 
-
+    /**
+     * loads events from text file
+     * problems with file path and date conversion.
+     * @param seriesName the series name that needs to be loaded
+     * @throws InvalidDateException
+     */
     public void load(String seriesName) throws InvalidDateException {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile("/series/" + seriesName + ".txt");
+            strings = saver.loadStringsFromFile( seriesName + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         assert strings != null;
         this.name = strings.get(0).trim();
+        List<Event> newEvents = new ArrayList<>();
 
         String[] eventsDetails = strings.get(1).trim().split(",");
         for (String e : eventsDetails) {
-            String[] details = e.trim().split("\\n");
+            String[] details = e.trim().split(";");
             String id = details[0];
             String eventName = details[1];
             GregorianCalendar start = new GregorianCalendar();
@@ -267,25 +278,29 @@ public class EventCollection implements Iterable<Event> {
             GregorianCalendar end = new GregorianCalendar();
             start.setTime(new Date(Long.parseLong(details[3])));
 
-            this.events.add(new Event(id, eventName, start, end));
+            newEvents.add(new Event(id, eventName, start, end));
         }
-
-        StringBuilder cgStr = new StringBuilder();
-        for (int i = 2; i < strings.size(); i++) {
-            cgStr.append(strings.get(i));
-        }
-        this.eGen.setCalGen(new CalendarGenerator(cgStr.toString()));
+        /**
+         * can't load from this...
+         */
+        this.events = newEvents;
+//        StringBuilder cgStr = new StringBuilder();
+//        for (int i = 2; i < strings.size(); i++) {
+//            cgStr.append(strings.get(i));
+//        }
+//
+//        this.eGen.setCalGen(new CalendarGenerator(cgStr.toString()));
     }
 
     /**
      * Save this event.EventCollection's data into a text file.
      */
     public void save() throws IOException {
-        List<String> contents = Arrays.asList(getString().split("\\s+"));
+        List<String> contents = Arrays.asList(getString().split("\\n"));
         if(name==null){
-            saver.saveToFile("/series/" + "" + ".txt", contents);
+            saver.saveToFile("series/" + "" + ".txt", contents);
         }else{
-            saver.saveToFile("/series/" + name + ".txt", contents);
+            saver.saveToFile( "series/"+ name + ".txt", contents);
         }
     }
 
@@ -295,14 +310,14 @@ public class EventCollection implements Iterable<Event> {
      * @return String representation of all the data in this AC, including the dates.CalendarGenerator.
      */
     public String getString() {
-        StringBuilder result = new StringBuilder(this.name + "\n ");
+        StringBuilder result = new StringBuilder(this.name + "\n");
         if (this.events != null) {
             for (Event e : this.events) {
-                result.append(e.getString()).append(",");
+                result.append(e.getString());
             }
         }
         if (eGen != null) {
-            result.append("\n ").append(eGen.getCalGen().getString());
+            result.append("\n").append(eGen.getCalGen().getString());
         }
         return result.toString();
     }

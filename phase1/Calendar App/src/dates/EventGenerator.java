@@ -57,7 +57,7 @@ public class EventGenerator {
         GregorianCalendar newGC = new GregorianCalendar();
         long dur = begin.getTimeInMillis() + time.getTimeInMillis();
         Date d2 = new Date(dur);
-        newGC.setGregorianChange(d2);
+        newGC.setTime(d2);
         return newGC;
     }
 
