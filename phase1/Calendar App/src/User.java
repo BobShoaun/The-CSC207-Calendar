@@ -51,7 +51,6 @@ public class User implements StringParsable {
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IndexOutOfBoundsException e) {
-            return;
         }
     }
 

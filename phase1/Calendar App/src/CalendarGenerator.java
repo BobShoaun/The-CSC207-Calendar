@@ -1,10 +1,5 @@
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Date;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
@@ -23,7 +18,8 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Create a CalendarGenerator from a String.
-     * @param input
+     *
+     * @param input The string representation of this CG (from toString())
      */
 
     public CalendarGenerator(String input) {
@@ -115,7 +111,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         }
 
         public List<GregorianCalendar> nextSet(){
-            ArrayList<GregorianCalendar> candiates = new ArrayList<>();
+            ArrayList<GregorianCalendar> candidates = new ArrayList<>();
 
             for(Duration period : periods){
                 GregorianCalendar newTime = startTime;
@@ -123,12 +119,12 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
                     newTime = add(newTime, period);
                 }
 
-                candiates.add(newTime);
+                candidates.add(newTime);
             }
 
-            candiates.removeIf(candiate -> ignoreList.contains(candiate) || (endTime != null && candiate.after(endTime)));
+            candidates.removeIf(candidate -> ignoreList.contains(candidate) || (endTime != null && candidate.after(endTime)));
 
-            return candiates;
+            return candidates;
         }
 
         @Override

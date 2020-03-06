@@ -1,7 +1,6 @@
 import exceptions.InvalidDateException;
 import exceptions.PeriodAlreadyExistsException;
 
-import javax.swing.text.html.Option;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
@@ -86,7 +85,7 @@ public class Calendar {
      * Returns an iterator to get future events sorted by start time.
      * [Warning] The iterator will no be updated and become unusable if the number of event collections change
      *
-     * @param start The earlist possible start time of the returned events
+     * @param start The earliest possible start time of the returned events
      * @return Null if no event collections exist, otherwise an Iterator<Event>
      */
     public Iterator<Event> getFutureEvents(Date start) {

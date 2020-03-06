@@ -1,9 +1,9 @@
 import exceptions.InvalidDateException;
-import java.io.IOException;
+
 import java.time.Duration;
 import java.time.temporal.Temporal;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 public class EventCollection implements Iterable<Event>
 {
@@ -154,7 +154,7 @@ public class EventCollection implements Iterable<Event>
         StringBuilder result = new StringBuilder("Events\n");
         result.append("===== YOUR EVENTS =====\n");
         for (Event e: this.events) {
-            result.append(e.toString()+"\n");
+            result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
@@ -164,7 +164,7 @@ public class EventCollection implements Iterable<Event>
         StringBuilder result = new StringBuilder("Events for Series "+name+"\n");
         result.append("===== YOUR SERIES =====\n");
         for (Event e: this.events) {
-            result.append(e.toString()+"\n");
+            result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
@@ -213,8 +213,7 @@ public class EventCollection implements Iterable<Event>
     /**
      * Save this EventCollection's data into a text file.
      */
-    public void save() throws IOException
-    {
+    public void save() {
 //        List<String> contents = Arrays.asList(getString().split("\\s+"));
 //        saver.saveToFile("/events/" + eventId + ".txt", contents);
     }

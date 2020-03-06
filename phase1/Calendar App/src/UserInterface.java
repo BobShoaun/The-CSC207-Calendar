@@ -68,8 +68,9 @@ public abstract class UserInterface {
      * have user input duration in the form:
      * <amount> <type> where amount is a number and type is { w, d, h, m, s } corresponding to
      * Week, day, hour, minute, seconds
-     * @param prompt
-     * @return
+     *
+     * @param prompt The prompt text
+     * @return The Duration entered by the user
      */
     protected Duration getDurationInput(String prompt) {
         System.out.print(prompt);

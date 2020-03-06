@@ -37,8 +37,8 @@ public class Alert {
      *
      * @return The time of the Alert.
      */
-    public Date getTime() {
-        return time.getTime();
+    public GregorianCalendar getTime() {
+        return time;
     }
 
     /**

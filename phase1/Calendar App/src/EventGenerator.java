@@ -1,8 +1,8 @@
 import exceptions.InvalidDateException;
+
 import java.time.Duration;
-import java.time.temporal.Temporal;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 public class EventGenerator {
     private Event baseEvent;
@@ -10,13 +10,13 @@ public class EventGenerator {
 
     /**
      * EventGenerator for finite repeating events events
+     *
      * @param baseEvent event to be repeated
-     * @param start start of repeating events
-     * @param end end of repeating events
-     * @param Duration time between occurrence of repeating events
+     * @param start     start of repeating events
+     * @param end       end of repeating events
+     * @param Duration  time between occurrence of repeating events
      */
-    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) throws InvalidDateException
-    {
+    public EventGenerator(Event baseEvent, Date start, Date end, List<Duration> Duration) {
         this.baseEvent = baseEvent;
         this.calGen = new CalendarGenerator(dateToGC(start), Duration, dateToGC(end));
     }

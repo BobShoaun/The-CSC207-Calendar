@@ -55,7 +55,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
                 return false;
         }
         for (Alert a : manAlerts) {
-            if (a.getTime().equals(time.getTime()))
+            if (a.getTime().getTime().equals(time.getTime()))
                 return false;
         }
         manAlerts.add(new Alert(eventId, time));
@@ -112,7 +112,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @return Whether the alert could be removed
      */
     public boolean removeManualAlert(GregorianCalendar d) {
-        return manAlerts.removeIf(a -> a.getTime().equals(d.getTime()));
+        return manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
     }
 
     /**
@@ -183,7 +183,8 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
     private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new LinkedList<>();
         for (Alert a : manAlerts) {
-            if (a.getTime().compareTo(start.getTime()) >= 0 && a.getTime().compareTo(end.getTime()) <= 0)
+            if (a.getTime().getTime().compareTo(start.getTime()) >= 0
+                    && a.getTime().getTime().compareTo(end.getTime()) <= 0)
                 alerts.add(a);
         }
         return alerts;

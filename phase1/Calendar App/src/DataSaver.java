@@ -1,7 +1,6 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
@@ -68,7 +67,7 @@ public class DataSaver {
         try (FileWriter fileWriter = new FileWriter(path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
-            // file and/or directory doesnt exist
+            // file and/or directory doesn't exist
             File newFile = new File(path);
             newFile.getParentFile().mkdirs(); // create whole directory
                 newFile.createNewFile();
