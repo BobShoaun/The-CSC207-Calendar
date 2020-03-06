@@ -10,7 +10,8 @@ public class Tests {
         assert a.getTime().getTime().equals(d);
         assert a.getEventId().equals("asdf123");
 
-        System.out.println();
+        Alert b = new Alert("id2", "1583471755081");
+        assert a.getTime().equals(b.getTime());
     }
 
     public static void main(String[] args) {

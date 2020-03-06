@@ -193,19 +193,20 @@ public class Calendar {
 
     /**
      * Move an event to a series from another series. If the event is already part of that series nothing changes
-     * @param eventId The id of the event to move
+     *
+     * @param eventId    The id of the event to move
      * @param seriesName The name of the new series to add it to
      */
-    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException {
+    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException, InvalidDateException {
         EventCollection from = null;
         EventCollection eventCollection = null;
         Event event = null;
         for (EventCollection eC :
                 eventCollections) {
-            if(eC.getName().equals(seriesName)){
+            if (eC.getName().equals(seriesName)) {
                 eventCollection = eC;
             }
-            if(eC.getEvent(eventId) != null){
+            if (eC.getEvent(eventId) != null) {
                 from = eC;
                 event = eC.getEvent(eventId);
             }
@@ -219,17 +220,18 @@ public class Calendar {
 
     /**
      * Remove an event from a series and put in the collection series with no name
+     *
      * @param eventId The event to move
      * @throws IllegalArgumentException If the event collection or the event can not be found
      */
-    public void removeFromSeries(String eventId) throws IllegalArgumentException{
+    public void removeFromSeries(String eventId) throws IllegalArgumentException, InvalidDateException {
         EventCollection from = null;
         EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
         Event event = null;
         for (EventCollection eventCollection :
                 eventCollections) {
             event = eventCollection.getEvent(eventId);
-            if(event != null){
+            if (event != null) {
                 from = eventCollection;
                 break;
             }
@@ -490,7 +492,13 @@ public class Calendar {
 
     public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) {
         List<Event> events = eventIds.stream().map(id -> getEvent(id)).collect(Collectors.toList());
-        events.forEach(e -> removeFromSeries(e.getId()));
+        events.forEach(e -> {
+            try {
+                removeFromSeries(e.getId());
+            } catch (InvalidDateException ex) {
+                ex.printStackTrace();
+            }
+        });
         eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
     }
 
@@ -627,7 +635,7 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
-    public void removeEvent(Event event){
+    public void removeEvent(Event event) throws InvalidDateException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 
