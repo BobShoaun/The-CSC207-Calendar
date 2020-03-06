@@ -1,7 +1,11 @@
 import exceptions.InvalidDateException;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Terminal interface for Event.
  */
@@ -28,19 +32,26 @@ public class EventUI extends UserInterface {
     @Override
     public void show() {
         boolean running = true;
+        getMemoUIs();
         while (running) {
-            int option = getOptionsInput(new String[]{"Exit", "Show Duration" ,"Edit Event", "Show Alerts", "Edit Alert", "Show Memos", "Edit Memos", "Show Tags", "Edit Tags"});
+            int option = getOptionsInput(new String[]{"Exit",
+                    "Event Duration" , "Edit Event",
+                    "Show Alerts", "Edit Alert",
+                    "Show Memos", "Edit Memos",
+                    "Show Tags", "Edit Tags"});
             switch (option) {
-                case 0:
+                case 0: // Exit
                     running = false;
                     break;
-                case 1:
-                    System.out.println("This event lasts for ");
+                case 1: // Event duration
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+                    formatter.format(event.getDuration().getTime());
+                    System.out.println(event.getName() + " lasts for " + formatter);
                     break;
-                case 2:
+                case 2: // Edit event
                     editEvent();
                     break;
-                case 3:
+                case 3: // Show alerts
                     List<AlertCollection> alertCollections = calendar.alertCollections;
                     for (AlertCollection ac: alertCollections) {
                         if (ac.getEventId().equals(event.getId())) {
@@ -48,27 +59,27 @@ public class EventUI extends UserInterface {
                         }
                     }
                     break;
-                case 4:
+                case 4: // Edit alert
                     break;
-                case 5:
+                case 5: // Show memos
                     List<Memo> memos = calendar.getMemos();
                     StringBuilder result = new StringBuilder();
+                    int i = 0;
                     for (Memo m: memos) {
-                        int i = 0;
                         if ( m.hasEvent(event.getId()) ) {
                             String num = Integer.toString(i);
-                            result.append("[" + num + "]" + m.getTitle() + "\n" + m.getText() + "\n\n");
+                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
                             i += 1;
                         }
                     }
                     System.out.println(result);
                     break;
-                case 6:
+                case 6: // Edit memo
                     int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
                     MemoUI mui = memoUIs.get(num);
                     mui.show();
                     break;
-                case 7:
+                case 7: // Show tags
                     List<Tag> tags = calendar.tags;
                     for (Tag t: tags) {
                         if ( t.hasEvent(event.getId()) ) {
@@ -76,7 +87,7 @@ public class EventUI extends UserInterface {
                         }
                     }
                     break;
-                case 8:
+                case 8: // Edit tag
                     editTag();
                     break;
             }
@@ -117,8 +128,9 @@ public class EventUI extends UserInterface {
 
     private void getMemoUIs() {
         List<Memo> m = calendar.getMemos(event.getId());
-        //List<MemoUI> memoUIs = m.stream().map(MemoUI::new).collect(Collectors.toList());;
-
+        for (Memo memo: m) {
+            memoUIs.add(new MemoUI(memo, calendar));
+        }
     }
 
     private void editTag() {
