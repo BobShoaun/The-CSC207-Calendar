@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -104,29 +103,30 @@ public abstract class UserInterface {
             Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(dateString);
             calendar.setTime(date);
         } catch (ParseException e) {
-            if(allowNull && dateString.equals(""))
+            if (allowNull && dateString.equals(""))
                 return null;
             return getDateInput("Please re-enter a valid date: (DD/MM/YYYY HH:MM:SS)");
         }
         return calendar;
     }
 
-    protected void displayLine (int length) {
-        for (int i = 0; i < length; i++)
-            System.out.print('=');
+    protected void displayLine() {
+        for (int i = 0; i < 70; i++)
+            System.out.print("=");
         System.out.println();
     }
 
     /**
      * Helper method for displaying a list of options and handling input for them.
-     * @param options
-     * @return
+     *
+     * @param options The names of the menu options
+     * @return The number of the chosen option
      */
-    protected int getOptionsInput (String[] options) {
-        displayLine(70);
+    protected int getOptionsInput(String[] options) {
+        displayLine();
         for (int i = 0; i < options.length; i++)
-            System.out.println("[ " + i + " ] " + options[i]);
-        displayLine(70);
+            System.out.println("[" + i + "] " + options[i]);
+        displayLine();
         return getIntInput("Choose an option: ", 0, options.length);
     }
 
