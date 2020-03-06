@@ -5,11 +5,18 @@ public class Memo {
 
     private String title;
     private String text;
-    private ArrayList<String> ids = new ArrayList<>();
+    private List<String> ids;
 
     public Memo(String title, String text) {
         this.text = text;
         this.title = title;
+        ids = new ArrayList<>();
+    }
+
+    public Memo(String title, String text, List<String> ids) {
+        this.text = text;
+        this.title = title;
+        this.ids = ids;
     }
 
     public void setTitle(String newTitle) {

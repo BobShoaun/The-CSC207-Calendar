@@ -1,8 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Scanner;
+import java.time.Duration;
+import java.util.*;
 
 /**
  * User interface class representing an abstract user interface
@@ -17,9 +16,22 @@ public abstract class UserInterface {
     public abstract void show();
 
     protected String getStringInput(String prompt) {
+        return getStringInput(prompt, new ArrayList<>());
+    }
+
+    protected String getStringInput(String prompt, List<String> bannedWords) {
         System.out.print(prompt);
-        String input = scanner.nextLine();
+        String input;
+        boolean first = true;
+        do{
+            if(!first){
+                System.out.println("This input is not valid/has already been chosen");
+            }
+            input = scanner.nextLine();
+            first = false;
+        } while(bannedWords.contains(input));
         return input;
+
     }
 
     /**
@@ -46,27 +58,34 @@ public abstract class UserInterface {
         try {
             int input = Integer.parseInt(scanner.nextLine());
             if (input < min || max < input)
-                throw new Exception ("Number out of Range");
+                throw new Exception("Number out of Range");
             return input;
         } catch (Exception e) {
             return getIntInput("Invalid number, try again: ", min, max);
         }
     }
 
-    protected String getDurationInput() {
-        return scanner.nextLine();
+    protected Duration getDurationInput(String prompt) {
+        // TODO: complete
+        return null;
     }
 
-    protected GregorianCalendar getDateInput (String prompt) {
+    protected GregorianCalendar getDateInput(String prompt) {
+        return getDateInput(prompt, false);
+    }
+
+    protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
-        System.out.print(prompt);
+        System.out.print(prompt + " (DD/MM/YYYY HH:MM:SS)");
         GregorianCalendar calendar = new GregorianCalendar();
         String dateString = scanner.nextLine();
         try {
             Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(dateString);
             calendar.setTime(date);
         } catch (ParseException e) {
-            return getDateInput("Please re-enter a valid date: ");
+            if(allowNull && dateString.equals(""))
+                return null;
+            return getDateInput("Please re-enter a valid date: (DD/MM/YYYY HH:MM:SS)");
         }
         return calendar;
     }
@@ -85,9 +104,10 @@ public abstract class UserInterface {
     protected int getOptionsInput (String[] options) {
         displayLine(70);
         for (int i = 0; i < options.length; i++)
-            System.out.println(i + 1 + ") " + options[i]);
+            System.out.println("[ " + i + " ] " + options[i]);
         displayLine(70);
-        return getIntInput("Choose an option: ", 1, options.length);
+        return getIntInput("Choose an option: ", 0, options.length);
     }
+
 
 }

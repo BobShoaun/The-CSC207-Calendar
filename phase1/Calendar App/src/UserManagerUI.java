@@ -24,31 +24,33 @@ public class UserManagerUI extends UserInterface {
                 "██║     ██╔══██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══██║██╔══██╗\n" +
                 "╚██████╗██║  ██║███████╗███████╗██║ ╚████║██████╔╝██║  ██║██║  ██║\n" +
                 " ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
+
+    }
+
+    @Override
+    public void show() {
+        display();
         boolean running = true;
         while (running) {
-            int option = getOptionsInput(new String[]{"Login", "Register", "Exit"});
+            int option = getOptionsInput(new String[]{"Exit", "Login", "Register"});
             switch (option) {
+                case 0:
+                    running = false;
+                    try {
+                        userManager.saveUsers();
+                        return;
+                    } catch (IOException ee) {
+                        System.out.println("Failed to save users!");
+                    }
+                    break;
                 case 1:
                     showLoginMenu();
                     break;
                 case 2:
                     showRegisterMenu();
                     break;
-                case 3:
-                    running = false;
-                    try {
-                        userManager.saveUsers();
-                    } catch (IOException ee){
-                        System.out.println("Failed to save users!");
-                    }
-                    break;
             }
         }
-    }
-
-    @Override
-    public void show() {
-        display();
     }
 
     private void showLoginMenu() {
@@ -61,9 +63,9 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        System.out.println("Login successful...");
-        new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
-        // TODO: create calendarUI object, pass in userManager.getCurrentUser().getCalendar()
+        System.out.println("Welcome back, " + username + "!");
+        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
+        calendarUI.show();
     }
 
     private void showRegisterMenu () {
