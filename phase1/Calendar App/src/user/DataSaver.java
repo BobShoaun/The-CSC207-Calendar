@@ -48,12 +48,12 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile (String path, List<String> contents) throws IOException {
-        try (PrintWriter out = new PrintWriter(path)) {
+        try (PrintWriter out = new PrintWriter(basePath + path)) {
             for (String line : contents)
                 out.println(line);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
-            File newFile = new File(path);
+            File newFile = new File(basePath + path);
             newFile.getParentFile().mkdirs(); // create whole directory
             newFile.createNewFile();
             saveToFile(path, contents);
@@ -66,11 +66,11 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile (String path, String contents) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(path)) {
+        try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
-            File newFile = new File(path);
+            File newFile = new File(basePath + path);
             newFile.getParentFile().mkdirs(); // create whole directory
             newFile.createNewFile();
             saveToFile(path, contents);
