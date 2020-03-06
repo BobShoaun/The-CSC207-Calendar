@@ -242,7 +242,8 @@ public class AlertCollection implements Observer {
         for (Alert a : getManAlerts()) {
             result.append(a.getString()).append(" ");
         }
-        result.append("\n").append(calGen.getString());
+        if (calGen != null)
+            result.append("\n").append(calGen.getString());
         return result.toString();
     }
 
@@ -255,7 +256,8 @@ public class AlertCollection implements Observer {
             result.append(a.toString()).append("\n");
         }
         result.append("===== REPEATING ALERTS =====\n");
-        result.append(calGen.toString());
+        if (calGen != null)
+            result.append(calGen.toString());
         return result.toString();
     }
 
@@ -289,14 +291,14 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Save this alert.AlertCollection's data into a text file.
+     * Save this AlertCollection's data into a text file.
      */
     public void save() {
         List<String> contents = Arrays.asList(getString().split("\\s+"));
         try {
-            saver.saveToFile("/alerts/" + eventId + ".txt", contents);
+            saver.saveToFile("alerts/" + eventId + ".txt", contents);
         } catch (IOException e) {
-            System.out.println("Error while saving alert.AlertCollection");
+            System.out.println("Error while saving AlertCollection");
             e.printStackTrace();
         }
     }

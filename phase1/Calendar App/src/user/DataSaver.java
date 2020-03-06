@@ -12,7 +12,7 @@ public class DataSaver {
     private String basePath;
 
     public DataSaver(String basePath){
-        this.basePath = "./" + basePath + "/";
+        this.basePath = "users/" + basePath + "/";
     }
 
     /**
@@ -53,7 +53,7 @@ public class DataSaver {
                 out.println(line);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
-            File newFile = new File(path);
+            File newFile = new File(basePath + path);
             newFile.getParentFile().mkdirs(); // create whole directory
             newFile.createNewFile();
             saveToFile(path, contents);

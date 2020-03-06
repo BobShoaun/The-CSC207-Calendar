@@ -47,9 +47,9 @@ public class Tests {
         List<Duration> durs = new ArrayList<>();
         durs.add(Duration.ofDays(1));
         EventGenerator eg = new EventGenerator(e, date, date2, durs);
-        for (Event event : eg.generateEvents()) {
-            System.out.println(event);
-        }
+//        for (Event event : eg.generateEvents()) {
+//            System.out.println(event);
+//        }
     }
 
     static void testECSave() throws InvalidDateException, IOException {
@@ -66,7 +66,7 @@ public class Tests {
         for (Event e : eve) {
             System.out.println(e);
         }
-        DataSaver ds = new DataSaver("testPath");
+        DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.save();
     }
@@ -81,10 +81,10 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-//        for (Event e:eve) {
-//            System.out.println(e);
-//        }
-        DataSaver ds = new DataSaver("");
+        for (Event e : eve) {
+            System.out.println(e);
+        }
+        DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.load("testseries");
         for (Event e : EC) {
@@ -109,8 +109,8 @@ public class Tests {
         testAlert();
         testAlertCollection();
         testEventsGenerator();
-        testLoad();
         testECSave();
+        testLoad();
         testEventsGenerator();
     }
 
