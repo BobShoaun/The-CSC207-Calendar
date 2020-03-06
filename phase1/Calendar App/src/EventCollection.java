@@ -106,12 +106,13 @@ public class EventCollection implements Iterable<Event> {
      *
      * @param event the event to be added
      */
-    public void addEvent(Event event) {
+    public void addEvent(Event event) throws IOException {
         if (eGen != null)//if inf
         {
             eGen.getCalGen().addIgnore(event.getStartDate());
         }
         this.events.add(event);
+        save();
     }
 
     /**
@@ -119,7 +120,7 @@ public class EventCollection implements Iterable<Event> {
      *
      * @param event the event to br removed
      */
-    public void removeEvent(Event event) throws InvalidDateException {
+    public void removeEvent(Event event) throws InvalidDateException, IOException {
         String eventId = event.getId();
         if (eGen != null) {
             for (Event e : eGen.generateEvents()) {
@@ -129,6 +130,7 @@ public class EventCollection implements Iterable<Event> {
             }
         }
         this.events.removeIf(e -> e.getId().equals(eventId));
+        save();
     }
 
     /**
@@ -136,16 +138,17 @@ public class EventCollection implements Iterable<Event> {
      * @param newEvent the replacement event
      * @throws InvalidDateException
      */
-    public void editEvent(Event oldEvent, Event newEvent) throws InvalidDateException {
+    public void editEvent(Event oldEvent, Event newEvent) throws InvalidDateException, IOException {
         String eventId = oldEvent.getId();
         if (eGen != null && eventId.equals(eGen.getBaseEvent().getId())) {
             eGen.getCalGen().addIgnore(oldEvent.getStartDate());
         }
         removeEvent(oldEvent);
         this.events.add(newEvent);
+        save();
     }
 
-    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException {
+    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException, IOException {
         //finite series
         if (eGen == null) {
             this.eGen = new EventGenerator(baseEvent, start, end, dateToDurationList(start, frequency));
@@ -155,9 +158,10 @@ public class EventCollection implements Iterable<Event> {
             eGen.setCalGen(CG);
         }
         this.events.addAll(eGen.generateEvents());
+        save();
     }
 
-    public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException {
+    public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException, IOException {
         //Assume originally finite series
         Event base = getEvent(eventId);
         Date start = base.getStartDate().getTime();
@@ -410,6 +414,7 @@ public class EventCollection implements Iterable<Event> {
             }
         }
     }
+
 
     /**
      * Remove the event from the tag

@@ -18,8 +18,8 @@ public class EventCollectionUI extends UserInterface {
     public void show() {
         display();
         int option = getOptionsInput(new String[]{"Exit",
-                "Display in Time frame",
-                "Edit an Event in Series",});
+                "Display in Time frame",});
+//                "Edit an Event in Series",});
         switch (option) {
             case 0:
                 break;
@@ -34,8 +34,10 @@ public class EventCollectionUI extends UserInterface {
                     System.out.println("Invalid date input");
                 }
                 break;
-            case 2:
-                break;
+//            case 2:
+//                String eventName = getStringInput("Enter the name of the event ou want to edit");
+//                Event edit = events.
+//                break;
             default:
         }
     }
