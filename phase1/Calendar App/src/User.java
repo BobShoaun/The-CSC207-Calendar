@@ -53,7 +53,6 @@ public class User implements StringParsable {
         } catch (IndexOutOfBoundsException e) {
             return;
         }
-
     }
 
     @Override

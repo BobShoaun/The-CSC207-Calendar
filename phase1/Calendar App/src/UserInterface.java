@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -64,9 +65,30 @@ public abstract class UserInterface {
         }
     }
 
+    /**
+     * have user input duration in the form:
+     * <amount> <type> where amount is a number and type is { w, d, h, m, s } corresponding to
+     * Week, day, hour, minute, seconds
+     * @param prompt
+     * @return
+     */
     protected Duration getDurationInput(String prompt) {
-        // TODO: complete
-        return null;
+        System.out.print(prompt);
+        String[] split = scanner.nextLine().split("\\s+"); // split text by whitespaces
+        int amount = Integer.parseInt(split[0]);
+        switch (split[1]) {
+            case "w":
+                return Duration.ofDays(7 * amount);
+            case "d":
+                return Duration.ofDays(amount);
+            case "h":
+                return Duration.ofHours(amount);
+            case "m":
+                return Duration.ofMinutes(amount);
+            case "s":
+                return Duration.ofSeconds(amount);
+        }
+        return getDurationInput("Invalid duration, try again: ");
     }
 
     protected GregorianCalendar getDateInput(String prompt) {
