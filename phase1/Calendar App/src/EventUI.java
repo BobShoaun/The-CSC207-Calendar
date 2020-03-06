@@ -2,10 +2,8 @@ import exceptions.InvalidDateException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Terminal interface for Event.
@@ -33,9 +31,9 @@ public class EventUI extends UserInterface {
     @Override
     public void show() {
         boolean running = true;
-        display();
         getMemoUIs();
         while (running) {
+            display();
             int option = getOptionsInput(new String[]{"Exit",
                     "Event Duration" , "Edit Event",
                     "Show Alerts", "Edit Alert",
