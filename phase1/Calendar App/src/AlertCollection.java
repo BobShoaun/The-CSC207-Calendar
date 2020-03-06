@@ -50,9 +50,11 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @return Whether or not the Alert could be added.
      */
     public boolean addAlert(GregorianCalendar time) { // TODO: dependency injection?
-        for (GregorianCalendar c : calGen) {
-            if (c.equals(time))
-                return false;
+        if (calGen != null) {
+            for (GregorianCalendar c : calGen) {
+                if (c.equals(time))
+                    return false;
+            }
         }
         for (Alert a : manAlerts) {
             if (a.getTime().getTime().equals(time.getTime()))
@@ -198,7 +200,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @return The list of Alerts between start and end time.
      */
     private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
-        List<Alert> alerts = new LinkedList<>();
+        List<Alert> alerts = new ArrayList<>();
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
                 alerts.add(new Alert(eventId, d));

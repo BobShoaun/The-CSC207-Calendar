@@ -57,10 +57,9 @@ public class AlertUI extends UserInterface {
                     }
                 }
                 try {
-                    alerts.save();
+                    alerts.save(); // TODO: move save to AC
                 } catch (IOException e) {
                     System.out.println("Save error occurred.");
-                    ;
                 }
                 break;
             case 3:

@@ -1,8 +1,6 @@
 import java.time.Duration;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 public class Tests {
 
@@ -29,8 +27,20 @@ public class Tests {
         assert get.size() == 9;
     }
 
+    static void testCalendarGenerator() {
+        CalendarGenerator cg = new CalendarGenerator(new GregorianCalendar(2020, Calendar.FEBRUARY, 1),
+                Arrays.asList(Duration.ofDays(1)),
+                new GregorianCalendar(2020, Calendar.FEBRUARY, 29));
+        List<GregorianCalendar> dates = new ArrayList<>();
+        for (GregorianCalendar date : cg) {
+            dates.add(date);
+        }
+        assert dates.size() == 29;
+    }
+
     public static void main(String[] args) throws Exception {
         testAlert();
+        testCalendarGenerator();
         testAlertCollection();
     }
 
