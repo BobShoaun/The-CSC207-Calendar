@@ -259,7 +259,7 @@ public class EventCollection implements Iterable<Event> {
     public void load(String seriesName) throws InvalidDateException {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile( seriesName + ".txt");
+            strings = saver.loadStringsFromFile("events/series/" + seriesName + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -298,9 +298,9 @@ public class EventCollection implements Iterable<Event> {
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\n"));
         if(name==null){
-            saver.saveToFile("series/" + "" + ".txt", contents);
+            saver.saveToFile("events/series/" + "" + ".txt", contents);
         }else{
-            saver.saveToFile( "series/"+ name + ".txt", contents);
+            saver.saveToFile("events/series/" + name + ".txt", contents);
         }
     }
 

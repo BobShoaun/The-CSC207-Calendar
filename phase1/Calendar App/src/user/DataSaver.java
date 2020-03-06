@@ -53,7 +53,7 @@ public class DataSaver {
                 out.println(line);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
-            File newFile = new File(basePath + path);
+            File newFile = new File(path);
             newFile.getParentFile().mkdirs(); // create whole directory
             newFile.createNewFile();
             saveToFile(path, contents);
