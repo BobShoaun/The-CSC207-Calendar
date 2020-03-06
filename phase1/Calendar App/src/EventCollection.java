@@ -464,4 +464,14 @@ public class EventCollection implements Iterable<Event>
         tag.removeEvent(eventId);
     }
 
+    public String[] regularEventDetails()
+    {
+        String[] ret = new String[events.size()];
+        for (int i=0;i<events.size();i++)
+        {
+            ret[i] = events.get(i).toString();
+        }
+        return ret;
+    }
+
 }

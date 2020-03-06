@@ -22,7 +22,7 @@ public class EventCollectionUI extends UserInterface
     }
 
     @Override
-    public void show() throws IOException, InvalidDateException
+    public void show()
     {
         //not a series
         if(events == null)
@@ -46,17 +46,43 @@ public class EventCollectionUI extends UserInterface
                 case 3:
                     String name = getStringInput("Series name:");
                     EventCollection newManualSeries = new EventCollection(name, selectEvents(), saver);
-                    newManualSeries.save();
+                    try
+                    {
+                        newManualSeries.save();
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                     break;
                 case 4:
                     String name1 = getStringInput("Series name:");
-                    Event base = createEvent();
+                    Event base = null;
+                    try
+                    {
+                        base = createEvent();
+                    } catch (InvalidDateException e)
+                    {
+                        e.printStackTrace();
+                    }
                     GregorianCalendar endPeriod = getDateInput("Select end date for this series or null for " +
                             "infinite repeating events ", true);
-                    EventGenerator EG = new EventGenerator(base, base.getStartDate().getTime(),
-                            endPeriod.getTime(), getFrequency());
+                    EventGenerator EG = null;
+                    try
+                    {
+                        EG = new EventGenerator(base, base.getStartDate().getTime(),
+                                endPeriod.getTime(), getFrequency());
+                    } catch (InvalidDateException e)
+                    {
+                        e.printStackTrace();
+                    }
                     EventCollection series = new EventCollection(name1,EG,saver);
-                    series.save();
+                    try
+                    {
+                        series.save();
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
             }
@@ -77,6 +103,7 @@ public class EventCollectionUI extends UserInterface
     }
     private List<Event> selectEvents()
     {
+        int option = getOptionsInput(this.events.regularEventDetails());
         return null;
     }
     private Event createEvent() throws InvalidDateException
@@ -99,5 +126,4 @@ public class EventCollectionUI extends UserInterface
         }
         return ret;
     }
-
 }
