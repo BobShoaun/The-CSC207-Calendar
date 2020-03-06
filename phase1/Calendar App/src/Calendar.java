@@ -197,7 +197,7 @@ public class Calendar {
      * @param eventId    The id of the event to move
      * @param seriesName The name of the new series to add it to
      */
-    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException, InvalidDateException {
+    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException {
         EventCollection from = null;
         EventCollection eventCollection = null;
         Event event = null;
@@ -224,7 +224,7 @@ public class Calendar {
      * @param eventId The event to move
      * @throws IllegalArgumentException If the event collection or the event can not be found
      */
-    public void removeFromSeries(String eventId) throws IllegalArgumentException, InvalidDateException {
+    public void removeFromSeries(String eventId) throws IllegalArgumentException {
         EventCollection from = null;
         EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
         Event event = null;
@@ -492,13 +492,7 @@ public class Calendar {
 
     public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) {
         List<Event> events = eventIds.stream().map(id -> getEvent(id)).collect(Collectors.toList());
-        events.forEach(e -> {
-            try {
-                removeFromSeries(e.getId());
-            } catch (InvalidDateException ex) {
-                ex.printStackTrace();
-            }
-        });
+        events.forEach(e -> removeFromSeries(e.getId()));
         eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
     }
 
@@ -635,7 +629,7 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
-    public void removeEvent(Event event) throws InvalidDateException {
+    public void removeEvent(Event event) {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 
