@@ -31,7 +31,6 @@ public abstract class UserInterface {
             first = false;
         } while(bannedWords.contains(input));
         return input;
-
     }
 
     /**

@@ -1,3 +1,4 @@
+import exceptions.NullLastLoginException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
@@ -36,9 +37,9 @@ public class UserManagerUI extends UserInterface {
             switch (option) {
                 case 0:
                     running = false;
+                    userManager.logoutCurrentUser();
                     try {
                         userManager.saveUsers();
-                        return;
                     } catch (IOException ee) {
                         System.out.println("Failed to save users!");
                     }
@@ -63,7 +64,11 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        System.out.println("Welcome back, " + username + "!");
+        try {
+            System.out.println("Welcome back, " + username + "! You last login was on: " + userManager.getCurrentUser().getLastLoginTime().getTime());
+        } catch (NullLastLoginException e) {
+            System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
+        }
         CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
         calendarUI.show();
     }

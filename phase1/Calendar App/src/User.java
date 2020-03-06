@@ -1,4 +1,10 @@
 
+import exceptions.NullLastLoginException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -11,6 +17,7 @@ public class User implements StringParsable {
     private String password;
     private Calendar calendar;
     private DataSaver dataSaver;
+    private GregorianCalendar lastLoginTime;
 
     public String getName () { return name; }
 
@@ -37,6 +44,16 @@ public class User implements StringParsable {
         this.name = split[0];
         this.password = split[1];
         this.calendar = new Calendar(new DataSaver(name));
+        try {
+            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[2] + " " + split[3]);
+            this.lastLoginTime = new GregorianCalendar();
+            this.lastLoginTime.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e) {
+            return;
+        }
+
     }
 
     @Override
@@ -46,14 +63,21 @@ public class User implements StringParsable {
 
     @Override
     public String toString () {
-        return name + " " + password;
+        if(lastLoginTime == null)
+            return name + " " + password;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        String dateFormatted = sdf.format(lastLoginTime.getTime());
+        return name + " " + password + " " + dateFormatted;
     }
 
-    public GregorianCalendar getLastLoginTime(){
-        GregorianCalendar gregorianCalendar= new GregorianCalendar();
-        gregorianCalendar.set(2000, 1, 1, 1, 0);
-        return gregorianCalendar;
+    public GregorianCalendar getLastLoginTime() throws NullLastLoginException {
+        if (lastLoginTime == null)
+            throw new NullLastLoginException();
+        return lastLoginTime;
     }
 
-    public void updateLastLoginTime(){throw new UnsupportedOperationException();}
+    public void setLastLoginTime (GregorianCalendar time) {
+        this.lastLoginTime = time;
+    }
+
 }

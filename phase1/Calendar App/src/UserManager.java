@@ -4,6 +4,7 @@ import exceptions.UsernameTakenException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -53,6 +54,13 @@ public class UserManager extends DataSaver {
             }
         }
         return false;
+    }
+
+    public void logoutCurrentUser () {
+        if (currentUser == null)
+            return;
+        GregorianCalendar c = new GregorianCalendar();
+        currentUser.setLastLoginTime(c); // by default it is the current time
     }
 
     public void registerUser(String username, String password, String confirmPassword)

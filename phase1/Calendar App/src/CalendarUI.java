@@ -1,4 +1,6 @@
 import exceptions.InvalidDateException;
+import exceptions.NullLastLoginException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,11 @@ public class CalendarUI extends UserInterface{
 
     @Override
     public void show() {
-        visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
+        try {
+            visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
+        } catch (NullLastLoginException e) {
+
+        }
         GregorianCalendar startOfDay = calendar.getTime();
         startOfDay.set(startOfDay.get(java.util.Calendar.YEAR), startOfDay.get(java.util.Calendar.MONTH), startOfDay.get(java.util.Calendar.DATE), 0, 0);
         GregorianCalendar nextDay = (GregorianCalendar)startOfDay.clone();
@@ -46,7 +52,7 @@ public class CalendarUI extends UserInterface{
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
-            int command = getOptionsInput(new String[]{"Exit", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series", "Search events"});
+            int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos", "View memo", "Delete memo", "Add event", "Add event series", "Search events"});
             switch (command){
                 case 0:
                     return;
