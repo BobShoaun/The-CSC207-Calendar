@@ -1,6 +1,8 @@
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class Tests {
 
@@ -14,8 +16,22 @@ public class Tests {
         assert a.getTime().equals(b.getTime());
     }
 
-    public static void main(String[] args) {
+    static void testAlertCollection() throws Exception {
+        Event e = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        DataSaver ds = new DataSaver("tests");
+        AlertCollection ac = new AlertCollection(e, ds);
+        ac.addAlert(new GregorianCalendar(2020, Calendar.MARCH, 6, 10, 0));
+        ac.addAlert(new GregorianCalendar(2020, Calendar.FEBRUARY, 1), Duration.ofDays(1));
+        List<Alert> get = ac.getAlerts(new GregorianCalendar(2020, Calendar.FEBRUARY, 28),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0));
+        assert get.size() == 9;
+    }
+
+    public static void main(String[] args) throws Exception {
         testAlert();
+        testAlertCollection();
     }
 
 }

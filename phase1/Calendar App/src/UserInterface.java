@@ -100,16 +100,16 @@ public abstract class UserInterface {
 
     protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
-        System.out.print(prompt + " (DD/MM/YYYY HH:MM:SS)");
+        System.out.print(prompt + " (DD/MM/YYYY HH:MM)");
         GregorianCalendar calendar = new GregorianCalendar();
         String dateString = scanner.nextLine();
         try {
-            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(dateString);
+            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(dateString);
             calendar.setTime(date);
         } catch (ParseException e) {
             if (allowNull && dateString.equals(""))
                 return null;
-            return getDateInput("Please re-enter a valid date: (DD/MM/YYYY HH:MM:SS)");
+            return getDateInput("Please re-enter a valid date: )");
         }
         return calendar;
     }
