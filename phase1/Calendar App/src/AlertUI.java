@@ -19,7 +19,7 @@ public class AlertUI extends UserInterface {
     }
 
     @Override
-    public void show() throws IOException {
+    public void show() {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Add a single alert",
@@ -37,7 +37,12 @@ public class AlertUI extends UserInterface {
                     result = alerts.addAlert(
                             getDateInput("Alert already exists. Please try again: "));
                 }
-                alerts.save();
+                try {
+                    alerts.save();
+                } catch (IOException e) {
+                    System.out.println("Save error occurred.");
+                    ;
+                }
                 break;
             case 2:
                 boolean badInput = true;
@@ -51,12 +56,22 @@ public class AlertUI extends UserInterface {
                         System.out.println("Period already exists. Please try again: ");
                     }
                 }
-                alerts.save();
+                try {
+                    alerts.save();
+                } catch (IOException e) {
+                    System.out.println("Save error occurred.");
+                    ;
+                }
                 break;
             case 3:
                 Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
                 a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
-                alerts.save();
+                try {
+                    alerts.save();
+                } catch (IOException e) {
+                    System.out.println("Save error occurred.");
+                    ;
+                }
                 break;
             case 4:
                 boolean works = false;
@@ -65,7 +80,12 @@ public class AlertUI extends UserInterface {
                             getDateInput("Enter the date of the alert to be removed: ")
                     );
                 }
-                alerts.save();
+                try {
+                    alerts.save();
+                } catch (IOException e) {
+                    System.out.println("Save error occurred.");
+                    ;
+                }
                 break;
         }
     }
