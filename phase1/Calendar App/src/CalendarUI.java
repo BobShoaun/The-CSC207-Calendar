@@ -62,7 +62,7 @@ public class CalendarUI extends UserInterface{
                         displayEvents();
                     } else{
                         Iterator<Event> eventIterator = calendar.getFutureEvents(start.getTime());
-                        ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, (Event e) -> e.getName() + " at " + e.getStartDate() + " for " + e.getDuration());
+                        ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, Event::toString);
                         eventIteratorView.show();
                     }
                     break;
