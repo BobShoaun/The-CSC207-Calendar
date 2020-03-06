@@ -1,5 +1,4 @@
 import exceptions.InvalidDateException;
-import exceptions.NullLastLoginException;
 
 import java.util.*;
 import java.util.stream.Collectors;

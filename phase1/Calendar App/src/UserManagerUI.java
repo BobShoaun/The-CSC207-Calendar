@@ -1,4 +1,3 @@
-import exceptions.NullLastLoginException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
