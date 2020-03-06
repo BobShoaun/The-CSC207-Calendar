@@ -116,6 +116,7 @@ public class EventUI extends UserInterface {
                         System.out.println("Invalid time input. Start time cannot be after current end time.");
                         editEvent();
                     }
+                    break;
                 case 3:
                     try {
                         GregorianCalendar end = getDateInput("Enter new end time: ");
@@ -124,6 +125,7 @@ public class EventUI extends UserInterface {
                         System.out.println("Invalid time input. End time cannot be before current start time.");
                         editEvent();
                     }
+                    break;
             }
         }
     }
@@ -139,7 +141,7 @@ public class EventUI extends UserInterface {
             }
         }
     }
-    
+
     private void getMemoUIs() {
         List<Memo> m = calendar.getMemos(event.getId());
         for (Memo memo: m) {
