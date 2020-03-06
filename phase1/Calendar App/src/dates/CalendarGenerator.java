@@ -120,7 +120,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
                     newTime.setTimeInMillis(newTime.getTimeInMillis() + period.toMillis());
                 }
 
-                if(endTime == null || newTime.after(endTime)){
+                if(endTime == null || endTime.after(newTime)){
                     candidates.add(newTime);
                 }
             }
