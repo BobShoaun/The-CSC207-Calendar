@@ -1,4 +1,5 @@
 import exceptions.InvalidDateException;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -122,4 +123,12 @@ public class Event extends Observable{
         return name + " from " + start + " to " + end;
     }
 
+    public String getString()
+    {
+        String result = id + "\n" +
+                name + "\n" +
+                startDate.getTimeInMillis() + "\n" +
+                endDate.getTimeInMillis() + "\n";
+        return result;
+    }
 }

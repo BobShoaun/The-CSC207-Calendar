@@ -265,42 +265,64 @@ public class EventCollection implements Iterable<Event>
     }
 
 
-    /**
-     * Load the data into this EventCollection.
-     *
-     * @param eventId The ID of the event for which the Alerts are being loaded
-     */
-    public void load(String filePath, String eventId)
+    public void load(String eventId) throws InvalidDateException
     {
-//        List<String> strings = null;
-//        try {
-//            strings = saver.loadStringsFromFile(filePath + "/" + eventId + ".txt");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        this.eventId = strings.get(0).trim();
-//
-//        String[] manTimes = strings.get(1).trim().split("\\s+");
-//        for (String timeStr : manTimes) {
-//            manAlerts.add(new Alert(eventId, timeStr));
-//        }
-//
-//        StringBuilder cgStr = new StringBuilder();
-//        for (int i = 2; i < strings.size(); i++) {
-//            cgStr.append(strings.get(i));
-//        }
-//        this.calGen = new CalendarGenerator(cgStr.toString());
+        List<String> strings = null;
+        try {
+            strings = saver.loadStringsFromFile("/series/" + eventId + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert strings != null;
+        this.name = strings.get(0).trim();
+
+        String[] eventsDetails = strings.get(1).trim().split(",");
+        for (String e : eventsDetails) {
+            String[] details = e.trim().split("\\n");
+            String id = details[0];
+            String name = details[1];
+            GregorianCalendar start = new GregorianCalendar();
+            start.setTime(new Date(Long.parseLong(details[2])));
+            GregorianCalendar end = new GregorianCalendar();
+            start.setTime(new Date(Long.parseLong(details[3])));
+
+            this.events.add(new Event(id,name,start,end));
+        }
+
+        StringBuilder cgStr = new StringBuilder();
+        for (int i = 2; i < strings.size(); i++) {
+            cgStr.append(strings.get(i));
+        }
+        this.eGen.setCalGen(new CalendarGenerator(cgStr.toString()));
     }
 
     /**
      * Save this EventCollection's data into a text file.
      */
-    public void save() throws IOException
-    {
-//        List<String> contents = Arrays.asList(getString().split("\\s+"));
-//        saver.saveToFile("/events/" + eventId + ".txt", contents);
+    public void save() throws IOException {
+        List<String> contents = Arrays.asList(getString().split("\\s+"));
+        saver.saveToFile("/series/" + name + ".txt", contents);
+    }
+
+    /**
+     * Get a String representation of data in this AlertCollection.
+     *
+     * @return String representation of all the data in this AC, including the CalendarGenerator.
+     */
+    public String getString() {
+        StringBuilder result = new StringBuilder(this.name + "\n ");
+        if(this.events!=null)
+        {
+            for (Event e : this.events) {
+                result.append(e.getString()).append(",");
+            }
+        }
+        if(eGen!=null)
+        {
+            result.append("\n ").append(eGen.getCalGen().getString());
+        }
+        return result.toString();
     }
 
     /**
