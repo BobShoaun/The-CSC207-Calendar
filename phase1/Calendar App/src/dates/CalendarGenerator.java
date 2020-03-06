@@ -16,7 +16,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     private List<Duration> periods;
     private GregorianCalendar endTime;
 
-    // end==null means forever up to implementation
+    // end==null means forever
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
         this.startTime = start;
         this.periods = periods;
@@ -117,7 +117,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         }
 
         public List<GregorianCalendar> nextSet(){
-            ArrayList<GregorianCalendar> candiates = new ArrayList<>();
+            ArrayList<GregorianCalendar> candidates = new ArrayList<>();
 
             for(Duration period : periods){
                 GregorianCalendar newTime = new GregorianCalendar();
