@@ -1,9 +1,5 @@
-
-import exceptions.NullLastLoginException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -18,6 +14,7 @@ public class User implements StringParsable {
     private Calendar calendar;
     private DataSaver dataSaver;
     private GregorianCalendar lastLoginTime;
+    boolean firstLogin = false;
 
     public String getName () { return name; }
 
@@ -28,9 +25,11 @@ public class User implements StringParsable {
         this.password = password;
         dataSaver = new DataSaver(name);
         this.calendar = new Calendar(dataSaver);
+        firstLogin = true;
     }
 
     public User (String string) {
+        firstLogin = false;
         unparse(string);
     }
 
@@ -53,7 +52,6 @@ public class User implements StringParsable {
         } catch (IndexOutOfBoundsException e) {
             return;
         }
-
     }
 
     @Override
@@ -70,9 +68,7 @@ public class User implements StringParsable {
         return name + " " + password + " " + dateFormatted;
     }
 
-    public GregorianCalendar getLastLoginTime() throws NullLastLoginException {
-        if (lastLoginTime == null)
-            throw new NullLastLoginException();
+    public GregorianCalendar getLastLoginTime() {
         return lastLoginTime;
     }
 
