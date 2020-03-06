@@ -2,6 +2,7 @@ import exceptions.InvalidDateException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,6 +61,7 @@ public class EventUI extends UserInterface {
                     }
                     break;
                 case 4: // Edit alert
+                    editAlert();
                     break;
                 case 5: // Show memos
                     List<Memo> memos = calendar.getMemos();
@@ -126,6 +128,18 @@ public class EventUI extends UserInterface {
         }
     }
 
+
+    private void editAlert() {
+        for (AlertCollection ac: calendar.alertCollections) {
+            if ( ac.getEventId().equals(event.getId()) ) {
+                AlertUI alertUI = new AlertUI(ac);
+                alertUI.show();
+            } else {
+                System.out.println("No existing alerts.");
+            }
+        }
+    }
+    
     private void getMemoUIs() {
         List<Memo> m = calendar.getMemos(event.getId());
         for (Memo memo: m) {
