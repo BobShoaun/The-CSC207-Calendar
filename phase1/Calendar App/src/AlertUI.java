@@ -22,6 +22,7 @@ public class AlertUI extends UserInterface {
         int option = getOptionsInput(new String[]{"Exit",
                 "Add a single alert",
                 "Add a repeating alert",
+                "Edit an alert",
                 "Remove an alert",
         });
         switch (option) {
@@ -49,6 +50,9 @@ public class AlertUI extends UserInterface {
                 }
                 break;
             case 3:
+                Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
+                a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
+            case 4:
                 boolean works = false;
                 while (!works) {
                     works = alerts.removeAlert(
