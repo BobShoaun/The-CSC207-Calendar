@@ -6,8 +6,7 @@ import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.Calendar;
 
-public class EventCollection implements Iterable<Event>
-{
+public class EventCollection implements Iterable<Event> {
     private List<Event> events;
     private EventGenerator eGen;
     private String name;
@@ -20,8 +19,7 @@ public class EventCollection implements Iterable<Event>
      * @param events list of events of the series
      * @param saver  saver object to load/save this EventCollection
      */
-    public EventCollection(String name, List<Event> events, DataSaver saver)
-    {
+    public EventCollection(String name, List<Event> events, DataSaver saver) {
         this.name = name;
         this.events = events;
         this.saver = saver;
@@ -34,8 +32,7 @@ public class EventCollection implements Iterable<Event>
      * @param eGen  Event generator for this series
      * @param saver saver object to load/save this EventCollection
      */
-    public EventCollection(String name, EventGenerator eGen, DataSaver saver)
-    {
+    public EventCollection(String name, EventGenerator eGen, DataSaver saver) {
         this.name = name;
         this.eGen = eGen;
         this.saver = saver;
@@ -44,8 +41,7 @@ public class EventCollection implements Iterable<Event>
     /**
      * @return name of this EventCollection
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -55,13 +51,10 @@ public class EventCollection implements Iterable<Event>
      * @param id of the event to be searched for
      * @return event with given id
      */
-    public Event getEvent(String id)
-    {
+    public Event getEvent(String id) {
         Event ret = null;
-        for (Event e : this.events)
-        {
-            if (e.getId().equals(id))
-            {
+        for (Event e : this.events) {
+            if (e.getId().equals(id)) {
                 ret = e;
                 break;
             }
@@ -75,21 +68,17 @@ public class EventCollection implements Iterable<Event>
      * @param date date of events demanded
      * @return a list of events that is on the same day as <date></>
      */
-    public List<Event> getEvents(Date date)
-    {
+    public List<Event> getEvents(Date date) {
         //find alternative
         Date startTime = roundUp(date);
         Date endTime = roundDown(date);
         return getEvents(startTime, endTime);
     }
 
-    public List<Event> getEvents(Date start, Date end)
-    {
+    public List<Event> getEvents(Date start, Date end) {
         List<Event> ret = new ArrayList<>();
-        for (Event e : this.events)
-        {
-            if (isOnTime(e, start, end))
-            {
+        for (Event e : this.events) {
+            if (isOnTime(e, start, end)) {
                 ret.add(e);
             }
         }
@@ -100,15 +89,12 @@ public class EventCollection implements Iterable<Event>
      * @param start the earliest start date of events in this iterator
      * @return a iterator containing all events but ones that have start dates before <start></>
      */
-    public Iterator<Event> getEventIterator(Date start)
-    {
+    public Iterator<Event> getEventIterator(Date start) {
         Iterator<Event> ite = events.iterator();
-        while (ite.hasNext())
-        {
+        while (ite.hasNext()) {
             Event curr = ite.next();
             Date startDate = curr.getStartDate().getTime();
-            if (startDate.compareTo(start) <= 0)
-            {
+            if (startDate.compareTo(start) <= 0) {
                 ite.remove();
             }
         }
@@ -120,9 +106,8 @@ public class EventCollection implements Iterable<Event>
      *
      * @param event the event to be added
      */
-    public void addEvent(Event event)
-    {
-        if(eGen!=null)//if inf
+    public void addEvent(Event event) {
+        if (eGen != null)//if inf
         {
             eGen.getCalGen().addIgnore(event.getStartDate());
         }
@@ -134,15 +119,11 @@ public class EventCollection implements Iterable<Event>
      *
      * @param event the event to br removed
      */
-    public void removeEvent(Event event) throws InvalidDateException
-    {
+    public void removeEvent(Event event) throws InvalidDateException {
         String eventId = event.getId();
-        if (eGen != null)
-        {
-            for (Event e:eGen.generateEvents())
-            {
-                if(e.getId().equals(eventId))
-                {
+        if (eGen != null) {
+            for (Event e : eGen.generateEvents()) {
+                if (e.getId().equals(eventId)) {
                     eGen.getCalGen().addIgnore(e.getStartDate());
                 }
             }
@@ -151,30 +132,24 @@ public class EventCollection implements Iterable<Event>
     }
 
     /**
-     *
      * @param oldEvent an Event that has been edited
      * @param newEvent the replacement event
      * @throws InvalidDateException
      */
-    public void editEvent(Event oldEvent, Event newEvent) throws InvalidDateException
-    {
+    public void editEvent(Event oldEvent, Event newEvent) throws InvalidDateException {
         String eventId = oldEvent.getId();
-        if (eGen != null && eventId.equals(eGen.getBaseEvent().getId()))
-        {
+        if (eGen != null && eventId.equals(eGen.getBaseEvent().getId())) {
             eGen.getCalGen().addIgnore(oldEvent.getStartDate());
         }
         removeEvent(oldEvent);
         this.events.add(newEvent);
     }
 
-    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException
-    {
+    public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException {
         //finite series
-        if (eGen == null)
-        {
+        if (eGen == null) {
             this.eGen = new EventGenerator(baseEvent, start, end, dateToDurationList(start, frequency));
-        } else
-        {
+        } else {
             CalendarGenerator CG = eGen.getCalGen();
             CG.addPeriod(dateToDuration(start, frequency));
             eGen.setCalGen(CG);
@@ -182,8 +157,7 @@ public class EventCollection implements Iterable<Event>
         this.events.addAll(eGen.generateEvents());
     }
 
-    public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException
-    {
+    public void makeEventToSeries(String eventId, Date end, Date frequency) throws InvalidDateException {
         //Assume originally finite series
         Event base = getEvent(eventId);
         Date start = base.getStartDate().getTime();
@@ -191,98 +165,79 @@ public class EventCollection implements Iterable<Event>
         // if end=null generate infinite events
     }
 
-    public void addTag(String eventId, Tag tag)
-    {
-        for (Event e : this.events)
-        {
-            if (e.getId().equals(eventId))
-            {
+    public void addTag(String eventId, Tag tag) {
+        for (Event e : this.events) {
+            if (e.getId().equals(eventId)) {
                 tag.addEvent(eventId);
             }
         }
     }
 
-    private List<Duration> dateToDurationList(Date start, Date end)
-    {
+    private List<Duration> dateToDurationList(Date start, Date end) {
         List<Duration> durList = new ArrayList<>();
         Duration dur = Duration.between((Temporal) start, (Temporal) end);
         durList.add(dur);
         return durList;
     }
 
-    private Duration dateToDuration(Date start, Date end)
-    {
+    private Duration dateToDuration(Date start, Date end) {
         return Duration.between((Temporal) start, (Temporal) end);
     }
 
     @Override
-    public String toString()
-    {
-        if(name==null)
-        {
+    public String toString() {
+        if (name == null) {
             return regularEventsToString();
-        }else if(eGen == null)
-        {
+        } else if (eGen == null) {
             return finiteSeriesToString();
-        }
-        else{
-            try
-            {
+        } else {
+            try {
                 return infiniteSeriesToString();
-            } catch (InvalidDateException e)
-            {
+            } catch (InvalidDateException e) {
                 e.printStackTrace();
             }
         }
         return "Invalid date";
     }
 
-    private String regularEventsToString()
-    {
+    private String regularEventsToString() {
         StringBuilder result = new StringBuilder("Events\n");
         result.append("===== EVENTS =====\n");
-        for (Event e : this.events)
-        {
+        for (Event e : this.events) {
             result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
 
-    private String finiteSeriesToString()
-    {
+    private String finiteSeriesToString() {
         StringBuilder result = new StringBuilder("Events for Series " + name + "\n");
         result.append("===== SERIES =====\n");
-        for (Event e : this.events)
-        {
+        for (Event e : this.events) {
             result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
 
-    private String infiniteSeriesToString() throws InvalidDateException
-    {
+    private String infiniteSeriesToString() throws InvalidDateException {
 
         StringBuilder result = new StringBuilder("Events for Series " + name + "\n");
         result.append("===== SERIES =====\n");
         result.append("Here is your manually created events\n");
-        for (Event e : this.events)
-        {
+        for (Event e : this.events) {
             result.append(e.toString()).append("\n");
         }
         String start = eGen.getCalGen().getStartTime().getTime().toString();
         String end = eGen.getCalGen().getEndTime().getTime().toString();
 
         result.append("Here is your repeating events in this series from ").append(start).append(" to ").append(end).append("\n");
-        for(Event e:eGen.generateEvents())
-        {
+        for (Event e : eGen.generateEvents()) {
             result.append(e.toString());
         }
         return result.toString();
     }
 
 
-    public void load(String seriesName) throws InvalidDateException
-    {
+    public void load(String seriesName) throws InvalidDateException {
         List<String> strings = null;
         try {
             strings = saver.loadStringsFromFile("/series/" + seriesName + ".txt");
@@ -303,7 +258,7 @@ public class EventCollection implements Iterable<Event>
             GregorianCalendar end = new GregorianCalendar();
             start.setTime(new Date(Long.parseLong(details[3])));
 
-            this.events.add(new Event(id,eventName,start,end));
+            this.events.add(new Event(id, eventName, start, end));
         }
 
         StringBuilder cgStr = new StringBuilder();
@@ -328,14 +283,12 @@ public class EventCollection implements Iterable<Event>
      */
     public String getString() {
         StringBuilder result = new StringBuilder(this.name + "\n ");
-        if(this.events!=null)
-        {
+        if (this.events != null) {
             for (Event e : this.events) {
                 result.append(e.getString()).append(",");
             }
         }
-        if(eGen!=null)
-        {
+        if (eGen != null) {
             result.append("\n ").append(eGen.getCalGen().getString());
         }
         return result.toString();
@@ -347,8 +300,7 @@ public class EventCollection implements Iterable<Event>
      * @param endTime   end time
      * @return true iff the event time period is within the start and end time
      */
-    private boolean isOnTime(Event event, Date startTime, Date endTime)
-    {
+    private boolean isOnTime(Event event, Date startTime, Date endTime) {
         Date startEvent = GCToDate(event.getStartDate());
         Date endEvent = GCToDate(event.getEndDate());
         boolean within1 = startTime.before(startEvent) && endTime.after(startEvent);
@@ -356,13 +308,11 @@ public class EventCollection implements Iterable<Event>
         return within1 && within2;
     }
 
-    private Date GCToDate(GregorianCalendar calendar)
-    {
+    private Date GCToDate(GregorianCalendar calendar) {
         return calendar.getTime();
     }
 
-    private Date roundUp(Date date)
-    {
+    private Date roundUp(Date date) {
         Calendar cl = Calendar.getInstance();
         cl.setTime(date);
         cl.set(Calendar.HOUR_OF_DAY, 0);
@@ -372,8 +322,7 @@ public class EventCollection implements Iterable<Event>
         return cl.getTime();
     }
 
-    private Date roundDown(Date date)
-    {
+    private Date roundDown(Date date) {
         Calendar cl = Calendar.getInstance();
         cl.setTime(date);
         cl.set(Calendar.HOUR_OF_DAY, 23);
@@ -383,19 +332,34 @@ public class EventCollection implements Iterable<Event>
         return cl.getTime();
     }
 
+    public List<Event> getEventsBetween(GregorianCalendar start, GregorianCalendar end) throws InvalidDateException {
+        List<Event> ret =new ArrayList<>();
+        if(events!=null)
+        {
+            for (Event e:events) {
+                if(isOnTime(e,start.getTime(),end.getTime())){
+                    ret.add(e);
+                }
+            }
+        }
+        if(eGen!=null){
+            EventGenerator newEG = new EventGenerator(eGen.getBaseEvent(), start.getTime(),
+                    end.getTime() ,eGen.getCalGen().getPeriods());
+            ret.addAll(newEG.generateEvents());
+        }
+        return ret;
+    }
     /**
      * Returns an iterator over elements of type {@code Event}.
      *
      * @return an Iterator.
      */
     @Override
-    public Iterator<Event> iterator()
-    {
+    public Iterator<Event> iterator() {
         return new EventCollectionIterator();
     }
 
-    private class EventCollectionIterator implements Iterator<Event>
-    {
+    private class EventCollectionIterator implements Iterator<Event> {
         /**
          * The index of the next Event to return.
          */
@@ -407,8 +371,7 @@ public class EventCollection implements Iterable<Event>
          * @return whether there is another Event to return.
          */
         @Override
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return current < events.size();
         }
 
@@ -418,19 +381,16 @@ public class EventCollection implements Iterable<Event>
          * @return the next Event.
          */
         @Override
-        public Event next()
-        {
+        public Event next() {
             Event res;
 
             // List.get(i) throws an IndexOutBoundsException if
             // we call it with i >= contacts.size().
             // But Iterator's next() needs to throw a
             // NoSuchElementException if there are no more elements.
-            try
-            {
+            try {
                 res = events.get(current);
-            } catch (IndexOutOfBoundsException e)
-            {
+            } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
             current += 1;
@@ -441,14 +401,11 @@ public class EventCollection implements Iterable<Event>
          * Removes the Event just returned.
          */
         @Override
-        public void remove()
-        {
-            if (events.size() != 0)
-            {
+        public void remove() {
+            if (events.size() != 0) {
                 events.remove(current - 1);
                 current = -1;
-            } else
-            {
+            } else {
                 throw new NoSuchElementException();
             }
         }
@@ -456,22 +413,11 @@ public class EventCollection implements Iterable<Event>
 
     /**
      * Remove the event from the tag
+     *
      * @param eventId the id of the event to be removed
-     * @param tag the tag that needs to remove the event
+     * @param tag     the tag that needs to remove the event
      */
-    public void removeTag(String eventId, Tag tag)
-    {
+    public void removeTag(String eventId, Tag tag) {
         tag.removeEvent(eventId);
     }
-
-    public String[] regularEventDetails()
-    {
-        String[] ret = new String[events.size()];
-        for (int i=0;i<events.size();i++)
-        {
-            ret[i] = events.get(i).toString();
-        }
-        return ret;
-    }
-
 }

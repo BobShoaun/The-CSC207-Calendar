@@ -1,39 +1,38 @@
 import exceptions.InvalidDateException;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-public class EventCollectionUI extends UserInterface
-{
+public class EventCollectionUI extends UserInterface {
     private EventCollection events;
-    private DataSaver saver;
 
-    public EventCollectionUI(EventCollection eventCollection)
-    {
+    public EventCollectionUI(EventCollection eventCollection) {
         this.events = eventCollection;
     }
 
     @Override
-    public void display()
-    {
+    public void display() {
         System.out.println(this.events);
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Display in Time frame",
                 "Edit an Event in Series",});
-        switch (option)
-        {
+        switch (option) {
             case 0:
                 break;
             case 1:
+                GregorianCalendar start = getDateInput("Select a Start Time frame");
+                GregorianCalendar end = getDateInput("Select a End Time Frame");
+                try {
+                    for (Event e:events.getEventsBetween(start,end)) {
+                        System.out.println(e.toString());
+                    }
+                } catch (InvalidDateException e) {
+                    System.out.println("Invalid date input");
+                }
                 break;
             case 2:
                 break;
