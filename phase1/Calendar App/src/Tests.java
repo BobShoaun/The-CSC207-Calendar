@@ -108,7 +108,6 @@ public class Tests {
         testCalendarGenerator();
         testAlert();
         testAlertCollection();
-        testEventsGenerator();
         testECSave();
         testLoad();
         testEventsGenerator();

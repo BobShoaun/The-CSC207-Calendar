@@ -39,7 +39,7 @@ public class DataSaver {
      * @return entire text file as a string
      */
     public String loadStringFromFile (String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(basePath + path)));
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     /**
