@@ -150,7 +150,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
                 currentTime = result;
                 return result;
             } else {
-                return null;
+                throw new IndexOutOfBoundsException("No next date");
             }
         }
     }
