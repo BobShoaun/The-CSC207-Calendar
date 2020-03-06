@@ -1,13 +1,7 @@
 import exceptions.InvalidDateException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Terminal interface for Event.
  */
