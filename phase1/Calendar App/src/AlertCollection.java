@@ -49,7 +49,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param time The time of the Alert to be added.
      * @return Whether or not the Alert could be added.
      */
-    public boolean addAlert(GregorianCalendar time) { // TODO: dependency injection?
+    public boolean addAlert(GregorianCalendar time) throws IOException { // TODO: dependency injection?
         if (calGen != null) {
             for (GregorianCalendar c : calGen) {
                 if (c.equals(time))
@@ -62,25 +62,26 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
         }
         manAlerts.add(new Alert(eventId, time));
         manAlerts.sort(new AlertComparator());
+        save();
         return true;
     }
 
     /**
      * Add a recurring Alert until the Event occurs
-     *  @param start  The start time
+     *
+     * @param start  The start time
      * @param period The time between each alert
      */
-    public void addAlert(GregorianCalendar start, Duration period) throws PeriodAlreadyExistsException {
+    public void addAlert(GregorianCalendar start, Duration period) throws PeriodAlreadyExistsException, IOException {
         if (this.calGen == null) {
             ArrayList<Duration> d = new ArrayList<>();
             d.add(period);
             this.calGen = new CalendarGenerator(start, d, eventTime);
-        }
-        else if (this.calGen.getPeriods().contains(period)) {
+        } else if (this.calGen.getPeriods().contains(period)) {
             throw new PeriodAlreadyExistsException();
-        }
-        else
+        } else
             this.calGen.addPeriod(period);
+        save();
     }
 
     /**
@@ -89,7 +90,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The date of the Alert to be removed
      * @return Whether or not the Alert could be removed.
      */
-    public boolean removeAlert(GregorianCalendar d) {
+    public boolean removeAlert(GregorianCalendar d) throws IOException {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
@@ -99,11 +100,12 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
      */
-    public boolean removeGeneratedAlert(GregorianCalendar d) {
+    public boolean removeGeneratedAlert(GregorianCalendar d) throws IOException {
         for (GregorianCalendar ignored : calGen.getIgnoreList()) {
             if (d.equals(ignored))
                 return false;
         }
+        save();
         return calGen.getIgnoreList().add(d);
     }
 
@@ -113,8 +115,10 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
      */
-    public boolean removeManualAlert(GregorianCalendar d) {
-        return manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
+    public boolean removeManualAlert(GregorianCalendar d) throws IOException {
+        boolean result = manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
+        save();
+        return result;
     }
 
     /**
@@ -122,7 +126,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      *
      * @param newEventTime The new time of the Event
      */
-    private void shiftAlerts(GregorianCalendar newEventTime) {
+    private void shiftAlerts(GregorianCalendar newEventTime) throws IOException {
         if (calGen == null) {
             throw new IllegalStateException();
         }
@@ -131,6 +135,7 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
         long newMillis = calGen.getStartTime().getTimeInMillis() + diff;
         newStart.setTimeInMillis(newMillis);
         this.calGen.setStartTime(newStart);
+        save();
     }
 
 //    /**
@@ -216,9 +221,13 @@ public class AlertCollection implements Observer { //TODO: AlertFacade
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof GregorianCalendar)
-            shiftAlerts((GregorianCalendar) arg);
-        else
+        if (arg instanceof GregorianCalendar) {
+            try {
+                shiftAlerts((GregorianCalendar) arg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
             throw new IllegalArgumentException();
     }
 

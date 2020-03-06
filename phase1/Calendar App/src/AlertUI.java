@@ -31,17 +31,20 @@ public class AlertUI extends UserInterface {
             case 0:
                 break;
             case 1:
-                boolean result = alerts.addAlert(
-                        getDateInput("Enter a time for the alert: "));
-                while (!result) {
-                    result = alerts.addAlert(
-                            getDateInput("Alert already exists. Please try again: "));
-                }
+                boolean result = false;
                 try {
-                    alerts.save();
+                    result = alerts.addAlert(
+                            getDateInput("Enter a time for the alert: "));
                 } catch (IOException e) {
-                    System.out.println("Save error occurred.");
-                    ;
+                    System.out.println("Error while saving.");
+                }
+                while (!result) {
+                    try {
+                        result = alerts.addAlert(
+                                getDateInput("Alert already exists. Please try again: "));
+                    } catch (IOException e) {
+                        System.out.println("Error while saving.");
+                    }
                 }
                 break;
             case 2:
@@ -54,12 +57,9 @@ public class AlertUI extends UserInterface {
                         badInput = false;
                     } catch (PeriodAlreadyExistsException e) {
                         System.out.println("Period already exists. Please try again: ");
+                    } catch (IOException e) {
+                        System.out.println("Error while saving.");
                     }
-                }
-                try {
-                    alerts.save(); // TODO: move save to AC
-                } catch (IOException e) {
-                    System.out.println("Save error occurred.");
                 }
                 break;
             case 3:
@@ -68,22 +68,19 @@ public class AlertUI extends UserInterface {
                 try {
                     alerts.save();
                 } catch (IOException e) {
-                    System.out.println("Save error occurred.");
-                    ;
+                    System.out.println("Error while saving.");
                 }
                 break;
             case 4:
                 boolean works = false;
                 while (!works) {
-                    works = alerts.removeAlert(
-                            getDateInput("Enter the date of the alert to be removed: ")
-                    );
-                }
-                try {
-                    alerts.save();
-                } catch (IOException e) {
-                    System.out.println("Save error occurred.");
-                    ;
+                    try {
+                        works = alerts.removeAlert(
+                                getDateInput("Enter the date of the alert to be removed: ")
+                        );
+                    } catch (IOException e) {
+                        System.out.println("Error while saving.");
+                    }
                 }
                 break;
         }
