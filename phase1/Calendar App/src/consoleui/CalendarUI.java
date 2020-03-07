@@ -2,6 +2,7 @@ package consoleui;
 
 import alert.Alert;
 import event.Event;
+import event.EventCollection;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
@@ -18,6 +19,7 @@ public class CalendarUI extends UserInterface {
 
     List<Alert> visibleAlerts = new ArrayList<>();
     List<EventUI> visibleEvents = new ArrayList<>();
+    List<EventCollectionUI> visibleEventCollections = new ArrayList<>();
 
     public CalendarUI(User user, Calendar calendar) {
         this.user = user;
@@ -61,7 +63,7 @@ public class CalendarUI extends UserInterface {
         while (true){
             display();
             int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos",
-                    "View memo", "Delete memo", "Add event", "Add event series", "Search events", "Show all events", "List all tags"});
+                    "View memo", "Delete memo", "Add event", "Add event series", "Search events", "Show all events", "List all tags", "List all event series", "Edit event series"});
             switch (command){
                 case 0:
                     user.setLastLoginTime(new GregorianCalendar()); // logout
@@ -223,6 +225,27 @@ public class CalendarUI extends UserInterface {
                     break;
                 default:
                     throw new UnsupportedOperationException();
+                case 12:
+                    List<EventCollection> eventCollections = calendar.getEventCollections();
+                    System.out.println("Event series:");
+                    int i = 0;
+                    for (EventCollection eC :
+                            eventCollections) {
+                        if(!eC.getName().equals("")){
+                            System.out.println("(" + i + ") " + eC.getName());
+                            i += 1;
+                        }
+                    }
+                    visibleEventCollections = eventCollections.stream().filter(eC -> !eC.getName().equals(""))
+                            .map(eC -> new EventCollectionUI(eC, calendar)).collect(Collectors.toList());
+                    System.out.println("----");
+                    break;
+                case 13:
+                    if(visibleEventCollections.size() == 0){
+                        System.out.println("No event collections have been displayed so far");
+                    }
+                    int eventCollectionNum = getIntInput("Relative event collection id: ", 0, visibleEventCollections.size() - 1);
+                    visibleEventCollections.get(eventCollectionNum).show();
             }
         }
     }
