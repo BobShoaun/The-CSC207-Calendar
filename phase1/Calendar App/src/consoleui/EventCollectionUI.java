@@ -2,9 +2,10 @@ package consoleui;
 
 import event.Event;
 import event.EventCollection;
-import user.Calendar;
 import exceptions.InvalidDateException;
+import user.Calendar;
 
+import java.io.IOException;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
@@ -44,7 +45,24 @@ public class EventCollectionUI extends UserInterface {
                 }
                 break;
             case 2:
-//                EventCollection NewEC1 =
+                String name = getStringInput("name of the series:");
+                EventCollection regularEvents = cal.getEventCollection(null);
+
+                int option1 = getOptionsInput(regularEvents.getEventOptions());
+                String eventId = regularEvents.getEvents().get(option1-1).getId();
+
+                while(option1!=0)
+                {
+                    try {
+                        //keep asking for events to select till exit at 0
+                        cal.addToSeries(eventId, name);
+                        option1 = getOptionsInput(regularEvents.getEventOptions());
+                        eventId = regularEvents.getEvents().get(option1-1).getId();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //get ECollections find the regular one, diaplay it for choice and add that using addToSeries to a given Series name...
                 break;
             case 3:
 //            case 2:

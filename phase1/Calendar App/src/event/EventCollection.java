@@ -23,7 +23,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * constructor for a finite/manually created series, or a list of regular events if name == null
+     * constructor for a finite/manually created series, or a list of regular events if name == ""
      *
      * @param name   name of series
      * @param events list of events of the series
@@ -210,7 +210,7 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     @Override
     public String toString() {
-        if (name == null) {
+        if (name.equals("")) {
             return regularEventsToString();
         } else if (eGen == null) {
             return finiteSeriesToString();
@@ -258,6 +258,10 @@ public class EventCollection implements Iterable<Event>, Observer {
             result.append(e.toString());
         }
         return result.toString();
+    }
+
+    public List<Event> getEvents() {
+        return events;
     }
 
     /**
@@ -312,7 +316,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\n"));
-        if (name == null || name.equals("")) {
+        if (name.equals("")) {
             saver.saveToFile("events/noname.txt", contents);
         } else {
             saver.saveToFile("events/" + name + ".txt", contents);
@@ -464,6 +468,14 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
 
+    public String[] getEventOptions(){
+        String[] eventList = new String[events.size()+1];
+        eventList[0] = "exit";
+        for (int i = 0; i < events.size(); i++) {
+            eventList[i+1] = events.get(i).toString();
+        }
+        return eventList;
+    }
     /**
      * Remove the event from the tag
      *
