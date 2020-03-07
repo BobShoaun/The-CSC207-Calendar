@@ -48,7 +48,7 @@ public class EventGenerator {
         for (GregorianCalendar GC : calGen) {
             test.add(GC);
             String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
-            Duration dur = Duration.ofMillis(baseEvent.getDuration().getTimeInMillis());
+            Duration dur = Duration.ofMillis(baseEvent.getEndDate().getTimeInMillis()-baseEvent.getStartDate().getTimeInMillis());
             Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
             ret.add(event);
         }

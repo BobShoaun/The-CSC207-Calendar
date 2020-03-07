@@ -81,47 +81,4 @@ public class EventCollectionUI extends UserInterface {
                 }
         }
     }
-
-//    private void regularEventsMenu()
-//    {
-//        int option = getOptionsInput(new String[]{"Exit",
-//                "Display in Time frame",
-//                "Edit an event.Event in Series"});
-//        switch (option)
-//        {
-//            case 0:
-//                break;
-//            case 1:
-//                break;
-//            case 2:
-//        }
-//    }
-
-//    private List<event.Event> selectEvents()
-//    {
-//        int option = getOptionsInput(this.events.regularEventDetails());
-//        return null;
-//    }
-//
-//    private event.Event createEvent() throws InvalidDateException
-//    {
-//        String name = getStringInput("Base event.Event Name:");
-//        GregorianCalendar start = getDateInput("Start Date of Base event.Event");
-//        GregorianCalendar end = getDateInput("End Date of Base event.Event");
-//        return new event.Event(name + start.getTime(), name, start, end);
-//    }
-//
-//    private List<Duration> getFrequency()
-//    {
-//        List<Duration> ret = new ArrayList<>();
-//        int option = 1;
-//        while (option != 0)
-//        {
-//            Duration dur = getDurationInput("Choose a the frequency of repetition for your event");
-//            option = getOptionsInput(new String[]{"Exit",
-//                    "Choose another frequency of repetition for your event"});
-//            ret.add(dur);
-//        }
-//        return ret;
-//    }
 }

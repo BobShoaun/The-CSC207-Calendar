@@ -113,7 +113,7 @@ public class Event extends Observable{
         } else {
             long dur = startDate.getTime().getTime() - endDate.getTime().getTime();
             Date d2 = new Date(dur);
-            newGC.setGregorianChange(d2);
+            newGC.setTime(d2);
         }
         return newGC;
     }
