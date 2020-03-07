@@ -64,9 +64,6 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-        for (Event e : eve) {
-            System.out.println(e);
-        }
         DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.save();
@@ -82,15 +79,17 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-        for (Event e : eve) {
-            System.out.println(e);
-        }
+
         DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.load("testseries");
+
+        List<Event> result = new ArrayList<>();
         for (Event e : EC) {
-            System.out.println(e);
+            result.add(e);
         }
+
+        if (result.size() != 2) throw new AssertionError("Bad loading");
     }
 
     static void testCalendarGenerator() {
@@ -104,7 +103,8 @@ public class Tests {
         int size = dates.size();
         if (29 != size) throw new AssertionError("CG Issue");
     }
-    public static void testEventCollectionUI() throws InvalidDateException {
+
+    static void testEventCollectionUI() throws InvalidDateException {
 //        Event event = new Event("test", "Go Shopping",
 //                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
 //                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
@@ -132,11 +132,15 @@ public class Tests {
         eve.add(event);
         eve.add(e2);
         DataSaver saver = new DataSaver("testUser");
-        EventCollection coll = new EventCollection("test", eve,saver);
+        EventCollection coll = new EventCollection("test", eve, saver);
         coll.removeEvent(e2);
-        for (Event e:coll) {
-            System.out.println(e);
+
+        List<Event> result = new ArrayList<>();
+        for (Event e : coll) {
+            result.add(e);
         }
+        if (result.size() != 1) throw new AssertionError("Error while removing");
+        if (result.contains(e2)) throw new AssertionError("Error while removing");
 
     }
 
