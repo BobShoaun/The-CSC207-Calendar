@@ -168,15 +168,17 @@ public class CalendarUI extends UserInterface {
     private void search() {
         ListUIView<Event> listUIView = null;
         Iterator<Event> events;
-        int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
+        int searchOption = getOptionsInput(new String[]{"Exit", "Event name", "Memo title", "Event series", "Date", "Tag"});
         switch (searchOption) {
             case 0:
+                return;
+            case 1:
                 String eventName = getStringInput("Event name: ");
                 events = calendar.getEvents(eventName);
                 listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                 listUIView.show();
                 break;
-            case 1:
+            case 2:
                 String memoName = getStringInput("Memo name: ");
                 Memo memo = calendar.getMemo(memoName);
                 if (memo == null) {
@@ -187,7 +189,7 @@ public class CalendarUI extends UserInterface {
                 listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                 listUIView.show();
                 break;
-            case 2:
+            case 3:
                 String eventSeriesName = getStringInput("Event series: ");
                 if (calendar.getEventCollection(eventSeriesName) == null) {
                     System.out.println("That event series does not exist!");
@@ -197,13 +199,13 @@ public class CalendarUI extends UserInterface {
                 listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                 listUIView.show();
                 break;
-            case 3:
+            case 4:
                 GregorianCalendar date = getDateInput("Events at time: ");
                 events = calendar.getEvents(date.getTime()).iterator();
                 listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                 listUIView.show();
                 break;
-            case 4:
+            case 5:
                 String tag = getStringInput("Tag: ");
                 if (calendar.getTag(tag) == null) {
                     System.out.println("This tag cannot be found!");
