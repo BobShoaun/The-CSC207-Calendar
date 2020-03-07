@@ -104,7 +104,7 @@ public class Event extends Observable{
     }
 
     /**
-     * Shift the event to the new start time.
+     * Shift the event to the new start time and notify Observer.
      * @param shifted the new startDate of the Event
      */
     public void shiftEvent(GregorianCalendar shifted) {
@@ -113,6 +113,8 @@ public class Event extends Observable{
         long newEndMillis = endDate.getTimeInMillis() + diff;
         startDate.setTimeInMillis(newStartMillis);
         endDate.setTimeInMillis(newEndMillis);
+        setChanged();
+        notifyObservers(this.startDate);
     }
 
     /**
