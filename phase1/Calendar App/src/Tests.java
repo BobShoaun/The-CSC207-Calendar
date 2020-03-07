@@ -114,7 +114,7 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
 //        eve.add(event);
 //        eve.add(e2);
-        DataSaver saver = new DataSaver("testUser");
+        DataSaver saver = new DataSaver("tests");
         EventCollection regular = new EventCollection("", eve, saver);
         user.Calendar cal = new user.Calendar(saver);
         EventCollectionUI ui = new EventCollectionUI(regular, cal);
@@ -131,7 +131,7 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-        DataSaver saver = new DataSaver("testUser");
+        DataSaver saver = new DataSaver("tests");
         EventCollection coll = new EventCollection("test", eve, saver);
         coll.removeEvent(e2);
 
