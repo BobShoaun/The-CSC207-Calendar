@@ -8,8 +8,10 @@ import exceptions.InvalidDateException;
 import user.DataSaver;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Tests {
     static void testAlert() {
@@ -104,6 +106,20 @@ public class Tests {
         if (29 != size) throw new AssertionError("CG Issue");
     }
 
+    static void testEventGetDuration() throws InvalidDateException {
+        Event event = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        long millis = event.getDuration();
+        String dur = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(millis),
+                TimeUnit.MILLISECONDS.toMinutes(millis) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+        System.out.println(event.getName() + " lasts for " + dur);
+    }
+
     public static void main(String[] args) throws Exception {
         testCalendarGenerator();
         testAlert();
@@ -111,6 +127,7 @@ public class Tests {
         testECSave();
         testLoad();
         testEventsGenerator();
+        testEventGetDuration();
     }
 
 }

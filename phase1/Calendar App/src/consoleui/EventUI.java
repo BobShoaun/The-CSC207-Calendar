@@ -9,8 +9,10 @@ import user.Calendar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Terminal interface for event.Event.
@@ -51,8 +53,14 @@ public class EventUI extends UserInterface {
                     running = false;
                     break;
                 case 1: // event.Event duration
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-                    System.out.println(event.getName() + " lasts for " + formatter.format(event.getDuration().getTime()));
+                    long millis = event.getDuration();
+                    String dur = String.format("%02d:%02d:%02d",
+                            TimeUnit.MILLISECONDS.toHours(millis),
+                            TimeUnit.MILLISECONDS.toMinutes(millis) -
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
+                            TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                    System.out.println(event.getName() + " lasts for " + dur);
                     break;
                 case 2: // Edit event
                     editEvent();
@@ -104,7 +112,7 @@ public class EventUI extends UserInterface {
     private void editEvent() {
         boolean editing = true;
         while (editing) {
-            int options = getOptionsInput(new String[]{"Exit", "Change name", "Change start time", "Change end time"});
+            int options = getOptionsInput(new String[]{"Exit", "Change name", "Change start time", "Change end time", "Shift event"});
             switch (options) {
                 case 0:
                     editing = false;
@@ -130,6 +138,10 @@ public class EventUI extends UserInterface {
                         System.out.println("Invalid time input. End time cannot be before current start time.");
                         editEvent();
                     }
+                    break;
+                case 4:
+                    GregorianCalendar shifted = getDateInput("Enter new start time: ");
+                    //event.shiftEvent(shifted);
                     break;
             }
         }
