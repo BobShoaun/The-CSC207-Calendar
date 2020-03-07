@@ -62,7 +62,7 @@ public class EventCollectionUI extends UserInterface {
                         if(option1 == 0){
                             break;
                         }
-                        eventId = regularEvents.getEvents().get(option1-1).getId();
+                        eventId = regularEvents.getEvents().get(option1 - 1).getId();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -70,15 +70,15 @@ public class EventCollectionUI extends UserInterface {
                 //get ECollections find the regular one, diaplay it for choice and add that using addToSeries to a given Series name...
                 break;
             case 3:
-                String eventName = getStringInput("Base Event Name:");
-                GregorianCalendar start1 = getDateInput("Event Start Date:");
-                GregorianCalendar end1 = getDateInput("Event End Date:");
-                Duration next = getDurationInput("How frequent is the repetition?");
+                String eventName = getStringInput("Base Event Name: ");
+                GregorianCalendar start1 = getDateInput("Event Start Date: ");
+                GregorianCalendar end1 = getDateInput("Event End Date: ");
+                Duration next = getDurationInput("How frequent is the repetition? ");
                 Date difference = new Date(next.toMillis());
-                GregorianCalendar endSeries = getDateInput("The end date for this series");
+                GregorianCalendar endSeries = getDateInput("The end date for this series: ");
                 try {
-                    Event base = new Event(eventName+start1.getTimeInMillis(), eventName, start1, end1);
-                    cal.addEventSeries(events.getName(),start1.getTime(), endSeries.getTime(), difference,base);
+                    Event base = new Event(eventName + start1.getTimeInMillis(), eventName, start1, end1);
+                    cal.addEventSeries(events.getName(), start1.getTime(), endSeries.getTime(), difference, base);
                 } catch (InvalidDateException | IOException e) {
                     e.printStackTrace();
                 }

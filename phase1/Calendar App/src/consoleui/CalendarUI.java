@@ -160,13 +160,13 @@ public class CalendarUI extends UserInterface {
                     int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
                     switch(searchOption){
                         case 0:
-                            eventName = getStringInput("Event name:");
+                            eventName = getStringInput("Event name: ");
                             events = calendar.getEvents(eventName);
                             listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         case 1:
-                            memoName = getStringInput("Memo name:");
+                            memoName = getStringInput("Memo name: ");
                             memo = calendar.getMemo(memoName);
                             if(memo == null){
                                 System.out.println("Memo not found!");
@@ -177,7 +177,7 @@ public class CalendarUI extends UserInterface {
                             listUIView.show();
                             break;
                         case 2:
-                            eventSeriesName = getStringInput("Event series:");
+                            eventSeriesName = getStringInput("Event series: ");
                             if(calendar.getEventCollection(eventSeriesName) == null){
                                 System.out.println("That event series does not exist!");
                                 break;
