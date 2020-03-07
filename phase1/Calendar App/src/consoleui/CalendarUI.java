@@ -43,6 +43,9 @@ public class CalendarUI extends UserInterface {
             Event event = visibleEvents.get(i).getEvent();
             System.out.println("(" + i + ") " +  event.toString());
         }
+        if(visibleEvents.size() == 0){
+            System.out.println("No events!");
+        }
     }
 
     @Override
@@ -69,7 +72,7 @@ public class CalendarUI extends UserInterface {
                         displayEvents();
                     } else{
                         Iterator<Event> eventIterator = calendar.getFutureEvents(start.getTime());
-                        ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, Event::toString);
+                        ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, Event::toString, visibleEvents.size());
                         eventIteratorView.show();
                     }
                     break;
@@ -91,7 +94,7 @@ public class CalendarUI extends UserInterface {
                     }
                     break;
                 case 4:
-                    ListUIView<Memo> memoUiView = new ListUIView<>(calendar.getMemos().iterator(), Memo::getTitle);
+                    ListUIView<Memo> memoUiView = new ListUIView<>(calendar.getMemos().iterator(), Memo::getTitle, 0);
                     memoUiView.show();
                     break;
                 case 5:
@@ -144,12 +147,14 @@ public class CalendarUI extends UserInterface {
                     EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName), calendar);
                     eventCollectionUI.show();
                 case 9:
-                    int searchOption = getOptionsInput(new String[]{"Event name", "mt.Memo title", "event.Event series", "Date", "mt.Tag"});
+                    ListUIView<Event> listUIView = null;
+                    Iterator<Event> events = null;
+                    int searchOption = getOptionsInput(new String[]{"Event name", "Memo title", "Event series", "Date", "Tag"});
                     switch(searchOption){
                         case 0:
                             eventName = getStringInput("Event name:");
-                            Iterator<Event> events = calendar.getEvents(eventName);
-                            ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString);
+                            events = calendar.getEvents(eventName);
+                            listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         case 1:
@@ -160,7 +165,7 @@ public class CalendarUI extends UserInterface {
                                 break;
                             }
                             events = calendar.getLinkedEvents(memo).iterator();
-                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         case 2:
@@ -170,13 +175,13 @@ public class CalendarUI extends UserInterface {
                                 break;
                             }
                             events = calendar.getEventCollection(eventSeriesName).getEventIterator(new Date(0));
-                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         case 3:
                             GregorianCalendar date = getDateInput("Events at time: ");
                             events = calendar.getEvents(date.getTime()).iterator();
-                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         case 4:
@@ -186,16 +191,19 @@ public class CalendarUI extends UserInterface {
                                 break;
                             }
                             events = calendar.getTag(tag).getEvents().stream().map(id -> calendar.getEvent(id)).iterator();
-                            listUIView = new ListUIView<>(events, Event::toString);
+                            listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                             listUIView.show();
                             break;
                         default:
                             throw new UnsupportedOperationException();
                     }
+                    if(listUIView != null){
+                        visibleEvents.addAll(listUIView.getElementsShown().stream().map(e -> new EventUI(e,calendar)).collect(Collectors.toList()));
+                    }
                     break;
                 case 10:
-                    Iterator<Event> events = calendar.getEvents(new Date(0, 1, 1), new Date(1000, 1, 1)).iterator();
-                    ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString);
+                    events = calendar.getEvents(new Date(0, 1, 1), new Date(1000, 1, 1)).iterator();
+                    listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                     listUIView.show();
                     break;
                 default:

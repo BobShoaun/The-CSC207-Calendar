@@ -7,16 +7,19 @@ import java.util.function.Function;
 
 public class ListUIView<T> extends UserInterface {
     private Iterator<T> iterator;
+    List<T> elementsShown;
     List<String> elements;
     int start = 0;
     int end = 10;
     int size = 10;
     private Function<T, String> converter;
 
-    public ListUIView(Iterator<T> iterator, Function<T, String> converter) {
+    public ListUIView(Iterator<T> iterator, Function<T, String> converter, int start) {
         this.converter = converter;
+        this.start = start;
         elements = new ArrayList<>();
         this.iterator = iterator;
+        elementsShown = new ArrayList<>();
         getMore();
         end = Math.min(10, elements.size());
     }
@@ -25,14 +28,16 @@ public class ListUIView<T> extends UserInterface {
         for (int i = 0; i < size; i++) {
             if(!iterator.hasNext())
                 break;
-            elements.add(converter.apply(iterator.next()));
+            T nextElement = iterator.next();
+            elements.add(converter.apply(nextElement));
+            elementsShown.add(nextElement);
         }
     }
 
     @Override
     public void display() {
         for (int i = start; i < end; i++) {
-            System.out.println(elements.get(i));
+            System.out.println("(" + i + ") " + elements.get(i));
         }
     }
 
@@ -48,5 +53,11 @@ public class ListUIView<T> extends UserInterface {
             start = end;
             end = Math.min(end + 10, elements.size());
         } while(getOptionsInput(new String[]{"End", "Continue"}) == 1 && start != elements.size());
+    }
+
+
+
+    public List<T> getElementsShown(){
+        return elementsShown;
     }
 }
