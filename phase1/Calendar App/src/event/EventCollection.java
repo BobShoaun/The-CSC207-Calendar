@@ -274,10 +274,9 @@ public class EventCollection implements Iterable<Event> {
             String id = details[0];
             String eventName = details[1];
             GregorianCalendar start = new GregorianCalendar();
-            start.setTime(new Date(Long.parseLong(details[2])));
+            start.setTimeInMillis(Long.parseLong(details[2]));
             GregorianCalendar end = new GregorianCalendar();
-            start.setTime(new Date(Long.parseLong(details[3])));
-
+            start.setTimeInMillis(Long.parseLong(details[3]));
             newEvents.add(new Event(id, eventName, start, end));
         }
         /**

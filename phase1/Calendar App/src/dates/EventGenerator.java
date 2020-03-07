@@ -44,7 +44,9 @@ public class EventGenerator {
      */
     public List<Event> generateEvents() throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
+        List<GregorianCalendar> test = new ArrayList<>();
         for (GregorianCalendar GC : calGen) {
+            test.add(GC);
             String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
             Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
             ret.add(event);

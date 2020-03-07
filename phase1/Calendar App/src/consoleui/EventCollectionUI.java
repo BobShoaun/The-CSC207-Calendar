@@ -4,13 +4,16 @@ import event.Event;
 import event.EventCollection;
 import exceptions.InvalidDateException;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
     private EventCollection events;
+    private Calendar cal;
 
-    public EventCollectionUI(EventCollection eventCollection) {
+    public EventCollectionUI(EventCollection eventCollection, Calendar cal) {
         this.events = eventCollection;
+        this.cal = cal;
     }
 
     @Override
