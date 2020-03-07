@@ -537,6 +537,16 @@ public class Calendar {
                 }
             }
         }
+        //Load existing alert collection series
+        files = dataSaver.getFilesInDirectory("/alerts/");
+        if(files != null){
+            for (File file :
+                    files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                alertCollections.add(new AlertCollection(name, dataSaver));
+            }
+        }
     }
 
     public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {

@@ -37,6 +37,12 @@ public class AlertCollection implements Observer {
         this.saver = saver;
     }
 
+    public AlertCollection(String eventId, DataSaver saver){
+        this.eventId = eventId;
+        this.saver = saver;
+        load(eventId);
+    }
+
     /**
      * Get the ID of the event associated with this alert.AlertCollection
      *
