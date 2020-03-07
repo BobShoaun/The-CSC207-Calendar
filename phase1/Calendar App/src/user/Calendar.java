@@ -524,7 +524,7 @@ public class Calendar {
 
         }
         //Load existing event collection series
-        File[] files = dataSaver.getFilesInDirectory("/events/series");
+        File[] files = dataSaver.getFilesInDirectory("/events");
         if(files != null){
             for (File file :
                     files) {
