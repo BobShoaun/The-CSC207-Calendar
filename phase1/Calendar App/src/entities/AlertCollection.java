@@ -34,7 +34,6 @@ public class AlertCollection implements Observer {
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
         this.saver = saver;
-        removeOldAlerts();
     }
 
     public AlertCollection(String eventId, DataSaver saver){
@@ -42,7 +41,6 @@ public class AlertCollection implements Observer {
         this.saver = saver;
         manAlerts = new ArrayList<>();
         load(eventId);
-        removeOldAlerts();
     }
 
     /**
