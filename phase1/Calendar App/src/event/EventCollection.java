@@ -117,15 +117,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @return a iterator containing all events but ones that have start dates before <start></>
      */
     public Iterator<Event> getEventIterator(Date start) {
-        Iterator<Event> ite = events.iterator();
-        while (ite.hasNext()) {
-            Event curr = ite.next();
-            Date startDate = curr.getStartDate().getTime();
-            if (startDate.compareTo(start) <= 0) {
-                ite.remove();
-            }
-        }
-        return ite;
+        return events.stream().filter(event -> event.getStartDate().getTime().after(start)).iterator();
     }
 
     /**

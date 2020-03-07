@@ -603,12 +603,12 @@ public class Calendar {
                 }
             }
 
-            // Checks if an additional event can be gotten from an iterator
-            for (Iterator<Event> iterator :
-                    eventCollectionEventIterators) {
-                if (iterator.hasNext()) {
+            // Checks if an additional event can be gotten from an iterator,
+            for (int i = 0; i < eventCollectionEventIterators.size(); i++) {
+                Iterator<Event> iterator = eventCollectionEventIterators.get(i);
+                findNextInIterator(i);
+                if(possibleNext.get(i) != null)
                     return true;
-                }
             }
             return false;
         }
@@ -622,18 +622,7 @@ public class Calendar {
         public Event next() {
             //Update the possible next list to include values from all event collection iterators which still have events
             for (int i = 0; i < possibleNext.size(); i++) {
-                if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
-                    Event next = null;
-                    while (eventCollectionEventIterators.get(i).hasNext()){
-                        Event possible = eventCollectionEventIterators.get(i).next();
-                        if(isValid.test(possible)){
-                            next = possible;
-                            break;
-                        }
-                    }
-                    if(next != null)
-                        possibleNext.set(i, next);
-                }
+                findNextInIterator(i);
             }
 
             // Select the earliest event
@@ -653,6 +642,21 @@ public class Calendar {
             possibleNext.set(index, null);
 
             return first;
+        }
+
+        private void findNextInIterator(int i) {
+            if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
+                Event next = null;
+                while (eventCollectionEventIterators.get(i).hasNext()){
+                    Event possible = eventCollectionEventIterators.get(i).next();
+                    if(isValid.test(possible)){
+                        next = possible;
+                        break;
+                    }
+                }
+                if(next != null)
+                    possibleNext.set(i, next);
+            }
         }
     }
 
