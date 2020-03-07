@@ -12,7 +12,7 @@ public class DataSaver {
     private String basePath;
 
     public DataSaver(String basePath){
-        this.basePath = "users/" + basePath + "/";
+        this.basePath = "./users/" + basePath + "/";
     }
 
     /**
@@ -78,7 +78,7 @@ public class DataSaver {
     }
 
     public File[] getFilesInDirectory (String path) {
-        return new File(path).listFiles();
+        return new File(basePath + path).listFiles();
     }
 
 

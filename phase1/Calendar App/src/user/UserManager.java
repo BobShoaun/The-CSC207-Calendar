@@ -28,7 +28,7 @@ public class UserManager extends DataSaver {
     }
 
     public void loadUsers() throws IOException {
-        File[] files = getFilesInDirectory("./users/");
+        File[] files = getFilesInDirectory("/users");
         for (File file : files) {
             String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
             users.add(new User(userCredentials));

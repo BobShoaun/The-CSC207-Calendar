@@ -52,8 +52,7 @@ public class EventUI extends UserInterface {
                     break;
                 case 1: // event.Event duration
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-                    formatter.format(event.getDuration().getTime());
-                    System.out.println(event.getName() + " lasts for " + formatter);
+                    System.out.println(event.getName() + " lasts for " + formatter.format(event.getDuration().getTime()));
                     break;
                 case 2: // Edit event
                     editEvent();
