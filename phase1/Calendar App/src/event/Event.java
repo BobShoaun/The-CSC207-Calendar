@@ -67,7 +67,11 @@ public class Event extends Observable{
      * Set the name of the Event
      * @param newName the new name of the Event
      */
-    public void setName(String newName) { this.name = newName; }
+    public void setName(String newName) {
+        this.name = newName;
+        setChanged();
+        notifyObservers(null);
+    }
 
     /**
      * Set the start time of the Event
@@ -93,7 +97,7 @@ public class Event extends Observable{
         } else {
             this.endDate = newEnd;
             setChanged();
-            notifyObservers(this.getDuration());
+            notifyObservers(null);
         }
     }
 

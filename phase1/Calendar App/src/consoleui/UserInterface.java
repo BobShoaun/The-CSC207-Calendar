@@ -109,7 +109,7 @@ public abstract class UserInterface {
         } catch (ParseException e) {
             if (allowNull && dateString.equals(""))
                 return null;
-            return getDateInput("Please re-enter a valid date: )");
+            return getDateInput("Please re-enter a valid date: ");
         }
         return calendar;
     }

@@ -141,7 +141,7 @@ public class CalendarUI extends UserInterface {
                         System.out.println("Error saving events!");
                         e.printStackTrace();
                     }
-                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName));
+                    EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName), calendar);
                     eventCollectionUI.show();
                 case 9:
                     int searchOption = getOptionsInput(new String[]{"Event name", "mt.Memo title", "event.Event series", "Date", "mt.Tag"});

@@ -228,7 +228,10 @@ public class AlertCollection implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof GregorianCalendar) {
             shiftAlerts((GregorianCalendar) arg);
-        } else
+        } else if(arg == null){
+            //Do nothing, in this case we are only saving in event collection
+        }
+        else
             throw new IllegalArgumentException();
     }
 

@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.util.*;
 
-public class EventCollection implements Iterable<Event> {
+public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     private EventGenerator eGen;
     private String name;
@@ -128,6 +128,7 @@ public class EventCollection implements Iterable<Event> {
             eGen.getCalGen().addIgnore(event.getStartDate());
         }
         this.events.add(event);
+        event.addObserver(this::update);
         save();
     }
 
@@ -282,7 +283,7 @@ public class EventCollection implements Iterable<Event> {
             GregorianCalendar start = new GregorianCalendar();
             start.setTimeInMillis(Long.parseLong(details[2]));
             GregorianCalendar end = new GregorianCalendar();
-            end.setTimeInMillis(new Date(Long.parseLong(details[3])));
+            end.setTimeInMillis(Long.parseLong(details[3]));
             newEvents.add(new Event(id, eventName, start, end));
         }
         /**
@@ -390,6 +391,15 @@ public class EventCollection implements Iterable<Event> {
     @Override
     public Iterator<Event> iterator() {
         return new EventCollectionIterator();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        try {
+            save();
+        } catch (IOException e) {
+
+        }
     }
 
     private class EventCollectionIterator implements Iterator<Event> {
