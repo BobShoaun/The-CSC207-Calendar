@@ -9,9 +9,9 @@ public class ListUIView<T> extends UserInterface {
     private Iterator<T> iterator;
     List<T> elementsShown;
     List<String> elements;
-    int start = 0;
-    int rawStart = 0;
-    int end = 10;
+    int start;
+    int rawStart;
+    int end;
     int size = 10;
     private Function<T, String> converter;
 

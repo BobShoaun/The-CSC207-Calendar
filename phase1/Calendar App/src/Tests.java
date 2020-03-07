@@ -1,15 +1,17 @@
-import alert.Alert;
-import alert.AlertCollection;
+import consoleui.EventCollectionUI;
 import dates.CalendarGenerator;
 import dates.EventGenerator;
-import event.Event;
-import event.EventCollection;
+import entities.Alert;
+import entities.AlertCollection;
+import entities.Event;
+import entities.EventCollection;
 import exceptions.InvalidDateException;
 import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Tests {
     static void testAlert() {
@@ -63,9 +65,6 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-        for (Event e : eve) {
-            System.out.println(e);
-        }
         DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.save();
@@ -81,15 +80,17 @@ public class Tests {
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
-        for (Event e : eve) {
-            System.out.println(e);
-        }
+
         DataSaver ds = new DataSaver("tests");
         EventCollection EC = new EventCollection(name, eve, ds);
         EC.load("testseries");
+
+        List<Event> result = new ArrayList<>();
         for (Event e : EC) {
-            System.out.println(e);
+            result.add(e);
         }
+
+        if (result.size() != 2) throw new AssertionError("Bad loading");
     }
 
     static void testCalendarGenerator() {
@@ -104,6 +105,60 @@ public class Tests {
         if (29 != size) throw new AssertionError("CG Issue");
     }
 
+    static void testEventCollectionUI() throws InvalidDateException {
+//        Event event = new Event("test", "Go Shopping",
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+//
+//        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        List<Event> eve = new ArrayList<>();
+//        eve.add(event);
+//        eve.add(e2);
+        DataSaver saver = new DataSaver("tests");
+        EventCollection regular = new EventCollection("", eve, saver);
+        user.Calendar cal = new user.Calendar(saver);
+        EventCollectionUI ui = new EventCollectionUI(regular, cal);
+
+    }
+
+    static void testRemove() throws InvalidDateException, IOException {
+        Event event = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+
+        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        List<Event> eve = new ArrayList<>();
+        eve.add(event);
+        eve.add(e2);
+        DataSaver saver = new DataSaver("tests");
+        EventCollection coll = new EventCollection("test", eve, saver);
+        coll.removeEvent(e2);
+
+        List<Event> result = new ArrayList<>();
+        for (Event e : coll) {
+            result.add(e);
+        }
+        if (result.size() != 1) throw new AssertionError("Error while removing");
+        if (result.contains(e2)) throw new AssertionError("Error while removing");
+
+    }
+
+    static void testEventGetDuration() throws InvalidDateException {
+        Event event = new Event("test", "Go Shopping",
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+        long millis = event.getDuration();
+        String dur = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(millis),
+                TimeUnit.MILLISECONDS.toMinutes(millis) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+        System.out.println(event.getName() + " lasts for " + dur);
+    }
+
     public static void main(String[] args) throws Exception {
         testCalendarGenerator();
         testAlert();
@@ -111,6 +166,10 @@ public class Tests {
         testECSave();
         testLoad();
         testEventsGenerator();
+        testEventCollectionUI();
+        testRemove();
+        testEventGetDuration();
     }
+
 
 }

@@ -1,19 +1,19 @@
 package consoleui;
 
-import alert.AlertCollection;
-import event.Event;
+import entities.AlertCollection;
+import entities.Event;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
 import user.Calendar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Terminal interface for event.Event.
+ * Terminal interface for alert.Event.
  */
 
 public class EventUI extends UserInterface {
@@ -28,9 +28,7 @@ public class EventUI extends UserInterface {
         this.calendar = calendar;
     }
 
-    public Event getEvent() {
-        return event;
-    }
+    public Event getEvent() { return event; }
 
     @Override
     public void display() {
@@ -47,27 +45,31 @@ public class EventUI extends UserInterface {
                     "Event Duration", "Edit Event",
                     "Show Alerts", "Edit Alert",
                     "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags", "Add memo", "Add alert"});
+                    "Show Tags", "Edit Tags"});
             switch (option) {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // event.Event duration
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-                    System.out.println(event.getName() + " lasts for " + formatter.format(event.getDuration().getTime()));
+                case 1: // alert.Event duration
+                    long millis = event.getDuration();
+                    String dur = String.format("%02d:%02d:%02d:%02d",
+                            TimeUnit.MILLISECONDS.toDays(millis),
+                            TimeUnit.MILLISECONDS.toHours(millis),
+                            TimeUnit.MILLISECONDS.toMinutes(millis) -
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
+                            TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                    System.out.println(event.getName() + " lasts for " + dur);
                     break;
                 case 2: // Edit event
                     editEvent();
                     break;
                 case 3: // Show alerts
                     List<AlertCollection> alertCollections = calendar.getAlertCollections();
-                    for (AlertCollection ac : alertCollections) {
+                    for (AlertCollection ac: alertCollections) {
                         if (ac.getEventId().equals(event.getId())) {
                             System.out.println(ac.toString());
                         }
-                    }
-                    if (alertCollections.size() == 0) {
-                        System.out.println("No alerts");
                     }
                     break;
                 case 4: // Edit alert
@@ -75,33 +77,26 @@ public class EventUI extends UserInterface {
                     break;
                 case 5: // Show memos
                     List<Memo> memos = calendar.getMemos();
-                    if (memos.size() == 0) {
-                        System.out.println("No memos found for this event!");
-                    }
                     StringBuilder result = new StringBuilder();
                     int i = 0;
-                    for (Memo m : memos) {
-                        if (m.hasEvent(event.getId())) {
+                    for (Memo m: memos) {
+                        if ( m.hasEvent(event.getId()) ) {
                             String num = Integer.toString(i);
-                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n");
+                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
                             i += 1;
                         }
                     }
                     System.out.println(result);
                     break;
                 case 6: // Edit memo
-                    if (memoUIs.size() == 0) {
-                        System.out.println("No memos found!");
-                    } else {
-                        int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
-                        MemoUI mui = memoUIs.get(num);
-                        mui.show();
-                        break;
-                    }
+                    int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
+                    MemoUI mui = memoUIs.get(num);
+                    mui.show();
+                    break;
                 case 7: // Show tags
                     List<Tag> tags = calendar.getTags();
-                    for (Tag t : tags) {
-                        if (t.hasEvent(event.getId())) {
+                    for (Tag t: tags) {
+                        if ( t.hasEvent(event.getId()) ) {
                             System.out.println(t.getText());
                         }
                     }
@@ -109,39 +104,14 @@ public class EventUI extends UserInterface {
                 case 8: // Edit tag
                     editTag();
                     break;
-                case 9: // Add memo:
-                    String memoName = getStringInput("Memo name: ");
-                    if (calendar.getMemo(memoName) != null) {
-                        Memo memo = calendar.getMemo(memoName);
-                        if (memo.hasEvent(event.getId())) {
-                            System.out.println("A memo with this name already exists!");
-                        } else {
-                            calendar.linkMemo(memoName, event.getId());
-                        }
-                    } else {
-                        calendar.addMemo(memoName, "");
-                        calendar.linkMemo(memoName, event.getId());
-                        MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
-                        memoUI.show();
-                    }
-                    break;
-                case 10: //Add alert
-                    calendar.addAlertCollection(event.getId());
-                    AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
-                    AlertUI alertUI = new AlertUI(alertCollection);
-                    alertUI.show();
-                    break;
-                default:
-                    throw new Error();
             }
         }
-
     }
 
     private void editEvent() {
         boolean editing = true;
         while (editing) {
-            int options = getOptionsInput(new String[]{"Exit", "Change name", "Change start time", "Change end time"});
+            int options = getOptionsInput(new String[]{"Exit", "Change name", "Change start time", "Change end time", "Shift event"});
             switch (options) {
                 case 0:
                     editing = false;
@@ -168,6 +138,10 @@ public class EventUI extends UserInterface {
                         editEvent();
                     }
                     break;
+                case 4:
+                    GregorianCalendar shifted = getDateInput("Enter new start time: ");
+                    event.shiftEvent(shifted);
+                    break;
             }
         }
     }
@@ -186,7 +160,7 @@ public class EventUI extends UserInterface {
 
     private void getMemoUIs() {
         List<Memo> m = calendar.getMemos(event.getId());
-        for (Memo memo : m) {
+        for (Memo memo: m) {
             memoUIs.add(new MemoUI(memo, calendar));
         }
     }
@@ -194,27 +168,12 @@ public class EventUI extends UserInterface {
     private void editTag() {
         List<Tag> tags = calendar.getTags();
         String tagName = getStringInput("Enter tag name: ");
-        for (Tag t : tags) {
-            if (t.getText().equals(tagName)) {
-                if (t.hasEvent(event.getId())) {
-                    int option = getOptionsInput(new String[]{"Remove tag", "Edit tag"});
-                    if (option == 0) {
-                        t.removeEvent(event.getId());
-                        System.out.println("Removed tag!");
-                    } else {
-                        String newText = getStringInput("Enter new tag text: ");
-                        t.setText(newText);
-                        System.out.println("Changed tag name to " + newText);
-                    }
-                } else {
-                    t.addEvent(event.getId());
-                    System.out.println("Added new tag!");
-                }
-                return;
+        for (Tag t: tags) {
+            if ( t.getText().equals(tagName) )  {
+                String newText = getStringInput("Enter new tag text: ");
+                t.setText(newText);
             }
         }
-        System.out.println("Adding new tag!");
-        calendar.tagEvent(event.getId(), tagName);
     }
 
 

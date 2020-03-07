@@ -1,11 +1,12 @@
-package alert;
+package entities;
 
 import dates.CalendarGenerator;
-import event.Event;
 import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class AlertCollection implements Observer {
     /**
      * Creates a new alert.Alert group (possibly repeating)
      *
-     * @param e The event.Event attached to the alert.Alert.
+     * @param e The alert.Event attached to the alert.Alert.
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
@@ -79,7 +80,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Add a recurring alert.Alert until the event.Event occurs
+     * Add a recurring alert.Alert until the alert.Event occurs
      *
      * @param start  The start time
      * @param period The time between each alert
@@ -136,7 +137,7 @@ public class AlertCollection implements Observer {
     /**
      * Shift the time of all Alerts in this alert.AlertCollection.
      *
-     * @param newEventTime The new time of the event.Event
+     * @param newEventTime The new time of the alert.Event
      */
     private void shiftAlerts(GregorianCalendar newEventTime) {
         if (calGen == null) {
@@ -237,10 +238,7 @@ public class AlertCollection implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof GregorianCalendar) {
             shiftAlerts((GregorianCalendar) arg);
-        } else if(arg == null){
-            //Do nothing, in this case we are only saving in event collection
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
@@ -288,6 +286,15 @@ public class AlertCollection implements Observer {
         try {
             strings = saver.loadStringsFromFile("/alerts/" + eventId + ".txt");
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String time = eventId.substring(0, 28);
+        this.eventTime = new GregorianCalendar();
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            eventTime.setTime(df.parse(time));
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

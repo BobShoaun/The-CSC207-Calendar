@@ -21,6 +21,7 @@ public class MemoUI extends UserInterface {
     public void show() {
         boolean running = true;
         while (running) {
+            display();
             int option = getOptionsInput(new String[]{"Exit", "Edit Title", "Edit Text", "Show Events", "Delete"});
             switch (option) {
                 case 0:

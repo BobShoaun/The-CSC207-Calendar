@@ -1,10 +1,10 @@
-package alert;
+package entities;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * An alert.Alert, representing a notification for an event.Event.
+ * An alert.Alert, representing a notification for an alert.Event.
  *
  * @author colin
  */
@@ -59,7 +59,7 @@ public class Alert {
      *
      * @return The time in milliseconds for the alert.Alert
      */
-    public String getString() {
+    protected String getString() {
         return "" + time.getTimeInMillis();
     }
 

@@ -1,6 +1,6 @@
 package dates;
 
-import event.Event;
+import entities.Event;
 import exceptions.InvalidDateException;
 
 import java.time.Duration;
@@ -54,10 +54,10 @@ public class EventGenerator {
         return ret;
     }
 
-    private GregorianCalendar addTime(GregorianCalendar begin, GregorianCalendar time) {
+    private GregorianCalendar addTime(GregorianCalendar begin, long time) {
         //Adding the time to offset each event
         GregorianCalendar newGC = new GregorianCalendar();
-        long dur = begin.getTimeInMillis() + time.getTimeInMillis();
+        long dur = begin.getTimeInMillis() + time;
         Date d2 = new Date(dur);
         newGC.setTime(d2);
         return newGC;

@@ -105,7 +105,7 @@ public abstract class UserInterface {
 
     protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
-        System.out.print(prompt + " (DD/MM/YYYY HH:MM)");
+        System.out.print(prompt + " (DD/MM/YYYY HH:MM) ");
         GregorianCalendar calendar = new GregorianCalendar();
         String dateString = scanner.nextLine();
         try {
