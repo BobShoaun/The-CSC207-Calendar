@@ -7,6 +7,7 @@ import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -291,6 +292,10 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
 
+        String time = eventId.substring(0, 28);
+        this.eventTime = new GregorianCalendar();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE LLL dd HH:mm:ss zzz yyyy");
+        eventTime.setTime((Date) dtf.parse(time));
 
         assert strings != null;
         this.eventId = strings.get(0).trim();
