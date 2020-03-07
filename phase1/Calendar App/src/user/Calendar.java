@@ -525,14 +525,16 @@ public class Calendar {
         }
         //Load existing event collection series
         File[] files = dataSaver.getFilesInDirectory("/events/series");
-        for (File file :
-                files) {
-            String name = file.getName();
-            name = name.replaceAll(".txt", "");
-            try {
-                eventCollections.add(new EventCollection(name, dataSaver));
-            } catch (InvalidDateException e) {
-                System.out.println("Failed to load events: " + name);
+        if(files != null){
+            for (File file :
+                    files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                try {
+                    eventCollections.add(new EventCollection(name, dataSaver));
+                } catch (InvalidDateException e) {
+                    System.out.println("Failed to load events: " + name);
+                }
             }
         }
     }
