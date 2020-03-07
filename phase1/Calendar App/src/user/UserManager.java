@@ -28,16 +28,21 @@ public class UserManager extends DataSaver {
     }
 
     public void loadUsers() throws IOException {
-        File[] files = getFilesInDirectory("/users");
+        File[] files = getFilesInDirectory("");
         for (File file : files) {
             String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
-            users.add(new User(userCredentials));
+            try {
+                users.add(new User(userCredentials));
+            }
+            catch (Exception e){
+
+            }
         }
     }
 
     public void saveUsers() throws IOException {
         for (User user : users)
-            saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
+            saveToFile("" + user.getName() + "/credentials.txt", user.parse());
     }
 
     public void saveUser(User user) throws IOException {
