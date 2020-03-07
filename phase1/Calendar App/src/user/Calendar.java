@@ -215,6 +215,14 @@ public class Calendar {
         alertCollections.add(alertCollection);
     }
 
+    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {
+        List<Event> events = eventIds.stream().map(this::getEvent).collect(Collectors.toList());
+        for (Event e : events) {
+            removeFromSeries(e.getId());
+        }
+        eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
+    }
+
     /**
      * Move an event to a series from another series. If the event is already part of that series nothing changes
      *
@@ -547,14 +555,6 @@ public class Calendar {
                 alertCollections.add(new AlertCollection(name, dataSaver));
             }
         }
-    }
-
-    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {
-        List<Event> events = eventIds.stream().map(this::getEvent).collect(Collectors.toList());
-        for (Event e : events) {
-            removeFromSeries(e.getId());
-        }
-        eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
     }
 
     public EventCollection getEventCollection(String eventSeriesName) {
