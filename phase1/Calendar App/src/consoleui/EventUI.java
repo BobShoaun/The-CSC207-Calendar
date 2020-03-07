@@ -43,9 +43,9 @@ public class EventUI extends UserInterface {
             display();
             int option = getOptionsInput(new String[]{"Exit",
                     "Event Duration", "Edit Event",
-                    "Show Alerts", "Edit Alert",
-                    "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags"});
+                    "Show Alerts", "Edit Alerts",
+                    "Show Memos", "Edit a memo",
+                    "Show Tags", "Edit a tag"});
             switch (option) {
                 case 0: // Exit
                     running = false;

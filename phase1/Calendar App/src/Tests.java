@@ -105,7 +105,7 @@ public class Tests {
         if (29 != size) throw new AssertionError("CG Issue");
     }
 
-    static void testEventCollectionUI() throws InvalidDateException {
+    static void testEventCollectionUI() {
 //        Event event = new Event("test", "Go Shopping",
 //                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
 //                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
