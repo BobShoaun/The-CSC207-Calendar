@@ -26,9 +26,9 @@ public class EventCollectionUI extends UserInterface {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Display in Time frame",
-                "Create an series manually," +
+                "Create an series manually,",
                 "Create an repeating series "});
-//                "Edit an event.Event in Series",});
+//                "Edit an Event in Series",});
         switch (option) {
             case 0:
                 break;

@@ -78,7 +78,11 @@ public class CalendarUI extends UserInterface {
                     }
                     break;
                 case 2:
-                    int relativeId = getIntInput("Relative id:", 0, visibleEvents.size());
+                    if(visibleEvents.size() == 0){
+                        System.out.println("You have no events!");
+                        break;
+                    }
+                    int relativeId = getIntInput("Relative id:", 0, visibleEvents.size() - 1);
                     EventUI eventUI = visibleEvents.get(relativeId);
                     eventUI.show();
                     break;

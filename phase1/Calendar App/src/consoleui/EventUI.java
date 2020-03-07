@@ -45,7 +45,7 @@ public class EventUI extends UserInterface {
                     "Event Duration", "Edit Event",
                     "Show Alerts", "Edit Alert",
                     "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags", "Add memo"});
+                    "Show Tags", "Edit Tags", "Add memo", "Add alert"});
             switch (option) {
                 case 0: // Exit
                     running = false;
@@ -64,6 +64,9 @@ public class EventUI extends UserInterface {
                             System.out.println(ac.toString());
                         }
                     }
+                    if(alertCollections.size() == 0){
+                        System.out.println("No alerts");
+                    }
                     break;
                 case 4: // Edit alert
                     editAlert();
@@ -78,7 +81,7 @@ public class EventUI extends UserInterface {
                     for (Memo m: memos) {
                         if ( m.hasEvent(event.getId()) ) {
                             String num = Integer.toString(i);
-                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
+                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n");
                             i += 1;
                         }
                     }
@@ -120,6 +123,15 @@ public class EventUI extends UserInterface {
                         calendar.linkMemo(memoName, event.getId());
                         MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
                         memoUI.show();
+                    }
+                    break;
+                case 10: //Add alert
+                    if(!calendar.addAlertCollection(event.getId())){
+                        System.out.println("Alert already exists!");
+                    } else{
+                        AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
+                        AlertUI alertUI = new AlertUI(alertCollection);
+                        alertUI.show();
                     }
                     break;
                 default:

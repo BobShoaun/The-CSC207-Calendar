@@ -558,6 +558,37 @@ public class Calendar {
     }
 
     /**
+     * Try and add an alert collection for an event
+     * @param eventId Id of the evemt
+     * @return True if a new alert collection was created; False if an alert collection already exists
+     */
+    public boolean addAlertCollection(String eventId) {
+        for (AlertCollection alertCollection :
+                alertCollections) {
+            if (eventId.equals(alertCollection.getEventId())){
+                return false;
+            }
+        }
+        alertCollections.add(new AlertCollection(getEvent(eventId), dataSaver));
+        return true;
+    }
+
+    /**
+     * Return the corresponding alert collection to an event
+     * @param eventId Id of event
+     * @return Alert collection if it exists, otherwise null
+     */
+    public AlertCollection getAlertCollection(String eventId) {
+        for (AlertCollection alertCollection :
+                alertCollections) {
+            if (alertCollection.getEventId().equals(eventId)){
+                return alertCollection;
+            }
+        }
+        return null;
+    }
+
+    /**
      * event.Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {

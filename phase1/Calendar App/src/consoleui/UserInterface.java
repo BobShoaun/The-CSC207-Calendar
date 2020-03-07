@@ -76,9 +76,14 @@ public abstract class UserInterface {
      * @return The Duration entered by the user
      */
     protected Duration getDurationInput(String prompt) {
-        System.out.print(prompt);
+        System.out.print(prompt + " Format: Number [w/d/h/m/s]");
         String[] split = scanner.nextLine().split("\\s+"); // split text by whitespaces
-        int amount = Integer.parseInt(split[0]);
+        int amount;
+        try{
+            amount = Integer.parseInt(split[0]);
+        } catch (NumberFormatException n){
+            return getDurationInput("Invalid duration, try again: ");
+        }
         switch (split[1]) {
             case "w":
                 return Duration.ofDays(7 * amount);

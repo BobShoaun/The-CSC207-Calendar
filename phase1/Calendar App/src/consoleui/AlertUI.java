@@ -38,7 +38,7 @@ public class AlertUI extends UserInterface {
                         getDateInput("Enter a time for the alert: "));
                 while (!result) {
                     result = alerts.addAlert(
-                            getDateInput("alert.Alert already exists. Please try again: "));
+                            getDateInput("Alert already exists. Please try again: "));
                 }
                 break;
             case 2:
