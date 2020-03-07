@@ -109,8 +109,10 @@ public class Event extends Observable{
      */
     public void shiftEvent(GregorianCalendar shifted) {
         long diff = shifted.getTimeInMillis() - startDate.getTimeInMillis();
-        long newMillis = startDate.getTimeInMillis() + diff;
-        startDate.setTimeInMillis(newMillis);
+        long newStartMillis = startDate.getTimeInMillis() + diff;
+        long newEndMillis = endDate.getTimeInMillis() + diff;
+        startDate.setTimeInMillis(newStartMillis);
+        endDate.setTimeInMillis(newEndMillis);
     }
 
     /**
