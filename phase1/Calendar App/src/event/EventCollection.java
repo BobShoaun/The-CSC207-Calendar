@@ -481,7 +481,7 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     public String[] getEventOptions(){
         String[] eventList = new String[events.size()+1];
-        eventList[0] = "exit";
+        eventList[0] = "Exit";
         for (int i = 0; i < events.size(); i++) {
             eventList[i+1] = events.get(i).toString();
         }

@@ -59,6 +59,9 @@ public class EventCollectionUI extends UserInterface {
                         //keep asking for events to select till exit at 0
                         cal.addToSeries(eventId, this.events.getName());
                         option1 = getOptionsInput(regularEvents.getEventOptions());
+                        if(option1 == 0){
+                            break;
+                        }
                         eventId = regularEvents.getEvents().get(option1-1).getId();
                     } catch (IOException e) {
                         e.printStackTrace();
