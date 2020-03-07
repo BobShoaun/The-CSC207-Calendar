@@ -29,8 +29,6 @@ public class CalendarUI extends UserInterface {
 
     @Override
     public void display() {
-        calendar.load();
-
         System.out.println("======= " + user.getName() + "'s Calendar =======");
         displayAlerts();
         displayEvents();
@@ -60,11 +58,7 @@ public class CalendarUI extends UserInterface {
     @Override
     public void show() {
         visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
-        GregorianCalendar startOfDay = calendar.getTime();
-        startOfDay.set(startOfDay.get(java.util.Calendar.YEAR), startOfDay.get(java.util.Calendar.MONTH), startOfDay.get(java.util.Calendar.DATE), 0, 0);
-        GregorianCalendar nextDay = (GregorianCalendar) startOfDay.clone();
-        nextDay.add(java.util.Calendar.DATE, 1);
-        getVisibleEvents(startOfDay, nextDay);
+        getEventsToday();
         while (true) {
             display();
             int command = getOptionsInput(new String[]{"Logout",
@@ -128,6 +122,14 @@ public class CalendarUI extends UserInterface {
                     break;
             }
         }
+    }
+
+    private void getEventsToday() {
+        GregorianCalendar startOfDay = calendar.getTime();
+        startOfDay.set(startOfDay.get(java.util.Calendar.YEAR), startOfDay.get(java.util.Calendar.MONTH), startOfDay.get(java.util.Calendar.DATE), 0, 0);
+        GregorianCalendar nextDay = (GregorianCalendar) startOfDay.clone();
+        nextDay.add(java.util.Calendar.DATE, 1);
+        getVisibleEvents(startOfDay, nextDay);
     }
 
     private void editEventSeries() {
@@ -290,6 +292,8 @@ public class CalendarUI extends UserInterface {
         int relativeId = getIntInput("Enter the event number (relative id): ", 0, visibleEvents.size());
         try {
             calendar.removeEvent(visibleEvents.get(relativeId).getEvent());
+            visibleEventCollections.clear();
+            getEventsToday();
         } catch (InvalidDateException e) {
             System.out.println("Internal error when removing the event!");
             e.printStackTrace();
