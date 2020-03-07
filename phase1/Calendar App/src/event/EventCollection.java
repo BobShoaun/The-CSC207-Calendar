@@ -8,7 +8,6 @@ import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.temporal.Temporal;
 import java.util.*;
 
 public class EventCollection implements Iterable<Event>, Observer {
@@ -169,15 +168,16 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException, IOException {
-        //finite series
         if (eGen == null) {
-            this.eGen = new EventGenerator(baseEvent, start, end, dateToDurationList(start, frequency));
+            List<Duration> durs = new ArrayList<>();
+            durs.add(Duration.ofMillis(frequency.getTime()));
+            this.eGen = new EventGenerator(baseEvent, start, end, durs);
         } else {
             CalendarGenerator CG = eGen.getCalGen();
-            CG.addPeriod(dateToDuration(start, frequency));
+            CG.addPeriod(Duration.ofMillis(frequency.getTime()));
             eGen.setCalGen(CG);
         }
-        this.events.addAll(eGen.generateEvents());
+        flush(eGen);
         save();
     }
 
@@ -197,16 +197,16 @@ public class EventCollection implements Iterable<Event>, Observer {
         }
     }
 
-    private List<Duration> dateToDurationList(Date start, Date end) {
-        List<Duration> durList = new ArrayList<>();
-        Duration dur = Duration.between((Temporal) start, (Temporal) end);
-        durList.add(dur);
-        return durList;
-    }
+//    private List<Duration> dateToDurationList(Date start, Date end) {
+//        List<Duration> durList = new ArrayList<>();
+//        Duration dur = Duration.between((Temporal) start, (Temporal) end);
+//        durList.add(dur);
+//        return durList;
+//    }
 
-    private Duration dateToDuration(Date start, Date end) {
-        return Duration.between((Temporal) start, (Temporal) end);
-    }
+//    private Duration dateToDuration(Date start, Date end) {
+//        return Duration.between((Temporal) start, (Temporal) end);
+//    }
 
     @Override
     public String toString() {
@@ -377,6 +377,17 @@ public class EventCollection implements Iterable<Event>, Observer {
         cl.set(Calendar.SECOND, 59);
         cl.set(Calendar.MILLISECOND, 999);
         return cl.getTime();
+    }
+
+    /**
+     * Checks if the series is infinite or not, if finite send all events to this.events and clear eGen
+     * @param eg
+     */
+    private void flush(EventGenerator eg) throws InvalidDateException {
+        if(eg.getCalGen().getEndTime()!=null){
+            this.events.addAll(eGen.generateEvents());
+            this.eGen=null;
+        }
     }
 
     public List<Event> getEventsBetween(GregorianCalendar start, GregorianCalendar end) throws InvalidDateException {

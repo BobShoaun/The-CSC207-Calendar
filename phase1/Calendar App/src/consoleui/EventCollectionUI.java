@@ -6,6 +6,8 @@ import exceptions.InvalidDateException;
 import user.Calendar;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
@@ -45,8 +47,8 @@ public class EventCollectionUI extends UserInterface {
                 }
                 break;
             case 2:
-                String name = getStringInput("name of the series:");
-                EventCollection regularEvents = cal.getEventCollection(null);
+//                String name = getStringInput("name of the series:");
+                EventCollection regularEvents = cal.getEventCollection("");
 
                 int option1 = getOptionsInput(regularEvents.getEventOptions());
                 String eventId = regularEvents.getEvents().get(option1-1).getId();
@@ -55,7 +57,7 @@ public class EventCollectionUI extends UserInterface {
                 {
                     try {
                         //keep asking for events to select till exit at 0
-                        cal.addToSeries(eventId, name);
+                        cal.addToSeries(eventId, this.events.getName());
                         option1 = getOptionsInput(regularEvents.getEventOptions());
                         eventId = regularEvents.getEvents().get(option1-1).getId();
                     } catch (IOException e) {
@@ -65,11 +67,18 @@ public class EventCollectionUI extends UserInterface {
                 //get ECollections find the regular one, diaplay it for choice and add that using addToSeries to a given Series name...
                 break;
             case 3:
-//            case 2:
-//                String eventName = getStringInput("Enter the name of the event ou want to edit");
-//                event.Event edit = events.
-//                break;
-            default:
+                String eventName = getStringInput("Base Event Name:");
+                GregorianCalendar start1 = getDateInput("Event Start Date:");
+                GregorianCalendar end1 = getDateInput("Event End Date:");
+                Duration next = getDurationInput("How frequent is the repetition?");
+                Date difference = new Date(next.toMillis());
+                GregorianCalendar endSeries = getDateInput("The end date for this series");
+                try {
+                    Event base = new Event(eventName+start1.getTimeInMillis(), eventName, start1, end1);
+                    cal.addEventSeries(events.getName(),start1.getTime(), endSeries.getTime(), difference,base);
+                } catch (InvalidDateException | IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
