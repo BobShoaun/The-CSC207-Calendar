@@ -18,7 +18,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     private DataSaver saver;
 
     //temporary
-    public EventCollection(){
+    public EventCollection() {
 
     }
 
@@ -105,7 +105,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         GregorianCalendar endGC = new GregorianCalendar();
         endGC.setTime(end);
         for (Event e : this.events) {
-            if(e.getStartDate().before(endGC) && e.getEndDate().after(startGC)){
+            if (e.getStartDate().before(endGC) && e.getEndDate().after(startGC)) {
                 ret.add(e);
             }
         }
@@ -263,13 +263,19 @@ public class EventCollection implements Iterable<Event>, Observer {
     /**
      * loads events from text file
      * problems with file path and date conversion.
+     *
      * @param seriesName the series name that needs to be loaded
      * @throws InvalidDateException
      */
     public void load(String seriesName) throws InvalidDateException {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile("events/series/" + seriesName + ".txt");
+            String path;
+            if (seriesName.equals(""))
+                path = "events/noname.txt";
+            else
+                path = "events/" + seriesName + ".txt";
+            strings = saver.loadStringsFromFile(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -306,10 +312,10 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\n"));
-        if(name==null){
-            saver.saveToFile("events/series/" + "" + ".txt", contents);
-        }else{
-            saver.saveToFile("events/series/" + name + ".txt", contents);
+        if (name == null || name.equals("")) {
+            saver.saveToFile("events/noname.txt", contents);
+        } else {
+            saver.saveToFile("events/" + name + ".txt", contents);
         }
     }
 
@@ -370,7 +376,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     public List<Event> getEventsBetween(GregorianCalendar start, GregorianCalendar end) throws InvalidDateException {
-        List<Event> ret =new ArrayList<>();
+        List<Event> ret = new ArrayList<>();
         if (events != null) {
             for (Event e : events) {
                 if (isOnTime(e, start.getTime(), end.getTime())) {

@@ -28,7 +28,9 @@ public class EventUI extends UserInterface {
         this.calendar = calendar;
     }
 
-    public Event getEvent() { return event; }
+    public Event getEvent() {
+        return event;
+    }
 
     @Override
     public void display() {
@@ -59,12 +61,12 @@ public class EventUI extends UserInterface {
                     break;
                 case 3: // Show alerts
                     List<AlertCollection> alertCollections = calendar.getAlertCollections();
-                    for (AlertCollection ac: alertCollections) {
+                    for (AlertCollection ac : alertCollections) {
                         if (ac.getEventId().equals(event.getId())) {
                             System.out.println(ac.toString());
                         }
                     }
-                    if(alertCollections.size() == 0){
+                    if (alertCollections.size() == 0) {
                         System.out.println("No alerts");
                     }
                     break;
@@ -73,13 +75,13 @@ public class EventUI extends UserInterface {
                     break;
                 case 5: // Show memos
                     List<Memo> memos = calendar.getMemos();
-                    if(memos.size() == 0){
+                    if (memos.size() == 0) {
                         System.out.println("No memos found for this event!");
                     }
                     StringBuilder result = new StringBuilder();
                     int i = 0;
-                    for (Memo m: memos) {
-                        if ( m.hasEvent(event.getId()) ) {
+                    for (Memo m : memos) {
+                        if (m.hasEvent(event.getId())) {
                             String num = Integer.toString(i);
                             result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n");
                             i += 1;
@@ -88,10 +90,9 @@ public class EventUI extends UserInterface {
                     System.out.println(result);
                     break;
                 case 6: // Edit memo
-                    if(memoUIs.size() == 0)
-                    {
+                    if (memoUIs.size() == 0) {
                         System.out.println("No memos found!");
-                    } else{
+                    } else {
                         int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
                         MemoUI mui = memoUIs.get(num);
                         mui.show();
@@ -99,8 +100,8 @@ public class EventUI extends UserInterface {
                     }
                 case 7: // Show tags
                     List<Tag> tags = calendar.getTags();
-                    for (Tag t: tags) {
-                        if ( t.hasEvent(event.getId()) ) {
+                    for (Tag t : tags) {
+                        if (t.hasEvent(event.getId())) {
                             System.out.println(t.getText());
                         }
                     }
@@ -110,15 +111,14 @@ public class EventUI extends UserInterface {
                     break;
                 case 9: // Add memo:
                     String memoName = getStringInput("Memo name: ");
-                    if(calendar.getMemo(memoName) != null){
+                    if (calendar.getMemo(memoName) != null) {
                         Memo memo = calendar.getMemo(memoName);
-                        if(memo.hasEvent(event.getId())){
+                        if (memo.hasEvent(event.getId())) {
                             System.out.println("A memo with this name already exists!");
-                        } else{
+                        } else {
                             calendar.linkMemo(memoName, event.getId());
                         }
-                    }
-                    else{
+                    } else {
                         calendar.addMemo(memoName, "");
                         calendar.linkMemo(memoName, event.getId());
                         MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
@@ -126,18 +126,16 @@ public class EventUI extends UserInterface {
                     }
                     break;
                 case 10: //Add alert
-                    if(!calendar.addAlertCollection(event.getId())){
-                        System.out.println("Alert already exists!");
-                    } else{
-                        AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
-                        AlertUI alertUI = new AlertUI(alertCollection);
-                        alertUI.show();
-                    }
+                    calendar.addAlertCollection(event.getId());
+                    AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
+                    AlertUI alertUI = new AlertUI(alertCollection);
+                    alertUI.show();
                     break;
                 default:
                     throw new Error();
             }
         }
+
     }
 
     private void editEvent() {
@@ -188,7 +186,7 @@ public class EventUI extends UserInterface {
 
     private void getMemoUIs() {
         List<Memo> m = calendar.getMemos(event.getId());
-        for (Memo memo: m) {
+        for (Memo memo : m) {
             memoUIs.add(new MemoUI(memo, calendar));
         }
     }
@@ -196,19 +194,19 @@ public class EventUI extends UserInterface {
     private void editTag() {
         List<Tag> tags = calendar.getTags();
         String tagName = getStringInput("Enter tag name: ");
-        for (Tag t: tags) {
-            if ( t.getText().equals(tagName) )  {
-                if(t.hasEvent(event.getId())){
+        for (Tag t : tags) {
+            if (t.getText().equals(tagName)) {
+                if (t.hasEvent(event.getId())) {
                     int option = getOptionsInput(new String[]{"Remove tag", "Edit tag"});
-                    if(option == 0){
+                    if (option == 0) {
                         t.removeEvent(event.getId());
                         System.out.println("Removed tag!");
-                    } else{
+                    } else {
                         String newText = getStringInput("Enter new tag text: ");
                         t.setText(newText);
                         System.out.println("Changed tag name to " + newText);
                     }
-                } else{
+                } else {
                     t.addEvent(event.getId());
                     System.out.println("Added new tag!");
                 }

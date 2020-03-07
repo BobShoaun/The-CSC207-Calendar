@@ -33,7 +33,8 @@ public class CalendarUI extends UserInterface {
         for (int i = 0; i < visibleAlerts.size(); i++) {
             Alert alert = visibleAlerts.get(i);
             Event correspondingEvent = calendar.getEvent(alert.getEventId());
-            System.out.println("(" + i + ") " + alert.getTime().toString() + " - alert.Alert for " + correspondingEvent.getName());
+            System.out.println("(" + i + ") " + alert.getTime().toString()
+                    + " - Alert for " + correspondingEvent.getName());
         }
         displayEvents();
     }
