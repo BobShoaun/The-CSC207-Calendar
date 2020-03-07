@@ -21,6 +21,7 @@ public class AlertCollection implements Observer {
     private GregorianCalendar eventTime;
     private CalendarGenerator calGen;
     private DataSaver saver;
+    private String eventName;
 
     /**
      * Creates a new alert.Alert group (possibly repeating)
@@ -29,6 +30,7 @@ public class AlertCollection implements Observer {
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
+        this.eventName = e.getName();
         this.eventTime = new GregorianCalendar();
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
@@ -252,15 +254,21 @@ public class AlertCollection implements Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("alert.Alert for EventID " + getEventId()
-                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
-        result.append("===== MANUALLY CREATED ALERTS =====\n");
-        for (Alert a : manAlerts) {
-            result.append(a.toString()).append("\n");
+        StringBuilder result = new StringBuilder("Alert for \"" + eventName
+                + "\", which occurs at " + eventTime.getTime().toString() + ".\n");
+        result.append("     ===== MANUALLY CREATED ALERTS =====\n");
+        if (manAlerts.size() == 0)
+            result.append("None.");
+        else {
+            for (Alert a : manAlerts) {
+                result.append(a.toString()).append("\n");
+            }
         }
-        result.append("===== REPEATING ALERTS =====\n");
+        result.append("        ===== REPEATING ALERTS =====\n");
         if (calGen != null)
             result.append(calGen.toString());
+        else
+            result.append("None.");
         return result.toString();
     }
 
