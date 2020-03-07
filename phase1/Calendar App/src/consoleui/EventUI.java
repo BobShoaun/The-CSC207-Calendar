@@ -108,7 +108,12 @@ public class EventUI extends UserInterface {
                 case 9: // Add memo:
                     String memoName = getStringInput("Memo name: ");
                     if(calendar.getMemo(memoName) != null){
-                        System.out.println("A memo with this name already exists!");
+                        Memo memo = calendar.getMemo(memoName);
+                        if(memo.hasEvent(event.getId())){
+                            System.out.println("A memo with this name already exists!");
+                        } else{
+                            calendar.linkMemo(memoName, event.getId());
+                        }
                     }
                     else{
                         calendar.addMemo(memoName, "");
