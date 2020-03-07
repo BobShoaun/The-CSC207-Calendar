@@ -29,8 +29,14 @@ public class CalendarUI extends UserInterface {
 
     @Override
     public void display() {
-        //Show current alerts
+        calendar.load();
+
         System.out.println("======= " + user.getName() + "'s Calendar =======");
+        displayAlerts();
+        displayEvents();
+    }
+
+    private void displayAlerts() {
         System.out.println("New alerts: ");
         for (int i = 0; i < visibleAlerts.size(); i++) {
             Alert alert = visibleAlerts.get(i);
@@ -38,7 +44,6 @@ public class CalendarUI extends UserInterface {
             System.out.println("(" + i + ") " + alert.getTime().toString()
                     + " - Alert for " + correspondingEvent.getName());
         }
-        displayEvents();
     }
 
     private void displayEvents() {
@@ -137,16 +142,15 @@ public class CalendarUI extends UserInterface {
         List<EventCollection> eventCollections = calendar.getEventCollections();
         System.out.println("Event series:");
         int i = 0;
-        for (EventCollection eC :
-                eventCollections) {
-            if (!eC.getName().equals("")) {
+        for (EventCollection eC : eventCollections) {
+            if (!(eC.getName().equals("noname") || eC.getName().equals(""))) {
                 System.out.println("(" + i + ") " + eC.getName());
                 i += 1;
             }
         }
         visibleEventCollections = eventCollections.stream().filter(eC -> !eC.getName().equals(""))
                 .map(eC -> new EventCollectionUI(eC, calendar)).collect(Collectors.toList());
-        System.out.println("----");
+        System.out.println("< End of series >");
     }
 
     private void showAllTags() {
@@ -224,7 +228,7 @@ public class CalendarUI extends UserInterface {
     }
 
     private void addEventSeries() {
-        String eventSeriesName = getStringInput("Name of event series", calendar.getEventSeriesNames());
+        String eventSeriesName = getStringInput("Name of event series: ", calendar.getEventSeriesNames());
         try {
             calendar.createEventSeries(eventSeriesName, new ArrayList<>());
         } catch (IOException e) {

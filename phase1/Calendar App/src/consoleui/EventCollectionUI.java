@@ -29,7 +29,7 @@ public class EventCollectionUI extends UserInterface {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Display in Time frame",
-                "Create an series manually,",
+                "Add events to this series manually",
                 "Create an repeating series "});
 //                "Edit an Event in Series",});
         switch (option) {

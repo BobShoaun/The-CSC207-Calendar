@@ -502,12 +502,12 @@ public class Calendar {
     /**
      *
      */
-    private void load(){
+    public void load() {
         //load memos
         try {
             memos = new ArrayList<>();
             Scanner scanner = dataSaver.loadScannerFromFile("memos.txt");
-            while (scanner.hasNext()){
+            while (scanner.hasNext()) {
                 String memoData = scanner.nextLine();
                 String[] parts = memoData.split("[§]+");
                 //Split ids
