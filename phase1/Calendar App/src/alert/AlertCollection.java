@@ -6,6 +6,8 @@ import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -33,6 +35,13 @@ public class AlertCollection implements Observer {
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
         this.saver = saver;
+    }
+
+    public AlertCollection(String eventId, DataSaver saver){
+        this.eventId = eventId;
+        this.saver = saver;
+        manAlerts = new ArrayList<>();
+        load(eventId);
     }
 
     /**
@@ -211,6 +220,8 @@ public class AlertCollection implements Observer {
      */
     private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new ArrayList<>();
+        if (calGen == null)
+            return alerts;
         for (GregorianCalendar d : calGen) {
             if (d.compareTo(start) >= 0 && d.compareTo(end) <= 0)
                 alerts.add(new Alert(eventId, d));
@@ -252,15 +263,20 @@ public class AlertCollection implements Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("alert.Alert for EventID " + getEventId()
-                + ", which occurs at " + eventTime.getTime().toString() + ".\n");
-        result.append("===== MANUALLY CREATED ALERTS =====\n");
-        for (Alert a : manAlerts) {
-            result.append(a.toString()).append("\n");
+        StringBuilder result = new StringBuilder("Alert at " + eventTime.getTime().toString() + ".\n");
+        result.append("     ===== MANUALLY CREATED ALERTS =====\n");
+        if (manAlerts.size() == 0)
+            result.append("None.\n");
+        else {
+            for (Alert a : manAlerts) {
+                result.append(a.toString()).append("\n");
+            }
         }
-        result.append("===== REPEATING ALERTS =====\n");
+        result.append("        ===== REPEATING ALERTS =====\n");
         if (calGen != null)
             result.append(calGen.toString());
+        else
+            result.append("None.");
         return result.toString();
     }
 
@@ -277,31 +293,41 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
 
+        String time = eventId.substring(0, 28);
+        this.eventTime = new GregorianCalendar();
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            eventTime.setTime(df.parse(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         assert strings != null;
         this.eventId = strings.get(0).trim();
 
-        String[] manTimes = strings.get(1).trim().split("\\s+");
+        String[] manTimes = strings.get(1).trim().split("\\n+");
         for (String timeStr : manTimes) {
             manAlerts.add(new Alert(eventId, timeStr));
         }
 
         StringBuilder cgStr = new StringBuilder();
-        for (int i = 2; i < strings.size(); i++) {
+        for (int i = 3; i < strings.size(); i++) {
             cgStr.append(strings.get(i));
         }
-        this.calGen = new CalendarGenerator(cgStr.toString());
+        if (!cgStr.toString().equals(""))
+            this.calGen = new CalendarGenerator(cgStr.toString());
     }
 
     /**
      * Save this AlertCollection's data into a text file.
      */
     public void save() {
-        List<String> contents = Arrays.asList(getString().split("\\s+"));
+        List<String> contents = Arrays.asList(getString().split("\\n+"));
         try {
             saver.saveToFile("alerts/" + eventId + ".txt", contents);
         } catch (IOException e) {
-            System.out.println("Error while saving AlertCollection");
+            System.out.println("Error while saving AlertCollection " + eventId);
             e.printStackTrace();
         }
     }

@@ -25,20 +25,22 @@ public class MemoUI extends UserInterface {
             switch (option) {
                 case 0:
                     running = false;
-
+                    break;
                 case 1:
-                    memo.setTitle(this.getStringInput("Enter new title: "));
-
+                    calendar.editMemoTitle(memo.getTitle(), this.getStringInput("Enter new title: "));
+                    break;
                 case 2:
-                    memo.setText(this.getStringInput("Enter new text: "));
-
+                    calendar.editMemoText(memo.getTitle(), this.getStringInput("Enter new text: "));
+                    break;
                 case 3:
                     for(String id : memo.getEvents()){
                         System.out.println(calendar.getEvent(id).toString());
                     }
-
+                    break;
                 case 4:
                     calendar.removeMemo(memo);
+                    System.out.println("Memo deleted!");
+                    return;
             }
         }
     }

@@ -1,12 +1,7 @@
 package dates;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Date;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
@@ -31,10 +26,10 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     public CalendarGenerator(String input) {
         String[] information = input.split("\n");
         startTime = new GregorianCalendar();
-        startTime.setTime(new Date(Integer.parseInt(information[0])));
+        startTime.setTimeInMillis(Long.parseLong(information[0].trim()));
 
         endTime = (new GregorianCalendar());
-        endTime.setTime(new Date(Integer.parseInt(information[1])));
+        endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
 
         periods = Arrays.stream(information[2].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
         periods = Arrays.stream(information[3].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());

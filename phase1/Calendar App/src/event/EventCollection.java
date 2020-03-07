@@ -8,7 +8,6 @@ import user.DataSaver;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.temporal.Temporal;
 import java.util.*;
 
 public class EventCollection implements Iterable<Event>, Observer {
@@ -18,12 +17,12 @@ public class EventCollection implements Iterable<Event>, Observer {
     private DataSaver saver;
 
     //temporary
-    public EventCollection(){
+    public EventCollection() {
 
     }
 
     /**
-     * constructor for a finite/manually created series, or a list of regular events if name == null
+     * constructor for a finite/manually created series, or a list of regular events if name == ""
      *
      * @param name   name of series
      * @param events list of events of the series
@@ -105,7 +104,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         GregorianCalendar endGC = new GregorianCalendar();
         endGC.setTime(end);
         for (Event e : this.events) {
-            if(e.getStartDate().before(endGC) && e.getEndDate().after(startGC)){
+            if (e.getStartDate().before(endGC) && e.getEndDate().after(startGC)) {
                 ret.add(e);
             }
         }
@@ -117,15 +116,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @return a iterator containing all events but ones that have start dates before <start></>
      */
     public Iterator<Event> getEventIterator(Date start) {
-        Iterator<Event> ite = events.iterator();
-        while (ite.hasNext()) {
-            Event curr = ite.next();
-            Date startDate = curr.getStartDate().getTime();
-            if (startDate.compareTo(start) <= 0) {
-                ite.remove();
-            }
-        }
-        return ite;
+        return events.stream().filter(event -> event.getStartDate().getTime().after(start)).iterator();
     }
 
     /**
@@ -177,15 +168,16 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     public void addRepeatingEvent(Event baseEvent, Date start, Date end, Date frequency) throws InvalidDateException, IOException {
-        //finite series
         if (eGen == null) {
-            this.eGen = new EventGenerator(baseEvent, start, end, dateToDurationList(start, frequency));
+            List<Duration> durs = new ArrayList<>();
+            durs.add(Duration.ofMillis(frequency.getTime()));
+            this.eGen = new EventGenerator(baseEvent, start, end, durs);
         } else {
             CalendarGenerator CG = eGen.getCalGen();
-            CG.addPeriod(dateToDuration(start, frequency));
+            CG.addPeriod(Duration.ofMillis(frequency.getTime()));
             eGen.setCalGen(CG);
         }
-        this.events.addAll(eGen.generateEvents());
+        flush(eGen);
         save();
     }
 
@@ -205,20 +197,20 @@ public class EventCollection implements Iterable<Event>, Observer {
         }
     }
 
-    private List<Duration> dateToDurationList(Date start, Date end) {
-        List<Duration> durList = new ArrayList<>();
-        Duration dur = Duration.between((Temporal) start, (Temporal) end);
-        durList.add(dur);
-        return durList;
-    }
+//    private List<Duration> dateToDurationList(Date start, Date end) {
+//        List<Duration> durList = new ArrayList<>();
+//        Duration dur = Duration.between((Temporal) start, (Temporal) end);
+//        durList.add(dur);
+//        return durList;
+//    }
 
-    private Duration dateToDuration(Date start, Date end) {
-        return Duration.between((Temporal) start, (Temporal) end);
-    }
+//    private Duration dateToDuration(Date start, Date end) {
+//        return Duration.between((Temporal) start, (Temporal) end);
+//    }
 
     @Override
     public String toString() {
-        if (name == null) {
+        if (name.equals("")) {
             return regularEventsToString();
         } else if (eGen == null) {
             return finiteSeriesToString();
@@ -268,21 +260,31 @@ public class EventCollection implements Iterable<Event>, Observer {
         return result.toString();
     }
 
+    public List<Event> getEvents() {
+        return events;
+    }
+
     /**
      * loads events from text file
      * problems with file path and date conversion.
+     *
      * @param seriesName the series name that needs to be loaded
      * @throws InvalidDateException
      */
     public void load(String seriesName) throws InvalidDateException {
         List<String> strings = null;
         try {
-            strings = saver.loadStringsFromFile("events/series/" + seriesName + ".txt");
+            String path;
+            if (seriesName.equals(""))
+                path = "events/noname.txt";
+            else
+                path = "events/" + seriesName + ".txt";
+            strings = saver.loadStringsFromFile(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        assert strings != null;
+        if (strings == null) throw new AssertionError();
         this.name = strings.get(0).trim();
         List<Event> newEvents = new ArrayList<>();
 
@@ -314,10 +316,10 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\n"));
-        if(name==null){
-            saver.saveToFile("events/series/" + "" + ".txt", contents);
-        }else{
-            saver.saveToFile("events/series/" + name + ".txt", contents);
+        if (name.equals("")) {
+            saver.saveToFile("events/noname.txt", contents);
+        } else {
+            saver.saveToFile("events/" + name + ".txt", contents);
         }
     }
 
@@ -377,8 +379,19 @@ public class EventCollection implements Iterable<Event>, Observer {
         return cl.getTime();
     }
 
+    /**
+     * Checks if the series is infinite or not, if finite send all events to this.events and clear eGen
+     * @param eg
+     */
+    private void flush(EventGenerator eg) throws InvalidDateException {
+        if(eg.getCalGen().getEndTime()!=null){
+            this.events.addAll(eGen.generateEvents());
+            this.eGen=null;
+        }
+    }
+
     public List<Event> getEventsBetween(GregorianCalendar start, GregorianCalendar end) throws InvalidDateException {
-        List<Event> ret =new ArrayList<>();
+        List<Event> ret = new ArrayList<>();
         if (events != null) {
             for (Event e : events) {
                 if (isOnTime(e, start.getTime(), end.getTime())) {
@@ -466,6 +479,14 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
 
+    public String[] getEventOptions(){
+        String[] eventList = new String[events.size()+1];
+        eventList[0] = "Exit";
+        for (int i = 0; i < events.size(); i++) {
+            eventList[i+1] = events.get(i).toString();
+        }
+        return eventList;
+    }
     /**
      * Remove the event from the tag
      *

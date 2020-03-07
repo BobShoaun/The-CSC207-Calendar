@@ -2,9 +2,12 @@ package consoleui;
 
 import event.Event;
 import event.EventCollection;
-import user.Calendar;
 import exceptions.InvalidDateException;
+import user.Calendar;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
@@ -26,75 +29,67 @@ public class EventCollectionUI extends UserInterface {
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Display in Time frame",
-                "Create an series manually," +
+                "Create an series manually,",
                 "Create an repeating series "});
-//                "Edit an event.Event in Series",});
+//                "Edit an Event in Series",});
         switch (option) {
             case 0:
-                break;
+                return;
             case 1:
-                GregorianCalendar start = getDateInput("Select a Start Time frame");
-                GregorianCalendar end = getDateInput("Select a End Time Frame");
-                try {
-                    for (Event e:events.getEventsBetween(start,end)) {
-                        System.out.println(e.toString());
-                    }
-                } catch (InvalidDateException e) {
-                    System.out.println("Invalid date input");
-                }
+                displayTimeFrame();
                 break;
             case 2:
-//                EventCollection NewEC1 =
+//                String name = getStringInput("name of the series:");
+                EventCollection regularEvents = cal.getEventCollection("");
+
+                int option1 = getOptionsInput(regularEvents.getEventOptions());
+                String eventId = regularEvents.getEvents().get(option1-1).getId();
+
+                while(option1!=0) {
+                    try {
+                        //keep asking for events to select till exit at 0
+                        cal.addToSeries(eventId, this.events.getName());
+                        option1 = getOptionsInput(regularEvents.getEventOptions());
+                        if(option1 == 0){
+                            break;
+                        }
+                        eventId = regularEvents.getEvents().get(option1 - 1).getId();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //get ECollections find the regular one, display it for choice and add that using addToSeries to a given Series name...
                 break;
             case 3:
-//            case 2:
-//                String eventName = getStringInput("Enter the name of the event ou want to edit");
-//                event.Event edit = events.
-//                break;
-            default:
+                createRepeatingSeries();
+                break;
         }
     }
 
-//    private void regularEventsMenu()
-//    {
-//        int option = getOptionsInput(new String[]{"Exit",
-//                "Display in Time frame",
-//                "Edit an event.Event in Series"});
-//        switch (option)
-//        {
-//            case 0:
-//                break;
-//            case 1:
-//                break;
-//            case 2:
-//        }
-//    }
+    private void createRepeatingSeries() {
+        String eventName = getStringInput("Base Event Name: ");
+        GregorianCalendar start1 = getDateInput("Event Start Date: ");
+        GregorianCalendar end1 = getDateInput("Event End Date: ");
+        Duration next = getDurationInput("How frequent is the repetition? ");
+        Date difference = new Date(next.toMillis());
+        GregorianCalendar endSeries = getDateInput("The end date for this series: ");
+        try {
+            Event base = new Event(eventName + start1.getTimeInMillis(), eventName, start1, end1);
+            cal.addEventSeries(events.getName(), start1.getTime(), endSeries.getTime(), difference, base);
+        } catch (InvalidDateException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-//    private List<event.Event> selectEvents()
-//    {
-//        int option = getOptionsInput(this.events.regularEventDetails());
-//        return null;
-//    }
-//
-//    private event.Event createEvent() throws InvalidDateException
-//    {
-//        String name = getStringInput("Base event.Event Name:");
-//        GregorianCalendar start = getDateInput("Start Date of Base event.Event");
-//        GregorianCalendar end = getDateInput("End Date of Base event.Event");
-//        return new event.Event(name + start.getTime(), name, start, end);
-//    }
-//
-//    private List<Duration> getFrequency()
-//    {
-//        List<Duration> ret = new ArrayList<>();
-//        int option = 1;
-//        while (option != 0)
-//        {
-//            Duration dur = getDurationInput("Choose a the frequency of repetition for your event");
-//            option = getOptionsInput(new String[]{"Exit",
-//                    "Choose another frequency of repetition for your event"});
-//            ret.add(dur);
-//        }
-//        return ret;
-//    }
+    private void displayTimeFrame() {
+        GregorianCalendar start = getDateInput("Select a Start Time frame");
+        GregorianCalendar end = getDateInput("Select a End Time Frame");
+        try {
+            for (Event e : events.getEventsBetween(start, end)) {
+                System.out.println(e.toString());
+            }
+        } catch (InvalidDateException e) {
+            System.out.println("Invalid date input");
+        }
+    }
 }

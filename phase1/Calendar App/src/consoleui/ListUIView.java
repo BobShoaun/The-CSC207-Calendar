@@ -10,6 +10,7 @@ public class ListUIView<T> extends UserInterface {
     List<T> elementsShown;
     List<String> elements;
     int start = 0;
+    int rawStart = 0;
     int end = 10;
     int size = 10;
     private Function<T, String> converter;
@@ -17,11 +18,12 @@ public class ListUIView<T> extends UserInterface {
     public ListUIView(Iterator<T> iterator, Function<T, String> converter, int start) {
         this.converter = converter;
         this.start = start;
+        rawStart = start;
         elements = new ArrayList<>();
         this.iterator = iterator;
         elementsShown = new ArrayList<>();
         getMore();
-        end = Math.min(10, elements.size());
+        end = Math.min(10, rawStart + elements.size());
     }
 
     private void getMore() {
@@ -37,7 +39,7 @@ public class ListUIView<T> extends UserInterface {
     @Override
     public void display() {
         for (int i = start; i < end; i++) {
-            System.out.println("(" + i + ") " + elements.get(i));
+            System.out.println("(" + i + ") " + elements.get(i - rawStart));
         }
     }
 
@@ -51,7 +53,7 @@ public class ListUIView<T> extends UserInterface {
             display();
             getMore();
             start = end;
-            end = Math.min(end + 10, elements.size());
+            end = Math.min(end + 10, rawStart + elements.size());
         } while(getOptionsInput(new String[]{"End", "Continue"}) == 1 && start != elements.size());
     }
 

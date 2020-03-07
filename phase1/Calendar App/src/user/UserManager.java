@@ -35,7 +35,7 @@ public class UserManager extends DataSaver {
                 users.add(new User(userCredentials));
             }
             catch (Exception e){
-
+                e.printStackTrace();
             }
         }
     }

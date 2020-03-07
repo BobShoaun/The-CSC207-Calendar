@@ -102,5 +102,4 @@ public class UserManagerUI extends UserInterface {
         }
         new UserManagerUI(userManager).show();
     }
-
 }
