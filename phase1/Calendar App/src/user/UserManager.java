@@ -41,7 +41,7 @@ public class UserManager extends DataSaver {
     }
 
     public void saveUser(User user) throws IOException {
-        saveToFile("users/" + user.getName() + "/credentials.txt", user.parse());
+        saveToFile(user.getName() + "/credentials.txt", user.parse());
     }
 
     public void displayUsers() {

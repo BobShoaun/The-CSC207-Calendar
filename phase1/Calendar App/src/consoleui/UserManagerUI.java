@@ -78,7 +78,7 @@ public class UserManagerUI extends UserInterface {
         String confirmPassword = getWordInput("Confirm password: ");
         try {
             userManager.registerUser(username, password, confirmPassword);
-            System.out.println("user.User registered successfully...");
+            System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
             CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
             calendarUI.show();

@@ -55,11 +55,11 @@ public class Tests {
     static void testECSave() throws InvalidDateException, IOException {
         String name = "testseries";
         Event event = new Event("test", "Go Shopping",
-                new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
 
-        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
+        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
@@ -73,11 +73,11 @@ public class Tests {
     static void testLoad() throws InvalidDateException {
         String name = "LETS TEST";
         Event event = new Event("test", "Go Shopping",
-                new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
 
-        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
+        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
         List<Event> eve = new ArrayList<>();
         eve.add(event);
         eve.add(e2);
