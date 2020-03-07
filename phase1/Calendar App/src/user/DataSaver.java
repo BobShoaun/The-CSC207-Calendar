@@ -12,7 +12,7 @@ public class DataSaver {
     private String basePath;
 
     public DataSaver(String basePath){
-        this.basePath = "./users/" + basePath + "/";
+        this.basePath = "./users/" + basePath + (!basePath.equals("") ? "/" : "");
     }
 
     /**

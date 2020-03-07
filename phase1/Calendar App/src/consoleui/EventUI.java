@@ -45,7 +45,7 @@ public class EventUI extends UserInterface {
                     "Event Duration", "Edit Event",
                     "Show Alerts", "Edit Alert",
                     "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags"});
+                    "Show Tags", "Edit Tags", "Add memo"});
             switch (option) {
                 case 0: // Exit
                     running = false;
@@ -70,6 +70,9 @@ public class EventUI extends UserInterface {
                     break;
                 case 5: // Show memos
                     List<Memo> memos = calendar.getMemos();
+                    if(memos.size() == 0){
+                        System.out.println("No memos found for this event!");
+                    }
                     StringBuilder result = new StringBuilder();
                     int i = 0;
                     for (Memo m: memos) {
@@ -82,10 +85,15 @@ public class EventUI extends UserInterface {
                     System.out.println(result);
                     break;
                 case 6: // Edit memo
-                    int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
-                    MemoUI mui = memoUIs.get(num);
-                    mui.show();
-                    break;
+                    if(memoUIs.size() == 0)
+                    {
+                        System.out.println("No memos found!");
+                    } else{
+                        int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
+                        MemoUI mui = memoUIs.get(num);
+                        mui.show();
+                        break;
+                    }
                 case 7: // Show tags
                     List<Tag> tags = calendar.getTags();
                     for (Tag t: tags) {
@@ -97,6 +105,20 @@ public class EventUI extends UserInterface {
                 case 8: // Edit tag
                     editTag();
                     break;
+                case 9: // Add memo:
+                    String memoName = getStringInput("Memo name: ");
+                    if(calendar.getMemo(memoName) != null){
+                        System.out.println("A memo with this name already exists!");
+                    }
+                    else{
+                        calendar.addMemo(memoName, "");
+                        calendar.linkMemo(memoName, event.getId());
+                        MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
+                        memoUI.show();
+                    }
+                    break;
+                default:
+                    throw new Error();
             }
         }
     }

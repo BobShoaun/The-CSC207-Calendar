@@ -395,12 +395,12 @@ public class Calendar {
 
     /**
      * Link new event to a memo
-     * @param memoText The memo to add the event to. The memo must already exist
+     * @param memoTitle The title of the memo to add the event to. The memo must already exist
      * @param eventId The id of the event. It must exist
      * @throws IllegalArgumentException if the event or the memo does not exist
      */
-    public void linkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        Memo memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
+    public void linkMemo(String memoTitle, String eventId) throws IllegalArgumentException {
+        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoTitle)).findAny().orElseThrow(null);
         if(getEvent(eventId) == null){
             throw new IllegalArgumentException();
         }
@@ -465,7 +465,7 @@ public class Calendar {
                     memo.getEvents()) {
                 ids.append(id).append("|");
             }
-            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("$").append(ids.toString()).append(String.format("%n"));
+            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("§").append(ids.toString()).append(String.format("%n"));
         }
         try {
             dataSaver.saveToFile("memos.txt", memoData.toString());
@@ -664,20 +664,32 @@ public class Calendar {
         return (GregorianCalendar)GregorianCalendar.getInstance();
     }
 
-    public void editMemoName(String memoName, String newMemoName){
+    public void editMemoTitle(String memoName, String newMemoName){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setTitle(newMemoName);
+        save();
     }
 
     public void editMemoText(String memoName, String newMemoText){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
+        save();
     }
 
+    /**
+     * Remove the memo from all memos. Saves memos
+     * @param memo Memo to remove
+     */
     public void removeMemo(Memo memo){
         memos.remove(memo);
+        save();
     }
 
+    /**
+     * Gets a memo by its title
+     * @param name Title of the memo
+     * @return Returns the memo with the corresponding title, if no memo is found returns null
+     */
     public Memo getMemo(String name){
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
