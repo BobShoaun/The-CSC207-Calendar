@@ -34,6 +34,7 @@ public class AlertCollection implements Observer {
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
         this.saver = saver;
+        removeOldAlerts();
     }
 
     public AlertCollection(String eventId, DataSaver saver){
@@ -41,6 +42,7 @@ public class AlertCollection implements Observer {
         this.saver = saver;
         manAlerts = new ArrayList<>();
         load(eventId);
+        removeOldAlerts();
     }
 
     /**
@@ -105,6 +107,14 @@ public class AlertCollection implements Observer {
      */
     public boolean removeAlert(GregorianCalendar d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
+    }
+
+    public void removeOldAlerts() {
+        GregorianCalendar start = new GregorianCalendar();
+        start.setTimeInMillis(0);
+        for (Alert a : getAlerts(start, new GregorianCalendar())) {
+            removeAlert(a.getTime());
+        }
     }
 
     /**
