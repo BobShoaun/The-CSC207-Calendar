@@ -2,9 +2,11 @@ package event;
 
 import exceptions.InvalidDateException;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * event.Event class
@@ -83,7 +85,7 @@ public class Event extends Observable{
        } else {
            this.startDate = newStart;
            setChanged();
-           notifyObservers(this.getDuration());
+           notifyObservers(this.startDate);
        }
     }
 
@@ -102,20 +104,26 @@ public class Event extends Observable{
     }
 
     /**
+     * Shift the event to the new start time.
+     * @param shifted the new startDate of the Event
+     */
+    public void shiftEvent(GregorianCalendar shifted) {
+        long diff = shifted.getTimeInMillis() - startDate.getTimeInMillis();
+        long newMillis = startDate.getTimeInMillis() + diff;
+        startDate.setTimeInMillis(newMillis);
+    }
+
+    /**
      * Return the duration of the Event in Date
      * @return duration of the Event
      */
-    public GregorianCalendar getDuration() {
-        GregorianCalendar newGC = new GregorianCalendar();
+    public long getDuration() {
         if (startDate.equals(endDate)) {
-            Date d1 = new Date(0);
-            newGC.setGregorianChange(d1);
+            return 0;
         } else {
-            long dur = startDate.getTime().getTime() - endDate.getTime().getTime();
-            Date d2 = new Date(dur);
-            newGC.setGregorianChange(d2);
+            long dur = endDate.getTime().getTime() - startDate.getTime().getTime();
+            return dur;
         }
-        return newGC;
     }
 
     /**
@@ -130,7 +138,7 @@ public class Event extends Observable{
 
     /**
      * Return the String representation of this Event with Date as milliseconds
-     * @return
+     * @return the String representation of this Event
      */
     public String getString()
     {

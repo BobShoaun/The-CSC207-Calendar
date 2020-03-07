@@ -48,23 +48,16 @@ public class EventGenerator {
         for (GregorianCalendar GC : calGen) {
             test.add(GC);
             String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
-            Duration dur = Duration.ofMillis(baseEvent.getEndDate().getTimeInMillis()-baseEvent.getStartDate().getTimeInMillis());
-            Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, dur));
+            Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
             ret.add(event);
         }
         return ret;
     }
 
-    /**
-     * nor returning the correct date needs debugging
-     * @param begin
-     * @param time
-     * @return
-     */
-    private GregorianCalendar addTime(GregorianCalendar begin, Duration time) {
+    private GregorianCalendar addTime(GregorianCalendar begin, long time) {
         //Adding the time to offset each event
         GregorianCalendar newGC = new GregorianCalendar();
-        long dur = begin.getTimeInMillis() + time.toMillis();
+        long dur = begin.getTimeInMillis() + time;
         Date d2 = new Date(dur);
         newGC.setTime(d2);
         return newGC;
