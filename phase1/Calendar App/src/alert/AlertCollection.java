@@ -281,7 +281,7 @@ public class AlertCollection implements Observer {
         assert strings != null;
         this.eventId = strings.get(0).trim();
 
-        String[] manTimes = strings.get(1).trim().split("\\s+");
+        String[] manTimes = strings.get(1).trim().split("\\n+");
         for (String timeStr : manTimes) {
             manAlerts.add(new Alert(eventId, timeStr));
         }
@@ -297,11 +297,11 @@ public class AlertCollection implements Observer {
      * Save this AlertCollection's data into a text file.
      */
     public void save() {
-        List<String> contents = Arrays.asList(getString().split("\\s+"));
+        List<String> contents = Arrays.asList(getString().split("\\n+"));
         try {
             saver.saveToFile("alerts/" + eventId + ".txt", contents);
         } catch (IOException e) {
-            System.out.println("Error while saving AlertCollection");
+            System.out.println("Error while saving AlertCollection " + eventId);
             e.printStackTrace();
         }
     }
