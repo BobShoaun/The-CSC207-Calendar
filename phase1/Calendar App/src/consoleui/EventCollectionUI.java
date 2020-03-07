@@ -2,14 +2,14 @@ package consoleui;
 
 import event.Event;
 import event.EventCollection;
+import user.Calendar;
 import exceptions.InvalidDateException;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
     private EventCollection events;
-    private Calendar cal;
+    private user.Calendar cal;
 
     public EventCollectionUI(EventCollection eventCollection, Calendar cal) {
         this.events = eventCollection;
@@ -25,7 +25,9 @@ public class EventCollectionUI extends UserInterface {
     public void show() {
         display();
         int option = getOptionsInput(new String[]{"Exit",
-                "Display in Time frame",});
+                "Display in Time frame",
+                "Create an series manually," +
+                "Create an repeating series "});
 //                "Edit an event.Event in Series",});
         switch (option) {
             case 0:
@@ -41,6 +43,10 @@ public class EventCollectionUI extends UserInterface {
                     System.out.println("Invalid date input");
                 }
                 break;
+            case 2:
+//                EventCollection NewEC1 =
+                break;
+            case 3:
 //            case 2:
 //                String eventName = getStringInput("Enter the name of the event ou want to edit");
 //                event.Event edit = events.
