@@ -283,7 +283,7 @@ public class CalendarUI extends UserInterface {
     }
 
     private void deleteEvent() {
-        int relativeId = getIntInput("Relative id:", 0, visibleEvents.size());
+        int relativeId = getIntInput("Enter the event number (relative id): ", 0, visibleEvents.size());
         try {
             calendar.removeEvent(visibleEvents.get(relativeId).getEvent());
         } catch (InvalidDateException e) {

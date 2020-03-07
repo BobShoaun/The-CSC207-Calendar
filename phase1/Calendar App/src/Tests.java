@@ -168,7 +168,7 @@ public class Tests {
         testEventsGenerator();
         testEventCollectionUI();
         testRemove();
-        testEventGetDuration()
+        testEventGetDuration();
     }
 
 
