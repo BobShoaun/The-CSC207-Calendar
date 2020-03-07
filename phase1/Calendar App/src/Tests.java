@@ -105,24 +105,23 @@ public class Tests {
         if (29 != size) throw new AssertionError("CG Issue");
     }
     public static void testEventCollectionUI() throws InvalidDateException {
-        String name = "LETS TEST";
-        Event event = new Event("test", "Go Shopping",
-                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
-
-        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+//        Event event = new Event("test", "Go Shopping",
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+//
+//        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
         List<Event> eve = new ArrayList<>();
 //        eve.add(event);
 //        eve.add(e2);
         DataSaver saver = new DataSaver("testUser");
-        EventCollection regular = new EventCollection("",eve,saver);
+        EventCollection regular = new EventCollection("", eve, saver);
         user.Calendar cal = new user.Calendar(saver);
-        EventCollectionUI ui = new EventCollectionUI(regular,cal);
+        EventCollectionUI ui = new EventCollectionUI(regular, cal);
 
     }
-    public static void testRemove() throws InvalidDateException, IOException {
-        String name = "LETS TEST";
+
+    static void testRemove() throws InvalidDateException, IOException {
         Event event = new Event("test", "Go Shopping",
                 new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
                 new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
@@ -142,13 +141,13 @@ public class Tests {
     }
 
     public static void main(String[] args) throws Exception {
-//        testCalendarGenerator();
-//        testAlert();
-//        testAlertCollection();
-//        testECSave();
-//        testLoad();
-//        testEventsGenerator();
-//        testEventCollectionUI();
+        testCalendarGenerator();
+        testAlert();
+        testAlertCollection();
+        testECSave();
+        testLoad();
+        testEventsGenerator();
+        testEventCollectionUI();
         testRemove();
     }
 
