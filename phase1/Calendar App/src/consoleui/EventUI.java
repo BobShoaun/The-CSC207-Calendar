@@ -54,7 +54,8 @@ public class EventUI extends UserInterface {
                     break;
                 case 1: // event.Event duration
                     long millis = event.getDuration();
-                    String dur = String.format("%02d:%02d:%02d",
+                    String dur = String.format("%02d:%02d:%02d:%02d",
+                            TimeUnit.MILLISECONDS.toDays(millis),
                             TimeUnit.MILLISECONDS.toHours(millis),
                             TimeUnit.MILLISECONDS.toMinutes(millis) -
                                     TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
@@ -141,7 +142,7 @@ public class EventUI extends UserInterface {
                     break;
                 case 4:
                     GregorianCalendar shifted = getDateInput("Enter new start time: ");
-                    //event.shiftEvent(shifted);
+                    event.shiftEvent(shifted);
                     break;
             }
         }
