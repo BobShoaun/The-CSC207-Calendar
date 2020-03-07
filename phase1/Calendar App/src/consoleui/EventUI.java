@@ -44,98 +44,126 @@ public class EventUI extends UserInterface {
         while (running) {
             display();
             int option = getOptionsInput(new String[]{"Exit",
-                    "Event Duration", "Edit Event",
-                    "Show Alerts", "Edit Alert",
-                    "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags", "Add memo", "Add alert"});
+                    "View event duration", "Edit event",
+                    "Show alerts", "Edit alert",
+                    "Show memos", "Edit memos",
+                    "Show tags", "Edit tags", "Add memo", "Add alert"});
             switch (option) {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // event.Event duration
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-                    System.out.println(event.getName() + " lasts for " + formatter.format(event.getDuration().getTime()));
+                case 1: // Event duration
+                    viewDuration();
                     break;
                 case 2: // Edit event
                     editEvent();
                     break;
                 case 3: // Show alerts
-                    List<AlertCollection> alertCollections = calendar.getAlertCollections();
-                    for (AlertCollection ac : alertCollections) {
-                        if (ac.getEventId().equals(event.getId())) {
-                            System.out.println(ac.toString());
-                        }
-                    }
-                    if (alertCollections.size() == 0) {
-                        System.out.println("No alerts");
-                    }
+                    showAlerts();
                     break;
                 case 4: // Edit alert
                     editAlert();
                     break;
                 case 5: // Show memos
-                    List<Memo> memos = calendar.getMemos();
-                    if (memos.size() == 0) {
-                        System.out.println("No memos found for this event!");
-                    }
-                    StringBuilder result = new StringBuilder();
-                    int i = 0;
-                    for (Memo m : memos) {
-                        if (m.hasEvent(event.getId())) {
-                            String num = Integer.toString(i);
-                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n");
-                            i += 1;
-                        }
-                    }
-                    System.out.println(result);
+                    showMemos();
                     break;
                 case 6: // Edit memo
-                    if (memoUIs.size() == 0) {
-                        System.out.println("No memos found!");
-                    } else {
-                        int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
-                        MemoUI mui = memoUIs.get(num);
-                        mui.show();
-                        break;
-                    }
+                    editMemo();
+                    break;
                 case 7: // Show tags
-                    List<Tag> tags = calendar.getTags();
-                    for (Tag t : tags) {
-                        if (t.hasEvent(event.getId())) {
-                            System.out.println(t.getText());
-                        }
-                    }
+                    showTags();
                     break;
                 case 8: // Edit tag
                     editTag();
                     break;
                 case 9: // Add memo:
-                    String memoName = getStringInput("Memo name: ");
-                    if (calendar.getMemo(memoName) != null) {
-                        Memo memo = calendar.getMemo(memoName);
-                        if (memo.hasEvent(event.getId())) {
-                            System.out.println("A memo with this name already exists!");
-                        } else {
-                            calendar.linkMemo(memoName, event.getId());
-                        }
-                    } else {
-                        calendar.addMemo(memoName, "");
-                        calendar.linkMemo(memoName, event.getId());
-                        MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
-                        memoUI.show();
-                    }
+                    addMemo();
                     break;
                 case 10: //Add alert
-                    calendar.addAlertCollection(event.getId());
-                    AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
-                    AlertUI alertUI = new AlertUI(alertCollection);
-                    alertUI.show();
+                    addAlert();
                     break;
                 default:
                     throw new Error();
             }
         }
 
+    }
+
+    private void addAlert() {
+        calendar.addAlertCollection(event.getId());
+        AlertCollection alertCollection = calendar.getAlertCollection(event.getId());
+        AlertUI alertUI = new AlertUI(alertCollection);
+        alertUI.show();
+    }
+
+    private void addMemo() {
+        String memoName = getStringInput("Memo name: ");
+        if (calendar.getMemo(memoName) != null) {
+            Memo memo = calendar.getMemo(memoName);
+            if (memo.hasEvent(event.getId())) {
+                System.out.println("A memo with this name already exists!");
+            } else {
+                calendar.linkMemo(memoName, event.getId());
+            }
+        } else {
+            calendar.addMemo(memoName, "");
+            calendar.linkMemo(memoName, event.getId());
+            MemoUI memoUI = new MemoUI(calendar.getMemo(memoName), calendar);
+            memoUI.show();
+        }
+    }
+
+    private void showTags() {
+        List<Tag> tags = calendar.getTags();
+        for (Tag t : tags) {
+            if (t.hasEvent(event.getId())) {
+                System.out.println(t.getText());
+            }
+        }
+    }
+
+    private void editMemo() {
+        if (memoUIs.size() == 0) {
+            System.out.println("No memos found!");
+        } else {
+            int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
+            MemoUI mui = memoUIs.get(num);
+            mui.show();
+        }
+    }
+
+    private void showMemos() {
+        List<Memo> memos = calendar.getMemos();
+        if (memos.size() == 0) {
+            System.out.println("No memos found for this event!");
+        }
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        for (Memo m : memos) {
+            if (m.hasEvent(event.getId())) {
+                String num = Integer.toString(i);
+                result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n");
+                i += 1;
+            }
+        }
+        System.out.println(result);
+    }
+
+    private void showAlerts() {
+        List<AlertCollection> alertCollections = calendar.getAlertCollections();
+        for (AlertCollection ac : alertCollections) {
+            if (ac.getEventId().equals(event.getId())) {
+                System.out.println(ac.toString());
+            }
+        }
+        if (alertCollections.size() == 0) {
+            System.out.println("No alerts");
+        }
+    }
+
+    private void viewDuration() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        System.out.println(event.getName() + " lasts for " + formatter.format(event.getDuration().getTime()));
     }
 
     private void editEvent() {

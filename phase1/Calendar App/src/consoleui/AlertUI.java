@@ -5,7 +5,7 @@ import alert.AlertCollection;
 import exceptions.PeriodAlreadyExistsException;
 
 /**
- * Terminal interface for alert.AlertCollection.
+ * Terminal interface for AlertCollection.
  */
 public class AlertUI extends UserInterface {
 
@@ -31,42 +31,58 @@ public class AlertUI extends UserInterface {
         });
         switch (option) {
             case 0:
-                break;
+                return;
             case 1:
-                boolean result;
-                result = alerts.addAlert(
-                        getDateInput("Enter a time for the alert: "));
-                while (!result) {
-                    result = alerts.addAlert(
-                            getDateInput("Alert already exists. Please try again: "));
-                }
+                addAlert();
                 break;
             case 2:
-                boolean badInput = true;
-                while (badInput) {
-                    try {
-                        alerts.addAlert(
-                                getDateInput("Enter a start time for the alert: "),
-                                getDurationInput("Enter a period for the series: "));
-                        badInput = false;
-                    } catch (PeriodAlreadyExistsException e) {
-                        System.out.println("Period already exists. Please try again: ");
-                    }
-                }
+                addRepeatingAlert();
                 break;
             case 3:
-                Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
-                a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
-                alerts.save(); // TODO: implement editAlert() in AC instead
+                editAlert();
                 break;
             case 4:
-                boolean works = false;
-                while (!works) {
-                    works = alerts.removeAlert(
-                            getDateInput("Enter the date of the alert to be removed: ")
-                    );
-                }
+                removeAlert();
                 break;
+        }
+    }
+
+    private void removeAlert() {
+        boolean works = false;
+        while (!works) {
+            works = alerts.removeAlert(
+                    getDateInput("Enter the date of the alert to be removed: ")
+            );
+        }
+    }
+
+    private void editAlert() {
+        Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
+        a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
+        alerts.save(); // TODO: implement editAlert() in AC instead
+    }
+
+    private void addRepeatingAlert() {
+        boolean badInput = true;
+        while (badInput) {
+            try {
+                alerts.addAlert(
+                        getDateInput("Enter a start time for the alert: "),
+                        getDurationInput("Enter a period for the series: "));
+                badInput = false;
+            } catch (PeriodAlreadyExistsException e) {
+                System.out.println("Period already exists. Please try again: ");
+            }
+        }
+    }
+
+    private void addAlert() {
+        boolean result;
+        result = alerts.addAlert(
+                getDateInput("Enter a time for the alert: "));
+        while (!result) {
+            result = alerts.addAlert(
+                    getDateInput("Alert already exists. Please try again: "));
         }
     }
 }
