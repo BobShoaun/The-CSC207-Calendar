@@ -274,7 +274,7 @@ public class EventCollection implements Iterable<Event>, Observer {
             e.printStackTrace();
         }
 
-        assert strings != null;
+        if (strings == null) throw new AssertionError();
         this.name = strings.get(0).trim();
         List<Event> newEvents = new ArrayList<>();
 
