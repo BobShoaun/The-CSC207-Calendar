@@ -82,7 +82,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * Returns all events that is
      *
      * @param date date of events demanded
-     * @return a list of events that is on the same day as <date></>
+     * @return a list of events that is on the same day as <date></> //TODO: Make this work like in calendar
      */
     public List<Event> getEvents(Date date) {
         //find alternative
@@ -91,10 +91,21 @@ public class EventCollection implements Iterable<Event>, Observer {
         return getEvents(startTime, endTime);
     }
 
+    /**
+     * Gets all events which either start or end during this time period. The endpoints are INCLUDED
+     *
+     * @param start Earliest time for an event to end
+     * @param end   Latest time for an event to end
+     * @return List of all events where start point <= end and end point >= start
+     */
     public List<Event> getEvents(Date start, Date end) {
         List<Event> ret = new ArrayList<>();
+        GregorianCalendar startGC = new GregorianCalendar();
+        startGC.setTime(start);
+        GregorianCalendar endGC = new GregorianCalendar();
+        endGC.setTime(end);
         for (Event e : this.events) {
-            if (isOnTime(e, start, end)) {
+            if(e.getStartDate().before(endGC) && e.getEndDate().after(startGC)){
                 ret.add(e);
             }
         }

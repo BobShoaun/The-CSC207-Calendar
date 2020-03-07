@@ -41,7 +41,7 @@ public class CalendarUI extends UserInterface {
         System.out.println("Your events:");
         for (int i = 0; i < visibleEvents.size(); i++) {
             Event event = visibleEvents.get(i).getEvent();
-            System.out.println("(" + i + ") " +  event.getName() + " at " + event.getStartDate() + " for " + event.getDuration());
+            System.out.println("(" + i + ") " +  event.toString());
         }
     }
 
@@ -51,7 +51,7 @@ public class CalendarUI extends UserInterface {
         GregorianCalendar startOfDay = calendar.getTime();
         startOfDay.set(startOfDay.get(java.util.Calendar.YEAR), startOfDay.get(java.util.Calendar.MONTH), startOfDay.get(java.util.Calendar.DATE), 0, 0);
         GregorianCalendar nextDay = (GregorianCalendar)startOfDay.clone();
-        nextDay.roll(java.util.Calendar.DATE, true);
+        nextDay.add(java.util.Calendar.DATE, 1);
         getVisibleEvents(startOfDay, nextDay);
         while (true){
             display();
