@@ -48,6 +48,12 @@ public class EventCollection implements Iterable<Event> {
         this.saver = saver;
     }
 
+    public EventCollection(String name, DataSaver dataSaver) throws InvalidDateException {
+        this.name = name;
+        this.saver = dataSaver;
+        load(name);
+    }
+
     /**
      * @return name of this event.EventCollection
      */
@@ -276,7 +282,7 @@ public class EventCollection implements Iterable<Event> {
             GregorianCalendar start = new GregorianCalendar();
             start.setTimeInMillis(Long.parseLong(details[2]));
             GregorianCalendar end = new GregorianCalendar();
-            start.setTimeInMillis(Long.parseLong(details[3]));
+            end.setTimeInMillis(new Date(Long.parseLong(details[3])));
             newEvents.add(new Event(id, eventName, start, end));
         }
         /**

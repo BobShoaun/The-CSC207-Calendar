@@ -10,6 +10,7 @@ import exceptions.PeriodAlreadyExistsException;
 import mt.Memo;
 import mt.Tag;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
@@ -34,9 +35,12 @@ public class Calendar {
     public Calendar(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
-        eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
         alertCollections = new ArrayList<>();
         load();
+        if(eventCollections.stream().filter(eC -> eC.getName().equals("")).findAny().orElse(null) == null)
+        {
+            eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
+        }
     }
 
     /**
@@ -518,6 +522,18 @@ public class Calendar {
             }
         } catch (FileNotFoundException e) {
 
+        }
+        //Load existing event collection series
+        File[] files = dataSaver.getFilesInDirectory("/events/series");
+        for (File file :
+                files) {
+            String name = file.getName();
+            name = name.replaceAll(".txt", "");
+            try {
+                eventCollections.add(new EventCollection(name, dataSaver));
+            } catch (InvalidDateException e) {
+                System.out.println("Failed to load events: " + name);
+            }
         }
     }
 
