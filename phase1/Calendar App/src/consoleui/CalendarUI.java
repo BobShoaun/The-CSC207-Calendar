@@ -59,6 +59,7 @@ public class CalendarUI extends UserInterface {
     @Override
     public void show() {
         visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
+        calendar.removeOldAlerts();
         getEventsToday();
         while (true) {
             display();
