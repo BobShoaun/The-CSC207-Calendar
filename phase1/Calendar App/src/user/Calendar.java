@@ -470,7 +470,7 @@ public class Calendar {
         try {
             dataSaver.saveToFile("memos.txt", memoData.toString());
         } catch (IOException ignored) {
-
+            ignored.printStackTrace();
         }
 
         // save tags
@@ -480,14 +480,14 @@ public class Calendar {
             StringBuilder ids = new StringBuilder();
             for (String id :
                     tag.getEvents()) {
-                ids.append(id).append(",");
+                ids.append(id).append("|");
             }
             memoData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
         }
         try {
             dataSaver.saveToFile("tags.txt", memoData.toString());
         } catch (IOException ignored) {
-
+            ignored.printStackTrace();
         }
     }
 

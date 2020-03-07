@@ -159,10 +159,25 @@ public class EventUI extends UserInterface {
         String tagName = getStringInput("Enter tag name: ");
         for (Tag t: tags) {
             if ( t.getText().equals(tagName) )  {
-                String newText = getStringInput("Enter new tag text: ");
-                t.setText(newText);
+                if(t.hasEvent(event.getId())){
+                    int option = getOptionsInput(new String[]{"Remove tag", "Edit tag"});
+                    if(option == 0){
+                        t.removeEvent(event.getId());
+                        System.out.println("Removed tag!");
+                    } else{
+                        String newText = getStringInput("Enter new tag text: ");
+                        t.setText(newText);
+                        System.out.println("Changed tag name to " + newText);
+                    }
+                } else{
+                    t.addEvent(event.getId());
+                    System.out.println("Added new tag!");
+                }
+                return;
             }
         }
+        System.out.println("Adding new tag!");
+        calendar.tagEvent(event.getId(), tagName);
     }
 
 

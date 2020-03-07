@@ -4,6 +4,7 @@ import alert.Alert;
 import event.Event;
 import exceptions.InvalidDateException;
 import mt.Memo;
+import mt.Tag;
 import user.Calendar;
 import user.User;
 
@@ -59,7 +60,7 @@ public class CalendarUI extends UserInterface {
         while (true){
             display();
             int command = getOptionsInput(new String[]{"Logout", "Show events", "View event", "Delete event", "View memos",
-                    "View memo", "Delete memo", "Add event", "Add event series", "Search events", "Show all events"});
+                    "View memo", "Delete memo", "Add event", "Add event series", "Search events", "Show all events", "List all tags"});
             switch (command){
                 case 0:
                     user.setLastLoginTime(new GregorianCalendar()); // logout
@@ -205,6 +206,15 @@ public class CalendarUI extends UserInterface {
                     events = calendar.getEvents(new Date(0, 1, 1), new Date(1000, 1, 1)).iterator();
                     listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                     listUIView.show();
+                    break;
+                case 11:
+                    List<Tag> tags = calendar.getTags();
+                    System.out.println("Tags:");
+                    for (Tag t :
+                            tags) {
+                        System.out.println(t.getText());
+                    }
+                    System.out.println("----");
                     break;
                 default:
                     throw new UnsupportedOperationException();
