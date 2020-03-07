@@ -1,10 +1,6 @@
 package user;
 
-import alert.Alert;
-import alert.AlertCollection;
-import alert.AlertComparator;
-import event.Event;
-import event.EventCollection;
+import entities.*;
 import exceptions.InvalidDateException;
 import exceptions.PeriodAlreadyExistsException;
 import mt.Memo;
@@ -110,7 +106,7 @@ public class Calendar {
      * [Warning] The iterator will no be updated and become unusable if the number of event collections change
      *
      * @param start The earliest possible start time of the returned events
-     * @return Null if no event collections exist, otherwise an Iterator<event.Event>
+     * @return Null if no event collections exist, otherwise an Iterator<alert.Event>
      */
     public Iterator<Event> getFutureEvents(Date start) {
         if (eventCollections.size() == 0) {
@@ -138,7 +134,7 @@ public class Calendar {
     /**
      * Add an event to the correct event collection
      *
-     * @param event    event.Event to add
+     * @param event    alert.Event to add
      * @param seriesId Series to add event to
      */
     public void createEvent(Event event, String seriesId) throws IllegalArgumentException, IOException {
@@ -333,7 +329,7 @@ public class Calendar {
     /**
      * Creates a new tag or add an existing tag to an event
      *
-     * @param eventId event.Event the tag is added to
+     * @param eventId alert.Event the tag is added to
      * @param tagName Name of the tag to be added
      * @throws IllegalArgumentException If the event cannot be found
      */
@@ -360,7 +356,7 @@ public class Calendar {
     /**
      * Remove tag to an event
      *
-     * @param eventId event.Event the tag is removed from
+     * @param eventId alert.Event the tag is removed from
      * @param tagName Name of the tag to be removed
      * @throws IllegalArgumentException If the event or the tag cannot be found
      */
@@ -601,7 +597,7 @@ public class Calendar {
     }
 
     /**
-     * event.Event Iterator is used to iterate over the individual event collections to get the next time
+     * alert.Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
         private Predicate<Event> isValid;

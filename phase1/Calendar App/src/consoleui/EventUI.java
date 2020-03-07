@@ -1,21 +1,19 @@
 package consoleui;
 
-import alert.AlertCollection;
-import event.Event;
+import entities.AlertCollection;
+import entities.Event;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
 import user.Calendar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Terminal interface for event.Event.
+ * Terminal interface for alert.Event.
  */
 
 public class EventUI extends UserInterface {
@@ -52,7 +50,7 @@ public class EventUI extends UserInterface {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // event.Event duration
+                case 1: // alert.Event duration
                     long millis = event.getDuration();
                     String dur = String.format("%02d:%02d:%02d:%02d",
                             TimeUnit.MILLISECONDS.toDays(millis),

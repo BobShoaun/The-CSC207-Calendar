@@ -1,10 +1,10 @@
-import alert.Alert;
-import alert.AlertCollection;
 import consoleui.EventCollectionUI;
 import dates.CalendarGenerator;
 import dates.EventGenerator;
-import event.Event;
-import event.EventCollection;
+import entities.Alert;
+import entities.AlertCollection;
+import entities.Event;
+import entities.EventCollection;
 import exceptions.InvalidDateException;
 import user.DataSaver;
 

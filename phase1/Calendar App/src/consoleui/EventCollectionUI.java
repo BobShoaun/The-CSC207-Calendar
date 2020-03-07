@@ -1,7 +1,7 @@
 package consoleui;
 
-import event.Event;
-import event.EventCollection;
+import entities.Event;
+import entities.EventCollection;
 import exceptions.InvalidDateException;
 import user.Calendar;
 

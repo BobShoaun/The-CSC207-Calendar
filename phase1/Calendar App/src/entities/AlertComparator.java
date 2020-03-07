@@ -1,4 +1,4 @@
-package alert;
+package entities;
 
 import java.util.Comparator;
 

@@ -1,6 +1,6 @@
 package dates;
 
-import event.Event;
+import entities.Event;
 import exceptions.InvalidDateException;
 
 import java.time.Duration;

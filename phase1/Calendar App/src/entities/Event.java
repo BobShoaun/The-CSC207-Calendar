@@ -1,15 +1,12 @@
-package event;
+package entities;
 
 import exceptions.InvalidDateException;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
-import java.util.concurrent.TimeUnit;
 
 /**
- * event.Event class
+ * alert.Event class
  */
 public class Event extends Observable{
 

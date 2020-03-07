@@ -1,8 +1,8 @@
 package consoleui;
 
-import alert.Alert;
-import event.Event;
-import event.EventCollection;
+import entities.Alert;
+import entities.Event;
+import entities.EventCollection;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;

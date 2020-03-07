@@ -1,4 +1,4 @@
-package event;
+package entities;
 
 import dates.CalendarGenerator;
 import dates.EventGenerator;
@@ -26,7 +26,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      *
      * @param name   name of series
      * @param events list of events of the series
-     * @param saver  saver object to load/save this event.EventCollection
+     * @param saver  saver object to load/save this alert.EventCollection
      */
     public EventCollection(String name, List<Event> events, DataSaver saver) {
         this.name = name;
@@ -38,8 +38,8 @@ public class EventCollection implements Iterable<Event>, Observer {
      * Constructor for a repeating/infinite series
      *
      * @param name  name of the series
-     * @param eGen  event.Event generator for this series
-     * @param saver saver object to load/save this event.EventCollection
+     * @param eGen  alert.Event generator for this series
+     * @param saver saver object to load/save this alert.EventCollection
      */
     public EventCollection(String name, EventGenerator eGen, DataSaver saver) {
         this.name = name;
@@ -54,7 +54,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * @return name of this event.EventCollection
+     * @return name of this alert.EventCollection
      */
     public String getName() {
         return name;
@@ -153,7 +153,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * @param oldEvent an event.Event that has been edited
+     * @param oldEvent an alert.Event that has been edited
      * @param newEvent the replacement event
      * @throws InvalidDateException
      */
@@ -315,7 +315,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * Save this event.EventCollection's data into a text file.
+     * Save this alert.EventCollection's data into a text file.
      */
     public void save() throws IOException {
         List<String> contents = Arrays.asList(getString().split("\\n"));
@@ -411,7 +411,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * Returns an iterator over elements of type {@code event.Event}.
+     * Returns an iterator over elements of type {@code alert.Event}.
      *
      * @return an Iterator.
      */
@@ -431,14 +431,14 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     private class EventCollectionIterator implements Iterator<Event> {
         /**
-         * The index of the next event.Event to return.
+         * The index of the next alert.Event to return.
          */
         private int current = 0;
 
         /**
-         * Returns whether there is another event.Event to return.
+         * Returns whether there is another alert.Event to return.
          *
-         * @return whether there is another event.Event to return.
+         * @return whether there is another alert.Event to return.
          */
         @Override
         public boolean hasNext() {
@@ -446,9 +446,9 @@ public class EventCollection implements Iterable<Event>, Observer {
         }
 
         /**
-         * Returns the next event.Event.
+         * Returns the next alert.Event.
          *
-         * @return the next event.Event.
+         * @return the next alert.Event.
          */
         @Override
         public Event next() {
@@ -468,7 +468,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         }
 
         /**
-         * Removes the event.Event just returned.
+         * Removes the alert.Event just returned.
          */
         @Override
         public void remove() {

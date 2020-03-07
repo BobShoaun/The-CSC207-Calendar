@@ -1,7 +1,7 @@
 package consoleui;
 
-import alert.Alert;
-import alert.AlertCollection;
+import entities.Alert;
+import entities.AlertCollection;
 import exceptions.PeriodAlreadyExistsException;
 
 /**
