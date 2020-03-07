@@ -6,8 +6,9 @@ import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -294,8 +295,13 @@ public class AlertCollection implements Observer {
 
         String time = eventId.substring(0, 28);
         this.eventTime = new GregorianCalendar();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE LLL dd HH:mm:ss zzz yyyy");
-        eventTime.setTime((Date) dtf.parse(time));
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            eventTime.setTime(df.parse(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         assert strings != null;
         this.eventId = strings.get(0).trim();
