@@ -316,7 +316,12 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
 
-        String time = eventId.substring(0, 28);
+        String time = "";
+        try {
+            time = eventId.substring(0, 28);
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         this.eventTime = new GregorianCalendar();
         SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
         try {
