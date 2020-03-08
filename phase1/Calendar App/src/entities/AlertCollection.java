@@ -107,6 +107,14 @@ public class AlertCollection implements Observer {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
+    public void removeOldAlerts() {
+        GregorianCalendar start = new GregorianCalendar();
+        start.setTimeInMillis(0);
+        for (Alert a : getAlerts(start, new GregorianCalendar())) {
+            removeAlert(a.getTime());
+        }
+    }
+
     /**
      * Remove an automatically generated alert.Alert.
      *

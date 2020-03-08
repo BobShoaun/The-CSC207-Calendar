@@ -6,6 +6,7 @@ import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
 import user.Calendar;
+import user.DataSaver;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -20,12 +21,14 @@ public class EventUI extends UserInterface {
 
     private Event event;
     private Calendar calendar;
+    private DataSaver datasaver;
 
     List<MemoUI> memoUIs = new ArrayList<>();
 
-    public EventUI(Event event, Calendar calendar) {
+    public EventUI(Event event, Calendar calendar, DataSaver ds) {
         this.event = event;
         this.calendar = calendar;
+        this.datasaver = ds;
     }
 
     public Event getEvent() { return event; }
@@ -43,67 +46,92 @@ public class EventUI extends UserInterface {
             display();
             int option = getOptionsInput(new String[]{"Exit",
                     "Event Duration", "Edit Event",
-                    "Show Alerts", "Edit Alert",
-                    "Show Memos", "Edit Memos",
-                    "Show Tags", "Edit Tags"});
+                    "Show Alerts", "Manage alerts",
+                    "Show Memos", "Edit a memo",
+                    "Show Tags", "Edit a tag"});
             switch (option) {
                 case 0: // Exit
                     running = false;
                     break;
-                case 1: // alert.Event duration
-                    long millis = event.getDuration();
-                    String dur = String.format("%02d:%02d:%02d:%02d",
-                            TimeUnit.MILLISECONDS.toDays(millis),
-                            TimeUnit.MILLISECONDS.toHours(millis),
-                            TimeUnit.MILLISECONDS.toMinutes(millis) -
-                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
-                            TimeUnit.MILLISECONDS.toSeconds(millis) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-                    System.out.println(event.getName() + " lasts for " + dur);
+                case 1: // Event duration
+                    showDuration();
                     break;
-                case 2: // Edit event
+                case 2:
                     editEvent();
                     break;
-                case 3: // Show alerts
-                    List<AlertCollection> alertCollections = calendar.getAlertCollections();
-                    for (AlertCollection ac: alertCollections) {
-                        if (ac.getEventId().equals(event.getId())) {
-                            System.out.println(ac.toString());
-                        }
-                    }
+                case 3:
+                    showAlerts();
                     break;
-                case 4: // Edit alert
+                case 4:
                     editAlert();
                     break;
-                case 5: // Show memos
-                    List<Memo> memos = calendar.getMemos();
-                    StringBuilder result = new StringBuilder();
-                    int i = 0;
-                    for (Memo m: memos) {
-                        if ( m.hasEvent(event.getId()) ) {
-                            String num = Integer.toString(i);
-                            result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
-                            i += 1;
-                        }
-                    }
-                    System.out.println(result);
+                case 5:
+                    showMemos();
                     break;
-                case 6: // Edit memo
-                    int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
-                    MemoUI mui = memoUIs.get(num);
-                    mui.show();
+                case 6:
+                    editMemo();
                     break;
-                case 7: // Show tags
-                    List<Tag> tags = calendar.getTags();
-                    for (Tag t: tags) {
-                        if ( t.hasEvent(event.getId()) ) {
-                            System.out.println(t.getText());
-                        }
-                    }
+                case 7:
+                    showTags();
                     break;
-                case 8: // Edit tag
+                case 8:
                     editTag();
                     break;
+            }
+        }
+    }
+
+    private void showDuration() {
+        long millis = event.getDuration();
+        String dur = String.format("%02d:%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toDays(millis),
+                TimeUnit.MILLISECONDS.toHours(millis),
+                TimeUnit.MILLISECONDS.toMinutes(millis) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+        System.out.println(event.getName() + " lasts for " + dur);
+    }
+
+    private void showTags() {
+        List<Tag> tags = calendar.getTags();
+        for (Tag t : tags) {
+            if (t.hasEvent(event.getId())) {
+                System.out.println(t.getText());
+            }
+        }
+    }
+
+    private void editMemo() {
+        if (memoUIs.size() == 0) {
+            System.out.println("No memos found.");
+            return;
+        }
+        showMemos();
+        int num = getIntInput("Memo no.: ", 0, memoUIs.size() - 1);
+        MemoUI mui = memoUIs.get(num);
+        mui.show();
+    }
+
+    private void showMemos() {
+        List<Memo> memos = calendar.getMemos();
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        for (Memo m : memos) {
+            if (m.hasEvent(event.getId())) {
+                String num = Integer.toString(i);
+                result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
+                i += 1;
+            }
+        }
+        System.out.println(result);
+    }
+
+    private void showAlerts() {
+        List<AlertCollection> alertCollections = calendar.getAlertCollections();
+        for (AlertCollection ac : alertCollections) {
+            if (ac.getEventId().equals(event.getId())) {
+                System.out.println(ac.toString());
             }
         }
     }
@@ -148,12 +176,16 @@ public class EventUI extends UserInterface {
 
 
     private void editAlert() {
-        for (AlertCollection ac : calendar.getAlertCollections()) {
-            if (ac.getEventId().equals(event.getId())) {
-                AlertUI alertUI = new AlertUI(ac);
-                alertUI.show();
-            } else {
-                System.out.println("No existing alerts.");
+        if (calendar.getAlertCollections().size() == 0) {
+            AlertUI alertUI = new AlertUI(new AlertCollection(event, this.datasaver));
+            alertUI.show();
+        } else {
+            for (AlertCollection ac : calendar.getAlertCollections()) {
+                if (ac.getEventId().equals(event.getId())) {
+                    AlertUI alertUI = new AlertUI(ac);
+                    alertUI.show();
+                } else
+                    System.out.println("No alerts found.");
             }
         }
     }

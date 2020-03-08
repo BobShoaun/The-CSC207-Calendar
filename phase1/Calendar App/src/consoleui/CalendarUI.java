@@ -7,6 +7,7 @@ import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
 import user.Calendar;
+import user.DataSaver;
 import user.User;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class CalendarUI extends UserInterface {
         for (int i = 0; i < visibleAlerts.size(); i++) {
             Alert alert = visibleAlerts.get(i);
             Event correspondingEvent = calendar.getEvent(alert.getEventId());
-            System.out.println("(" + i + ") " + alert.getTime().toString()
+            System.out.println("(" + i + ") " + alert.getTime().getTime().toString()
                     + " - Alert for " + correspondingEvent.getName());
         }
     }
@@ -58,6 +59,7 @@ public class CalendarUI extends UserInterface {
     @Override
     public void show() {
         visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());
+        calendar.removeOldAlerts();
         getEventsToday();
         while (true) {
             display();
@@ -225,7 +227,8 @@ public class CalendarUI extends UserInterface {
                 throw new UnsupportedOperationException();
         }
         if (listUIView != null) {
-            visibleEvents.addAll(listUIView.getElementsShown().stream().map(e -> new EventUI(e, calendar)).collect(Collectors.toList()));
+            visibleEvents.addAll(listUIView.getElementsShown().stream()
+                    .map(e -> new EventUI(e, calendar, new DataSaver(user.getName()))).collect(Collectors.toList()));
         }
     }
 
@@ -258,7 +261,7 @@ public class CalendarUI extends UserInterface {
             System.out.println("Error saving events!");
             e.printStackTrace();
         }
-        EventUI newEventUi = new EventUI(event, calendar);
+        EventUI newEventUi = new EventUI(event, calendar, new DataSaver(user.getName()));
         newEventUi.show();
     }
 
@@ -308,7 +311,7 @@ public class CalendarUI extends UserInterface {
             System.out.println("You have no events!");
             return;
         }
-        int relativeId = getIntInput("Relative id:", 0, visibleEvents.size() - 1);
+        int relativeId = getIntInput("Relative id: ", 0, visibleEvents.size() - 1);
         EventUI eventUI = visibleEvents.get(relativeId);
         eventUI.show();
     }
@@ -331,6 +334,7 @@ public class CalendarUI extends UserInterface {
     }
 
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
-        visibleEvents = calendar.getEvents(startOfDay.getTime(), nextDay.getTime()).stream().map(e -> new EventUI(e, calendar)).collect(Collectors.toList());
+        visibleEvents = calendar.getEvents(startOfDay.getTime(),
+                nextDay.getTime()).stream().map(e -> new EventUI(e, calendar, new DataSaver(user.getName()))).collect(Collectors.toList());
     }
 }

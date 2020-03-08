@@ -22,6 +22,9 @@ public class AlertUI extends UserInterface {
 
     @Override
     public void show() {
+
+        alerts.removeOldAlerts();
+
         display();
         int option = getOptionsInput(new String[]{"Exit",
                 "Add a single alert",
@@ -46,6 +49,7 @@ public class AlertUI extends UserInterface {
                 break;
         }
     }
+
 
     private void removeAlert() {
         boolean works = false;
