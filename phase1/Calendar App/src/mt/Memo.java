@@ -13,9 +13,10 @@ public class Memo {
     private List<String> ids;
 
     /**
-     * constructor for Memo
-     * @param title of the memo
-     * @param text content of the memo
+     * Initialize a memo.
+     *
+     * @param title The title of the memo.
+     * @param text  The contents of the memo
      */
     public Memo(String title, String text) {
         this.text = text;
@@ -24,10 +25,11 @@ public class Memo {
     }
 
     /**
-     * constructor for Memo
-     * @param title of the memo
-     * @param text content of the memo
-     * @param ids
+     * Initialize a memo with event ids
+     *
+     * @param title The title of the memo.
+     * @param text  The contents of the memo
+     * @param ids   The ids of the events attached to the memo
      */
     public Memo(String title, String text, List<String> ids) {
         this.text = text;
@@ -36,24 +38,27 @@ public class Memo {
     }
 
     /**
-     * setter for title
-     * @param newTitle
+     * Set the memo title
+     *
+     * @param newTitle New title
      */
     public void setTitle(String newTitle) {
         title = newTitle;
     }
 
     /**
-     * setter for text content
-     * @param newText
+     * Set the memo text
+     *
+     * @param newText New text
      */
     public void setText(String newText) {
         text = newText;
     }
 
     /**
-     * getter for text
-     * @return
+     * Get the memo's text
+     *
+     * @return Memo contents
      */
     public String getText() {
         return text;
@@ -63,38 +68,42 @@ public class Memo {
      * getter for title
      * @return
      */
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
 
     /**
-     * adds an event to the Memo
-     * @param eventId of event to remove
+     * Add an event to the memo
+     *
+     * @param eventId ID of the event being added
      */
     public void addEvent(String eventId) {
         ids.add(eventId);
     }
 
     /**
-     * removes an event
-     * @param eventId of event to remove
+     * Remove an event from the memo
+     *
+     * @param eventId ID of the event being removed
      */
     public void removeEvent(String eventId) {
         ids.remove(eventId);
     }
 
     /**
-     * check if event is in memo
-     * @param eventId
-     * @return
+     * Find the event if it is in this memo
+     *
+     * @param eventId Event ID to be searched for
+     * @return True iff the memo is attached to the event
      */
     public boolean hasEvent(String eventId) {
         return ids.contains(eventId);
     }
 
     /**
-     * getter for events ids
-     * @return
+     * Get the list of events attached to the memo
+     *
+     * @return The list of event IDs
      */
     public List<String> getEvents() {
         return ids;

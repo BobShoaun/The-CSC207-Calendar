@@ -193,17 +193,17 @@ public class Tests {
     }
 
     public static void main(String[] args) throws Exception {
-        testCalendarGenerator();
-        testAlert();
-        testAlertCollection();
-        testECSave();
-        testLoad();
-        testEventsGenerator();
-        testEventCollectionUI();
-        testRemove();
-        testEventGetDuration();
-        testUserManager();
-        testUser();
+//        testCalendarGenerator();
+//        testAlert();
+//        testAlertCollection();
+//        testECSave();
+//        testLoad();
+//        testEventsGenerator();
+//        testEventCollectionUI();
+//        testRemove();
+//        testEventGetDuration();
+//        testUserManager();
+//        testUser();
     }
 
 

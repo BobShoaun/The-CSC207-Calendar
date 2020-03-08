@@ -36,7 +36,13 @@ public class AlertCollection implements Observer {
         this.saver = saver;
     }
 
-    public AlertCollection(String eventId, DataSaver saver){
+    /**
+     * Create a new Alertcollection
+     *
+     * @param eventId The ID of the event
+     * @param saver   The Datasaver representing the user filepath
+     */
+    public AlertCollection(String eventId, DataSaver saver) {
         this.eventId = eventId;
         this.saver = saver;
         manAlerts = new ArrayList<>();
@@ -52,6 +58,11 @@ public class AlertCollection implements Observer {
         return eventId;
     }
 
+    /**
+     * Get the list of manual alerts
+     *
+     * @return All manually created alerts in this AlertCollection
+     */
     public List<Alert> getManAlerts() {
         return manAlerts;
     }
@@ -107,6 +118,9 @@ public class AlertCollection implements Observer {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
+    /**
+     * Remove any alerts that occur in the past.
+     */
     public void removeOldAlerts() {
         GregorianCalendar start = new GregorianCalendar();
         start.setTimeInMillis(0);
@@ -265,6 +279,11 @@ public class AlertCollection implements Observer {
         return result.toString();
     }
 
+    /**
+     * Get a String representing this AC.
+     *
+     * @return A user-friendly string representation
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("Alert at " + eventTime.getTime().toString() + ".\n");
@@ -297,7 +316,12 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
 
-        String time = eventId.substring(0, 28);
+        String time = "";
+        try {
+            time = eventId.substring(0, 28);
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         this.eventTime = new GregorianCalendar();
         SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
         try {
