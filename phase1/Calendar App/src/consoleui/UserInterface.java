@@ -138,7 +138,7 @@ public abstract class UserInterface {
         } catch (ParseException e) {
             if (allowNull && dateString.equals(""))
                 return null;
-            return getDateInput("Please re-enter a valid date: ");
+            return getDateInput("Please re-enter a valid date: ", allowNull);
         }
         return calendar;
     }
@@ -163,7 +163,7 @@ public abstract class UserInterface {
         for (int i = 0; i < options.length; i++)
             System.out.println("[" + i + "] " + options[i]);
         displayLine();
-        return getIntInput("Choose an option: ", 0, options.length);
+        return getIntInput("Choose an option: ", 0, options.length - 1);
     }
 
 

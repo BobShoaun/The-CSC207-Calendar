@@ -64,6 +64,7 @@ public class UserManagerUI extends UserInterface {
     }
 
     private void showLoginMenu() {
+        displayLine();
         String username, password;
         boolean firstTry = true;
         do {
@@ -78,11 +79,11 @@ public class UserManagerUI extends UserInterface {
         } else {
             System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
         }
-        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
-        calendarUI.show();
+        showCalendar();
     }
 
     private void showRegisterMenu () {
+        displayLine();
         String username = getWordInput("Enter username: ");
         String password = getWordInput("Enter password: ");
         String confirmPassword = getWordInput("Confirm password: ");
@@ -90,8 +91,7 @@ public class UserManagerUI extends UserInterface {
             userManager.registerUser(username, password, confirmPassword);
             System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
-            CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
-            calendarUI.show();
+            showCalendar();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
             showRegisterMenu();
@@ -101,6 +101,11 @@ public class UserManagerUI extends UserInterface {
         } catch (IOException ee) {
             System.out.println("Failed to create user:" + ee.toString());
         }
+    }
+
+    private void showCalendar() {
+        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
+        calendarUI.show();
     }
 
     /**

@@ -710,12 +710,22 @@ public class Calendar {
         return (GregorianCalendar)GregorianCalendar.getInstance();
     }
 
+    /**
+     * edits the memo title
+     * @param memoName
+     * @param newMemoName
+     */
     public void editMemoTitle(String memoName, String newMemoName){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setTitle(newMemoName);
         save();
     }
 
+    /**
+     * edits a memo text
+     * @param memoName
+     * @param newMemoText
+     */
     public void editMemoText(String memoName, String newMemoText){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
@@ -740,10 +750,20 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
+    /**
+     * remove event
+     * @param event
+     * @throws InvalidDateException
+     * @throws IOException
+     */
     public void removeEvent(Event event) throws InvalidDateException, IOException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 
+    /**
+     * get all event series's name
+     * @return
+     */
     public List<String> getEventSeriesNames(){
         return eventCollections.stream().map(EventCollection::getName).filter(f -> !f.equals("")).collect(Collectors.toList());
     }
