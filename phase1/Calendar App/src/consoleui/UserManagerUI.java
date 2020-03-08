@@ -13,10 +13,17 @@ public class UserManagerUI extends UserInterface {
 
     private UserManager userManager;
 
+    /**
+     * Constructor for UserManagerUI
+     * @param userManager the userManager to display
+     */
     public UserManagerUI(UserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Display graphics
+     */
     @Override
     public void display() {
         System.out.println("\n" +
@@ -28,6 +35,9 @@ public class UserManagerUI extends UserInterface {
                 "   ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝\n");
     }
 
+    /**
+     * Show UI
+     */
     @Override
     public void show() {
         display();
@@ -93,6 +103,10 @@ public class UserManagerUI extends UserInterface {
         }
     }
 
+    /**
+     * Main Method
+     * @param args
+     */
     public static void main (String[] args) {
         UserManager userManager = new UserManager();
         try {
