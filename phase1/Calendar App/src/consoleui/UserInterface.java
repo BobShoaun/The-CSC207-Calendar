@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * user.User interface class representing an abstract user interface
+ * User interface class representing an abstract user interface
  *
  * @author Ng Bob Shoaun
  */
@@ -14,22 +14,38 @@ public abstract class UserInterface {
 
     private Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Displays graphical information from this user interface
+     */
     public abstract void display();
 
+    /**
+     * Activates this user interface.
+     */
     public abstract void show();
 
+    /**
+     * Sources and validates the user's string input
+     * @param prompt message to prompt the user on what to input
+     * @return validated string input
+     */
     protected String getStringInput(String prompt) {
         return getStringInput(prompt, new ArrayList<>());
     }
 
+    /**
+     * Sources and validates the user's string input
+     * @param prompt message to prompt the user on what to input
+     * @param bannedWords words that will not be validated.
+     * @return validated string input
+     */
     protected String getStringInput(String prompt, List<String> bannedWords) {
         System.out.print(prompt);
         String input;
         boolean first = true;
         do{
-            if(!first){
+            if (!first)
                 System.out.println("This input is not valid/has already been chosen");
-            }
             input = scanner.nextLine();
             first = false;
         } while(bannedWords.contains(input));
@@ -37,8 +53,8 @@ public abstract class UserInterface {
     }
 
     /**
-     *
-     * @param prompt: message to prompt user on what to input
+     * Sources and validates the user's word input, only one word allowed
+     * @param prompt message to prompt user on what to input
      * @return validated word, no spaces allowed
      */
     protected String getWordInput(String prompt) {
@@ -50,7 +66,8 @@ public abstract class UserInterface {
     }
 
     /**
-     *
+     * Sources and validates the user's integer input
+     * @param prompt message to prompt the user on what to input
      * @param min: minimum acceptable int, inclusive
      * @param max: maximum acceptable int, inclusive
      * @return validated int
@@ -68,12 +85,12 @@ public abstract class UserInterface {
     }
 
     /**
-     * have user input duration in the form:
+     * Sources and validates user input of a duration in the form:
      * <amount> <type> where amount is a number and type is { w, d, h, m, s } corresponding to
      * Week, day, hour, minute, seconds
      *
-     * @param prompt The prompt text
-     * @return The Duration entered by the user
+     * @param prompt message to prompt the user on what to input
+     * @return Duration object created based on the user's input
      */
     protected Duration getDurationInput(String prompt) {
         System.out.print(prompt + " Format: Number [w/d/h/m/s]");
@@ -103,6 +120,13 @@ public abstract class UserInterface {
         return getDateInput(prompt, false);
     }
 
+    /**
+     * Sources and validates user input of a date
+     * in the form DD/MM/YYYY HH:MM
+     * @param prompt message to prompt the user on what to input
+     * @param allowNull whether a null date is acceptable as an output
+     * @return validated input as a GregorianCalendar object
+     */
     protected GregorianCalendar getDateInput(String prompt, boolean allowNull) {
         // DD/MM/YYYY HH:MM:SS
         System.out.print(prompt + " (DD/MM/YYYY HH:MM) ");
@@ -119,6 +143,9 @@ public abstract class UserInterface {
         return calendar;
     }
 
+    /**
+     * Draw a line to the console.
+     */
     protected void displayLine() {
         for (int i = 0; i < 70; i++)
             System.out.print("=");

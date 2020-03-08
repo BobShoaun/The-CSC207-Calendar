@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * user.User class
+ * User class representing a User for the calendar
  *
  * @author Ng Bob Shoaun
  */
@@ -16,38 +16,84 @@ public class User implements StringParsable {
     private String password;
     private Calendar calendar;
     private GregorianCalendar lastLoginTime;
-    boolean firstLogin;
+    private boolean firstLogin;
 
+    /**
+     * getter for the user's name
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * getter for the user's calendar
+     * @return calendar
+     */
     public Calendar getCalendar() {
         return calendar;
     }
 
+    /**
+     * getter for firstLogin, whether if its the user's first time logging in
+     * @return firstLogin
+     */
     public boolean getFirstLogin() {
         return firstLogin;
     }
 
+    /**
+     * Getter for last login time
+     * @return lastLoginTime
+     */
+    public GregorianCalendar getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    /**
+     * setter for last login time
+     * @param time new last login time
+     */
+    public void setLastLoginTime (GregorianCalendar time) {
+        this.lastLoginTime = time;
+    }
+
+    /**
+     * Constructor for User
+     * @param name the user's name
+     * @param password the user's password
+     */
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        DataSaver dataSaver = new DataSaver(name);
-        this.calendar = new Calendar(dataSaver);
+        this.calendar = new Calendar(new DataSaver(name));
         firstLogin = true;
         lastLoginTime = calendar.getTime();
     }
 
+    /**
+     * Constructor for User
+     * @param string string containing the user's data.
+     */
     public User (String string) {
         firstLogin = false;
         unparse(string);
     }
 
+    /**
+     * Check if the name and password matches this user's
+     * @param name name to check
+     * @param password password to check
+     * @return whether the name and password are an exact match
+     */
     public boolean authenticate (String name, String password) {
         return this.name.equals(name) && this.password.equals(password);
     }
 
+    /**
+     * Unparse a string's data into this user's data.
+     * @param string string containing the user's data.
+     */
     @Override
     public void unparse(String string) {
         String[] split = string.split("\\s+"); // split text by whitespaces
@@ -64,11 +110,19 @@ public class User implements StringParsable {
         }
     }
 
+    /**
+     * Creates a string representation of this user
+     * @return string representation
+     */
     @Override
     public String parse() {
         return toString();
     }
 
+    /**
+     * Creates a string representation of this user
+     * @return string representation
+     */
     @Override
     public String toString () {
         if(lastLoginTime == null)
@@ -78,12 +132,5 @@ public class User implements StringParsable {
         return name + " " + password + " " + dateFormatted;
     }
 
-    public GregorianCalendar getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime (GregorianCalendar time) {
-        this.lastLoginTime = time;
-    }
 
 }

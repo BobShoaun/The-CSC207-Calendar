@@ -6,7 +6,11 @@ import entities.AlertCollection;
 import entities.Event;
 import entities.EventCollection;
 import exceptions.InvalidDateException;
+import exceptions.PasswordMismatchException;
+import exceptions.UsernameTakenException;
 import user.DataSaver;
+import user.User;
+import user.UserManager;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -159,6 +163,35 @@ public class Tests {
         System.out.println(event.getName() + " lasts for " + dur);
     }
 
+    private static void testUserManager () throws IOException, UsernameTakenException {
+        // delete testUserName user from the users directory before testing
+        UserManager userManager = new UserManager();
+        userManager.loadUsers();
+        try {
+            userManager.registerUser("testUserName", "testPassword", "testPassword");
+        } catch (PasswordMismatchException p) {
+            throw new AssertionError("Password checking has bugs!");
+        }
+        assert userManager.loginUser("testUserName", "testPassword");
+        assert userManager.getCurrentUser() != null;
+        assert userManager.getCurrentUser().getName() == "testUserName";
+        userManager.logoutCurrentUser();
+        userManager.saveUsers();
+    }
+
+    private static void testUser() {
+        User user = new User("test", "123");
+        assert user.authenticate("test", "123");
+        user.setLastLoginTime(new GregorianCalendar());
+        String userString = user.parse();
+        User user2 = new User(userString);
+        assert user2.getName() == user.getName();
+        assert user2.getLastLoginTime() == user.getLastLoginTime();
+        assert user2.getFirstLogin() == user.getFirstLogin();
+        assert user2.getCalendar() == user.getCalendar();
+        assert user2.parse() == user.parse();
+    }
+
     public static void main(String[] args) throws Exception {
         testCalendarGenerator();
         testAlert();
@@ -169,6 +202,8 @@ public class Tests {
         testEventCollectionUI();
         testRemove();
         testEventGetDuration();
+        testUserManager();
+        testUser();
     }
 
 

@@ -7,11 +7,19 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
+ * @auther Ng Bob Shoaun
+ */
 public class DataSaver {
 
     private String basePath;
 
-    public DataSaver(String basePath){
+    /**
+     * Initializes DataSaver
+     * @param basePath a base path relative to all path's passed into this DataSaver
+     */
+    public DataSaver(String basePath) {
         this.basePath = "./users/" + basePath + (!basePath.equals("") ? "/" : "");
     }
 
@@ -77,6 +85,11 @@ public class DataSaver {
         }
     }
 
+    /**
+     *
+     * @param path The path relative to the base directory of the user data
+     * @return the list of files in the given path
+     */
     public File[] getFilesInDirectory (String path) {
         return new File(basePath + path).listFiles();
     }
