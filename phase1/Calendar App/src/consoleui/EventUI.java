@@ -25,19 +25,39 @@ public class EventUI extends UserInterface {
 
     List<MemoUI> memoUIs = new ArrayList<>();
 
+    /**
+     * Create a new EventUI
+     *
+     * @param event    The event
+     * @param calendar Calendar object attached to the event
+     * @param ds       The datasaver representing the user filepath
+     */
     public EventUI(Event event, Calendar calendar, DataSaver ds) {
         this.event = event;
         this.calendar = calendar;
         this.datasaver = ds;
     }
 
-    public Event getEvent() { return event; }
+    /**
+     * Get the event associated with the UI
+     *
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
 
+    /**
+     * Display the contents of this event.
+     */
     @Override
     public void display() {
         System.out.println(event.toString());
     }
 
+    /**
+     * Start the user interface.
+     */
     @Override
     public void show() {
         boolean running = true;

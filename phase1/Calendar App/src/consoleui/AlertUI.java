@@ -15,11 +15,17 @@ public class AlertUI extends UserInterface {
         alerts = ac;
     }
 
+    /**
+     * Display the contents of the alert collection to the user.
+     */
     @Override
     public void display() {
         System.out.println(alerts);
     }
 
+    /**
+     * Start this user interface.
+     */
     @Override
     public void show() {
 

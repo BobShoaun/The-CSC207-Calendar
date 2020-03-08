@@ -14,7 +14,7 @@ public class Alert {
     private String eventId;
 
     /**
-     * Create an alert.Alert
+     * Create an Alert
      *
      * @param time    The time at which the notification goes off
      * @param eventId The ID of the event
@@ -25,7 +25,7 @@ public class Alert {
     }
 
     /**
-     * Create an alert.Alert from a String representation.
+     * Create an Alert from a String representation.
      *
      * @param string  the toString() output, representing time
      * @param eventId The ID of the event
@@ -63,6 +63,11 @@ public class Alert {
         return "" + time.getTimeInMillis();
     }
 
+    /**
+     * Get a string representation of this alert.
+     *
+     * @return String representing the time of the alert
+     */
     @Override
     public String toString() {
         return "" + time.getTime().toString();
