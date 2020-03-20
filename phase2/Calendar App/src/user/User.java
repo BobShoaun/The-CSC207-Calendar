@@ -85,6 +85,7 @@ public class User implements StringParsable, Iterator<Calendar> {
         this.calendars = new ArrayList<>();
         firstLogin = true;
         lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
+        dataSaver = new DataSaver("./users/" + name);
     }
 
     /**
