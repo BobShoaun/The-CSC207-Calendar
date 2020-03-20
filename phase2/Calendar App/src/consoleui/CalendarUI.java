@@ -62,7 +62,7 @@ public class CalendarUI extends UserInterface {
         getEventsToday();
         while (true) {
             display();
-            int command = getOptionsInput(new String[]{"Logout",
+            int command = getOptionsInput(new String[]{"Back",
                     "Show events",
                     "View event",
                     "Delete event",
@@ -78,7 +78,6 @@ public class CalendarUI extends UserInterface {
                     "Edit event series"});
             switch (command) {
                 case 0:
-                    logout();
                     return;
                 case 1:
                     showEvents();
@@ -326,10 +325,6 @@ public class CalendarUI extends UserInterface {
             ListUIView<Event> eventIteratorView = new ListUIView<>(eventIterator, Event::toString, visibleEvents.size());
             eventIteratorView.show();
         }
-    }
-
-    private void logout() {
-        user.setLastLoginTime(new GregorianCalendar());
     }
 
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
