@@ -14,10 +14,11 @@ import java.util.List;
  *
  * @author Ng Bob Shoaun
  */
-public class UserManager extends DataSaver {
+public class UserManager {
 
     private List<User> users;
     private User currentUser;
+    private DataSaver dataSaver;
 
     /**
      *
@@ -29,7 +30,7 @@ public class UserManager extends DataSaver {
      * Constructor for UserManager
      */
     public UserManager () {
-        super("");
+        dataSaver = new DataSaver("./users/");
         users = new ArrayList<> ();
         currentUser = null;
     }
@@ -39,15 +40,10 @@ public class UserManager extends DataSaver {
      * @throws IOException
      */
     public void loadUsers() throws IOException {
-        File[] files = getFilesInDirectory("");
+        File[] files = dataSaver.getFilesInDirectory("");
         for (File file : files) {
-            String userCredentials = loadStringFromFile(file.getPath() + "/credentials.txt");
-            try {
-                users.add(new User(userCredentials));
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+            String userCredentials = dataSaver.loadStringFromFile(file.getName() + "/credentials.txt");
+            users.add(new User(userCredentials));
         }
     }
 
@@ -57,7 +53,7 @@ public class UserManager extends DataSaver {
      */
     public void saveUsers() throws IOException {
         for (User user : users)
-            saveToFile("" + user.getName() + "/credentials.txt", user.parse());
+            dataSaver.saveToFile("" + user.getName() + "/credentials.txt", user.parse());
     }
 
     /**
@@ -66,7 +62,7 @@ public class UserManager extends DataSaver {
      * @throws IOException
      */
     public void saveUser(User user) throws IOException {
-        saveToFile(user.getName() + "/credentials.txt", user.parse());
+        dataSaver.saveToFile(user.getName() + "/credentials.txt", user.parse());
     }
 
     /**
@@ -87,6 +83,7 @@ public class UserManager extends DataSaver {
         for (User user : users) {
             if (user.authenticate(username, password)) {
                 currentUser = user;
+
                 return true;
             }
         }

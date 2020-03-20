@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  */
 public class Calendar {
 
+    private String name;
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;
     List<Memo> memos;
@@ -28,16 +29,17 @@ public class Calendar {
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar(DataSaver dataSaver) {
+    public Calendar(String name, DataSaver dataSaver) {
+        this.name = name;
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
         alertCollections = new ArrayList<>();
         load();
         if(eventCollections.stream().filter(eC -> eC.getName().equals("")).findAny().orElse(null) == null)
-        {
             eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
-        }
     }
+
+    public String getName () { return name; }
 
     /**
      * Constructor for calendar with already existing data

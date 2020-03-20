@@ -24,13 +24,12 @@ public class CalendarUI extends UserInterface {
 
     public CalendarUI(User user, Calendar calendar) {
         this.user = user;
-
         this.calendar = calendar;
     }
 
     @Override
     public void display() {
-        System.out.println("======= " + user.getName() + "'s Calendar =======");
+        System.out.println("======= " + user.getName() + "'s " + calendar.getName() + " =======");
         displayAlerts();
         displayEvents();
     }

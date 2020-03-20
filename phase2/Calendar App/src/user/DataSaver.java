@@ -3,7 +3,9 @@ package user;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,8 +21,8 @@ public class DataSaver {
      * Initializes DataSaver
      * @param basePath a base path relative to all path's passed into this DataSaver
      */
-    public DataSaver(String basePath) {
-        this.basePath = "./users/" + basePath + (!basePath.equals("") ? "/" : "");
+    public DataSaver (String basePath) {
+        this.basePath = basePath + (!basePath.equals("") ? "/" : "");
     }
 
     /**
@@ -47,7 +49,7 @@ public class DataSaver {
      * @return entire text file as a string
      */
     public String loadStringFromFile (String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(path)));
+        return new String(Files.readAllBytes(Paths.get(basePath + path)));
     }
 
     /**
@@ -94,5 +96,15 @@ public class DataSaver {
         return new File(basePath + path).listFiles();
     }
 
+    public void makeDirectory (String path) {
+        new File(basePath + path).mkdirs();
+    }
+
+    public void deleteDirectory (String path) throws IOException {
+        Files.walk(Paths.get(basePath + path))
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+    }
 
 }

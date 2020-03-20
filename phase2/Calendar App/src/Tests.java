@@ -121,7 +121,7 @@ public class Tests {
 //        eve.add(e2);
         DataSaver saver = new DataSaver("tests");
         EventCollection regular = new EventCollection("", eve, saver);
-        user.Calendar cal = new user.Calendar(saver);
+        user.Calendar cal = new user.Calendar("test", saver);
         EventCollectionUI ui = new EventCollectionUI(regular, cal);
 
     }
@@ -187,8 +187,8 @@ public class Tests {
         User user2 = new User(userString);
         assert user2.getName() == user.getName();
         assert user2.getLastLoginTime() == user.getLastLoginTime();
-        assert user2.getFirstLogin() == user.getFirstLogin();
-        assert user2.getCalendar() == user.getCalendar();
+        assert user2.isFirstLogin() == user.isFirstLogin();
+//        assert user2.getCalendar() == user.getCalendar();
         assert user2.parse() == user.parse();
     }
 

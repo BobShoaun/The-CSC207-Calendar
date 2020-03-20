@@ -40,6 +40,7 @@ public class UserManagerUI extends UserInterface {
      */
     @Override
     public void show() {
+        displayLine();
         display();
         boolean running = true;
         while (running) {
@@ -74,12 +75,8 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        if (!userManager.getCurrentUser().getFirstLogin()) {
-            System.out.println("Welcome back, " + username + "! You last login was on: " + userManager.getCurrentUser().getLastLoginTime().getTime());
-        } else {
-            System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
-        }
-        showCalendar();
+        displayLine();
+        showCalendarManagerUI();
     }
 
     private void showRegisterMenu () {
@@ -91,7 +88,7 @@ public class UserManagerUI extends UserInterface {
             userManager.registerUser(username, password, confirmPassword);
             System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
-            showCalendar();
+            showCalendarManagerUI();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
             showRegisterMenu();
@@ -103,9 +100,14 @@ public class UserManagerUI extends UserInterface {
         }
     }
 
-    private void showCalendar() {
-        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
-        calendarUI.show();
+//    private void showCalendar() {
+//        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
+//        calendarUI.show();
+//    }
+
+    private void showCalendarManagerUI() {
+        CalendarManagerUI calendarManagerUI = new CalendarManagerUI(userManager.getCurrentUser());
+        calendarManagerUI.show();
     }
 
     /**

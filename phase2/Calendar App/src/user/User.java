@@ -1,22 +1,25 @@
 package user;
 
+import javax.xml.crypto.Data;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * User class representing a User for the calendar
  *
  * @author Ng Bob Shoaun
  */
-public class User implements StringParsable {
+public class User implements StringParsable, Iterator<Calendar> {
 
     private String name;
     private String password;
-    private Calendar calendar;
+    private List<Calendar> calendars;
     private GregorianCalendar lastLoginTime;
     private boolean firstLogin;
+    private DataSaver dataSaver;
 
     /**
      * getter for the user's name
@@ -26,19 +29,32 @@ public class User implements StringParsable {
         return name;
     }
 
-    /**
-     * getter for the user's calendar
-     * @return calendar
-     */
-    public Calendar getCalendar() {
-        return calendar;
+
+    public Calendar getCalendar(int index) {
+        return calendars.get(index);
     }
+
+    public void addCalendar (String calendarName) {
+        this.calendars.add(new Calendar(calendarName, new DataSaver("./users/" + this.name + "/" + calendarName)));
+        saveCalendars();
+    }
+
+    public void removeCalendar (int index) {
+        try {
+            dataSaver.deleteDirectory(this.calendars.get(index).getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.calendars.remove(index);
+    }
+
+    public List<Calendar> getCalendars () { return this.calendars; }
 
     /**
      * getter for firstLogin, whether if its the user's first time logging in
      * @return firstLogin
      */
-    public boolean getFirstLogin() {
+    public boolean isFirstLogin() {
         return firstLogin;
     }
 
@@ -66,18 +82,20 @@ public class User implements StringParsable {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.calendar = new Calendar(new DataSaver(name));
+        this.calendars = new ArrayList<>();
         firstLogin = true;
-        lastLoginTime = calendar.getTime();
+        lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
     }
 
     /**
      * Constructor for User
-     * @param string string containing the user's data.
+     * @param credentials string containing the user's data.
      */
-    public User (String string) {
+    public User (String credentials) {
         firstLogin = false;
-        unparse(string);
+        unparse(credentials);
+        dataSaver = new DataSaver("./users/" + name);
+        loadCalendars();
     }
 
     /**
@@ -96,17 +114,18 @@ public class User implements StringParsable {
      */
     @Override
     public void unparse(String string) {
-        String[] split = string.split("\\s+"); // split text by whitespaces
+        String[] split = string.split(";"); // split text by whitespaces
         this.name = split[0];
         this.password = split[1];
-        this.calendar = new Calendar(new DataSaver(name));
+        this.calendars = new ArrayList<>();
         try {
-            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[2] + " " + split[3]);
+            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[2]);
             this.lastLoginTime = new GregorianCalendar();
             this.lastLoginTime.setTime(date);
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IndexOutOfBoundsException e) {
+            this.lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
         }
     }
 
@@ -125,12 +144,33 @@ public class User implements StringParsable {
      */
     @Override
     public String toString () {
-        if(lastLoginTime == null)
-            return name + " " + password;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         String dateFormatted = sdf.format(lastLoginTime.getTime());
-        return name + " " + password + " " + dateFormatted;
+        return name + ";" + password + ";" + dateFormatted;
     }
 
+    @Override
+    public boolean hasNext() {
+        return calendars.iterator().hasNext();
+    }
+
+    @Override
+    public Calendar next() {
+        return calendars.iterator().next();
+    }
+
+    private void loadCalendars() {
+        File[] files = dataSaver.getFilesInDirectory("");
+        for (File file : files) {
+            if (file.isFile()) // dont want credentials.txt
+                continue;
+            this.addCalendar(file.getName());
+        }
+    }
+
+    private void saveCalendars() {
+        for (Calendar calendar : calendars)
+            dataSaver.makeDirectory(calendar.getName());
+    }
 
 }
