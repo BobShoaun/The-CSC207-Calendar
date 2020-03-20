@@ -75,7 +75,6 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        displayLine();
         showCalendarManagerUI();
     }
 
@@ -99,11 +98,6 @@ public class UserManagerUI extends UserInterface {
             System.out.println("Failed to create user:" + ee.toString());
         }
     }
-
-//    private void showCalendar() {
-//        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
-//        calendarUI.show();
-//    }
 
     private void showCalendarManagerUI() {
         CalendarManagerUI calendarManagerUI = new CalendarManagerUI(userManager.getCurrentUser());

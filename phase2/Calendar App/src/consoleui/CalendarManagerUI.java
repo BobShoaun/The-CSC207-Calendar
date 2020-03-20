@@ -18,15 +18,16 @@ public class CalendarManagerUI extends UserInterface {
     @Override
     public void display() {
 
-    }
-
-    @Override
-    public void show() {
         if (user.isFirstLogin())
             System.out.println("Welcome " + user.getName() + "!!");
         else
             System.out.println("Welcome back, " + user.getName() + "! Your last login was on: " + user.getLastLoginTime().getTime());
+    }
 
+    @Override
+    public void show() {
+        displayLine();
+        display();
         while (true) {
             int option = getOptionsInput(new String[]{"Logout", "List calendars", "Add calendar", "Remove calendar"});
             switch (option) {

@@ -12,7 +12,7 @@ import java.util.*;
  *
  * @author Ng Bob Shoaun
  */
-public class User implements StringParsable, Iterator<Calendar> {
+public class User implements StringParsable {
 
     private String name;
     private String password;
@@ -148,16 +148,6 @@ public class User implements StringParsable, Iterator<Calendar> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         String dateFormatted = sdf.format(lastLoginTime.getTime());
         return name + ";" + password + ";" + dateFormatted;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return calendars.iterator().hasNext();
-    }
-
-    @Override
-    public Calendar next() {
-        return calendars.iterator().next();
     }
 
     private void loadCalendars() {
