@@ -2,14 +2,12 @@ package user;
 
 import entities.*;
 import exceptions.InvalidDateException;
-import exceptions.PeriodAlreadyExistsException;
 import mt.Memo;
 import mt.Tag;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -44,13 +42,15 @@ public class Calendar {
     /**
      * Constructor for calendar with already existing data
      *
+     * @param name Name of the calendar
      * @param eventCollections List of  event collections for new calendar
      * @param alertCollections List of alert collections for new calendar
      */
-    public Calendar(List<EventCollection> eventCollections, List<AlertCollection> alertCollections) {
+    public Calendar(String name, List<EventCollection> eventCollections, List<AlertCollection> alertCollections) {
         if (eventCollections == null || alertCollections == null) {
             throw new NullPointerException();
         }
+        this.name = name;
         this.eventCollections = eventCollections;
         this.alertCollections = alertCollections;
         load();
@@ -170,49 +170,6 @@ public class Calendar {
         return alerts;
     }
 
-    /**
-     * Add a single alert to an event
-     * @param time The time of the alert to be added
-     * @param eventId id of connected event
-     */
-    public void addAlert(GregorianCalendar time, String eventId){
-        for (AlertCollection alertCollection :
-                alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)) {
-                alertCollection.addAlert(time);
-                return;
-            }
-        }
-
-        AlertCollection alertCollection = new AlertCollection(getEvent(eventId), new DataSaver(""));
-        alertCollection.addAlert(time);
-        alertCollections.add(alertCollection);
-    }
-
-    /**
-     * Add a repeating alert to the event
-     *
-     * @param start   The relative start time of the alert
-     * @param period  The time between repeating alerts starting from the relative start time
-     * @param eventId The event this alert should be linked to
-     */
-    public void addAlert(GregorianCalendar start, Duration period, String eventId) throws PeriodAlreadyExistsException {
-        Event event = getEvent(eventId);
-        if (event == null) {
-            throw new IllegalArgumentException();
-        }
-        for (AlertCollection alertCollection : alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)) {
-                alertCollection.addAlert(start, period);
-                return;
-            }
-        }
-
-        AlertCollection alertCollection = new AlertCollection(event, new DataSaver(""));
-        alertCollection.addAlert(start, period);
-        alertCollections.add(alertCollection);
-    }
-
     public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {
         List<Event> events = eventIds.stream().map(this::getEvent).collect(Collectors.toList());
         for (Event e : events) {
@@ -303,134 +260,7 @@ public class Calendar {
         eventCollections.add(eventCollection);
     }
 
-    /**
-     * Make an event within an existing series into a new repeating event either within the same series or within a new one
-     * @param eventId Id of the event
-     * @param end No event will be created after this time. Can be null if there is no end time
-     * @param difference The time difference between two created events
-     * @throws IllegalArgumentException Will throw when no event collection was found
-     */
-    public void makeEventToSeries(String eventId, Date end, Date difference, String seriesName) throws IllegalArgumentException, InvalidDateException, IOException {
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection.getEvent(eventId) != null) {
-                if(!eventCollection.getName().equals(seriesName)){
-                    Event event =  eventCollection.getEvent(eventId);
-                    eventCollection.removeEvent(event);
-                    EventCollection newEventCollection = new EventCollection(seriesName, new ArrayList<>(), dataSaver);
-                    addEventSeries(seriesName, event.getStartDate().getTime(), end, difference, event);
-                } else{
-                    eventCollection.makeEventToSeries(eventId, end, difference);
-                }
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
 
-    /**
-     * Creates a new tag or add an existing tag to an event
-     *
-     * @param eventId alert.Event the tag is added to
-     * @param tagName Name of the tag to be added
-     * @throws IllegalArgumentException If the event cannot be found
-     */
-    public void tagEvent(String eventId, String tagName) throws IllegalArgumentException {
-        Tag tag;
-        Optional<Tag> optionalTag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny();
-        if (!optionalTag.isPresent()) {
-            tag = new Tag(tagName);
-            tags.add(tag);
-        } else {
-            tag = optionalTag.get();
-        }
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection.getEvent(eventId) != null) {
-                eventCollection.addTag(eventId, tag);
-                save();
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    /**
-     * Remove tag to an event
-     *
-     * @param eventId alert.Event the tag is removed from
-     * @param tagName Name of the tag to be removed
-     * @throws IllegalArgumentException If the event or the tag cannot be found
-     */
-    public void removeTagFromEvent(String eventId, String tagName) throws IllegalArgumentException {
-        Tag tag = tags.stream().filter(t -> t.getText().equals(tagName)).findAny().orElseThrow(null);
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection.getEvent(eventId) != null) {
-                eventCollection.removeTag(eventId, tag);
-                save();
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    /**
-     * Returns an iterator overall events sorted by start time, which have a certain tag
-     *
-     * @param start The earliest time for the events to start at
-     * @param tag   The tag to search by
-     * @return The iterator overall events. This will become invalid if new event collections or individual events are manipulated
-     */
-    public Iterator<Event> searchEvents(Date start, Tag tag) {
-        return new EventIterator(start, e -> tag.hasEvent(e.getName()));
-    }
-
-    /**
-     * Add a new memo to the system
-     * @param text The text of the new memo
-     * @throws IllegalArgumentException If a memo with the same text already exists
-     */
-    public void addMemo(String title, String text) throws IllegalArgumentException {
-        if(memos.stream().filter(mt -> mt.getText().equals(text)).anyMatch(mt -> true)){
-            throw new IllegalArgumentException();
-        }
-        memos.add(new Memo(title, text));
-        save();
-    }
-
-    /**
-     * Link new event to a memo
-     * @param memoTitle The title of the memo to add the event to. The memo must already exist
-     * @param eventId The id of the event. It must exist
-     * @throws IllegalArgumentException if the event or the memo does not exist
-     */
-    public void linkMemo(String memoTitle, String eventId) throws IllegalArgumentException {
-        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoTitle)).findAny().orElseThrow(null);
-        if(getEvent(eventId) == null){
-            throw new IllegalArgumentException();
-        }
-        memo.addEvent(eventId);
-        save();
-    }
-
-    /**
-     * Remove link between event and memo
-     * @param memoText The memo. It must exist
-     * @param eventId The id of the event. It must exist
-     * @throws IllegalArgumentException if the event or the memo does not exist
-     */
-    public void unlinkMemo(String memoText, String eventId) throws IllegalArgumentException {
-        Memo memo = memos.stream().filter(m -> m.getText().equals(memoText)).findAny().orElseThrow(null);
-        if(getEvent(eventId) == null){
-            throw new IllegalArgumentException();
-        }
-        memo.removeEvent(eventId);
-        if(memo.getEvents().size() == 0){
-            memos.remove(memo);
-        }
-        save();
-    }
 
     /**
      * Return all memos which are attributed with a certain event
@@ -475,8 +305,8 @@ public class Calendar {
         }
         try {
             dataSaver.saveToFile("memos.txt", memoData.toString());
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
         // save tags
@@ -488,12 +318,12 @@ public class Calendar {
                     tag.getEvents()) {
                 ids.append(id).append("|");
             }
-            memoData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
+            tagsData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
         }
         try {
-            dataSaver.saveToFile("tags.txt", memoData.toString());
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
+            dataSaver.saveToFile("tags.txt", tagsData.toString());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
     }
 
@@ -512,7 +342,7 @@ public class Calendar {
                 List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
                 memos.add(new Memo(parts[0], parts[1], idStrings));
             }
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
 
         }
         //load tags
@@ -526,7 +356,7 @@ public class Calendar {
                 List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
                 tags.add(new Tag(parts[0], idStrings));
             }
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
 
         }
         //Load existing event collection series
@@ -565,37 +395,6 @@ public class Calendar {
 
     public Tag getTag(String tag) {
         return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
-    }
-
-    /**
-     * Try and add an alert collection for an event
-     * @param eventId Id of the evemt
-     * @return True if a new alert collection was created; False if an alert collection already exists
-     */
-    public boolean addAlertCollection(String eventId) {
-        for (AlertCollection alertCollection :
-                alertCollections) {
-            if (eventId.equals(alertCollection.getEventId())){
-                return false;
-            }
-        }
-        alertCollections.add(new AlertCollection(getEvent(eventId), dataSaver));
-        return true;
-    }
-
-    /**
-     * Return the corresponding alert collection to an event
-     * @param eventId Id of event
-     * @return Alert collection if it exists, otherwise null
-     */
-    public AlertCollection getAlertCollection(String eventId) {
-        for (AlertCollection alertCollection :
-                alertCollections) {
-            if (alertCollection.getEventId().equals(eventId)){
-                return alertCollection;
-            }
-        }
-        return null;
     }
 
     public void removeOldAlerts() {
@@ -653,7 +452,6 @@ public class Calendar {
 
             // Checks if an additional event can be gotten from an iterator,
             for (int i = 0; i < eventCollectionEventIterators.size(); i++) {
-                Iterator<Event> iterator = eventCollectionEventIterators.get(i);
                 findNextInIterator(i);
                 if(possibleNext.get(i) != null)
                     return true;
@@ -714,8 +512,8 @@ public class Calendar {
 
     /**
      * edits the memo title
-     * @param memoName
-     * @param newMemoName
+     * @param memoName Name of the memo to edit
+     * @param newMemoName New name of the memo
      */
     public void editMemoTitle(String memoName, String newMemoName){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
@@ -725,8 +523,8 @@ public class Calendar {
 
     /**
      * edits a memo text
-     * @param memoName
-     * @param newMemoText
+     * @param memoName Name of the memo to edit
+     * @param newMemoText The new text for this memo
      */
     public void editMemoText(String memoName, String newMemoText){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
@@ -754,9 +552,9 @@ public class Calendar {
 
     /**
      * remove event
-     * @param event
-     * @throws InvalidDateException
-     * @throws IOException
+     * @param event The event to be removed
+     * @throws InvalidDateException Internal error
+     * @throws IOException Internal error when saving
      */
     public void removeEvent(Event event) throws InvalidDateException, IOException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
@@ -764,7 +562,7 @@ public class Calendar {
 
     /**
      * get all event series's name
-     * @return
+     * @return A list containing all the names of all event series in order of internal representation
      */
     public List<String> getEventSeriesNames(){
         return eventCollections.stream().map(EventCollection::getName).filter(f -> !f.equals("")).collect(Collectors.toList());
