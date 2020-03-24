@@ -15,38 +15,27 @@ public class FiniteSeries extends EventCollection {
     private Event baseEvent;
     private CalendarGenerator calGen;
 
+    //this attribute holds the events generated from calGen in memory, never saved nor loaded, but updated when CalGen is updated
+    //To save memory...
+    private List<Event> seriesEvents;
+
     /**
-     * Constructor for a repeating/infinite series
-     *
-     * @param calGen alert.Event generator for this series
-     * @param saver  saver object to load/save this alert.EventCollection
+     * @param name      the name of this Finite Series
+     * @param baseEvent the base Event this Series is modelled upon
+     * @param calGen    List of start date of the events of the series
+     * @param saver     saver object handling save and load of this series
+     * @throws InvalidDateException
      */
     public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
         super(new ArrayList<Event>(), saver);
         this.name = name;
         this.baseEvent = baseEvent;
         this.calGen = calGen;
+        this.seriesEvents = generateEvents();
         //load();
     }
 
     //TODO: test
-
-    /**
-     * Generate events based on the current CalGen
-     * @return List of events that has start time according to CalGen
-     * @throws InvalidDateException
-     */
-    public List<Event> generateEvents() throws InvalidDateException {
-        List<Event> ret = new ArrayList<>();
-        List<GregorianCalendar> test = new ArrayList<>();
-        for (GregorianCalendar GC : calGen) {
-            test.add(GC);
-            String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
-            Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
-            ret.add(event);
-        }
-        return ret;
-    }
 
     /**
      * @return name of this Finite Series
@@ -55,7 +44,42 @@ public class FiniteSeries extends EventCollection {
         return name;
     }
 
-//    public void addEvent(Event event) throws IOException {
+    @Override
+    public Event getEvent(String id) {
+        Event ret = super.getEvent(id);
+        if (null == ret) {
+            for (Event e : this.seriesEvents) {
+                if (e.getId().equals(id)) {
+                    ret = e;
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+
+
+    @Override
+    public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
+        List<Event> ret = super.getEvents(start, end);
+        for (Event e : this.seriesEvents) {
+            if (isOnTime(e, start, end)) {
+                ret.add(e);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Event> getEvents(GregorianCalendar date) {
+        List<Event> ret = super.getEvents(date);
+        GregorianCalendar startTime = roundUp(date);
+        GregorianCalendar endTime = roundDown(date);
+        ret.addAll(getEvents(startTime, endTime));
+        return ret;
+    }
+
+    //    public void addEvent(Event event) throws IOException {
 //        if (eGen != null)//if inf
 //        {
 //            eGen.getCalGen().addIgnore(event.getStartDate());
@@ -220,9 +244,28 @@ public class FiniteSeries extends EventCollection {
 //    }
 
     /**
+     * Generate events based on the current CalGen
+     *
+     * @return List of events that has start time according to CalGen
+     * @throws InvalidDateException
+     */
+    public List<Event> generateEvents() throws InvalidDateException {
+        List<Event> ret = new ArrayList<>();
+        List<GregorianCalendar> test = new ArrayList<>();
+        for (GregorianCalendar GC : calGen) {
+            test.add(GC);
+            String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
+            Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
+            ret.add(event);
+        }
+        return ret;
+    }
+
+    /**
      * Adds time (in millis) to a begin date and return it
+     *
      * @param begin the begin date
-     * @param time the time in millis to be added to begin
+     * @param time  the time in millis to be added to begin
      * @return a GC that is <time> later than <begin>
      */
     private GregorianCalendar addTime(GregorianCalendar begin, long time) {

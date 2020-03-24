@@ -105,7 +105,7 @@ public class Calendar {
 
     /**
      * Returns an iterator to get future events sorted by start time.
-     * [Warning] The iterator will no be updated and become unusable if the number of event collections change
+     * [Warning] The iterator will not be updated and become unusable if the number of event collections change
      *
      * @param start The earliest possible start time of the returned events
      * @return Null if no event collections exist, otherwise an Iterator<alert.Event>

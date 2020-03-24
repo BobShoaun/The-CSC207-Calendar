@@ -30,6 +30,8 @@ public class EventCollection implements Iterable<Event>, Observer {
 //        load(path);
     }
 
+    //TODO: re-evaluate overriding in Finite Series
+
     /**
      * @return the regular event list
      */
@@ -55,41 +57,38 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * Returns all events that is
-     *
-     * @param date date of events demanded
-     * @return a list of events that is on the same day as <date></>
-     */
-    //TODO: test this
-    public List<Event> getEvents(Date date) {
-        //find alternative
-        Date startTime = roundUp(date);
-        Date endTime = roundDown(date);
-        return getEvents(startTime, endTime);
-    }
-
-    /**
      * Gets all events which either start or end during this time period. The endpoints are INCLUDED
      *
      * @param start Earliest time for an event to end
      * @param end   Latest time for an event to end
      * @return List of all events where start point <= end and end point >= start
      */
-    public List<Event> getEvents(Date start, Date end) {
+    public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
         List<Event> ret = new ArrayList<>();
-        GregorianCalendar startGC = new GregorianCalendar();
-        GregorianCalendar endGC = new GregorianCalendar();
-        startGC.setTime(start);
-        endGC.setTime(end);
-        if(events!=null) {
+        if (events != null) {
             for (Event e : this.events) {
-                if (isOnTime(e, startGC, endGC)) {
+                if (isOnTime(e, start, end)) {
                     ret.add(e);
                 }
             }
         }
         return ret;
     }
+
+    /**
+     * Returns all events that is
+     *
+     * @param date date of events demanded
+     * @return a list of events that is on the same day as <date></>
+     */
+    //TODO: test this
+    public List<Event> getEvents(GregorianCalendar date) {
+        //find alternative
+        GregorianCalendar startTime = roundUp(date);
+        GregorianCalendar endTime = roundDown(date);
+        return getEvents(startTime, endTime);
+    }
+
 
     /**
      * @param start the earliest start date of events in this iterator
@@ -276,32 +275,30 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     /**
      * round date to the beginning of that date day i.e. 0 am
+     *
      * @param date
      * @return
      */
-    protected Date roundUp(Date date) {
-        Calendar cl = Calendar.getInstance();
-        cl.setTime(date);
-        cl.set(Calendar.HOUR_OF_DAY, 0);
-        cl.set(Calendar.MINUTE, 0);
-        cl.set(Calendar.SECOND, 0);
-        cl.set(Calendar.MILLISECOND, 0);
-        return cl.getTime();
+    protected GregorianCalendar roundUp(GregorianCalendar date) {
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return date;
     }
 
     /**
      * round date to the end of that date day i.e. 23:59:59:999 pm
+     *
      * @param date
      * @return
      */
-    protected Date roundDown(Date date) {
-        Calendar cl = Calendar.getInstance();
-        cl.setTime(date);
-        cl.set(Calendar.HOUR_OF_DAY, 23);
-        cl.set(Calendar.MINUTE, 59);
-        cl.set(Calendar.SECOND, 59);
-        cl.set(Calendar.MILLISECOND, 999);
-        return cl.getTime();
+    protected GregorianCalendar roundDown(GregorianCalendar date) {
+        date.set(Calendar.HOUR_OF_DAY, 23);
+        date.set(Calendar.MINUTE, 59);
+        date.set(Calendar.SECOND, 59);
+        date.set(Calendar.MILLISECOND, 999);
+        return date;
     }
 
     /**
