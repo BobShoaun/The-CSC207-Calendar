@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 public class Calendar {
 
     private String name;
-    List<EventCollection> eventCollections;
-    List<AlertCollection> alertCollections;
-    List<Memo> memos;
-    List<Tag> tags;
+    private List<EventCollection> eventCollections;
+    private List<AlertCollection> alertCollections;
+    private List<Memo> memos;
+    private List<Tag> tags;
     private DataSaver dataSaver;
+    private TimeController timeController;
 
     /**
      * Constructor for creating a new calendar with no data
@@ -32,9 +33,10 @@ public class Calendar {
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
         alertCollections = new ArrayList<>();
-        load();
-        if(eventCollections.stream().filter(eC -> eC.getName().equals("")).findAny().orElse(null) == null)
-            eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
+        memos = new ArrayList<>();
+        tags = new ArrayList<>();
+        eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
+        timeController = new TimeController();
     }
 
     public String getName () { return name; }
@@ -46,14 +48,17 @@ public class Calendar {
      * @param eventCollections List of  event collections for new calendar
      * @param alertCollections List of alert collections for new calendar
      */
-    public Calendar(String name, List<EventCollection> eventCollections, List<AlertCollection> alertCollections) {
+    public Calendar(String name, List<EventCollection> eventCollections, List<AlertCollection> alertCollections,
+                    List<Memo> memos, List<Tag> tags) {
         if (eventCollections == null || alertCollections == null) {
             throw new NullPointerException();
         }
         this.name = name;
         this.eventCollections = eventCollections;
         this.alertCollections = alertCollections;
-        load();
+        this.tags = tags;
+        this.memos = memos;
+        timeController = new TimeController();
     }
 
     public List<AlertCollection> getAlertCollections() {
@@ -134,23 +139,6 @@ public class Calendar {
     }
 
     /**
-     * Add an event to the correct event collection
-     *
-     * @param event    alert.Event to add
-     * @param seriesId Series to add event to
-     */
-    public void createEvent(Event event, String seriesId) throws IllegalArgumentException, IOException {
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection.getName().equals(seriesId)) {
-                eventCollection.addEvent(event);
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    /**
      * Return sorted alerts which occur in [start, end]
      *
      * @param start The inclusive start time
@@ -170,74 +158,15 @@ public class Calendar {
         return alerts;
     }
 
-    public void createEventSeries(String eventSeriesName, ArrayList<String> eventIds) throws IOException {
-        List<Event> events = eventIds.stream().map(this::getEvent).collect(Collectors.toList());
-        for (Event e : events) {
-            removeFromSeries(e.getId());
-        }
-        eventCollections.add(new EventCollection(eventSeriesName, events, dataSaver));
+    /**
+     * Create a new event series
+     * @param eventSeriesName name of the new series
+     * @throws IOException If saving error occurs
+     */
+    public void addEventSeries(String eventSeriesName) throws IOException {
+        eventCollections.add(new EventCollection(eventSeriesName, new ArrayList<>(), dataSaver));
     }
 
-    /**
-     * Move an event to a series from another series. If the event is already part of that series nothing changes
-     *
-     * @param eventId    The id of the event to move
-     * @param seriesName The name of the new series to add it to
-     */
-    public void addToSeries(String eventId, String seriesName) throws IllegalArgumentException, IOException {
-        EventCollection from = null;
-        EventCollection eventCollection = null;
-        Event event = null;
-        for (EventCollection eC :
-                eventCollections) {
-            if (eC.getName().equals(seriesName)) {
-                eventCollection = eC;
-            }
-            if (eC.getEvent(eventId) != null) {
-                from = eC;
-                event = eC.getEvent(eventId);
-            }
-        }
-        if(eventCollection == null || event == null){
-            throw new IllegalArgumentException();
-        }
-        try {
-            from.removeEvent(event);
-        } catch (InvalidDateException e) {
-            throw new IllegalArgumentException();
-        }
-        eventCollection.addEvent(event);
-    }
-
-    /**
-     * Remove an event from a series and put in the collection series with no name
-     *
-     * @param eventId The event to move
-     * @throws IllegalArgumentException If the event collection or the event can not be found
-     */
-    public void removeFromSeries(String eventId) throws IllegalArgumentException, IOException {
-        EventCollection from = null;
-        EventCollection to = eventCollections.stream().filter(p -> p.getName().equals("")).findAny().orElseThrow(null);
-        Event event = null;
-        for (EventCollection eventCollection :
-                eventCollections) {
-            event = eventCollection.getEvent(eventId);
-            if (event != null) {
-                from = eventCollection;
-                break;
-            }
-        }
-        if(event == null){
-            throw new IllegalArgumentException();
-        }
-        try {
-            from.removeEvent(event);
-        } catch (InvalidDateException e) {
-            // Date is invalid
-            throw new IllegalArgumentException();
-        }
-        to.addEvent(event);
-    }
 
     /**
      * Add an event series either to an existing series or it creates a new series
@@ -259,7 +188,6 @@ public class Calendar {
         eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
         eventCollections.add(eventCollection);
     }
-
 
 
     /**
@@ -289,100 +217,6 @@ public class Calendar {
      */
     public List<Event> getLinkedEvents(Memo memo) {
         return memo.getEvents().stream().map(this::getEvent).collect(Collectors.toList());
-    }
-
-    private void save(){
-        // save memos
-        StringBuilder memoData = new StringBuilder();
-        for (Memo memo :
-                memos) {
-            StringBuilder ids = new StringBuilder();
-            for (String id :
-                    memo.getEvents()) {
-                ids.append(id).append("|");
-            }
-            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("§").append(ids.toString()).append(String.format("%n"));
-        }
-        try {
-            dataSaver.saveToFile("memos.txt", memoData.toString());
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-
-        // save tags
-        StringBuilder tagsData = new StringBuilder();
-        for (Tag tag :
-                tags) {
-            StringBuilder ids = new StringBuilder();
-            for (String id :
-                    tag.getEvents()) {
-                ids.append(id).append("|");
-            }
-            tagsData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
-        }
-        try {
-            dataSaver.saveToFile("tags.txt", tagsData.toString());
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-    }
-
-    /**
-     *
-     */
-    public void load() {
-        //load memos
-        try {
-            memos = new ArrayList<>();
-            Scanner scanner = dataSaver.loadScannerFromFile("memos.txt");
-            while (scanner.hasNext()) {
-                String memoData = scanner.nextLine();
-                String[] parts = memoData.split("[§]+");
-                //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
-                memos.add(new Memo(parts[0], parts[1], idStrings));
-            }
-        } catch (FileNotFoundException ignored) {
-
-        }
-        //load tags
-        try {
-            tags = new ArrayList<>();
-            Scanner scanner = dataSaver.loadScannerFromFile("tags.txt");
-            while (scanner.hasNext()){
-                String tagData = scanner.nextLine();
-                String[] parts = tagData.split("[§]+");
-                //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
-                tags.add(new Tag(parts[0], idStrings));
-            }
-        } catch (FileNotFoundException ignored) {
-
-        }
-        //Load existing event collection series
-        File[] files = dataSaver.getFilesInDirectory("/events");
-        if(files != null){
-            for (File file :
-                    files) {
-                String name = file.getName();
-                name = name.replaceAll(".txt", "");
-                try {
-                    eventCollections.add(new EventCollection(name, dataSaver));
-                } catch (InvalidDateException e) {
-                    System.out.println("Failed to load events: " + name);
-                }
-            }
-        }
-        //Load existing alert collection series
-        files = dataSaver.getFilesInDirectory("/alerts/");
-        if(files != null){
-            for (File file :
-                    files) {
-                String name = file.getName();
-                name = name.replaceAll(".txt", "");
-                alertCollections.add(new AlertCollection(name, dataSaver));
-            }
-        }
     }
 
     public EventCollection getEventCollection(String eventSeriesName) {
@@ -507,7 +341,7 @@ public class Calendar {
     }
 
     public GregorianCalendar getTime(){
-        return (GregorianCalendar)GregorianCalendar.getInstance();
+        return timeController.getTime();
     }
 
     /**
@@ -518,7 +352,7 @@ public class Calendar {
     public void editMemoTitle(String memoName, String newMemoName){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setTitle(newMemoName);
-        save();
+        dataSaver.SaveCalendar(this);
     }
 
     /**
@@ -529,7 +363,7 @@ public class Calendar {
     public void editMemoText(String memoName, String newMemoText){
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
-        save();
+        dataSaver.SaveCalendar(this);
     }
 
     /**
@@ -538,7 +372,7 @@ public class Calendar {
      */
     public void removeMemo(Memo memo){
         memos.remove(memo);
-        save();
+        dataSaver.SaveCalendar(this);
     }
 
     /**

@@ -1,13 +1,18 @@
 package user;
 
+import entities.Alert;
+import entities.AlertCollection;
+import entities.EventCollection;
+import exceptions.InvalidDateException;
+import mt.Memo;
+import mt.Tag;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
@@ -105,6 +110,104 @@ public class DataSaver {
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
                 .forEach(File::delete);
+    }
+
+
+    public Calendar loadCalendar(String calendarName){
+        ArrayList<Memo> memos = new ArrayList<>();
+        ArrayList<Tag> tags = new ArrayList<>();
+        ArrayList<EventCollection> eventCollections = new ArrayList<>();
+        ArrayList<AlertCollection> alertCollections = new ArrayList<>();
+        //load memos
+        try {
+            memos = new ArrayList<>();
+            Scanner scanner = loadScannerFromFile("memos.txt");
+            while (scanner.hasNext()) {
+                String memoData = scanner.nextLine();
+                String[] parts = memoData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                memos.add(new Memo(parts[0], parts[1], idStrings));
+            }
+        } catch (FileNotFoundException ignored) {
+
+        }
+        //load tags
+        try {
+            tags = new ArrayList<>();
+            Scanner scanner = loadScannerFromFile("tags.txt");
+            while (scanner.hasNext()){
+                String tagData = scanner.nextLine();
+                String[] parts = tagData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                tags.add(new Tag(parts[0], idStrings));
+            }
+        } catch (FileNotFoundException ignored) {
+
+        }
+        //Load existing event collection series
+        File[] files = getFilesInDirectory("/events");
+        if(files != null){
+            for (File file :
+                    files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                try {
+                    eventCollections.add(new EventCollection(name, this));
+                } catch (InvalidDateException e) {
+                    System.out.println("Failed to load events: " + name);
+                }
+            }
+        }
+        //Load existing alert collection series
+        files = getFilesInDirectory("/alerts/");
+        if(files != null){
+            for (File file :
+                    files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                alertCollections.add(new AlertCollection(name, this));
+            }
+        }
+        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags);
+    }
+
+
+    public void SaveCalendar(Calendar calendar){
+        // save memos
+        StringBuilder memoData = new StringBuilder();
+        for (Memo memo :
+                calendar.getMemos()) {
+            StringBuilder ids = new StringBuilder();
+            for (String id :
+                    memo.getEvents()) {
+                ids.append(id).append("|");
+            }
+            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("§").append(ids.toString()).append(String.format("%n"));
+        }
+        try {
+            saveToFile("memos.txt", memoData.toString());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+        // save tags
+        StringBuilder tagsData = new StringBuilder();
+        for (Tag tag :
+                calendar.getTags()) {
+            StringBuilder ids = new StringBuilder();
+            for (String id :
+                    tag.getEvents()) {
+                ids.append(id).append("|");
+            }
+            tagsData.append(tag.getText()).append("§").append(ids.toString()).append(String.format("%n"));
+        }
+        try {
+            saveToFile("tags.txt", tagsData.toString());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
 }
