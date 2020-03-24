@@ -37,6 +37,11 @@ public class Calendar {
         tags = new ArrayList<>();
         eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
         timeController = new TimeController();
+        try {
+            addEventSeries("Shared");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public String getName () { return name; }
@@ -49,7 +54,7 @@ public class Calendar {
      * @param alertCollections List of alert collections for new calendar
      */
     public Calendar(String name, List<EventCollection> eventCollections, List<AlertCollection> alertCollections,
-                    List<Memo> memos, List<Tag> tags) {
+                    List<Memo> memos, List<Tag> tags, DataSaver dataSaver) {
         if (eventCollections == null || alertCollections == null) {
             throw new NullPointerException();
         }
@@ -59,6 +64,7 @@ public class Calendar {
         this.tags = tags;
         this.memos = memos;
         timeController = new TimeController();
+        this.dataSaver = dataSaver;
     }
 
     public List<AlertCollection> getAlertCollections() {

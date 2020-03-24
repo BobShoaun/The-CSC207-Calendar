@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * alert.Event class
  */
-public class Event extends Observable implements Comparable{
+public class Event extends Observable implements Cloneable, Comparable<Event>{
 
     private String id;
     private String name;
@@ -149,9 +149,8 @@ public class Event extends Observable implements Comparable{
                 endDate.getTimeInMillis() + ",";
         return result;
     }
-
     /**
-     * @param o the object to be compared.
+     * @param compareEvent the Event to be compared.
      * @return a negative integer, zero, or a positive integer as this object
      * is less than, equal to, or greater than the specified object.
      * @throws NullPointerException if the specified object is null
@@ -159,8 +158,16 @@ public class Event extends Observable implements Comparable{
      *                              from being compared to this object.
      */
     @Override
-    public int compareTo(Object o) {
-        long time = ((Event)o).getStartDate().getTimeInMillis();
+    public int compareTo(Event compareEvent) {
+        long time = compareEvent.getStartDate().getTimeInMillis();
         return (int)(this.getStartDate().getTimeInMillis()-time);
+    }
+
+    /**
+     * Return a clone of this event
+     * @return a clone of this event
+     */
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

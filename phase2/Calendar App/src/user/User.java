@@ -1,5 +1,7 @@
 package user;
 
+import entities.Event;
+
 import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +22,7 @@ public class User implements StringParsable {
     private GregorianCalendar lastLoginTime;
     private boolean firstLogin;
     private DataSaver dataSaver;
+    private EventSharer eventSharer;
 
     /**
      * getter for the user's name
@@ -46,6 +49,20 @@ public class User implements StringParsable {
             e.printStackTrace();
         }
         this.calendars.remove(index);
+    }
+
+    /**
+     * Gets a calendar by name
+     * @param name the name of the calendar you're looking for
+     * @return the calendar with the title of name or null if one doesn't exist
+     */
+    public Calendar getCalendar(String name){
+        for (Calendar calendar : calendars){
+            if (calendar.getName().equals(name)){
+                return calendar;
+            }
+        }
+        return null;
     }
 
     public List<Calendar> getCalendars () { return this.calendars; }
@@ -78,8 +95,10 @@ public class User implements StringParsable {
      * Constructor for User
      * @param name the user's name
      * @param password the user's password
+     * @param eventSharer the eventSharer
      */
-    public User(String name, String password) {
+    public User(String name, String password, EventSharer eventSharer) {
+        this.eventSharer = eventSharer;
         this.name = name;
         this.password = password;
         this.calendars = new ArrayList<>();
@@ -163,5 +182,4 @@ public class User implements StringParsable {
         for (Calendar calendar : calendars)
             dataSaver.makeDirectory(calendar.getName());
     }
-
 }

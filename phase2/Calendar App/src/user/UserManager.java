@@ -19,6 +19,7 @@ public class UserManager {
     private List<User> users;
     private User currentUser;
     private DataSaver dataSaver;
+    private EventSharer eventSharer;
 
     /**
      *
@@ -33,6 +34,7 @@ public class UserManager {
         dataSaver = new DataSaver("./users/");
         users = new ArrayList<> ();
         currentUser = null;
+        eventSharer = new EventSharer(this);
     }
 
     /**
@@ -117,9 +119,22 @@ public class UserManager {
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();
 
-        User newUser = new User(username, password);
+        User newUser = new User(username, password, eventSharer);
         users.add(newUser);
         saveUser(newUser);
     }
 
+    /**
+     * Gets a user by username
+     * @param username the username of the user you're looking for
+     * @return the user with the name of username or null if one doesn't exist
+     */
+    public User getUser(String username){
+        for (User user : users){
+            if (user.getName().equals(username)){
+                return user;
+            }
+        }
+        return null;
+    }
 }
