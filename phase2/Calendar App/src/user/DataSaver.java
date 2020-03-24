@@ -170,7 +170,7 @@ public class DataSaver {
                 alertCollections.add(new AlertCollection(name, this));
             }
         }
-        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags);
+        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags, this);
     }
 
 
