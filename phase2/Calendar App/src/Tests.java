@@ -1,6 +1,5 @@
 import consoleui.EventCollectionUI;
 import dates.CalendarGenerator;
-import dates.EventGenerator;
 import entities.Alert;
 import entities.AlertCollection;
 import entities.Event;
@@ -42,21 +41,6 @@ public class Tests {
         if (get.size() != 9) throw new AssertionError();
     }
 
-    static void testEventsGenerator() throws InvalidDateException {
-        Event e = new Event("test", "Go Shopping",
-                new GregorianCalendar(120, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(120, Calendar.MARCH, 6, 12, 0));
-
-
-        Date date = new Date(120, Calendar.MAY, 12);
-        Date date2 = new Date(120, Calendar.MAY, 20);
-        List<Duration> durs = new ArrayList<>();
-        durs.add(Duration.ofDays(1));
-        EventGenerator eg = new EventGenerator(e, date, date2, durs);
-
-        List<Event> events = new ArrayList<>(eg.generateEvents());
-        if (events.size() != 9) throw new AssertionError("EventGenerator problem");
-    }
 
     static void testECSave() throws InvalidDateException, IOException {
         String name = "testseries";
