@@ -4,6 +4,9 @@ import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The CalendarGenerator class
+ */
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     private List<GregorianCalendar> ignoreList = new ArrayList<>();
@@ -37,8 +40,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Outputs all data in this CG into a String.
-     *
-     * @return String representation of the data
+     * @return A savable representation of the data
      */
     public String getString() {
         StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n");
@@ -52,6 +54,10 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         return result.toString();
     }
 
+    /**
+     * Summarizes this object into a string
+     * @return String representation of the data
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ");
@@ -61,10 +67,18 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         return result.toString();
     }
 
+    /**
+     * Adds a period to the repeat periods
+     * @param period the period being added
+     */
     public void addPeriod(Duration period) {
         periods.add(period);
     }
 
+    /**
+     * Adds a time to the times being ignored
+     * @param newIgnoreTime the time to ignore
+     */
     public void addIgnore(GregorianCalendar newIgnoreTime){
         ignoreList.add(newIgnoreTime);
     }
@@ -93,19 +107,29 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         this.startTime = startTime;
     }
 
+    /**
+     * creates a new iterator
+     * @return the iterator
+     */
     @Override
     public Iterator<GregorianCalendar> iterator() {
         return new CGI();
     }
 
+    /**
+     * The CGI class
+     */
     private class CGI implements Iterator<GregorianCalendar>{
         GregorianCalendar currentTime = new GregorianCalendar();
 
+        /**
+         * Create a CGI
+         */
         public CGI() {
             currentTime.setTimeInMillis(startTime.getTimeInMillis());
         }
 
-        public List<GregorianCalendar> nextSet(){
+        private List<GregorianCalendar> nextSet(){
             List<GregorianCalendar> candidates = new ArrayList<>();
 
             for (Duration period : periods) {
