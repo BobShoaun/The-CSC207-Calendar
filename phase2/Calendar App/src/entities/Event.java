@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * alert.Event class
  */
-public class Event extends Observable{
+public class Event extends Observable implements Cloneable {
 
     private String id;
     private String name;
@@ -148,5 +148,13 @@ public class Event extends Observable{
                 startDate.getTimeInMillis() + ";" +
                 endDate.getTimeInMillis() + ",";
         return result;
+    }
+
+    /**
+     * Return a clone of this event
+     * @return a clone of this event
+     */
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

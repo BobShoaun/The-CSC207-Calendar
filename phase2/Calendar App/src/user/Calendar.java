@@ -37,6 +37,11 @@ public class Calendar {
         tags = new ArrayList<>();
         eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
         timeController = new TimeController();
+        try {
+            addEventSeries("Shared");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public String getName () { return name; }
