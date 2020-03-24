@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class TimeController {
-    GregorianCalendar currentTime;
+    private GregorianCalendar currentTime;
 
     public TimeController(){
         currentTime = new GregorianCalendar();
