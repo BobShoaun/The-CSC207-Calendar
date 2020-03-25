@@ -1,8 +1,6 @@
 package user;
 
-import entities.Alert;
-import entities.AlertCollection;
-import entities.EventCollection;
+import entities.*;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
@@ -176,6 +174,21 @@ public class DataSaver {
 
 
     public void SaveCalendar(Calendar calendar){
+        //save EventCollection and Series
+        saveHelper("events/", calendar.getEventCollection().getEvents());
+        saveHelper("events/postponed/", calendar.getEventCollection().getPostponedEvents());
+
+        for(Series series: calendar.getSeries())
+        {
+            saveHelper("series/" + series.getName() + "/", series.getManualEvents());
+            saveHelper("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
+            try {
+                saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         // save memos
         StringBuilder memoData = new StringBuilder();
         for (Memo memo :
@@ -208,6 +221,16 @@ public class DataSaver {
             saveToFile("tags.txt", tagsData.toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        }
+    }
+
+    private void saveHelper(String path, List<Event> events){
+        for (Event e : events) {
+            try {
+                saveToFile(path + e.getId() + ".txt", e.getString());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

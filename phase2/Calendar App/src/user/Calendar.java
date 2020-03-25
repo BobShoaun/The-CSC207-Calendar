@@ -5,6 +5,7 @@ import entities.*;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,12 +42,29 @@ public class Calendar {
         addEventSeries("Shared");
     }
 
-    public String getName () { return name; }
+    /**
+     * @return the SINGLE regular list of Event
+     */
+    public EventCollection getEventCollection() {
+        throw new NotImplementedException();
+    }
+
+    /**
+     *
+     * @return the list of series
+     */
+    public List<Series> getSeries() {
+        throw new NotImplementedException();
+    }
+
+    public String getName() {
+        return name;
+    }
 
     /**
      * Constructor for calendar with already existing data
      *
-     * @param name Name of the calendar
+     * @param name             Name of the calendar
      * @param eventCollections List of  event collections for new calendar
      * @param alertCollections List of alert collections for new calendar
      */
@@ -163,32 +181,34 @@ public class Calendar {
 
     /**
      * Create a new event series
+     *
      * @param eventSeriesName name of the new series
      * @throws InvalidDateException If incorrect data is passed in
      */
     public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventCollections.add(new InfiniteSeries(eventSeriesName, null, new CalendarGenerator(null, null, null),
+        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null),
                 dataSaver));
     }
 
 
     /**
      * Add an event series either to an existing series or it creates a new series
-     * @param name Name of the event collection it is added to
-     * @param start Time of the first repeating event
-     * @param end No event will occur after this time. Can be null if event will go on for ever
+     *
+     * @param name       Name of the event collection it is added to
+     * @param start      Time of the first repeating event
+     * @param end        No event will occur after this time. Can be null if event will go on for ever
      * @param difference The time difference between two created events
-     * @param baseEvent The event on which the other events will be based
+     * @param baseEvent  The event on which the other events will be based
      */
     public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
-            if (eventCollection instanceof InfiniteSeries && ((InfiniteSeries)eventCollection).getName().equals(name)) {
-                ((InfiniteSeries)eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
+            if (eventCollection instanceof Series && ((Series) eventCollection).getName().equals(name)) {
+                ((Series) eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
                 return;
             }
         }
-        InfiniteSeries eventCollection = new FiniteSeries(name, new ArrayList<>(), dataSaver);
+        Series eventCollection = new FiniteSeries(name, new ArrayList<>(), dataSaver);
         eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
         eventCollections.add(eventCollection);
     }
@@ -224,8 +244,8 @@ public class Calendar {
     }
 
     public EventCollection getEventCollection(String eventSeriesName) {
-        return eventCollections.stream().filter(eC -> eC instanceof InfiniteSeries
-                && ((InfiniteSeries)eC).getName().equals(eventSeriesName)).findAny().orElse(null);
+        return eventCollections.stream().filter(eC -> eC instanceof Series
+                && ((Series) eC).getName().equals(eventSeriesName)).findAny().orElse(null);
     }
 
     public Iterator<Event> getEvents(String eventName) {
@@ -243,6 +263,7 @@ public class Calendar {
         }
     }
 
+
     /**
      * alert.Event Iterator is used to iterate over the individual event collections to get the next time
      */
@@ -256,11 +277,11 @@ public class Calendar {
          * start time.
          * This will not observe changes to the number of event collections so a new one must be created after that occurs
          *
-         * @param start The earliest possible time for an event
+         * @param start   The earliest possible time for an event
          * @param isValid A predicate to filer events by. Can be null
          */
         public EventIterator(Date start, Predicate<Event> isValid) {
-            if(isValid == null)
+            if (isValid == null)
                 this.isValid = e -> true;
             else
                 this.isValid = isValid;
@@ -292,7 +313,7 @@ public class Calendar {
             // Checks if an additional event can be gotten from an iterator,
             for (int i = 0; i < eventCollectionEventIterators.size(); i++) {
                 findNextInIterator(i);
-                if(possibleNext.get(i) != null)
+                if (possibleNext.get(i) != null)
                     return true;
             }
             return false;
@@ -332,29 +353,30 @@ public class Calendar {
         private void findNextInIterator(int i) {
             if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
                 Event next = null;
-                while (eventCollectionEventIterators.get(i).hasNext()){
+                while (eventCollectionEventIterators.get(i).hasNext()) {
                     Event possible = eventCollectionEventIterators.get(i).next();
-                    if(isValid.test(possible)){
+                    if (isValid.test(possible)) {
                         next = possible;
                         break;
                     }
                 }
-                if(next != null)
+                if (next != null)
                     possibleNext.set(i, next);
             }
         }
     }
 
-    public GregorianCalendar getTime(){
+    public GregorianCalendar getTime() {
         return timeController.getTime();
     }
 
     /**
      * edits the memo title
-     * @param memoName Name of the memo to edit
+     *
+     * @param memoName    Name of the memo to edit
      * @param newMemoName New name of the memo
      */
-    public void editMemoTitle(String memoName, String newMemoName){
+    public void editMemoTitle(String memoName, String newMemoName) {
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setTitle(newMemoName);
         dataSaver.SaveCalendar(this);
@@ -362,10 +384,11 @@ public class Calendar {
 
     /**
      * edits a memo text
-     * @param memoName Name of the memo to edit
+     *
+     * @param memoName    Name of the memo to edit
      * @param newMemoText The new text for this memo
      */
-    public void editMemoText(String memoName, String newMemoText){
+    public void editMemoText(String memoName, String newMemoText) {
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
         dataSaver.SaveCalendar(this);
@@ -373,27 +396,30 @@ public class Calendar {
 
     /**
      * Remove the memo from all memos. Saves memos
+     *
      * @param memo Memo to remove
      */
-    public void removeMemo(Memo memo){
+    public void removeMemo(Memo memo) {
         memos.remove(memo);
         dataSaver.SaveCalendar(this);
     }
 
     /**
      * Gets a memo by its title
+     *
      * @param name Title of the memo
      * @return Returns the memo with the corresponding title, if no memo is found returns null
      */
-    public Memo getMemo(String name){
+    public Memo getMemo(String name) {
         return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
     }
 
     /**
      * remove event
+     *
      * @param event The event to be removed
      * @throws InvalidDateException Internal error
-     * @throws IOException Internal error when saving
+     * @throws IOException          Internal error when saving
      */
     public void removeEvent(Event event) throws InvalidDateException, IOException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
@@ -401,10 +427,11 @@ public class Calendar {
 
     /**
      * get all event series's name
+     *
      * @return A list containing all the names of all event series in order of internal representation
      */
-    public List<String> getEventSeriesNames(){
-        return eventCollections.stream().filter(eC -> eC instanceof InfiniteSeries)
-                .map(eC -> ((InfiniteSeries)eC).getName()).filter(f -> !f.equals("")).collect(Collectors.toList());
+    public List<String> getEventSeriesNames() {
+        return eventCollections.stream().filter(eC -> eC instanceof Series)
+                .map(eC -> ((Series) eC).getName()).filter(f -> !f.equals("")).collect(Collectors.toList());
     }
 }

@@ -225,19 +225,19 @@ public class EventCollection implements Iterable<Event>, Observer {
         return result.toString();
     }
 
-    /**
-     * Save this EventCollection's data into text files.
-     */
-    public void save() throws IOException {
-        saveHelper("events/", this.events);
-        saveHelper("events/postponed/", this.postponedEvents);
-    }
+//    /**
+//     * Save this EventCollection's data into text files.
+//     */
+//    public void save() throws IOException {
+//        saveHelper("events/", this.events);
+//        saveHelper("events/postponed/", this.postponedEvents);
+//    }
 
-    protected void saveHelper(String path, List<Event> events) throws IOException {
-        for (Event e : events) {
-            saver.saveToFile(path + e.getId() + ".txt", e.getString());
-        }
-    }
+//    protected void saveHelper(String path, List<Event> events) throws IOException {
+//        for (Event e : events) {
+//            saver.saveToFile(path + e.getId() + ".txt", e.getString());
+//        }
+//    }
 
     /**
      * loads events from text file
@@ -320,11 +320,7 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        try {
-            save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //TODO: implement update
     }
 
     /**

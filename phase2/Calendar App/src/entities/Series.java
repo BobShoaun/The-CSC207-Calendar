@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 
-public class InfiniteSeries extends EventCollection implements Iterable<Event> {
+public class Series extends EventCollection implements Iterable<Event> {
 
     private String name;
     private Event baseEvent;
@@ -27,7 +27,7 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
      * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
-    public InfiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
+    public Series(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
         //TODO: Watch it for save/load
         super(new ArrayList<>(), saver);
         this.name = name;
@@ -46,8 +46,12 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
     }
 
 
+    public CalendarGenerator getCalGen() {
+        return calGen;
+    }
+
     /**
-     * @return the regular event list
+     * @return the regular events and series events within the time period
      */
     @Override
     public List<Event> getEvents() {
@@ -55,6 +59,10 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
         ret.addAll(this.seriesEvents);
         Collections.sort(ret);
         return ret;
+    }
+
+    public List<Event> getManualEvents(){
+        return super.getEvents();
     }
 
     @Override
@@ -193,12 +201,12 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
         return result.toString();
     }
 
-    @Override
-    public void save() throws IOException {
-        saveHelper("series/" + this.name + "/", super.getEvents());
-        saveHelper("series/" + this.name + "/postponed/", super.getPostponedEvents());
-        getSaver().saveToFile("series/" + this.name + "/CalenderGenerator.txt", this.calGen.getString());
-    }
+//    @Override
+//    public void save() throws IOException {
+//        saveHelper("series/" + this.name + "/", super.getEvents());
+//        saveHelper("series/" + this.name + "/postponed/", super.getPostponedEvents());
+//        getSaver().saveToFile("series/" + this.name + "/CalenderGenerator.txt", this.calGen.getString());
+//    }
 
     @Override
     public void load() throws IOException, InvalidDateException {

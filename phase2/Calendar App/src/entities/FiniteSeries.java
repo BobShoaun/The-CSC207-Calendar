@@ -4,10 +4,9 @@ import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
 import user.DataSaver;
 
-import java.io.IOException;
 import java.util.GregorianCalendar;
 
-public class FiniteSeries extends InfiniteSeries {
+public class FiniteSeries extends Series {
     private GregorianCalendar endTime;
 
     /**
