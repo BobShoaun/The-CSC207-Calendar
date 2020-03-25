@@ -36,6 +36,11 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.seriesEvents = generateEvents();
     }
 
+    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end){
+        if(start.after(calGen.getStartTime())) {this.calGen.setStartTime(start);}
+        this.calGen.setEndTime(end);
+    }
+
     //TODO: test
 
     /**
@@ -61,8 +66,12 @@ public class Series extends EventCollection implements Iterable<Event> {
         return ret;
     }
 
-    public List<Event> getManualEvents(){
+    public List<Event> getManualEvents() {
         return super.getEvents();
+    }
+
+    public Event getBaseEvent() {
+        return baseEvent;
     }
 
     @Override
@@ -231,6 +240,7 @@ public class Series extends EventCollection implements Iterable<Event> {
             GregorianCalendar endTime = addTime(startTime, time);
             CalendarGenerator defaultCG = new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
 
+            calGen.setEndTime(endTime);
             return generateEventsHelper(defaultCG);
         }
         return generateEventsHelper(calGen);
@@ -245,6 +255,7 @@ public class Series extends EventCollection implements Iterable<Event> {
         }
         return ret;
     }
+
 
     /**
      * Adds time (in millis) to a begin date and return it

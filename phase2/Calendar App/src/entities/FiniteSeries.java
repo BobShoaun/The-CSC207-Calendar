@@ -7,6 +7,8 @@ import user.DataSaver;
 import java.util.GregorianCalendar;
 
 public class FiniteSeries extends Series {
+    //the end date where the repeating series definitively ends, unlike infinite series that goes
+    //on forever as long its within the period that user inputs
     private GregorianCalendar endTime;
 
     /**
@@ -14,17 +16,26 @@ public class FiniteSeries extends Series {
      * @param baseEvent the base Event this Series is modelled upon
      * @param calGen    List of start date of the events of the series, CalGen basically contains the user input of
      *                  display periods, however in a finite Series calGen.getEndTime == fixedEndTime
-     * @param endTime   the end date where the repeating series definitively ends, unlike infinite series that goes
-     *                  on forever as long its within the period that user inputs
      * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
-    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, GregorianCalendar endTime, DataSaver saver) throws InvalidDateException {
-        super(name, baseEvent, new CalendarGenerator(calGen.getStartTime(), calGen.getPeriods(), endTime), saver);
-        this.endTime = endTime;
+    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
+        super(name, baseEvent, calGen, saver);
+        this.endTime = calGen.getEndTime();
     }
 
     public void setEndTime(GregorianCalendar endTime) {
         this.endTime = endTime;
+        getCalGen().setEndTime(endTime);
+    }
+
+    @Override
+    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
+        if(start.after(getCalGen().getStartTime())) {getCalGen().setStartTime(start);}
+        if(end.after(endTime)){
+            getCalGen().setEndTime(endTime);
+        }else{
+            getCalGen().setEndTime(end);
+        }
     }
 }

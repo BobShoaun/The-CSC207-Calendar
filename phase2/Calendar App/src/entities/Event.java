@@ -143,10 +143,10 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
      */
     public String getString()
     {
-        String result = id + ";" +
-                name + ";" +
-                startDate.getTimeInMillis() + ";" +
-                endDate.getTimeInMillis() + ",";
+        String result = id + "\n" +
+                name + "\n" +
+                startDate.getTimeInMillis() + "\n" +
+                endDate.getTimeInMillis();
         return result;
     }
     /**

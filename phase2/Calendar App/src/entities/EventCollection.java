@@ -258,8 +258,8 @@ public class EventCollection implements Iterable<Event>, Observer {
             String name = eventData[1];
             GregorianCalendar start = new GregorianCalendar();
             GregorianCalendar end = new GregorianCalendar();
-            start.setTimeInMillis(Long.parseLong(eventData[1]));
-            end.setTimeInMillis(Long.parseLong(eventData[2]));
+            start.setTimeInMillis(Long.parseLong(eventData[2]));
+            end.setTimeInMillis(Long.parseLong(eventData[3]));
             loadedEvents.add(new Event(id, name, start, end));
         }
         return loadedEvents;

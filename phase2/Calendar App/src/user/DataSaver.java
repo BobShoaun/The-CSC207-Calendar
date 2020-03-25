@@ -1,5 +1,6 @@
 package user;
 
+import dates.CalendarGenerator;
 import entities.*;
 import exceptions.InvalidDateException;
 import mt.Memo;
@@ -14,6 +15,7 @@ import java.util.*;
 
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
+ *
  * @auther Ng Bob Shoaun
  */
 public class DataSaver {
@@ -22,45 +24,44 @@ public class DataSaver {
 
     /**
      * Initializes DataSaver
+     *
      * @param basePath a base path relative to all path's passed into this DataSaver
      */
-    public DataSaver (String basePath) {
+    public DataSaver(String basePath) {
         this.basePath = basePath + (!basePath.equals("") ? "/" : "");
     }
 
     /**
-     *
      * @param path The path relative to the base directory of the user data
      * @return loaded text file stream
      */
-    public Scanner loadScannerFromFile (String path) throws FileNotFoundException {
-        return new Scanner (new File (basePath + path));
+    public Scanner loadScannerFromFile(String path) throws FileNotFoundException {
+        return new Scanner(new File(basePath + path));
     }
 
     /**
-     *
      * @param path The path relative to the base directory of the user data
      * @return list of strings from file
      */
-    public List<String> loadStringsFromFile (String path) throws IOException {
+    public List<String> loadStringsFromFile(String path) throws IOException {
         return Files.readAllLines(Paths.get(basePath + path), StandardCharsets.UTF_8);
     }
 
     /**
-     *
      * @param path The path relative to the base directory of the user data
      * @return entire text file as a string
      */
-    public String loadStringFromFile (String path) throws IOException {
+    public String loadStringFromFile(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(basePath + path)));
     }
 
     /**
      * Save to file
-     * @param path The path relative to the base directory of the user data
+     *
+     * @param path     The path relative to the base directory of the user data
      * @param contents Data to save
      */
-    public void saveToFile (String path, List<String> contents) throws IOException {
+    public void saveToFile(String path, List<String> contents) throws IOException {
         try (PrintWriter out = new PrintWriter(basePath + path)) {
             for (String line : contents)
                 out.println(line);
@@ -75,10 +76,11 @@ public class DataSaver {
 
     /**
      * Save to file
-     * @param path The path relative to the base directory of the user data
+     *
+     * @param path     The path relative to the base directory of the user data
      * @param contents Data to save
      */
-    public void saveToFile (String path, String contents) throws IOException {
+    public void saveToFile(String path, String contents) throws IOException {
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
@@ -91,19 +93,24 @@ public class DataSaver {
     }
 
     /**
-     *
      * @param path The path relative to the base directory of the user data
      * @return the list of files in the given path
      */
-    public File[] getFilesInDirectory (String path) {
+    public File[] getFilesInDirectory(String path) {
         return new File(basePath + path).listFiles();
     }
 
-    public void makeDirectory (String path) {
+    /**
+     * @param path The path relative to the base directory of the user data
+     * @return the list of filenames in the given path
+     */
+    public String[] getFileNamesInDirectory(String path) { return new File(basePath + path).list(); }
+
+    public void makeDirectory(String path) {
         new File(basePath + path).mkdirs();
     }
 
-    public void deleteDirectory (String path) throws IOException {
+    public void deleteDirectory(String path) throws IOException {
         Files.walk(Paths.get(basePath + path))
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
@@ -111,11 +118,17 @@ public class DataSaver {
     }
 
 
-    public Calendar loadCalendar(String calendarName){
+    public Calendar loadCalendar(String calendarName) {
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags = new ArrayList<>();
-        ArrayList<EventCollection> eventCollections = new ArrayList<>();
+        EventCollection eventCollections;
+        ArrayList<Series> series = new ArrayList<>();
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
+        //load EC
+
+        eventCollections = new EventCollection(ECLoadHelper("events/"),this);
+        eventCollections.setPostponedEvents(ECLoadHelper("events/postponed/"));
+
         //load memos
         try {
             memos = new ArrayList<>();
@@ -134,7 +147,7 @@ public class DataSaver {
         try {
             tags = new ArrayList<>();
             Scanner scanner = loadScannerFromFile("tags.txt");
-            while (scanner.hasNext()){
+            while (scanner.hasNext()) {
                 String tagData = scanner.nextLine();
                 String[] parts = tagData.split("[§]+");
                 //Split ids
@@ -144,24 +157,38 @@ public class DataSaver {
         } catch (FileNotFoundException ignored) {
 
         }
-        //Load existing event collection series
-        File[] files = getFilesInDirectory("/events");
-        if(files != null){
-            for (File file :
-                    files) {
-                String name = file.getName();
-                name = name.replaceAll(".txt", "");
-                //try {
-                    //eventCollections.add(new EventCollection(name, this));
-                    throw new Error(); //Tell Jasper to fix this once datasaver loads event collection and series
-                //} catch (InvalidDateException e) {
-                //    System.out.println("Failed to load events: " + name);
-                //}
+        //Load existing series
+        String[] filenames = getFileNamesInDirectory("series/");
+        if (filenames != null) {
+            for (String seriesName :
+                    filenames) {
+                try {
+                    String[] info = loadStringFromFile("series/" + seriesName + "/BaseEvent.txt").split("\\n");
+                    GregorianCalendar start = new GregorianCalendar();
+                    GregorianCalendar end = new GregorianCalendar();
+                    start.setTimeInMillis(Long.parseLong(info[2]));
+                    end.setTimeInMillis(Long.parseLong(info[2]));
+                    Event baseEvent = new Event(info[0],info[1],start,end);
+
+                    String CG = loadStringFromFile("series/" + seriesName + "/CalenderGenerator.txt");
+                    CalendarGenerator newCG = new CalendarGenerator(CG);
+
+                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newCG, this);
+
+                    newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
+                    newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));
+
+                    series.add(newSeries);
+                } catch (IOException | InvalidDateException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }
         //Load existing alert collection series
-        files = getFilesInDirectory("/alerts/");
-        if(files != null){
+        File[] files = getFilesInDirectory("/alerts/");
+        if (files != null) {
             for (File file :
                     files) {
                 String name = file.getName();
@@ -173,17 +200,18 @@ public class DataSaver {
     }
 
 
-    public void SaveCalendar(Calendar calendar){
-        //save EventCollection and Series
-        saveHelper("events/", calendar.getEventCollection().getEvents());
-        saveHelper("events/postponed/", calendar.getEventCollection().getPostponedEvents());
+    public void SaveCalendar(Calendar calendar) {
+        //save EventCollection
+        ECSaveHelper("events/", calendar.getEventCollection().getEvents());
+        ECSaveHelper("events/postponed/", calendar.getEventCollection().getPostponedEvents());
 
-        for(Series series: calendar.getSeries())
-        {
-            saveHelper("series/" + series.getName() + "/", series.getManualEvents());
-            saveHelper("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
+        //save Series
+        for (Series series : calendar.getSeries()) {
+            ECSaveHelper("series/" + series.getName() + "/", series.getManualEvents());
+            ECSaveHelper("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
             try {
                 saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
+                saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -224,7 +252,7 @@ public class DataSaver {
         }
     }
 
-    private void saveHelper(String path, List<Event> events){
+    private void ECSaveHelper(String path, List<Event> events) {
         for (Event e : events) {
             try {
                 saveToFile(path + e.getId() + ".txt", e.getString());
@@ -232,6 +260,28 @@ public class DataSaver {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private List<Event> ECLoadHelper(String path) {
+        List<Event> loadedEvents = new ArrayList<>();
+        File[] data = getFilesInDirectory(path);
+        for (File f : data) {
+            String id = f.getName();
+            id = id.replaceAll(".txt", "");
+            try {
+                String[] eventData = loadStringFromFile(path + id + ".txt").split("\\n");
+                String name = eventData[1];
+                GregorianCalendar start = new GregorianCalendar();
+                GregorianCalendar end = new GregorianCalendar();
+                start.setTimeInMillis(Long.parseLong(eventData[2]));
+                end.setTimeInMillis(Long.parseLong(eventData[3]));
+                loadedEvents.add(new Event(id, name, start, end));
+
+            } catch (IOException | InvalidDateException e) {
+                e.printStackTrace();
+            }
+        }
+        return loadedEvents;
     }
 
 }
