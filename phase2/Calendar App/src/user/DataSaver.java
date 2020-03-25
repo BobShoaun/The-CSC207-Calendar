@@ -153,11 +153,12 @@ public class DataSaver {
                     files) {
                 String name = file.getName();
                 name = name.replaceAll(".txt", "");
-                try {
-                    eventCollections.add(new EventCollection(name, this));
-                } catch (InvalidDateException e) {
-                    System.out.println("Failed to load events: " + name);
-                }
+                //try {
+                    //eventCollections.add(new EventCollection(name, this));
+                    throw new Error(); //Tell Jasper to fix this once datasaver loads event collection and series
+                //} catch (InvalidDateException e) {
+                //    System.out.println("Failed to load events: " + name);
+                //}
             }
         }
         //Load existing alert collection series

@@ -1,5 +1,6 @@
 package user;
 
+import dates.CalendarGenerator;
 import entities.*;
 import exceptions.InvalidDateException;
 import mt.Memo;
@@ -28,20 +29,16 @@ public class Calendar {
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar(String name, DataSaver dataSaver) {
+    public Calendar(String name, DataSaver dataSaver) throws InvalidDateException {
         this.name = name;
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
         alertCollections = new ArrayList<>();
         memos = new ArrayList<>();
         tags = new ArrayList<>();
-        eventCollections.add(new EventCollection("", new ArrayList<>(), dataSaver));
+        eventCollections.add(new EventCollection(new ArrayList<>(), dataSaver));
         timeController = new TimeController();
-        try {
-            addEventSeries("Shared");
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        addEventSeries("Shared");
     }
 
     public String getName () { return name; }
@@ -80,12 +77,12 @@ public class Calendar {
     }
 
     /**
-     * Return all events which occur during at a certain time period
+     * Return all events which occur at day of that event
      *
      * @param date Date during which the event should occur
-     * @return A list of events which occur at that time
+     * @return Unsorted list of all events which occur at that day
      */
-    public List<Event> getEvents(Date date) {
+    public List<Event> getEvents(GregorianCalendar date) {
         List<Event> toReturn = new ArrayList<>();
 
         for (EventCollection eventCollection :
@@ -103,7 +100,7 @@ public class Calendar {
      * @param end   Latest time for an event to end
      * @return List of all events where start point <= end and end point >= start
      */
-    public List<Event> getEvents(Date start, Date end) {
+    public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
         List<Event> toReturn = new ArrayList<>();
 
         for (EventCollection eventCollection :
@@ -167,10 +164,11 @@ public class Calendar {
     /**
      * Create a new event series
      * @param eventSeriesName name of the new series
-     * @throws IOException If saving error occurs
+     * @throws InvalidDateException If incorrect data is passed in
      */
-    public void addEventSeries(String eventSeriesName) throws IOException {
-        eventCollections.add(new EventCollection(eventSeriesName, new ArrayList<>(), dataSaver));
+    public void addEventSeries(String eventSeriesName) throws InvalidDateException {
+        eventCollections.add(new InfiniteSeries(eventSeriesName, null, new CalendarGenerator(null, null, null),
+                dataSaver));
     }
 
 
@@ -185,12 +183,12 @@ public class Calendar {
     public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
-            if (eventCollection.getName().equals(name)) {
-                eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
+            if (eventCollection instanceof InfiniteSeries && ((InfiniteSeries)eventCollection).getName().equals(name)) {
+                ((InfiniteSeries)eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
                 return;
             }
         }
-        EventCollection eventCollection = new EventCollection(name, new ArrayList<>(), dataSaver);
+        InfiniteSeries eventCollection = new FiniteSeries(name, new ArrayList<>(), dataSaver);
         eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
         eventCollections.add(eventCollection);
     }
@@ -226,7 +224,8 @@ public class Calendar {
     }
 
     public EventCollection getEventCollection(String eventSeriesName) {
-        return eventCollections.stream().filter(eC -> eC.getName().equals(eventSeriesName)).findAny().orElse(null);
+        return eventCollections.stream().filter(eC -> eC instanceof InfiniteSeries
+                && ((InfiniteSeries)eC).getName().equals(eventSeriesName)).findAny().orElse(null);
     }
 
     public Iterator<Event> getEvents(String eventName) {
@@ -405,6 +404,7 @@ public class Calendar {
      * @return A list containing all the names of all event series in order of internal representation
      */
     public List<String> getEventSeriesNames(){
-        return eventCollections.stream().map(EventCollection::getName).filter(f -> !f.equals("")).collect(Collectors.toList());
+        return eventCollections.stream().filter(eC -> eC instanceof InfiniteSeries)
+                .map(eC -> ((InfiniteSeries)eC).getName()).filter(f -> !f.equals("")).collect(Collectors.toList());
     }
 }
