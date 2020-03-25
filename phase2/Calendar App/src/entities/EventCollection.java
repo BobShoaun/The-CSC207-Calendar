@@ -3,6 +3,7 @@ package entities;
 import exceptions.InvalidDateException;
 import mt.Tag;
 import user.DataSaver;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -20,7 +21,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @param events list of events of the series
      * @param saver  saver object to load/save this EventCollection
      */
-    public EventCollection(List<Event> events, DataSaver saver){
+    public EventCollection(List<Event> events, DataSaver saver) {
         this.events = events;
         this.saver = saver;
         this.postponedEvents = new ArrayList<>();
@@ -368,11 +369,6 @@ public class EventCollection implements Iterable<Event>, Observer {
         @Override
         public Event next() {
             Event res;
-
-            // List.get(i) throws an IndexOutBoundsException if
-            // we call it with i >= contacts.size().
-            // But Iterator's next() needs to throw a
-            // NoSuchElementException if there are no more elements.
             try {
                 res = events.get(current);
                 current += 1;

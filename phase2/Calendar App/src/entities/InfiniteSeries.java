@@ -3,6 +3,7 @@ package entities;
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
 import mt.Tag;
+import user.Calendar;
 import user.DataSaver;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
     /**
      * @param name      the name of this Infinite Series
      * @param baseEvent the base Event this Series is modelled upon
-     *      * @param calGen    List of start date of the events of the series
+     * @param calGen    List of start date of the events of the series, which also contains the DISPLAY endTime of this Infinite series
      * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
@@ -33,7 +34,6 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
         this.baseEvent = baseEvent;
         this.calGen = calGen;
         this.seriesEvents = generateEvents();
-        //load();
     }
 
     //TODO: test
@@ -118,9 +118,9 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
 
     @Override
     public boolean postponedEvent(Event event) throws InvalidDateException {
-        if(!super.postponedEvent(event)){
-            for (Event e: seriesEvents) {
-                if (e.getId().equals(event.getId())){
+        if (!super.postponedEvent(event)) {
+            for (Event e : seriesEvents) {
+                if (e.getId().equals(event.getId())) {
                     calGen.addIgnore(e.getStartDate());
                     addPostponedEvent(e);
                     seriesEvents = generateEvents();
@@ -195,29 +195,43 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
 
     @Override
     public void save() throws IOException {
-        saveHelper("series/"+this.name+"/", super.getEvents());
-        saveHelper("series/"+this.name+"/postponed/", super.getPostponedEvents());
-        getSaver().saveToFile("series/"+this.name+"/CalenderGenerator.txt",this.calGen.getString());
+        saveHelper("series/" + this.name + "/", super.getEvents());
+        saveHelper("series/" + this.name + "/postponed/", super.getPostponedEvents());
+        getSaver().saveToFile("series/" + this.name + "/CalenderGenerator.txt", this.calGen.getString());
     }
 
     @Override
     public void load() throws IOException, InvalidDateException {
-        setEvents(loadHelper("series/"+this.name+"/"));
-        setPostponedEvents(loadHelper("series/"+this.name+"/postponed/"));
-        String CG = getSaver().loadStringFromFile("series/"+this.name+"/CalenderGenerator.txt");
+        setEvents(loadHelper("series/" + this.name + "/"));
+        setPostponedEvents(loadHelper("series/" + this.name + "/postponed/"));
+        String CG = getSaver().loadStringFromFile("series/" + this.name + "/CalenderGenerator.txt");
         this.calGen = new CalendarGenerator(CG);
     }
 
     /**
      * Generate events based on the current CalGen
+     * if calGen.endTime == null i.e. the current display endtime of this infinite series is undefined
+     * then set a default display endtime of 1 year from calGen.starTime
      *
      * @return List of events that has start time according to CalGen
      * @throws InvalidDateException invalid dates in events
      */
     public List<Event> generateEvents() throws InvalidDateException {
+        if (calGen.getEndTime() == null) {
+            long time = Duration.ofDays(365).toMillis();
+            GregorianCalendar startTime = calGen.getStartTime();
+            GregorianCalendar endTime = addTime(startTime, time);
+            CalendarGenerator defaultCG = new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
+
+            return generateEventsHelper(defaultCG);
+        }
+        return generateEventsHelper(calGen);
+    }
+
+    private List<Event> generateEventsHelper(CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
-        for (GregorianCalendar GC : calGen) {
-            String id = baseEvent.getName() + baseEvent.getStartDate().getTime();
+        for (GregorianCalendar GC : CG) {
+            String id = baseEvent.getName() + GC.getTime();
             Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
             ret.add(event);
         }
@@ -281,11 +295,6 @@ public class InfiniteSeries extends EventCollection implements Iterable<Event> {
         @Override
         public Event next() {
             Event res;
-
-            // List.get(i) throws an IndexOutBoundsException if
-            // we call it with i >= contacts.size().
-            // But Iterator's next() needs to throw a
-            // NoSuchElementException if there are no more elements.
             try {
                 res = allEvents.get(current);
                 current += 1;

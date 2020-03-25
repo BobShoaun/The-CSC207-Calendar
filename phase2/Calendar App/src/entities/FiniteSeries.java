@@ -20,12 +20,12 @@ public class FiniteSeries extends InfiniteSeries {
      * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
-    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, GregorianCalendar endTime, DataSaver saver) throws InvalidDateException, IOException {
+    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, GregorianCalendar endTime, DataSaver saver) throws InvalidDateException {
         super(name, baseEvent, new CalendarGenerator(calGen.getStartTime(), calGen.getPeriods(), endTime), saver);
         this.endTime = endTime;
     }
 
-    public void setFixedEndTime(GregorianCalendar fixedEndTime) {
-        this.endTime = fixedEndTime;
+    public void setEndTime(GregorianCalendar endTime) {
+        this.endTime = endTime;
     }
 }

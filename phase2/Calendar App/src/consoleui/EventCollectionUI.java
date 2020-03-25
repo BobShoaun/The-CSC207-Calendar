@@ -85,11 +85,11 @@ public class EventCollectionUI extends UserInterface {
         GregorianCalendar start = getDateInput("Select a Start Time frame");
         GregorianCalendar end = getDateInput("Select a End Time Frame");
 //        try {
-//            for (Event e : events.getEventsBetween(start, end)) {
-//                System.out.println(e.toString());
-//            }
-//        } catch (InvalidDateException e) {
-//            System.out.println("Invalid date input");
-//        }
+////            for (Event e : events.getEventsBetween(start, end)) {
+////                System.out.println(e.toString());
+////            }
+////        } catch (InvalidDateException e) {
+////            System.out.println("Invalid date input");
+////        }
     }
 }
