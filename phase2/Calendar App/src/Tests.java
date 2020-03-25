@@ -48,14 +48,14 @@ public class Tests {
                 new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
                 new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
 
-        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
-                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
-        List<Event> eve = new ArrayList<>();
-        eve.add(event);
-        eve.add(e2);
-        DataSaver ds = new DataSaver("tests");
-        EventCollection EC = new EventCollection(name, eve, ds);
-        EC.save();
+//        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
+//                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
+//        List<Event> eve = new ArrayList<>();
+//        eve.add(event);
+//        eve.add(e2);
+//        DataSaver ds = new DataSaver("tests");
+//        EventCollection EC = new EventCollection(name, eve, ds);
+//        EC.save();
     }
     static void testLoad() throws InvalidDateException {
         String name = "LETS TEST";
@@ -69,16 +69,16 @@ public class Tests {
         eve.add(event);
         eve.add(e2);
 
-        DataSaver ds = new DataSaver("tests");
-        EventCollection EC = new EventCollection(name, eve, ds);
-        EC.load("testseries");
-
-        List<Event> result = new ArrayList<>();
-        for (Event e : EC) {
-            result.add(e);
-        }
-
-        if (result.size() != 2) throw new AssertionError("Bad loading");
+//        DataSaver ds = new DataSaver("tests");
+//        EventCollection EC = new EventCollection(name, eve, ds);
+//        EC.load("testseries");
+//
+//        List<Event> result = new ArrayList<>();
+//        for (Event e : EC) {
+//            result.add(e);
+//        }
+//
+//        if (result.size() != 2) throw new AssertionError("Bad loading");
     }
 
     static void testCalendarGenerator() {
@@ -100,13 +100,13 @@ public class Tests {
 //
 //        Event e2 = new Event("hjdkal", "whatever", new GregorianCalendar(2020, Calendar.MARCH, 6, 11, 0),
 //                new GregorianCalendar(2020, Calendar.MARCH, 6, 12, 0));
-        List<Event> eve = new ArrayList<>();
-//        eve.add(event);
-//        eve.add(e2);
-        DataSaver saver = new DataSaver("tests");
-        EventCollection regular = new EventCollection("", eve, saver);
-        user.Calendar cal = new user.Calendar("test", saver);
-        EventCollectionUI ui = new EventCollectionUI(regular, cal);
+//        List<Event> eve = new ArrayList<>();
+////        eve.add(event);
+////        eve.add(e2);
+//        DataSaver saver = new DataSaver("tests");
+//        EventCollection regular = new EventCollection("", eve, saver);
+//        user.Calendar cal = new user.Calendar("test", saver);
+//        EventCollectionUI ui = new EventCollectionUI(regular, cal);
 
     }
 
@@ -121,15 +121,15 @@ public class Tests {
         eve.add(event);
         eve.add(e2);
         DataSaver saver = new DataSaver("tests");
-        EventCollection coll = new EventCollection("test", eve, saver);
-        coll.removeEvent(e2);
-
-        List<Event> result = new ArrayList<>();
-        for (Event e : coll) {
-            result.add(e);
-        }
-        if (result.size() != 1) throw new AssertionError("Error while removing");
-        if (result.contains(e2)) throw new AssertionError("Error while removing");
+//        EventCollection coll = new EventCollection("test", eve, saver);
+//        coll.removeEvent(e2);
+//
+//        List<Event> result = new ArrayList<>();
+//        for (Event e : coll) {
+//            result.add(e);
+//        }
+//        if (result.size() != 1) throw new AssertionError("Error while removing");
+//        if (result.contains(e2)) throw new AssertionError("Error while removing");
 
     }
 
@@ -163,18 +163,18 @@ public class Tests {
         userManager.saveUsers();
     }
 
-    private static void testUser() {
-        User user = new User("test", "123");
-        assert user.authenticate("test", "123");
-        user.setLastLoginTime(new GregorianCalendar());
-        String userString = user.parse();
-        User user2 = new User(userString);
-        assert user2.getName() == user.getName();
-        assert user2.getLastLoginTime() == user.getLastLoginTime();
-        assert user2.isFirstLogin() == user.isFirstLogin();
-//        assert user2.getCalendar() == user.getCalendar();
-        assert user2.parse() == user.parse();
-    }
+//    private static void testUser() {
+//        User user = new User("test", "123");
+//        assert user.authenticate("test", "123");
+//        user.setLastLoginTime(new GregorianCalendar());
+//        String userString = user.parse();
+//        User user2 = new User(userString);
+//        assert user2.getName() == user.getName();
+//        assert user2.getLastLoginTime() == user.getLastLoginTime();
+//        assert user2.isFirstLogin() == user.isFirstLogin();
+////        assert user2.getCalendar() == user.getCalendar();
+//        assert user2.parse() == user.parse();
+//    }
 
     public static void main(String[] args) throws Exception {
 //        testCalendarGenerator();

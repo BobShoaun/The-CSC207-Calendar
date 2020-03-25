@@ -44,10 +44,6 @@ public class EventSharer {
             e.printStackTrace();
         }
 
-        try {
-            recipientCal.getEventCollection("Shared").addEvent(newEvent);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        recipientCal.getEventCollection("Shared").addEvent(newEvent);
     }
 }

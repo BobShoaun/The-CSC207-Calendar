@@ -3,34 +3,41 @@ package entities;
 import exceptions.InvalidDateException;
 import mt.Tag;
 import user.DataSaver;
-
+import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.*;
 
 public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
-    private List<Event> postPonedEvents;
+    private List<Event> postponedEvents;
     private DataSaver saver;
 
-    //TODO: Discuss the file name of regular events and need to talk through new save/load system
-    String path = "Event_List";
 
     /**
      * constructor for a finite/manually created series, or a list of regular events if name == ""
      *
      * @param events list of events of the series
-     * @param saver  saver object to load/save this alert.EventCollection
+     * @param saver  saver object to load/save this EventCollection
      */
-    public EventCollection(List<Event> events, DataSaver saver) throws InvalidDateException {
+    public EventCollection(List<Event> events, DataSaver saver){
         this.events = events;
         this.saver = saver;
-        //TODO: have to reimplement load
-//        load(path);
+        this.postponedEvents = new ArrayList<>();
     }
 
-    //TODO: re-evaluate overriding in Finite Series
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public void setPostponedEvents(List<Event> postponedEvents) {
+        this.postponedEvents = postponedEvents;
+    }
+
+    public DataSaver getSaver() {
+        return saver;
+    }
+
 
     /**
      * @return the regular event list
@@ -46,14 +53,12 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @return event with given id
      */
     public Event getEvent(String id) {
-        Event ret = null;
         for (Event e : this.events) {
             if (e.getId().equals(id)) {
-                ret = e;
-                break;
+                return e;
             }
         }
-        return ret;
+        return null;
     }
 
     /**
@@ -89,73 +94,96 @@ public class EventCollection implements Iterable<Event>, Observer {
         return getEvents(startTime, endTime);
     }
 
-
-    /**
-     * @param start the earliest start date of events in this iterator
-     * @return a iterator containing all events but ones that have start dates before <start></>
-     */
-    public Iterator<Event> getEventIterator(Date start) {
-        return events.stream().filter(event -> event.getStartDate().getTime().after(start)).iterator();
+    public List<Event> getPostponedEvents() {
+        return postponedEvents;
     }
 
     /**
-     * add an event to this list, if the event is infinite event will be ignored in eGen
+     * add an event to this list
      *
      * @param event the event to be added
      */
     public void addEvent(Event event) {
-        boolean added = false;
-        for (int i = 0; i < this.events.size(); i++) {
-            if (event.getStartDate().compareTo(this.events.get(i).getStartDate()) <= 0) {
-                this.events.add(i, event);
-                added = true;
-                break;
-            }
-        }
-        if (!added) {
-            this.events.add(event);
-        }
-
-        //TODO:observer
+        this.events.add(event);
+        Collections.sort(events);
         event.addObserver(this::update);
-//        save();
     }
 
     /**
      * remove the given event from events/ or ignore if it is an infinite series
      *
      * @param event the event to br removed
+     * @return if the event is removed or not
      */
-    public void removeEvent(Event event) throws IOException {
+    public boolean removeEvent(Event event) throws InvalidDateException {
         String eventId = event.getId();
-        this.events.removeIf(e -> e.getId().equals(eventId));
-//        save();
+        boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
+
+        if (removed) {
+            event.addObserver(this::update);
+        }
+        return removed;
     }
 
     /**
-     * @param oldEvent an alert.Event that has been edited
+     * @param oldEvent an Event that has been edited
      * @param newEvent the replacement event
-     * @throws InvalidDateException
+     * @return if the events was edited or not
+     * @throws InvalidDateException invalid dates in events
      */
-    public void editEvent(Event oldEvent, Event newEvent) throws IOException {
-        //TODO: could implement mutation instead of removing and adding
-        removeEvent(oldEvent);
-        this.events.add(newEvent);
-//        save();
+    public boolean editEvent(Event oldEvent, Event newEvent) throws InvalidDateException {
+        boolean removed = removeEvent(oldEvent);
+        if (removed) {
+            addEvent(newEvent);
+            newEvent.addObserver(this::update);
+        }
+        return removed;
     }
 
     /**
-     * adds a tag to the events with th eventId
+     * Postpone an event id the event exists
+     *
+     * @param event the event to be postponed
+     * @return if the event is found and postponed
+     * @throws InvalidDateException invalid date for an event
+     */
+    public boolean postponedEvent(Event event) throws InvalidDateException {
+        if (removeEvent(event)) {
+            addPostponedEvent(event);
+            event.addObserver(this::update);
+            return true;
+        }
+        return false;
+    }
+
+    public void rescheduleEvent(Event event, GregorianCalendar newStart, GregorianCalendar newEnd) throws InvalidDateException {
+        for (Event e : postponedEvents) {
+            if (e.getId().equals(event.getId())) {
+                postponedEvents.remove(e);
+                String newID = e.getName() + newStart.getTimeInMillis();
+                Event newEvent = new Event(newID, e.getName(), newStart, newEnd);
+                addEvent(newEvent);
+                newEvent.addObserver(this::update);
+                return;
+            }
+        }
+    }
+
+    /**
+     * adds a tag to the events with the eventId, do nothing is eventID is not found
      *
      * @param eventId the id of the event to be tagged
      * @param tag     the tag
      */
-    public void addTag(String eventId, Tag tag) {
+    public boolean addTag(String eventId, Tag tag) {
         for (Event e : this.events) {
+            //check if the event ID is valid
             if (e.getId().equals(eventId)) {
                 tag.addEvent(eventId);
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -170,91 +198,70 @@ public class EventCollection implements Iterable<Event>, Observer {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Events\n");
-        result.append("===== EVENTS =====\n");
+        StringBuilder result = new StringBuilder("===== EVENTS =====\n");
+        if (events.size() == 0) {
+            result.append("You don't have any events");
+        }
         for (Event e : this.events) {
+            result.append(e.toString()).append("\n");
+        }
+        result.append(postponedToString());
+
+        return result.toString();
+    }
+
+    /**
+     * @return a String representation of the postponed events
+     */
+    protected String postponedToString() {
+        StringBuilder result = new StringBuilder("\n==== Postponed Events====\n");
+        if (postponedEvents.size() == 0) {
+            result.append("No events are postponed");
+        }
+        for (Event e : this.postponedEvents) {
             result.append(e.toString()).append("\n");
         }
         return result.toString();
     }
 
-    //TODO: re-implement save
     /**
-     * Save this alert.EventCollection's data into a text file.
+     * Save this EventCollection's data into text files.
      */
-//    public void save() throws IOException {
-//        List<String> contents = Arrays.asList(getString().split("\\n"));
-//        if (name.equals("")) {
-//            saver.saveToFile("events/noname.txt", contents);
-//        } else {
-//            saver.saveToFile("events/" + name + ".txt", contents);
-//        }
-//    }
+    public void save() throws IOException {
+        saveHelper("events/", this.events);
+        saveHelper("events/postponed/", this.postponedEvents);
+    }
 
-    //TODO: reimplement Load
+    protected void saveHelper(String path, List<Event> events) throws IOException {
+        for (Event e : events) {
+            saver.saveToFile(path + e.getId() + ".txt", e.getString());
+        }
+    }
+
     /**
      * loads events from text file
      * problems with file path and date conversion.
-     *
-     * @param seriesName the series name that needs to be loaded
-     * @throws InvalidDateException
      */
-//    public void load(String seriesName) throws InvalidDateException {
-//        List<String> strings = null;
-//        try {
-//            String path;
-//            if (seriesName.equals(""))
-//                path = "events/noname.txt";
-//            else
-//                path = "events/" + seriesName + ".txt";
-//            strings = saver.loadStringsFromFile(path);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (strings == null || strings.size() == 0) {
-//            this.events = new ArrayList<>();
-//            return;
-//        }
-//        this.name = strings.get(0).trim();
-//        List<Event> newEvents = new ArrayList<>();
-//
-//        String[] eventsDetails = strings.get(1).trim().split(",");
-//        for (String e : eventsDetails) {
-//            String[] details = e.trim().split(";");
-//            String id = details[0];
-//            String eventName = details[1];
-//            GregorianCalendar start = new GregorianCalendar();
-//            start.setTimeInMillis(Long.parseLong(details[2]));
-//            GregorianCalendar end = new GregorianCalendar();
-//            end.setTimeInMillis(Long.parseLong(details[3]));
-//            newEvents.add(new Event(id, eventName, start, end));
-//        }
-//        /**
-//         * can't load from this...
-//         */
-//        this.events = newEvents;
-////        StringBuilder cgStr = new StringBuilder();
-////        for (int i = 2; i < strings.size(); i++) {
-////            cgStr.append(strings.get(i));
-////        }
-////
-////        this.eGen.setCalGen(new CalendarGenerator(cgStr.toString()));
-//    }
+    public void load() throws IOException, InvalidDateException {
+        events = loadHelper("events/");
+        postponedEvents = loadHelper("events/postponed/");
+    }
 
-    /**
-     * Get a String representation of data in this EventCollection
-     *
-     * @return String representation of all the data in this AC, including the dates.CalendarGenerator.
-     */
-    protected String getString() {
-        StringBuilder result = new StringBuilder();
-        if (this.events != null) {
-            for (Event e : this.events) {
-                result.append(e.getString());
-            }
+    protected List<Event> loadHelper(String path) throws IOException, InvalidDateException {
+        List<Event> loadedEvents = new ArrayList<>();
+        File[] data = saver.getFilesInDirectory(path);
+        for (File f : data) {
+            String id = f.getName();
+            id = id.replaceAll(".txt", "");
+            String[] eventData = saver.loadStringFromFile(path + id + ".txt").split("\\n");
+            String name = eventData[1];
+            GregorianCalendar start = new GregorianCalendar();
+            GregorianCalendar end = new GregorianCalendar();
+            start.setTimeInMillis(Long.parseLong(eventData[1]));
+            end.setTimeInMillis(Long.parseLong(eventData[2]));
+            loadedEvents.add(new Event(id, name, start, end));
         }
-        return result.toString();
+        return loadedEvents;
     }
 
     /**
@@ -264,7 +271,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @return true if the event's start time is within the start and end time
      */
     protected boolean isOnTime(Event event, GregorianCalendar startTime, GregorianCalendar endTime) {
-        //TODO: not inclusive of end points
+        //TODO: not inclusive of end points, test this
         return event.getStartDate().before(endTime) && event.getEndDate().after(startTime);
 //        Date startEvent = GCToDate(event.getStartDate());
 //        Date endEvent = GCToDate(event.getEndDate());
@@ -276,8 +283,8 @@ public class EventCollection implements Iterable<Event>, Observer {
     /**
      * round date to the beginning of that date day i.e. 0 am
      *
-     * @param date
-     * @return
+     * @param date the date to be rounded up
+     * @return the beginning of that date day i.e. 0 am
      */
     protected GregorianCalendar roundUp(GregorianCalendar date) {
         date.set(Calendar.HOUR_OF_DAY, 0);
@@ -290,8 +297,8 @@ public class EventCollection implements Iterable<Event>, Observer {
     /**
      * round date to the end of that date day i.e. 23:59:59:999 pm
      *
-     * @param date
-     * @return
+     * @param date the date to be rounded up
+     * @return end of that date day i.e. 23:59:59:999 pm
      */
     protected GregorianCalendar roundDown(GregorianCalendar date) {
         date.set(Calendar.HOUR_OF_DAY, 23);
@@ -302,7 +309,33 @@ public class EventCollection implements Iterable<Event>, Observer {
     }
 
     /**
-     * Returns an iterator over elements of type {@code alert.Event}.
+     * add an postponed event
+     *
+     * @param event the event to be postponed
+     */
+    protected void addPostponedEvent(Event event) {
+        postponedEvents.add(event);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param start the earliest start date of events in this iterator
+     * @return a iterator containing all events but ones that have start dates before <start></>
+     */
+    public Iterator<Event> getEventIterator(Date start) {
+        return events.stream().filter(event -> event.getStartDate().getTime().after(start)).iterator();
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code events}.
      *
      * @return an Iterator.
      */
@@ -311,22 +344,16 @@ public class EventCollection implements Iterable<Event>, Observer {
         return new EventCollectionIterator();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        //TODO: reimplement save
-        //save();
-    }
-
     private class EventCollectionIterator implements Iterator<Event> {
         /**
-         * The index of the next alert.Event to return.
+         * The index of the next Event to return.
          */
         private int current = 0;
 
         /**
-         * Returns whether there is another alert.Event to return.
+         * Returns whether there is another Event to return.
          *
-         * @return whether there is another alert.Event to return.
+         * @return whether there is another Event to return.
          */
         @Override
         public boolean hasNext() {
@@ -334,9 +361,9 @@ public class EventCollection implements Iterable<Event>, Observer {
         }
 
         /**
-         * Returns the next alert.Event.
+         * Returns the next Event.
          *
-         * @return the next alert.Event.
+         * @return the next Event.
          */
         @Override
         public Event next() {
@@ -348,28 +375,16 @@ public class EventCollection implements Iterable<Event>, Observer {
             // NoSuchElementException if there are no more elements.
             try {
                 res = events.get(current);
+                current += 1;
             } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
-            current += 1;
             return res;
-        }
-
-        /**
-         * Removes the alert.Event just returned.
-         */
-        @Override
-        public void remove() {
-            if (events.size() != 0) {
-                events.remove(current - 1);
-                current = -1;
-            } else {
-                throw new NoSuchElementException();
-            }
         }
     }
 
 
+    //TODO: re-evaluate this method with new UI
     public String[] getEventOptions() {
         String[] eventList = new String[events.size() + 1];
         eventList[0] = "Exit";
