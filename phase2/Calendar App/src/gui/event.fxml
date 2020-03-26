@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Event">
+    <children>
+        <GridPane layoutX="27.0" layoutY="31.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="25.0" vgrow="SOMETIMES"/>
+                <RowConstraints percentHeight="25.0" vgrow="SOMETIMES"/>
+                <RowConstraints percentHeight="25.0" vgrow="SOMETIMES"/>
+                <RowConstraints percentHeight="25.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3"
+                         GridPane.valignment="BOTTOM">
+                    <items>
+                        <Button mnemonicParsing="false" text="Done"/>
+                        <Button mnemonicParsing="false" text="Cancel"/>
+                        <Button mnemonicParsing="false" text="Alerts"/>
+                    </items>
+                </ToolBar>
+                <TextField promptText="Event Name" GridPane.halignment="CENTER">
+                    <GridPane.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+                    </GridPane.margin>
+                </TextField>
+                <ComboBox prefWidth="150.0" promptText="Event Type" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+                    </GridPane.margin>
+                </ComboBox>
+                <TextField disable="true" maxWidth="-Infinity" prefHeight="30.0" prefWidth="140.0"
+                           promptText="Repetition Period" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="30.0" left="30.0" right="120.0" top="30.0"/>
+                    </GridPane.margin>
+                </TextField>
+                <ComboBox disable="true" prefWidth="75.0" promptText="Unit" GridPane.halignment="RIGHT"
+                          GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+                    </GridPane.margin>
+                </ComboBox>
+                <GridPane GridPane.rowIndex="2">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <DatePicker maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="292.0"
+                                    promptText="Start Time" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="30.0" left="30.0" right="15.0" top="30.0"/>
+                            </GridPane.margin>
+                        </DatePicker>
+                        <DatePicker maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="285.0"
+                                    promptText="End Time" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+                                    GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="30.0" left="15.0" right="30.0" top="30.0"/>
+                            </GridPane.margin>
+                        </DatePicker>
+                    </children>
+                </GridPane>
+            </children>
+        </GridPane>
+    </children>
+</AnchorPane>
