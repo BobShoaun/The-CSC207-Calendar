@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -172,8 +173,11 @@ public class DataSaver {
 
                     String CG = loadStringFromFile("series/" + seriesName + "/CalenderGenerator.txt");
                     CalendarGenerator newCG = new CalendarGenerator(CG);
+                    GregorianCalendar newStart = newCG.getStartTime();
+                    GregorianCalendar newEnd = newCG.getStartTime();
+                    List<Duration> durs = newCG.getPeriods();
 
-                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newCG, this);
+                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newStart,newEnd,durs, this);
 
                     newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
                     newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));
