@@ -1,14 +1,11 @@
-import consoleui.EventCollectionUI;
 import dates.CalendarGenerator;
 import entities.Alert;
 import entities.AlertCollection;
 import entities.Event;
-import entities.EventCollection;
 import exceptions.InvalidDateException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import user.DataSaver;
-import user.User;
 import user.UserManager;
 
 import java.io.IOException;

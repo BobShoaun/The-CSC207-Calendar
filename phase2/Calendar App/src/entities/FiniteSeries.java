@@ -29,6 +29,11 @@ public class FiniteSeries extends Series {
         getCalGen().setEndTime(endTime);
     }
 
+    /**
+     *
+     * @param start startDisplay time of this Finite Series
+     * @param end endDisplay time of this Finite Series
+     */
     @Override
     public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
         if(start.after(getCalGen().getStartTime())) {getCalGen().setStartTime(start);}

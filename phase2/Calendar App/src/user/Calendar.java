@@ -10,6 +10,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class Calendar {
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar(String name, DataSaver dataSaver) throws InvalidDateException {
+    public Calendar(String name, DataSaver dataSaver){
         this.name = name;
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
@@ -39,7 +40,12 @@ public class Calendar {
         tags = new ArrayList<>();
         eventCollections.add(new EventCollection(new ArrayList<>(), dataSaver));
         timeController = new TimeController();
-        addEventSeries("Shared");
+
+        try {
+            addEventSeries("Shared");
+        } catch (InvalidDateException ignored) {
+            //This should not fail
+        }
     }
 
     /**
@@ -200,16 +206,17 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @param baseEvent  The event on which the other events will be based
      */
-    public void addEventSeries(String name, Date start, Date end, Date difference, Event baseEvent) throws InvalidDateException, IOException {
+    public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException, IOException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection instanceof Series && ((Series) eventCollection).getName().equals(name)) {
-                ((Series) eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
-                return;
+                // ((Series) eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
+                throw new Error();
+                //return;
             }
         }
-        Series eventCollection = new FiniteSeries(name, new ArrayList<>(), dataSaver);
-        eventCollection.addRepeatingEvent(baseEvent, start, end, difference);
+        SeriesFactory seriesFactory = new SeriesFactory();
+        Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference), dataSaver);
         eventCollections.add(eventCollection);
     }
 
