@@ -45,7 +45,10 @@ public class LoginController {
             System.out.println("Logged in");
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.hide();
-            Parent root = FXMLLoader.load(getClass().getResource("calendar.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("calendar.fxml"));
+            Parent root = fxmlLoader.load();
+            CalendarController calendarController = fxmlLoader.getController();
+            calendarController.setUser(userManager.getCurrentUser());
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
