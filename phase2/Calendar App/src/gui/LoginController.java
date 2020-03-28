@@ -1,5 +1,7 @@
 package gui;
 
+import exceptions.PasswordMismatchException;
+import exceptions.UsernameTakenException;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,6 +50,21 @@ public class LoginController {
             stage.setScene(scene);
             stage.show();
         }
+    }
+
+    @FXML
+    private void handleRegister(Event e) throws IOException{
+        String usernameText = username.getText();
+        String passwordText = password.getText();
+        try {
+            userManager.registerUser(usernameText, passwordText, passwordText);
+        } catch (UsernameTakenException ex) {
+            bottomMessage.setText("This username has already been taken.");
+            return;
+        } catch (PasswordMismatchException ignored) {
+
+        }
+        bottomMessage.setText("User successfully registered");
     }
 
 }
