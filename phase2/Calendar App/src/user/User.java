@@ -134,7 +134,7 @@ public class User implements StringParsable {
      */
     @Override
     public void unparse(String string) {
-        String[] split = string.split(" "); // split text by whitespaces
+        String[] split = string.split(";");
         this.name = split[0];
         this.password = split[1];
         this.calendars = new ArrayList<>();

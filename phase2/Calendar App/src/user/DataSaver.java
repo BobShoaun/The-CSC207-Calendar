@@ -98,7 +98,11 @@ public class DataSaver {
      * @return the list of files in the given path
      */
     public File[] getFilesInDirectory(String path) {
-        return new File(basePath + path).listFiles();
+        File[] files =  new File(basePath + path).listFiles();
+        if(files == null){
+            return new File[0];
+        }
+        return files;
     }
 
     /**

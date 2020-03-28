@@ -29,12 +29,14 @@ public class LoginController {
 
     private UserManager userManager = new UserManager();
 
+    public LoginController() throws IOException{
+        userManager.loadUsers();
+    }
+
     @FXML
     private void handleLogin(Event e) throws IOException {
         String usernameText = username.getText();
         String passwordText = password.getText();
-
-        userManager.loadUsers();
 
         if (!userManager.loginUser(usernameText, passwordText)) {
             bottomMessage.setText("Sorry, that didn't work. Please try again.");
