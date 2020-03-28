@@ -6,11 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import user.UserManager;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class LoginController {
@@ -31,8 +34,8 @@ public class LoginController {
 
         if (!userManager.loginUser(usernameText, passwordText)) {
             bottomMessage.setText("Sorry, that didn't work. Please try again.");
-            bottomMessage.setFont(new Font("Source Code Pro", Font.PLAIN, 16));
-            bottomMessage.setBackground(Color.RED);
+            bottomMessage.setFont(new Font("Source Code Pro", 16));
+            bottomMessage.setBackground(Background.EMPTY);
         } else {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.hide();
