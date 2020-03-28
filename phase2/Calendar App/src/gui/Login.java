@@ -18,7 +18,7 @@ import user.UserManager;
 
 import java.io.IOException;
 
-public class LoginController {
+public class Login {
 
     @FXML
     private TextField username;

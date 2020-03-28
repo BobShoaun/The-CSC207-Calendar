@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CalendarController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
     <children>
         <SplitPane dividerPositions="0.6521739130434783" layoutX="100.0" layoutY="40.0" prefHeight="160.0"
                    prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
@@ -49,6 +49,7 @@
                                         <Button mnemonicParsing="false" text="Memos"/>
                                         <Button mnemonicParsing="false" text="Tags"/>
                                         <Button mnemonicParsing="false" text="Search"/>
+                                        <Button mnemonicParsing="false" text="Calendars"/>
                                     </items>
                                     <GridPane.margin>
                                         <Insets top="30.0"/>
