@@ -32,11 +32,15 @@ public class LoginController {
         String usernameText = username.getText();
         String passwordText = password.getText();
 
+        userManager.loadUsers();
+
         if (!userManager.loginUser(usernameText, passwordText)) {
             bottomMessage.setText("Sorry, that didn't work. Please try again.");
-            bottomMessage.setFont(new Font("Source Code Pro", 16));
+            bottomMessage.setFont(new Font("Source Code Pro", 14));
             bottomMessage.setBackground(Background.EMPTY);
+            System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
+            System.out.println("Logged in");
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.hide();
             Parent root = FXMLLoader.load(getClass().getResource("calendar.fxml"));

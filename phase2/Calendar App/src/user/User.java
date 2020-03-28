@@ -1,13 +1,13 @@
 package user;
 
-import entities.Event;
-
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * User class representing a User for the calendar
@@ -134,7 +134,7 @@ public class User implements StringParsable {
      */
     @Override
     public void unparse(String string) {
-        String[] split = string.split(";"); // split text by whitespaces
+        String[] split = string.split(" "); // split text by whitespaces
         this.name = split[0];
         this.password = split[1];
         this.calendars = new ArrayList<>();
