@@ -33,7 +33,9 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.name = name;
         this.baseEvent = baseEvent;
         this.calGen = calGen;
-        this.seriesEvents = generateEvents();
+        if(baseEvent != null){
+            this.seriesEvents = generateEvents();
+        }
     }
 
     public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end){

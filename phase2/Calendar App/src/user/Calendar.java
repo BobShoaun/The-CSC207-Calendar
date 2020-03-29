@@ -51,8 +51,8 @@ public class Calendar {
     /**
      * @return the SINGLE regular list of Event
      */
-    public EventCollection getEventCollection() {
-        throw new NotImplementedException();
+    public EventCollection getSingleEventCollection() {
+        return eventCollections.stream().filter(eC -> !(eC instanceof Series)).findAny().get();
     }
 
     /**
@@ -270,6 +270,14 @@ public class Calendar {
         }
     }
 
+    /**
+     * Get data saver
+     * @return The data saver instance
+     */
+    public DataSaver getDataSaver() {
+        return dataSaver;
+    }
+
 
     /**
      * alert.Event Iterator is used to iterate over the individual event collections to get the next time
@@ -374,7 +382,7 @@ public class Calendar {
     }
 
     public GregorianCalendar getTime() {
-        return timeController.getTime();
+        return (GregorianCalendar)timeController.getTime().clone();
     }
 
     /**
@@ -440,5 +448,13 @@ public class Calendar {
     public List<String> getEventSeriesNames() {
         return eventCollections.stream().filter(eC -> eC instanceof Series)
                 .map(eC -> ((Series) eC).getName()).filter(f -> !f.equals("")).collect(Collectors.toList());
+    }
+
+    /**
+     * Add a new alert collection
+     * @param alertCollection The alert collection to add
+     */
+    public void addAlertCollection(AlertCollection alertCollection){
+        alertCollections.add(alertCollection);
     }
 }

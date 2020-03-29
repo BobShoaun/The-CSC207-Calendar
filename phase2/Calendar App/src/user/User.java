@@ -1,13 +1,13 @@
 package user;
 
-import entities.Event;
-
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * User class representing a User for the calendar
@@ -105,6 +105,7 @@ public class User implements StringParsable {
         firstLogin = true;
         lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
         dataSaver = new DataSaver("./users/" + name);
+        addCalendar("Standard");
     }
 
     /**
@@ -128,13 +129,14 @@ public class User implements StringParsable {
         return this.name.equals(name) && this.password.equals(password);
     }
 
+    //TODO: Move to datasaver
     /**
      * Unparse a string's data into this user's data.
      * @param string string containing the user's data.
      */
     @Override
     public void unparse(String string) {
-        String[] split = string.split(";"); // split text by whitespaces
+        String[] split = string.split(";");
         this.name = split[0];
         this.password = split[1];
         this.calendars = new ArrayList<>();
@@ -174,7 +176,7 @@ public class User implements StringParsable {
         for (File file : files) {
             if (file.isFile()) // dont want credentials.txt
                 continue;
-            this.addCalendar(file.getName());
+            this.calendars.add(dataSaver.loadCalendar(file.getName()));
         }
     }
 

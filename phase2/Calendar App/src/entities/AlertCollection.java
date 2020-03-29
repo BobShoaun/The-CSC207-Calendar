@@ -24,9 +24,9 @@ public class AlertCollection implements Observer {
     private DataSaver saver;
 
     /**
-     * Creates a new alert.Alert group (possibly repeating)
+     * Creates a new Alert group (possibly repeating)
      *
-     * @param e The alert.Event attached to the alert.Alert.
+     * @param e The Event attached to the alert.Alert.
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
@@ -86,7 +86,7 @@ public class AlertCollection implements Observer {
         }
         manAlerts.add(new Alert(eventId, time));
         manAlerts.sort(new AlertComparator());
-        save();
+        saver.saveAlertCollection(this);
         return true;
     }
 
@@ -105,7 +105,7 @@ public class AlertCollection implements Observer {
             throw new PeriodAlreadyExistsException();
         } else
             this.calGen.addPeriod(period);
-        save();
+        saver.saveAlertCollection(this);
     }
 
     /**
@@ -140,7 +140,7 @@ public class AlertCollection implements Observer {
             if (d.equals(ignored))
                 return false;
         }
-        save();
+        saver.saveAlertCollection(this);
         return calGen.getIgnoreList().add(d);
     }
 
@@ -152,7 +152,7 @@ public class AlertCollection implements Observer {
      */
     public boolean removeManualAlert(GregorianCalendar d) {
         boolean result = manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
-        save();
+        saver.saveAlertCollection(this);
         return result;
     }
 
@@ -170,7 +170,7 @@ public class AlertCollection implements Observer {
         long newMillis = calGen.getStartTime().getTimeInMillis() + diff;
         newStart.setTimeInMillis(newMillis);
         this.calGen.setStartTime(newStart);
-        save();
+        saver.saveAlertCollection(this);
     }
 
 //    /**
@@ -223,7 +223,7 @@ public class AlertCollection implements Observer {
      * @return The list of Alerts between start and end time.
      */
     private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
-        List<Alert> alerts = new LinkedList<>();
+        List<Alert> alerts = new ArrayList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().getTime().compareTo(start.getTime()) >= 0
                     && a.getTime().getTime().compareTo(end.getTime()) <= 0)
@@ -304,7 +304,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Load the data into this alert.AlertCollection.
+     * Load the data into this AlertCollection.
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
@@ -319,6 +319,7 @@ public class AlertCollection implements Observer {
         String time = "";
         try {
             time = eventId.substring(0, 28);
+            time = time.replace('&', ':');
         } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
@@ -346,18 +347,4 @@ public class AlertCollection implements Observer {
         if (!cgStr.toString().equals(""))
             this.calGen = new CalendarGenerator(cgStr.toString());
     }
-
-    /**
-     * Save this AlertCollection's data into a text file.
-     */
-    public void save() {
-        List<String> contents = Arrays.asList(getString().split("\\n+"));
-        try {
-            saver.saveToFile("alerts/" + eventId + ".txt", contents);
-        } catch (IOException e) {
-            System.out.println("Error while saving AlertCollection " + eventId);
-            e.printStackTrace();
-        }
-    }
-
 }

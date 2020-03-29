@@ -98,7 +98,11 @@ public class DataSaver {
      * @return the list of files in the given path
      */
     public File[] getFilesInDirectory(String path) {
-        return new File(basePath + path).listFiles();
+        File[] files =  new File(basePath + path).listFiles();
+        if(files == null){
+            return new File[0];
+        }
+        return files;
     }
 
     /**
@@ -120,6 +124,7 @@ public class DataSaver {
 
 
     public Calendar loadCalendar(String calendarName) {
+        DataSaver calendarDataSaver = new DataSaver(basePath + "/" + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags = new ArrayList<>();
         EventCollection eventCollections;
@@ -191,23 +196,25 @@ public class DataSaver {
             }
         }
         //Load existing alert collection series
-        File[] files = getFilesInDirectory("/alerts/");
+        File[] files = calendarDataSaver.getFilesInDirectory("/alerts/");
         if (files != null) {
             for (File file :
                     files) {
                 String name = file.getName();
                 name = name.replaceAll(".txt", "");
-                alertCollections.add(new AlertCollection(name, this));
+                AlertCollection alertCollection = new AlertCollection(name, calendarDataSaver);
+                alertCollection.load(name);
+                alertCollections.add(alertCollection);
             }
         }
-        return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, this);
+        return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, calendarDataSaver);
     }
 
 
     public void SaveCalendar(Calendar calendar) {
         //save EventCollection
-        ECSaveHelper("events/", calendar.getEventCollection().getEvents());
-        ECSaveHelper("events/postponed/", calendar.getEventCollection().getPostponedEvents());
+        ECSaveHelper("events/", calendar.getSingleEventCollection().getEvents());
+        ECSaveHelper("events/postponed/", calendar.getSingleEventCollection().getPostponedEvents());
 
         //save Series
         for (Series series : calendar.getSeries()) {
@@ -286,6 +293,16 @@ public class DataSaver {
             }
         }
         return loadedEvents;
+    }
+
+    public void saveAlertCollection(AlertCollection ac) {
+        List<String> contents = Arrays.asList(ac.getString().split("\\n+"));
+        try {
+            saveToFile("alerts/" + ac.getEventId() + ".txt", contents);
+        } catch (IOException e) {
+            System.out.println("Error while saving AlertCollection " + ac.getEventId());
+            e.printStackTrace();
+        }
     }
 
 }
