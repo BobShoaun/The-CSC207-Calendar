@@ -295,4 +295,14 @@ public class DataSaver {
         return loadedEvents;
     }
 
+    public void saveAlertCollection(AlertCollection ac) {
+        List<String> contents = Arrays.asList(ac.getString().split("\\n+"));
+        try {
+            saveToFile("alerts/" + ac.getEventId() + ".txt", contents);
+        } catch (IOException e) {
+            System.out.println("Error while saving AlertCollection " + ac.getEventId());
+            e.printStackTrace();
+        }
+    }
+
 }

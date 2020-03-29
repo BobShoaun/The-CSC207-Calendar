@@ -86,7 +86,7 @@ public class AlertCollection implements Observer {
         }
         manAlerts.add(new Alert(eventId, time));
         manAlerts.sort(new AlertComparator());
-        save();
+        saver.saveAlertCollection(this);
         return true;
     }
 
@@ -105,7 +105,7 @@ public class AlertCollection implements Observer {
             throw new PeriodAlreadyExistsException();
         } else
             this.calGen.addPeriod(period);
-        save();
+        saver.saveAlertCollection(this);
     }
 
     /**
@@ -140,7 +140,7 @@ public class AlertCollection implements Observer {
             if (d.equals(ignored))
                 return false;
         }
-        save();
+        saver.saveAlertCollection(this);
         return calGen.getIgnoreList().add(d);
     }
 
@@ -152,7 +152,7 @@ public class AlertCollection implements Observer {
      */
     public boolean removeManualAlert(GregorianCalendar d) {
         boolean result = manAlerts.removeIf(a -> a.getTime().getTime().equals(d.getTime()));
-        save();
+        saver.saveAlertCollection(this);
         return result;
     }
 
@@ -170,7 +170,7 @@ public class AlertCollection implements Observer {
         long newMillis = calGen.getStartTime().getTimeInMillis() + diff;
         newStart.setTimeInMillis(newMillis);
         this.calGen.setStartTime(newStart);
-        save();
+        saver.saveAlertCollection(this);
     }
 
 //    /**
@@ -347,18 +347,4 @@ public class AlertCollection implements Observer {
         if (!cgStr.toString().equals(""))
             this.calGen = new CalendarGenerator(cgStr.toString());
     }
-
-    /**
-     * Save this AlertCollection's data into a text file.
-     */
-    public void save() {
-        List<String> contents = Arrays.asList(getString().split("\\n+"));
-        try {
-            saver.saveToFile("alerts/" + eventId + ".txt", contents);
-        } catch (IOException e) {
-            System.out.println("Error while saving AlertCollection " + eventId);
-            e.printStackTrace();
-        }
-    }
-
 }
