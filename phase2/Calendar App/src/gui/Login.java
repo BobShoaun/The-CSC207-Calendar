@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.InvalidDateException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import javafx.event.Event;
@@ -29,12 +30,12 @@ public class Login {
 
     private UserManager userManager = new UserManager();
 
-    public LoginController() throws IOException{
+    public Login() throws IOException{
         userManager.loadUsers();
     }
 
     @FXML
-    private void handleLogin(Event e) throws IOException {
+    private void handleLogin(Event e) throws IOException, InvalidDateException {
         String usernameText = username.getText();
         String passwordText = password.getText();
 
@@ -49,7 +50,7 @@ public class Login {
             stage.hide();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("calendar.fxml"));
             Parent root = fxmlLoader.load();
-            CalendarController calendarController = fxmlLoader.getController();
+            Calendar calendarController = fxmlLoader.getController();
             calendarController.setUser(userManager.getCurrentUser());
             Scene scene = new Scene(root);
             stage.setScene(scene);

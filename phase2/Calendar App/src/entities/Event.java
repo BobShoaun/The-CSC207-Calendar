@@ -24,7 +24,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
      */
     public Event (String id, String name, GregorianCalendar startDate, GregorianCalendar endDate)
             throws InvalidDateException{
-        this.id = id;
+        this.id = id.replace(':', '&');
         this.name = name;
         if ( startDate.after(endDate) ) {
             throw new InvalidDateException();

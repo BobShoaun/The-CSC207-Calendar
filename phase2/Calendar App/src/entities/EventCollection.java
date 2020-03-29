@@ -161,7 +161,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 postponedEvents.remove(e);
-                String newID = e.getName() + newStart.getTimeInMillis();
+                String newID = e.getName() + newStart.getTimeInMillis(); //TODO: Confirm that this is the right fornat as otherwise alert collections will break for this event
                 Event newEvent = new Event(newID, e.getName(), newStart, newEnd);
                 addEvent(newEvent);
                 newEvent.addObserver(this::update);

@@ -24,9 +24,9 @@ public class AlertCollection implements Observer {
     private DataSaver saver;
 
     /**
-     * Creates a new alert.Alert group (possibly repeating)
+     * Creates a new Alert group (possibly repeating)
      *
-     * @param e The alert.Event attached to the alert.Alert.
+     * @param e The Event attached to the alert.Alert.
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
@@ -223,7 +223,7 @@ public class AlertCollection implements Observer {
      * @return The list of Alerts between start and end time.
      */
     private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
-        List<Alert> alerts = new LinkedList<>();
+        List<Alert> alerts = new ArrayList<>();
         for (Alert a : manAlerts) {
             if (a.getTime().getTime().compareTo(start.getTime()) >= 0
                     && a.getTime().getTime().compareTo(end.getTime()) <= 0)
@@ -304,7 +304,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Load the data into this alert.AlertCollection.
+     * Load the data into this AlertCollection.
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
@@ -319,6 +319,7 @@ public class AlertCollection implements Observer {
         String time = "";
         try {
             time = eventId.substring(0, 28);
+            time = time.replace('&', ':');
         } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
         }

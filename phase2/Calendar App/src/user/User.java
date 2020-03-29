@@ -105,6 +105,7 @@ public class User implements StringParsable {
         firstLogin = true;
         lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
         dataSaver = new DataSaver("./users/" + name);
+        addCalendar("Standard");
     }
 
     /**
@@ -128,6 +129,7 @@ public class User implements StringParsable {
         return this.name.equals(name) && this.password.equals(password);
     }
 
+    //TODO: Move to datasaver
     /**
      * Unparse a string's data into this user's data.
      * @param string string containing the user's data.
@@ -174,7 +176,7 @@ public class User implements StringParsable {
         for (File file : files) {
             if (file.isFile()) // dont want credentials.txt
                 continue;
-            this.addCalendar(file.getName());
+            this.calendars.add(dataSaver.loadCalendar(file.getName()));
         }
     }
 
