@@ -2,9 +2,7 @@ import dates.CalendarGenerator;
 import entities.Alert;
 import entities.AlertCollection;
 import entities.Event;
-import exceptions.InvalidDateException;
-import exceptions.PasswordMismatchException;
-import exceptions.UsernameTakenException;
+import exceptions.*;
 import user.DataSaver;
 import user.UserManager;
 
@@ -152,6 +150,10 @@ public class Tests {
             userManager.registerUser("testUserName", "testPassword", "testPassword");
         } catch (PasswordMismatchException p) {
             throw new AssertionError("Password checking has bugs!");
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+        } catch (InvalidPasswordException e) {
+            e.printStackTrace();
         }
         assert userManager.loginUser("testUserName", "testPassword");
         assert userManager.getCurrentUser() != null;

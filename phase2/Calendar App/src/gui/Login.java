@@ -30,8 +30,12 @@ public class Login {
 
     private UserManager userManager = new UserManager();
 
-    public Login() throws IOException{
-        userManager.loadUsers();
+    public Login() {
+        try {
+            userManager.loadUsers();
+        } catch (IOException e) {
+            System.out.println("Problem loading users!");
+        }
     }
 
     @FXML
@@ -46,31 +50,42 @@ public class Login {
             System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
             System.out.println("Logged in");
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            stage.hide();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-            Parent root = fxmlLoader.load();
-            Calendar calendarController = fxmlLoader.getController();
-            calendarController.setUser(userManager.getCurrentUser());
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            showCalendarUI(e);
         }
     }
 
     @FXML
     private void handleRegister(Event e) throws IOException{
-        String usernameText = username.getText();
-        String passwordText = password.getText();
-        try {
-            userManager.registerUser(usernameText, passwordText, passwordText);
-        } catch (UsernameTakenException ex) {
-            bottomMessage.setText("This username has already been taken.");
-            return;
-        } catch (PasswordMismatchException ignored) {
+        System.out.println("register clicked");
 
-        }
-        bottomMessage.setText("User successfully registered");
+        showRegisterUI(e);
+    }
+
+    private void showCalendarUI(Event e) throws IOException, InvalidDateException {
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage.hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("calendar.fxml"));
+        Parent root = fxmlLoader.load();
+        Calendar calendarController = fxmlLoader.getController();
+        calendarController.setUser(userManager.getCurrentUser());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void showRegisterUI(Event e) throws IOException {
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage.hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Register registerController = fxmlLoader.getController();
+        registerController.setUserManager(userManager);
+        registerController.init();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

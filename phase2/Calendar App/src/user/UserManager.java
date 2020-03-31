@@ -1,5 +1,7 @@
 package user;
 
+import exceptions.InvalidPasswordException;
+import exceptions.InvalidUsernameException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
@@ -111,9 +113,12 @@ public class UserManager {
      * @throws IOException
      */
     public void registerUser(String username, String password, String confirmPassword)
-            throws UsernameTakenException, PasswordMismatchException, IOException {
+            throws UsernameTakenException, PasswordMismatchException, InvalidUsernameException, InvalidPasswordException, IOException {
         if (!password.equals(confirmPassword))
             throw new PasswordMismatchException();
+
+        if (!username.matches("^[a-zA-Z0-9._-]{3,}$"))
+            throw new InvalidUsernameException();
 
         for (User user : users)
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
