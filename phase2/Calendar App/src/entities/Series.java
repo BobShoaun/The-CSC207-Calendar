@@ -3,7 +3,6 @@ package entities;
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
 import mt.Tag;
-import user.Calendar;
 import user.DataSaver;
 
 import java.io.IOException;
@@ -251,7 +250,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     private List<Event> generateEventsHelper(CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
         for (GregorianCalendar GC : CG) {
-            String id = baseEvent.getName() + GC.getTime();
+            String id = baseEvent.getName() + "%" + GC.getTime();
             Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
             ret.add(event);
         }

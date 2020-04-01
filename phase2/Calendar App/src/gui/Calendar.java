@@ -38,7 +38,7 @@ public class Calendar {
             tomorrow.add(GregorianCalendar.DATE, 1);
             GregorianCalendar tomorrowLater = (GregorianCalendar)tomorrow.clone();
             tomorrowLater.add(GregorianCalendar.HOUR_OF_DAY, 1);
-            Event event = new Event(tomorrow.getTime().toString()+"test", "test", tomorrow, tomorrowLater);
+            Event event = new Event("test%" + tomorrow.getTime().toString(), "test", tomorrow, tomorrowLater);
             singleEvents.addEvent(event);
             AlertCollection alertCollection = new AlertCollection(event, calendar.getDataSaver());
             alertCollection.addAlert(tomorrow);
