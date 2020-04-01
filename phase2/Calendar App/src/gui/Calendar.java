@@ -1,18 +1,15 @@
 package gui;
 
-import com.sun.javaws.IconUtil;
 import entities.Alert;
 import entities.AlertCollection;
 import entities.Event;
 import entities.EventCollection;
 import exceptions.InvalidDateException;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import sun.awt.windows.WPrinterJob;
 import user.User;
 
 import java.util.GregorianCalendar;

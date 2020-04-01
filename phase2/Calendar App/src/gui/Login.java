@@ -1,8 +1,6 @@
 package gui;
 
 import exceptions.InvalidDateException;
-import exceptions.PasswordMismatchException;
-import exceptions.UsernameTakenException;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,6 +68,7 @@ public class Login {
         calendarController.setUser(userManager.getCurrentUser());
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("Calendar");
         stage.show();
     }
 
