@@ -70,7 +70,7 @@ public class Alert {
      */
     @Override
     public String toString() {
-        return getEventId();
+        return getEventId().replace('%', ' ');
         //return "" + time.getTime().toString();
     }
 

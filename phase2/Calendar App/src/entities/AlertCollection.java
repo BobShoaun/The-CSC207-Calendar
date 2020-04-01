@@ -318,8 +318,12 @@ public class AlertCollection implements Observer {
 
         String time = "";
         try {
-            time = eventId.substring(0, 28);
-            time = time.replace('&', ':');
+            String[] times = eventId.split("%");
+            String[] times2 = new String[times.length - 1];
+            System.arraycopy(times, 1, times2, 0, times.length - 1);
+            for (String s : times2) {
+                time += s + " ";
+            }
         } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
