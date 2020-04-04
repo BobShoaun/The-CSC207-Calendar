@@ -2,7 +2,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class EventController {
+public class Event {
 
     @FXML
     private TextField eventName;
@@ -16,8 +16,10 @@ public class EventController {
     @FXML
     private Button alerts;
 
-    public EventController() {};
+    public Event() {
+    }
 
+    ;
 
 
 }
