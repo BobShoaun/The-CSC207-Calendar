@@ -43,14 +43,14 @@ public class EventCollectionUI extends UserInterface {
                 EventCollection regularEvents = cal.getEventCollection("");
 
                 int option1 = getOptionsInput(regularEvents.getEventOptions());
-                String eventId = regularEvents.getEvents().get(option1-1).getId();
+                String eventId = regularEvents.getEvents().get(option1 - 1).getId();
 
-                while(option1!=0) {
+                while (true) {
                     try {
                         //keep asking for events to select till exit at 0
                         cal.addToSeries(eventId, this.events.getName());
                         option1 = getOptionsInput(regularEvents.getEventOptions());
-                        if(option1 == 0){
+                        if (option1 == 0) {
                             break;
                         }
                         eventId = regularEvents.getEvents().get(option1 - 1).getId();

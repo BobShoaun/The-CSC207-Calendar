@@ -9,7 +9,7 @@ import exceptions.PeriodAlreadyExistsException;
  */
 public class AlertUI extends UserInterface {
 
-    private AlertCollection alerts;
+    private final AlertCollection alerts;
 
     public AlertUI(AlertCollection ac) {
         alerts = ac;
@@ -69,7 +69,6 @@ public class AlertUI extends UserInterface {
     private void editAlert() {
         Alert a = alerts.getAlert(getDateInput("Enter the time of the alert to edit: "));
         a.setTime(getDateInput("Enter a new time for this alert: ").getTime());
-        alerts.save(); // TODO: implement editAlert() in AC instead
     }
 
     private void addRepeatingAlert() {

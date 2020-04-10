@@ -1,5 +1,7 @@
 package consoleui;
 
+import exceptions.InvalidPasswordException;
+import exceptions.InvalidUsernameException;
 import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import user.UserManager;
@@ -74,7 +76,7 @@ public class UserManagerUI extends UserInterface {
             password = getWordInput("Enter password: ");
             firstTry = false;
         } while (!userManager.loginUser(username, password));
-        if (!userManager.getCurrentUser().getFirstLogin()) {
+        if (!userManager.getCurrentUser().isFirstLogin()) {
             System.out.println("Welcome back, " + username + "! You last login was on: " + userManager.getCurrentUser().getLastLoginTime().getTime());
         } else {
             System.out.println("Welcome " + username + ", take a look at your brand new calendar!");
@@ -92,6 +94,12 @@ public class UserManagerUI extends UserInterface {
             System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
             showCalendar();
+        } catch (InvalidUsernameException e) {
+            System.out.println("Invalid username!");
+            showRegisterMenu();
+        } catch (InvalidPasswordException e) {
+            System.out.println("Invalid password!");
+            showRegisterMenu();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
             showRegisterMenu();
@@ -104,7 +112,9 @@ public class UserManagerUI extends UserInterface {
     }
 
     private void showCalendar() {
-        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(), userManager.getCurrentUser().getCalendar());
+        CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(),
+                userManager.getCurrentUser().getCalendar(0));
+        // TODO: support multiple calendars
         calendarUI.show();
     }
 

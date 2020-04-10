@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
  *
- * @auther Ng Bob Shoaun
+ * @author Ng Bob Shoaun
  */
 public class DataSaver {
 

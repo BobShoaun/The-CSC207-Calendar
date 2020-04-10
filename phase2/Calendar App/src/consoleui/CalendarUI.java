@@ -168,7 +168,9 @@ public class CalendarUI extends UserInterface {
     }
 
     private void showAllEvents() {
-        Iterator<Event> events = calendar.getEvents(new Date(0, 1, 1), new Date(1000, 1, 1)).iterator();
+        Iterator<Event> events = calendar.getEvents(
+                new GregorianCalendar(0, java.util.Calendar.JANUARY, 1),
+                new GregorianCalendar(3000, java.util.Calendar.JANUARY, 1)).iterator();
         ListUIView<Event> listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
         listUIView.show();
     }
@@ -209,7 +211,7 @@ public class CalendarUI extends UserInterface {
                 break;
             case 4:
                 GregorianCalendar date = getDateInput("Events at time: ");
-                events = calendar.getEvents(date.getTime()).iterator();
+                events = calendar.getEvents(date).iterator();
                 listUIView = new ListUIView<>(events, Event::toString, visibleEvents.size());
                 listUIView.show();
                 break;
@@ -235,8 +237,8 @@ public class CalendarUI extends UserInterface {
     private void addEventSeries() {
         String eventSeriesName = getStringInput("Name of event series: ", calendar.getEventSeriesNames());
         try {
-            calendar.createEventSeries(eventSeriesName, new ArrayList<>());
-        } catch (IOException e) {
+            calendar.addEventSeries(eventSeriesName);
+        } catch (InvalidDateException e) {
             System.out.println("Error saving events!");
             e.printStackTrace();
         }
@@ -334,7 +336,7 @@ public class CalendarUI extends UserInterface {
     }
 
     private void getVisibleEvents(GregorianCalendar startOfDay, GregorianCalendar nextDay) {
-        visibleEvents = calendar.getEvents(startOfDay.getTime(),
-                nextDay.getTime()).stream().map(e -> new EventUI(e, calendar, new DataSaver(user.getName()))).collect(Collectors.toList());
+        visibleEvents = calendar.getEvents(startOfDay,
+                nextDay).stream().map(e -> new EventUI(e, calendar, new DataSaver(user.getName()))).collect(Collectors.toList());
     }
 }

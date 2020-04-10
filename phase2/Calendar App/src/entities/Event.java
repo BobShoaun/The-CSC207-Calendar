@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.Observable;
 
 /**
- * alert.Event class
+ * Event class
  */
 public class Event extends Observable implements Cloneable, Comparable<Event>{
 
@@ -25,7 +25,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
     public Event (String id, String name, GregorianCalendar startDate, GregorianCalendar endDate)
             throws InvalidDateException{
         this.id = id.replace(':', '%');
-        this.id = id.replace(' ', '%');
+        this.id = this.id.replace(' ', '%');
         this.name = name;
         if (startDate.after(endDate)) {
             throw new InvalidDateException();
