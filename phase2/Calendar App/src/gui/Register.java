@@ -93,6 +93,7 @@ public class Register {
         Parent root = fxmlLoader.load();
         Calendar calendarController = fxmlLoader.getController();
         calendarController.setUser(userManager.getCurrentUser());
+        calendarController.setTheme();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -107,5 +108,4 @@ public class Register {
         stage.setScene(scene);
         stage.show();
     }
-
 }

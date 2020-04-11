@@ -23,6 +23,15 @@ public class User implements StringParsable {
     private boolean firstLogin;
     private DataSaver dataSaver;
     private EventSharer eventSharer;
+    private boolean darkTheme;
+
+    public boolean getDarkTheme(){
+        return darkTheme;
+    }
+
+    public void setDarkTheme(boolean darkTheme){
+        this.darkTheme = darkTheme;
+    }
 
     /**
      * getter for the user's name
@@ -102,6 +111,7 @@ public class User implements StringParsable {
         this.name = name;
         this.password = password;
         this.calendars = new ArrayList<>();
+        this.darkTheme = true;
         firstLogin = true;
         lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
         dataSaver = new DataSaver("./users/" + name);
@@ -139,9 +149,10 @@ public class User implements StringParsable {
         String[] split = string.split(";");
         this.name = split[0];
         this.password = split[1];
+        this.darkTheme = Boolean.parseBoolean(split[2]);
         this.calendars = new ArrayList<>();
         try {
-            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[2]);
+            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[3]);
             this.lastLoginTime = new GregorianCalendar();
             this.lastLoginTime.setTime(date);
         } catch (ParseException e) {
@@ -168,7 +179,7 @@ public class User implements StringParsable {
     public String toString () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         String dateFormatted = sdf.format(lastLoginTime.getTime());
-        return name + ";" + password + ";" + dateFormatted;
+        return name + ";" + password + ";" + darkTheme + ";" + dateFormatted;
     }
 
     private void loadCalendars() {

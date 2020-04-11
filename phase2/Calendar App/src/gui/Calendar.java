@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -25,6 +26,9 @@ public class Calendar {
 
     @FXML
     ListView<String> alertList;
+
+    @FXML
+    CheckBox darkTheme;
 
     public void setUser(User user) throws InvalidDateException {
         this.user = user;
@@ -88,5 +92,22 @@ public class Calendar {
         ObservableList<String> empty = FXCollections.observableArrayList();
         alertList.setItems(empty);
         // TODO: delete all shown Alerts
+    }
+
+    @FXML
+    private void updateTheme(){
+        user.setDarkTheme(!user.getDarkTheme());
+        if(user.getDarkTheme()){
+            com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
+        } else {
+            com.sun.javafx.css.StyleManager.getInstance().removeUserAgentStylesheet("gui/DarkTheme.css");
+        }
+    }
+
+    public void setTheme(){
+        if(user.getDarkTheme()){
+            com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
+            darkTheme.setSelected(true);
+        }
     }
 }

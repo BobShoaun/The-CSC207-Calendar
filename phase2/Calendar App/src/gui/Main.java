@@ -1,5 +1,6 @@
 package gui;
 
+import com.sun.javafx.css.StyleManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +13,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         primaryStage.setTitle("Login");
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("gui/DarkTheme.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

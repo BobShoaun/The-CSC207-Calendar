@@ -66,6 +66,7 @@ public class Login {
         Parent root = fxmlLoader.load();
         Calendar calendarController = fxmlLoader.getController();
         calendarController.setUser(userManager.getCurrentUser());
+        calendarController.setTheme();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Calendar");
@@ -83,6 +84,7 @@ public class Login {
         registerController.init();
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("gui/DarkTheme.css");
         stage.setScene(scene);
         stage.show();
     }
