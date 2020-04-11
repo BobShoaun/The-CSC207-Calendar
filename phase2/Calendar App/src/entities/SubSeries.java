@@ -2,13 +2,9 @@ package entities;
 
 import dates.CalendarGenerator;
 
-import javax.swing.tree.ExpandVetoException;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-//This class is like Canada, fucking America on easy mode
 public class SubSeries {
     private Event base;
     private CalendarGenerator calGen;

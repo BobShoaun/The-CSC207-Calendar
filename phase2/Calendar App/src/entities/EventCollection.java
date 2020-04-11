@@ -32,10 +32,6 @@ public class EventCollection implements Iterable<Event>, Observer {
         this.postponedEvents = postponedEvents;
     }
 
-//    public DataSaver getSaver() {
-//        return saver;
-//    }
-
 
     /**
      * @return the regular event list
