@@ -316,13 +316,13 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
 
-        String time = "";
+        StringBuilder time = new StringBuilder();
         try {
             String[] times = eventId.split("%");
             String[] times2 = new String[times.length - 1];
             System.arraycopy(times, 1, times2, 0, times.length - 1);
             for (String s : times2) {
-                time += s + " ";
+                time.append(s).append(" ");
             }
         } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -330,7 +330,7 @@ public class AlertCollection implements Observer {
         this.eventTime = new GregorianCalendar();
         SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
         try {
-            eventTime.setTime(df.parse(time));
+            eventTime.setTime(df.parse(time.toString()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
