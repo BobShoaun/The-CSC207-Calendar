@@ -328,7 +328,7 @@ public class AlertCollection implements Observer {
             e.printStackTrace();
         }
         this.eventTime = new GregorianCalendar();
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
         try {
             eventTime.setTime(df.parse(time));
         } catch (ParseException e) {
