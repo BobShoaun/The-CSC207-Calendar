@@ -186,7 +186,8 @@ public class Calendar extends GraphicalUserInterface {
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        TimeController timeController = new TimeController(calendar);
+        TimeController timeController = new TimeController();
+        timeController.setCalendar(calendar);
         timeController.start(stage);
     }
 
