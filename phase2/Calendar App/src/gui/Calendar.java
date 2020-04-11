@@ -163,6 +163,8 @@ public class Calendar extends GraphicalUserInterface {
     public void setActiveCalendar(user.Calendar calendar) throws InvalidDateException {
         this.calendar = calendar;
 
+        setWindowTitle(calendar.getName());
+
         //For testing purposes until supported by ui
         EventCollection singleEvents = calendar.getSingleEventCollection();
         if (singleEvents.getEvents().size() == 0) {

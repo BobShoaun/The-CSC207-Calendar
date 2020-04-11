@@ -10,9 +10,14 @@ import java.io.IOException;
 public class GraphicalUserInterface {
 
     protected Stage window;
+    private String defaultWindowTitle;
 
     protected void setWindow (Stage window) {
         this.window = window;
+    }
+
+    protected void setDefaultWindowTitle(String title) {
+        defaultWindowTitle = title;
     }
 
     protected void setWindowTitle(String title) {
@@ -36,13 +41,19 @@ public class GraphicalUserInterface {
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             window.setScene(scene);
+            window.setTitle(defaultWindowTitle);
             window.show();
-            ((GraphicalUserInterface) fxmlLoader.getController()).setWindow(window); // set the window of the next GUI too
+            updateNextGUI(fxmlLoader.getController());
             return fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void updateNextGUI (GraphicalUserInterface gui) {
+        gui.setWindow(window);
+        gui.setDefaultWindowTitle(defaultWindowTitle);
     }
 
 

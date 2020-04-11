@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         GraphicalUserInterface gui = new GraphicalUserInterface();
         gui.setWindow(primaryStage);
-        gui.setWindowTitle("The CSC207 Calendar");
+        gui.setDefaultWindowTitle("The CSC207 Calendar");
         Login login = gui.showGUI("login.fxml");
         login.setDarkTheme();
     }
