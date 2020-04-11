@@ -3,9 +3,7 @@ package entities;
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
 import mt.Tag;
-import user.DataSaver;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 
@@ -34,7 +32,8 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.startTime = calGen.getStartTime();
         if (baseEvent != null) {
             this.seriesEvents = generateEvents();
-        }
+        } else
+            this.seriesEvents = new ArrayList<>();
     }
 
     /**

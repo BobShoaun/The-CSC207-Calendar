@@ -85,10 +85,14 @@ public class Calendar extends GraphicalUserInterface {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(true);
+            } else if(searchCriterion.equals("Postponed")){
+                startDate.setVisible(false);
+                endDate.setVisible(false);
+                searchTermField.setVisible(false);
             }
         });
         ObservableList<String> searchOptions = FXCollections.observableArrayList(
-                Stream.of("Date", "Tag", "Memo name").collect(Collectors.toList())
+                Stream.of("Date", "Tag", "Memo name", "Postponed").collect(Collectors.toList())
         );
         searchByList.setItems(searchOptions);
         searchByList.setValue("Date");
@@ -141,6 +145,11 @@ public class Calendar extends GraphicalUserInterface {
                     eventList.add(event.toString());
                 }
             }
+        } else if(searchCriterion.equals("Postponed")){
+            for (Event event :
+                    calendar.getPostponedEvents()) {
+                eventList.add(event.toString());
+            }
         }
     }
 
@@ -170,10 +179,10 @@ public class Calendar extends GraphicalUserInterface {
     }
 
     private void updateAlerts() {
-        GregorianCalendar future = calendar.getTime();
-        future.add(GregorianCalendar.DATE, 14);
+        GregorianCalendar past = calendar.getTime();
+        past.add(GregorianCalendar.DATE, -1);
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
-                calendar.getAlerts(calendar.getTime(), future).stream()
+                calendar.getAlerts(calendar.getTime(), past).stream()
                         .map(Alert::toString).collect(Collectors.toList()));
         alertList.setItems(alertStrings);
     }
@@ -186,7 +195,8 @@ public class Calendar extends GraphicalUserInterface {
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        TimeController timeController = new TimeController(calendar);
+        TimeController timeController = new TimeController();
+        timeController.setCalendar(calendar);
         timeController.start(stage);
     }
 

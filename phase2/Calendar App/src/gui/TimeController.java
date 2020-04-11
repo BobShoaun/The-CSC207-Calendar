@@ -25,14 +25,6 @@ public class TimeController extends Application {
         Update();
     }
 
-    public TimeController(){
-        
-    }
-
-    public TimeController(Calendar calendar){
-        this.calendar = calendar;
-    }
-
     public Calendar getCalendar() {
         return calendar;
     }
@@ -48,16 +40,20 @@ public class TimeController extends Application {
     }
 
     public void setClicked(MouseEvent event){
-        Update();
-    }
-
-    public void resetClicked(MouseEvent event){
         LocalDate date = timeView.getValue();
         GregorianCalendar time = calendar.getTime();
         time.set(GregorianCalendar.YEAR, date.getYear());
         time.set(GregorianCalendar.MONTH, date.getMonthValue());
         time.set(GregorianCalendar.DAY_OF_MONTH, date.getDayOfMonth());
         calendar.setTime(time);
+        Update();
+    }
+
+    public void resetClicked(MouseEvent event){
+        GregorianCalendar time = calendar.getTime();
+        LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
+                time.get(GregorianCalendar.DATE));
+        timeView.setValue(date);
         Update();
     }
 
@@ -80,6 +76,8 @@ public class TimeController extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
         Parent root = fxmlLoader.load();
 
+        TimeController timeController = fxmlLoader.getController();
+        timeController.setCalendar(calendar); // This is correct although I think we are creating a second instance of time controller, so this might not be the best design
         Stage stage = new Stage(); //Create a new stage, so we can have both windows visible at once
         Scene scene = new Scene(root);
         stage.setScene(scene);
