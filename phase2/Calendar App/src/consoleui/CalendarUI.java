@@ -3,6 +3,7 @@ package consoleui;
 import entities.Alert;
 import entities.Event;
 import entities.EventCollection;
+import entities.Series;
 import exceptions.InvalidDateException;
 import mt.Memo;
 import mt.Tag;
@@ -143,17 +144,14 @@ public class CalendarUI extends UserInterface {
     }
 
     private void showAllEventSeries() {
-        List<EventCollection> eventCollections = calendar.getEventCollections();
+        List<Series> eventCollections = calendar.getEventCollections().stream().map(events -> (Series)events).filter(Objects::nonNull).collect(Collectors.toList());
         System.out.println("Event series:");
         int i = 0;
-        for (EventCollection eC : eventCollections) {
-            if (!(eC.getName().equals("noname") || eC.getName().equals(""))) {
-                System.out.println("(" + i + ") " + eC.getName());
-                i += 1;
-            }
+        for (Series eC : eventCollections) {
+            System.out.println("(" + i + ") " + eC.getName());
+            i += 1;
         }
-        visibleEventCollections = eventCollections.stream().filter(eC -> !eC.getName().equals(""))
-                .map(eC -> new EventCollectionUI(eC, calendar)).collect(Collectors.toList());
+        visibleEventCollections = eventCollections.stream().map(eC -> new EventCollectionUI(eC, calendar)).collect(Collectors.toList());
         System.out.println("< End of series >");
     }
 
@@ -257,12 +255,8 @@ public class CalendarUI extends UserInterface {
         } catch (InvalidDateException e) {
             System.out.println("Creating event failed... Try again!");
         }
-        try {
-            calendar.createEvent(event, "");
-        } catch (IOException e) {
-            System.out.println("Error saving events!");
-            e.printStackTrace();
-        }
+        EventCollection eventCollection = calendar.getSingleEventCollection();
+        eventCollection.addEvent(event);
         EventUI newEventUi = new EventUI(event, calendar, new DataSaver(user.getName()));
         newEventUi.show();
     }
