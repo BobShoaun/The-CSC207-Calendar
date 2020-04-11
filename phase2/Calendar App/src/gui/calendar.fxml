@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -32,6 +33,26 @@
                         <RowConstraints maxHeight="92.0" minHeight="10.0" prefHeight="46.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
+                        <ChoiceBox fx:id="searchByList" prefHeight="25.0" prefWidth="94.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </ChoiceBox>
+                        <DatePicker fx:id="startDate" prefHeight="25.0" prefWidth="125.0" promptText="Choose a date" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="125.0" />
+                           </GridPane.margin>
+                        </DatePicker>
+                        <TextField fx:id="searchTermField" maxWidth="252.0" onKeyTyped="#searchTermValueChange" prefHeight="25.0" prefWidth="252.0" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="125.0" />
+                           </GridPane.margin>
+                        </TextField>
+                                <ListView fx:id="displayedEventList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0" />
+                                    </GridPane.margin>
+                                </ListView>
                                 <Label text="Events" GridPane.halignment="CENTER">
                                     <font>
                                         <Font name="Source Code Pro Black" size="18.0" />
@@ -40,7 +61,7 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <DatePicker promptText="Choose a date" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                <DatePicker fx:id="endDate" prefHeight="25.0" prefWidth="125.0" promptText="Choose a date" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                                     <GridPane.margin>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </GridPane.margin>
