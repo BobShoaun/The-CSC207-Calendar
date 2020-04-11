@@ -14,7 +14,8 @@ public class Main extends Application {
         GraphicalUserInterface gui = new GraphicalUserInterface();
         gui.setWindow(primaryStage);
         gui.setWindowTitle("The CSC207 Calendar");
-        gui.showGUI("login.fxml");
+        Login login = gui.showGUI("login.fxml");
+        login.setDarkTheme();
     }
 
 //    protected static void swapWindows(Event e, String fxml, String title) throws IOException {

@@ -19,6 +19,10 @@ public class GraphicalUserInterface {
         window.setTitle(title);
     }
 
+    protected void setDarkTheme () {
+        window.getScene().getStylesheets().add("gui/DarkTheme.css");
+    }
+
     /**
      *
      * @param fxml fmxl file of the GUI
@@ -31,7 +35,6 @@ public class GraphicalUserInterface {
             window.hide();
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
-//            scene.getStylesheets().add("gui/DarkTheme.css"); // enable this for global dark theme
             window.setScene(scene);
             window.show();
             ((GraphicalUserInterface) fxmlLoader.getController()).setWindow(window); // set the window of the next GUI too
@@ -41,5 +44,6 @@ public class GraphicalUserInterface {
             return null;
         }
     }
+
 
 }

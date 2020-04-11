@@ -13,12 +13,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import user.UserManager;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class Login extends GraphicalUserInterface {
+public class Login extends GraphicalUserInterface implements Initializable {
 
     @FXML
     private TextField username;
@@ -29,6 +30,11 @@ public class Login extends GraphicalUserInterface {
 
     private UserManager userManager = new UserManager();
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+//        setDarkTheme();
+    }
 
     public Login() {
         try {
@@ -69,6 +75,7 @@ public class Login extends GraphicalUserInterface {
     private void showRegisterUI() {
         Register g = this.showGUI("register.fxml");
         g.setUserManager(userManager);
+        g.setDarkTheme();
     }
 
 }

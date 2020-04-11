@@ -90,6 +90,7 @@ public class Register extends GraphicalUserInterface implements Initializable {
     }
 
     private void showLoginUI() {
-        showGUI("login.fxml");
+        Login login = showGUI("login.fxml");
+        login.setDarkTheme();
     }
 }
