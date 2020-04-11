@@ -18,7 +18,8 @@ import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
-public class Calendar {
+public class Calendar extends GraphicalUserInterface {
+
     private User user;
     private user.Calendar calendar;
     private String currAlert;

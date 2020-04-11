@@ -4,6 +4,7 @@ import exceptions.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,8 +15,10 @@ import javafx.stage.Stage;
 import user.UserManager;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class Register {
+public class Register extends GraphicalUserInterface implements Initializable {
 
     @FXML
     private Label usernameErrorLabel;
@@ -38,10 +41,10 @@ public class Register {
     }
 
     public Register () {
-
     }
 
-    public void init () {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         setLabelsNotVisible();
     }
 
@@ -52,7 +55,7 @@ public class Register {
     }
 
     @FXML
-    private void handleRegister(Event e) throws IOException, InvalidDateException {
+    private void handleRegister() throws IOException, InvalidDateException {
         setLabelsNotVisible();
         System.out.println("Register");
         String username = usernameField.getText();
@@ -62,7 +65,7 @@ public class Register {
         try {
             userManager.registerUser(username, password, confirmPassword);
             userManager.loginUser(username, password);
-            showCalendarUI(e);
+            showCalendarUI();
 
         } catch (UsernameTakenException ex) {
             usernameErrorLabel.setText("Username already taken!");
@@ -81,31 +84,18 @@ public class Register {
     }
 
     @FXML
-    private void handleCancel(Event e) throws IOException { // go back to login page
+    private void handleCancel() { // go back to login page
         System.out.println("Cancel");
-        showLoginUI(e);
+        showLoginUI();
     }
 
-    private void showCalendarUI(Event e) throws IOException, InvalidDateException {
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.hide();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-        Parent root = fxmlLoader.load();
-        Calendar calendarController = fxmlLoader.getController();
+    private void showCalendarUI() throws InvalidDateException {
+        Calendar calendarController = showGUI("calendar.fxml");
         calendarController.setUser(userManager.getCurrentUser());
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
-    private void showLoginUI(Event e) throws IOException {
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.hide();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    private void showLoginUI() {
+        showGUI("login.fxml");
     }
 
 }

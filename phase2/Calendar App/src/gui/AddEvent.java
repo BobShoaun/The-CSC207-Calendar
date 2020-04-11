@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class AddEvent {
+public class AddEvent extends GraphicalUserInterface {
 
     @FXML
     private TextField nameField;

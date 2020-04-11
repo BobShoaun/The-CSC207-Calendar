@@ -10,10 +10,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
-        primaryStage.setTitle("Login");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+        primaryStage.setTitle("The CSC207 Calendar");
+        GraphicalUserInterface.window = primaryStage;
+        new GraphicalUserInterface().showGUI("login.fxml");
     }
 
 //    protected static void swapWindows(Event e, String fxml, String title) throws IOException {
@@ -31,4 +30,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
