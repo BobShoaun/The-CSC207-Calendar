@@ -1,5 +1,6 @@
 package user;
 
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import dates.CalendarGenerator;
 import entities.*;
 import exceptions.InvalidDateException;
@@ -284,6 +285,16 @@ public class Calendar {
     public void addMemo(String memoTitle, String memoText) {
         memos.add(new Memo(memoTitle, memoText));
         dataSaver.SaveCalendar(this);
+    }
+
+    public List<Event> getPostponedEvents() {
+        ArrayList<Event> postponedEvents = new ArrayList<>();
+        for (EventCollection eventCollection :
+                eventCollections) {
+            postponedEvents.addAll(eventCollection.getPostponedEvents());
+        }
+        postponedEvents.sort(Event::compareTo);
+        return postponedEvents;
     }
 
 
