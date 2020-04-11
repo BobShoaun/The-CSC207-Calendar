@@ -49,8 +49,6 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     ChoiceBox searchByList;
     @FXML
-    ListView alertList;
-    @FXML
     DatePicker startDate;
     @FXML
     DatePicker endDate;
@@ -145,7 +143,6 @@ public class Calendar extends GraphicalUserInterface {
             }
         }
     }
->>>>>>> Added event search/display
 
     public void setUser(User user) throws InvalidDateException {
         this.user = user;
@@ -189,8 +186,7 @@ public class Calendar extends GraphicalUserInterface {
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        TimeController timeController = new TimeController();
-        timeController.setCalendar(calendar);
+        TimeController timeController = new TimeController(calendar);
         timeController.start(stage);
     }
 
@@ -222,11 +218,12 @@ public class Calendar extends GraphicalUserInterface {
         }
     }
 
-    public void setTheme(){
-        if(user.getDarkTheme()){
+    public void setTheme() {
+        if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
             darkTheme.setSelected(true);
         }
+    }
     public void searchTermValueChange(KeyEvent keyEvent) {
         UpdateDisplayedEvents();
     }
