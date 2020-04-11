@@ -68,13 +68,12 @@ public class TimeController extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
         Parent root = fxmlLoader.load();
 
         TimeController timeController = fxmlLoader.getController();
-        timeController.setCalendar(calendar);
-        Stage stage = new Stage();
+        timeController.setCalendar(calendar); // TODO: I feel like this is not right
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

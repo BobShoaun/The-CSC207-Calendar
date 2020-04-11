@@ -100,7 +100,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     public void addEvent(Event event) {
         this.events.add(event);
         Collections.sort(events);
-        event.addObserver(this::update);
+        event.addObserver(this);
     }
 
     /**
@@ -114,7 +114,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
 
         if (removed) {
-            event.addObserver(this::update);
+            event.addObserver(this);
         }
         return removed;
     }
@@ -129,7 +129,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         boolean removed = removeEvent(oldEvent);
         if (removed) {
             addEvent(newEvent);
-            newEvent.addObserver(this::update);
+            newEvent.addObserver(this);
         }
         return removed;
     }
@@ -144,7 +144,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     public boolean postponedEvent(Event event) throws InvalidDateException {
         if (removeEvent(event)) {
             addPostponedEvent(event);
-            event.addObserver(this::update);
+            event.addObserver(this);
             return true;
         }
         return false;

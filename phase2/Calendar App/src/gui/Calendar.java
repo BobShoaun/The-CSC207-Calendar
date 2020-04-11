@@ -8,10 +8,7 @@ import exceptions.InvalidDateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -24,9 +21,10 @@ import java.util.stream.Collectors;
 public class Calendar {
     private User user;
     private user.Calendar calendar;
+    private String currAlert;
 
     @FXML
-    ListView alertList;
+    ListView<String> alertList;
 
     public void setUser(User user) throws InvalidDateException {
         this.user = user;
@@ -39,10 +37,10 @@ public class Calendar {
 
         //For testing purposes until supported by ui
         EventCollection singleEvents = calendar.getSingleEventCollection();
-        if(singleEvents.getEvents().size() == 0){
+        if (singleEvents.getEvents().size() == 0) {
             GregorianCalendar tomorrow = new GregorianCalendar();
             tomorrow.add(GregorianCalendar.DATE, 1);
-            GregorianCalendar tomorrowLater = (GregorianCalendar)tomorrow.clone();
+            GregorianCalendar tomorrowLater = (GregorianCalendar) tomorrow.clone();
             tomorrowLater.add(GregorianCalendar.HOUR_OF_DAY, 1);
             Event event = new Event("test%" + tomorrow.getTime().toString(), "test", tomorrow, tomorrowLater);
             singleEvents.addEvent(event);
@@ -52,7 +50,7 @@ public class Calendar {
         }
     }
 
-    private void updateAlerts(){
+    private void updateAlerts() {
         GregorianCalendar future = calendar.getTime();
         future.add(GregorianCalendar.DATE, 14);
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
@@ -61,8 +59,10 @@ public class Calendar {
         alertList.setItems(alertStrings);
     }
 
-    public void alertListClicked(MouseEvent mouseEvent) {
-        System.out.println("Clicked on alert: " + alertList.getSelectionModel().getSelectedItems().get(0));
+    @FXML
+    private void alertListClicked() {
+        currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
+        System.out.println("Clicked on alert: " + currAlert);
     }
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
@@ -70,5 +70,23 @@ public class Calendar {
         TimeController timeController = new TimeController();
         timeController.setCalendar(calendar);
         timeController.start(stage);
+    }
+
+    @FXML
+    private void clearNotification() {
+        System.out.println("Clicked clear");
+        if (currAlert != null) {
+            ObservableList<String> temp = alertList.getItems();
+            temp.remove(currAlert);
+            alertList.setItems(temp);
+        } // TODO: actually delete the Alert?
+    }
+
+    @FXML
+    private void clearAllNotifications() {
+        System.out.println("Clicked clear all");
+        ObservableList<String> empty = FXCollections.observableArrayList();
+        alertList.setItems(empty);
+        // TODO: delete all shown Alerts
     }
 }

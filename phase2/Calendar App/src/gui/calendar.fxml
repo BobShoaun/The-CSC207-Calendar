@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
+<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
     <children>
         <SplitPane dividerPositions="0.6521739130434783" layoutX="100.0" layoutY="40.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -93,8 +93,8 @@
                                 </ListView>
                                 <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                     <items>
-                                        <Button mnemonicParsing="false" text="Clear" />
-                                        <Button mnemonicParsing="false" text="Clear All" />
+                                        <Button mnemonicParsing="false" onAction="#clearNotification" text="Delete" />
+                                        <Button mnemonicParsing="false" onAction="#clearAllNotifications" text="Clear All" />
                                     </items>
                                     <GridPane.margin>
                                         <Insets top="30.0" />
