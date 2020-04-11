@@ -10,10 +10,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("The CSC207 Calendar");
-        GraphicalUserInterface.window = primaryStage;
-        new GraphicalUserInterface().showGUI("login.fxml");
+    public void start(Stage primaryStage) {
+        GraphicalUserInterface gui = new GraphicalUserInterface();
+        gui.setWindow(primaryStage);
+        gui.setWindowTitle("The CSC207 Calendar");
+        gui.showGUI("login.fxml");
     }
 
 //    protected static void swapWindows(Event e, String fxml, String title) throws IOException {

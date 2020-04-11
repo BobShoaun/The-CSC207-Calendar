@@ -227,4 +227,12 @@ public class Calendar extends GraphicalUserInterface {
     public void searchTermValueChange(KeyEvent keyEvent) {
         UpdateDisplayedEvents();
     }
+
+    @FXML
+    private void handleSwitchCalendar() {
+        System.out.println("Switch Calendar clicked");
+        CalendarSwitcher controller = showGUI("calendarSwitcher.fxml");
+        controller.setUser(user);
+    }
+
 }
