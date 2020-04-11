@@ -28,7 +28,7 @@ public class Memo {
         String memoText = memoTextField.getText();
 
         try {
-//            calendar.addMemo(memoTitle, memoText);
+            calendar.addMemo(memoTitle, memoText);
         } catch (IllegalArgumentException ex) {
             memoExistsLabel.setText("Memo name already exists!");
             memoExistsLabel.setVisible(true);

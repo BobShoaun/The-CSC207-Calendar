@@ -17,6 +17,7 @@ public class GraphicalUserInterface {
             window.hide();
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add("gui/DarkTheme.css");
             window.setScene(scene);
             window.show();
             return fxmlLoader.getController();
