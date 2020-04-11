@@ -12,18 +12,15 @@ public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
-//    private DataSaver saver;
 
 
     /**
      * constructor for a finite/manually created series, or a list of regular events if name == ""
      *
      * @param events list of events of the series
-     * @param saver  saver object to load/save this EventCollection
      */
-    public EventCollection(List<Event> events, DataSaver saver) {
+    public EventCollection(List<Event> events) {
         this.events = events;
-//        this.saver = saver;
         this.postponedEvents = new ArrayList<>();
     }
 

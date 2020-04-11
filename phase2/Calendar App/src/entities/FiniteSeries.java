@@ -16,11 +16,10 @@ public class FiniteSeries extends Series {
      * @param baseEvent the base Event this Series is modelled upon
      * @param calGen    List of start date of the events of the series, CalGen basically contains the user input of
      *                  display periods, however in a finite Series calGen.getEndTime == fixedEndTime
-     * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
-    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
-        super(name, baseEvent, calGen, saver);
+    public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen) throws InvalidDateException {
+        super(name, baseEvent, calGen);
         this.endTime = calGen.getEndTime();
     }
 

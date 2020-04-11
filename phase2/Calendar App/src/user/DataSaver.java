@@ -132,7 +132,7 @@ public class DataSaver {
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
         //load EC
 
-        eventCollections = new EventCollection(ECLoadHelper("events/"),this);
+        eventCollections = new EventCollection(ECLoadHelper("events/"));
         eventCollections.setPostponedEvents(ECLoadHelper("events/postponed/"));
 
         //load memos
@@ -182,7 +182,7 @@ public class DataSaver {
                     GregorianCalendar newEnd = newCG.getStartTime();
                     List<Duration> durs = newCG.getPeriods();
 
-                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newStart,newEnd,durs, this);
+                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newStart,newEnd,durs);
 
                     newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
                     newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));

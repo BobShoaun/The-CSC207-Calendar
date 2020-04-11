@@ -10,13 +10,13 @@ import java.util.List;
 
 public class SeriesFactory {
 
-    public Series getSeries(String name, Event baseEvent, GregorianCalendar start, GregorianCalendar end, List<Duration> durs, DataSaver saver) throws InvalidDateException {
+    public Series getSeries(String name, Event baseEvent, GregorianCalendar start, GregorianCalendar end, List<Duration> durs) throws InvalidDateException {
 
         CalendarGenerator calGen = new CalendarGenerator(start, durs, end);
         if (end == null) {
-            return new Series(name, baseEvent, calGen, saver);
+            return new Series(name, baseEvent, calGen);
         } else {
-            return new FiniteSeries(name, baseEvent, calGen, saver);
+            return new FiniteSeries(name, baseEvent, calGen);
         }
     }
 }

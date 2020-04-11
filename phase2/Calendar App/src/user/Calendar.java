@@ -38,7 +38,7 @@ public class Calendar {
         alertCollections = new ArrayList<>();
         memos = new ArrayList<>();
         tags = new ArrayList<>();
-        eventCollections.add(new EventCollection(new ArrayList<>(), dataSaver));
+        eventCollections.add(new EventCollection(new ArrayList<>()));
         timeController = new TimeController();
 
         try {
@@ -192,8 +192,7 @@ public class Calendar {
      * @throws InvalidDateException If incorrect data is passed in
      */
     public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null),
-                dataSaver));
+        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null)));
     }
 
 
@@ -216,7 +215,7 @@ public class Calendar {
             }
         }
         SeriesFactory seriesFactory = new SeriesFactory();
-        Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference), dataSaver);
+        Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
         eventCollections.add(eventCollection);
     }
 

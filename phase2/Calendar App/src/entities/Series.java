@@ -24,11 +24,10 @@ public class Series extends EventCollection implements Iterable<Event> {
      * @param name      the name of this Infinite Series
      * @param baseEvent the base Event this Series is modelled upon
      * @param calGen    List of start date of the events of the series, which also contains the DISPLAY endTime of this Infinite series
-     * @param saver     saver object handling save and load of this series
      * @throws InvalidDateException invalid dates in events
      */
-    public Series(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
-        super(new ArrayList<>(), saver);
+    public Series(String name, Event baseEvent, CalendarGenerator calGen) throws InvalidDateException {
+        super(new ArrayList<>());
         this.name = name;
         this.baseEvent = baseEvent;
         this.calGen = calGen;
@@ -188,37 +187,19 @@ public class Series extends EventCollection implements Iterable<Event> {
         return false;
     }
 
-    //TODO: addRepeatingEvent should not be a thing, it should just call the constructor of Infinite Series
-    // Series should not be within another Series, CalGen takes a single start and end date not a list of them.
-    // And i'm not going to make a list of Cal Gen
-    // if a user want a new series simply create a new one, but put a series in a series
-    // MAYBE users can edit the add additional durations for cal gen
-    // OR MAYBE users can clone a series/frequency and edit start date etc...
-    // OR MAYBE calGen accepts a list of start dates
+    /**
+     * @param baseEvent the event that the new subSeries is modelled on
+     * @param start     start of the sub series
+     * @param end       the end of the sub series
+     * @param frequency the frequency of repetition of the series
+     */
 
-//    public void addRepeatingEvent(Event baseEvent, GregorianCalendar start, GregorianCalendar end, Duration frequency) throws InvalidDateException, IOException {
-//        if (eGen == null) {
-//            List<Duration> durs = new ArrayList<>();
-//            durs.add(Duration.ofMillis(frequency.getTime()));
-//            this.eGen = new EventGenerator(baseEvent, start, end, durs);
-//        } else {
-//            CalendarGenerator CG = eGen.getCalGen();
-//            CG.addPeriod(Duration.ofMillis(frequency.getTime()));
-//            eGen.setCalGen(CG);
-//        }
-//        flush(eGen);
-//        save();
-//    }
-
-//    /**
-//     * Add addition frequency of event repetition for this series.
-//     * i.e. it was repeating every 2 weeks, now I want it to repeat every 3 days as well
-//     *
-//     * @param frequency the new period of delay between start date of events in the series
-//     */
-//    public void addDuration(Duration frequency) {
-//        this.calGen.addPeriod(frequency);
-//    }
+    public void addRepeatingEvent(Event baseEvent, GregorianCalendar start, GregorianCalendar end, Duration frequency) {
+        List<Duration> dur = new ArrayList<>();
+        dur.add(frequency);
+        CalendarGenerator newCG = new CalendarGenerator(start, dur, end);
+        subSeries.add(new SubSeries(baseEvent, newCG));
+    }
 
 
     @Override
@@ -285,7 +266,8 @@ public class Series extends EventCollection implements Iterable<Event> {
         }
         return ret;
     }
-    private CalendarGenerator defaultCG(CalendarGenerator CG){
+
+    private CalendarGenerator defaultCG(CalendarGenerator CG) {
         long time = Duration.ofDays(365).toMillis();
         GregorianCalendar startTime = calGen.getStartTime();
         GregorianCalendar endTime = addTime(startTime, time);
