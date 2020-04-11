@@ -92,10 +92,10 @@ public class Register extends GraphicalUserInterface implements Initializable {
     private void showCalendarUI() throws InvalidDateException {
         Calendar calendarController = showGUI("calendar.fxml");
         calendarController.setUser(userManager.getCurrentUser());
+        calendarController.setTheme();
     }
 
     private void showLoginUI() {
         showGUI("login.fxml");
     }
-
 }

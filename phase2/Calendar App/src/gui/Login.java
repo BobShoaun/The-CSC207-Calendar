@@ -63,6 +63,7 @@ public class Login extends GraphicalUserInterface {
     private void showCalendarUI() throws InvalidDateException {
         Calendar calendarController = showGUI("calendar.fxml");
         calendarController.setUser(userManager.getCurrentUser());
+        calendarController.setTheme();
     }
 
     private void showRegisterUI() {

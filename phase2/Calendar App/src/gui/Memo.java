@@ -33,7 +33,7 @@ public class Memo {
             memoExistsLabel.setText("Memo name already exists!");
             memoExistsLabel.setVisible(true);
         }
-        showCalendarUI(e);
+        showViewMemoUI(e);
     }
 
     @FXML
@@ -41,10 +41,10 @@ public class Memo {
         String memoTitle = memoTitleField.getText();
         mt.Memo memo = calendar.getMemo(memoTitle);
         calendar.removeMemo(memo);
-        showCalendarUI(e);
+        showViewMemoUI(e);
     }
 
-    private void showCalendarUI(Event e) {
+    private void showViewMemoUI(Event e) {
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         stage.hide();
     }
