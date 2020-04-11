@@ -8,10 +8,16 @@ import exceptions.InvalidDateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import user.User;
 
+import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
@@ -57,5 +63,12 @@ public class Calendar {
 
     public void alertListClicked(MouseEvent mouseEvent) {
         System.out.println("Clicked on alert: " + alertList.getSelectionModel().getSelectedItems().get(0));
+    }
+
+    public void showTimeController(MouseEvent mouseEvent) throws IOException {
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        TimeController timeController = new TimeController();
+        timeController.setCalendar(calendar);
+        timeController.start(stage);
     }
 }

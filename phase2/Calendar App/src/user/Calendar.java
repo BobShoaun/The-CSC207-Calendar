@@ -277,6 +277,10 @@ public class Calendar {
         return dataSaver;
     }
 
+    public void setTime(GregorianCalendar gregorianCalendar) {
+        timeController.setCurrentTime(gregorianCalendar);
+    }
+
 
     /**
      * alert.Event Iterator is used to iterate over the individual event collections to get the next time

@@ -86,5 +86,4 @@ public class Login {
         stage.setScene(scene);
         stage.show();
     }
-
 }
