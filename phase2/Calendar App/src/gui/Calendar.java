@@ -48,8 +48,6 @@ public class Calendar {
     @FXML
     ChoiceBox searchByList;
     @FXML
-    ListView alertList;
-    @FXML
     DatePicker startDate;
     @FXML
     DatePicker endDate;
@@ -144,7 +142,6 @@ public class Calendar {
             }
         }
     }
->>>>>>> Added event search/display
 
     public void setUser(User user) throws InvalidDateException {
         this.user = user;
@@ -221,11 +218,12 @@ public class Calendar {
         }
     }
 
-    public void setTheme(){
-        if(user.getDarkTheme()){
+    public void setTheme() {
+        if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
             darkTheme.setSelected(true);
         }
+    }
     public void searchTermValueChange(KeyEvent keyEvent) {
         UpdateDisplayedEvents();
     }

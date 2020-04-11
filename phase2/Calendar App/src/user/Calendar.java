@@ -281,6 +281,11 @@ public class Calendar {
         timeController.setCurrentTime(gregorianCalendar);
     }
 
+    public void addMemo(String memoTitle, String memoText) {
+        memos.add(new Memo(memoTitle, memoText));
+        dataSaver.SaveCalendar(this);
+    }
+
 
     /**
      * alert.Event Iterator is used to iterate over the individual event collections to get the next time
