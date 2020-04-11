@@ -185,8 +185,7 @@ public class Calendar {
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        TimeController timeController = new TimeController();
-        timeController.setCalendar(calendar);
+        TimeController timeController = new TimeController(calendar);
         timeController.start(stage);
     }
 

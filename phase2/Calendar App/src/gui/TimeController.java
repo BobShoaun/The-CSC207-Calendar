@@ -25,6 +25,14 @@ public class TimeController extends Application {
         Update();
     }
 
+    public TimeController(){
+        
+    }
+
+    public TimeController(Calendar calendar){
+        this.calendar = calendar;
+    }
+
     public Calendar getCalendar() {
         return calendar;
     }
@@ -68,12 +76,11 @@ public class TimeController extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage mainStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
         Parent root = fxmlLoader.load();
 
-        TimeController timeController = fxmlLoader.getController();
-        timeController.setCalendar(calendar); // TODO: I feel like this is not right
+        Stage stage = new Stage(); //Create a new stage, so we can have both windows visible at once
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
