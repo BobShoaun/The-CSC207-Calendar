@@ -14,10 +14,11 @@ public class Series extends EventCollection implements Iterable<Event> {
     private String name;
     private Event baseEvent;
     private CalendarGenerator calGen;
-
+    private List<SubSeries> subSeries;
     //this attribute holds the events generated from calGen in memory, never saved nor loaded, but updated when CalGen is updated
     //To save memory...
     private List<Event> seriesEvents;
+    protected GregorianCalendar startTime;
 
     /**
      * @param name      the name of this Infinite Series
@@ -27,19 +28,44 @@ public class Series extends EventCollection implements Iterable<Event> {
      * @throws InvalidDateException invalid dates in events
      */
     public Series(String name, Event baseEvent, CalendarGenerator calGen, DataSaver saver) throws InvalidDateException {
-        //TODO: Watch it for save/load
         super(new ArrayList<>(), saver);
         this.name = name;
         this.baseEvent = baseEvent;
         this.calGen = calGen;
-        if(baseEvent != null){
+        this.startTime = calGen.getStartTime();
+        if (baseEvent != null) {
             this.seriesEvents = generateEvents();
         }
     }
 
-    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end){
-        if(start.after(calGen.getStartTime())) {this.calGen.setStartTime(start);}
+    /**
+     * set the startTime of this Series manually
+     *
+     * @param startTime the new start Time of this Series
+     */
+    public void setStartTime(GregorianCalendar startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * Set the display period of this series up given user input
+     *
+     * @param start the start display time of this Series
+     * @param end   the end display time of this Series
+     */
+    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
+        //TODO: set display time for all sub series
+        setStartDisplayTime(start);
         this.calGen.setEndTime(end);
+    }
+
+    protected void setStartDisplayTime(GregorianCalendar start) {
+        if (start.before(startTime)) {
+            //The anchor for the startTime
+            calGen.setStartTime(startTime);
+        } else {
+            calGen.setStartTime(start);
+        }
     }
 
     //TODO: test
@@ -184,15 +210,15 @@ public class Series extends EventCollection implements Iterable<Event> {
 //        save();
 //    }
 
-    /**
-     * Add addition frequency of event repetition for this series.
-     * i.e. it was repeating every 2 weeks, now I want it to repeat every 3 days as well
-     *
-     * @param frequency the new period of delay between start date of events in the series
-     */
-    public void addDuration(Duration frequency) {
-        this.calGen.addPeriod(frequency);
-    }
+//    /**
+//     * Add addition frequency of event repetition for this series.
+//     * i.e. it was repeating every 2 weeks, now I want it to repeat every 3 days as well
+//     *
+//     * @param frequency the new period of delay between start date of events in the series
+//     */
+//    public void addDuration(Duration frequency) {
+//        this.calGen.addPeriod(frequency);
+//    }
 
 
     @Override
@@ -218,13 +244,13 @@ public class Series extends EventCollection implements Iterable<Event> {
 //        getSaver().saveToFile("series/" + this.name + "/CalenderGenerator.txt", this.calGen.getString());
 //    }
 
-    @Override
-    public void load() throws IOException, InvalidDateException {
-        setEvents(loadHelper("series/" + this.name + "/"));
-        setPostponedEvents(loadHelper("series/" + this.name + "/postponed/"));
-        String CG = getSaver().loadStringFromFile("series/" + this.name + "/CalenderGenerator.txt");
-        this.calGen = new CalendarGenerator(CG);
-    }
+//    @Override
+//    public void load() throws IOException, InvalidDateException {
+//        setEvents(loadHelper("series/" + this.name + "/"));
+//        setPostponedEvents(loadHelper("series/" + this.name + "/postponed/"));
+//        String CG = getSaver().loadStringFromFile("series/" + this.name + "/CalenderGenerator.txt");
+//        this.calGen = new CalendarGenerator(CG);
+//    }
 
     /**
      * Generate events based on the current CalGen
@@ -234,27 +260,36 @@ public class Series extends EventCollection implements Iterable<Event> {
      * @return List of events that has start time according to CalGen
      * @throws InvalidDateException invalid dates in events
      */
-    public List<Event> generateEvents() throws InvalidDateException {
+    private List<Event> generateEvents() throws InvalidDateException {
+        List<Event> ret = new ArrayList<>();
         if (calGen.getEndTime() == null) {
-            long time = Duration.ofDays(365).toMillis();
-            GregorianCalendar startTime = calGen.getStartTime();
-            GregorianCalendar endTime = addTime(startTime, time);
-            CalendarGenerator defaultCG = new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
-
-            calGen.setEndTime(endTime);
-            return generateEventsHelper(defaultCG);
+            CalendarGenerator defaultCG = defaultCG(calGen);
+            this.setDisplayPeriod(defaultCG.getStartTime(), defaultCG.getEndTime());
+            ret.addAll(generateEventsHelper(baseEvent, defaultCG));
+        } else {
+            ret.addAll(generateEventsHelper(baseEvent, calGen));
         }
-        return generateEventsHelper(calGen);
+
+        for (SubSeries s : subSeries) {
+            ret.addAll(generateEventsHelper(s.getBase(), s.getCalGen()));
+        }
+        return ret;
     }
 
-    private List<Event> generateEventsHelper(CalendarGenerator CG) throws InvalidDateException {
+    private List<Event> generateEventsHelper(Event base, CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
         for (GregorianCalendar GC : CG) {
-            String id = baseEvent.getName() + "%" + GC.getTime();
-            Event event = new Event(id, baseEvent.getName(), GC, addTime(GC, baseEvent.getDuration()));
+            String id = base.getName() + "%" + GC.getTime();
+            Event event = new Event(id, base.getName(), GC, addTime(GC, base.getDuration()));
             ret.add(event);
         }
         return ret;
+    }
+    private CalendarGenerator defaultCG(CalendarGenerator CG){
+        long time = Duration.ofDays(365).toMillis();
+        GregorianCalendar startTime = calGen.getStartTime();
+        GregorianCalendar endTime = addTime(startTime, time);
+        return new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
     }
 
 

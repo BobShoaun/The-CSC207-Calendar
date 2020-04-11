@@ -12,7 +12,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
-    private DataSaver saver;
+//    private DataSaver saver;
 
 
     /**
@@ -23,7 +23,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public EventCollection(List<Event> events, DataSaver saver) {
         this.events = events;
-        this.saver = saver;
+//        this.saver = saver;
         this.postponedEvents = new ArrayList<>();
     }
 
@@ -35,9 +35,9 @@ public class EventCollection implements Iterable<Event>, Observer {
         this.postponedEvents = postponedEvents;
     }
 
-    public DataSaver getSaver() {
-        return saver;
-    }
+//    public DataSaver getSaver() {
+//        return saver;
+//    }
 
 
     /**
@@ -239,31 +239,31 @@ public class EventCollection implements Iterable<Event>, Observer {
 //        }
 //    }
 
-    /**
-     * loads events from text file
-     * problems with file path and date conversion.
-     */
-    public void load() throws IOException, InvalidDateException {
-        events = loadHelper("events/");
-        postponedEvents = loadHelper("events/postponed/");
-    }
+//    /**
+//     * loads events from text file
+//     * problems with file path and date conversion.
+//     */
+//    public void load() throws IOException, InvalidDateException {
+//        events = loadHelper("events/");
+//        postponedEvents = loadHelper("events/postponed/");
+//    }
 
-    protected List<Event> loadHelper(String path) throws IOException, InvalidDateException {
-        List<Event> loadedEvents = new ArrayList<>();
-        File[] data = saver.getFilesInDirectory(path);
-        for (File f : data) {
-            String id = f.getName();
-            id = id.replaceAll(".txt", "");
-            String[] eventData = saver.loadStringFromFile(path + id + ".txt").split("\\n");
-            String name = eventData[1];
-            GregorianCalendar start = new GregorianCalendar();
-            GregorianCalendar end = new GregorianCalendar();
-            start.setTimeInMillis(Long.parseLong(eventData[2]));
-            end.setTimeInMillis(Long.parseLong(eventData[3]));
-            loadedEvents.add(new Event(id, name, start, end));
-        }
-        return loadedEvents;
-    }
+//    protected List<Event> loadHelper(String path) throws IOException, InvalidDateException {
+//        List<Event> loadedEvents = new ArrayList<>();
+//        File[] data = saver.getFilesInDirectory(path);
+//        for (File f : data) {
+//            String id = f.getName();
+//            id = id.replaceAll(".txt", "");
+//            String[] eventData = saver.loadStringFromFile(path + id + ".txt").split("\\n");
+//            String name = eventData[1];
+//            GregorianCalendar start = new GregorianCalendar();
+//            GregorianCalendar end = new GregorianCalendar();
+//            start.setTimeInMillis(Long.parseLong(eventData[2]));
+//            end.setTimeInMillis(Long.parseLong(eventData[3]));
+//            loadedEvents.add(new Event(id, name, start, end));
+//        }
+//        return loadedEvents;
+//    }
 
     /**
      * @param event     the event to br checked
