@@ -1,21 +1,13 @@
 package gui;
 
-import com.sun.org.apache.xml.internal.security.Init;
 import entities.Alert;
-import entities.AlertCollection;
 import entities.Event;
-import entities.EventCollection;
 import exceptions.InvalidDateException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.InputMethodEvent;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -25,7 +17,6 @@ import user.User;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -165,19 +156,19 @@ public class Calendar extends GraphicalUserInterface {
 
         setWindowTitle(calendar.getName());
 
-        //For testing purposes until supported by ui
-        EventCollection singleEvents = calendar.getSingleEventCollection();
-        if (singleEvents.getEvents().size() == 0) {
-            GregorianCalendar tomorrow = new GregorianCalendar();
-            tomorrow.add(GregorianCalendar.DATE, 1);
-            GregorianCalendar tomorrowLater = (GregorianCalendar) tomorrow.clone();
-            tomorrowLater.add(GregorianCalendar.HOUR_OF_DAY, 1);
-            Event event = new Event("test%" + tomorrow.getTime().toString(), "test", tomorrow, tomorrowLater);
-            singleEvents.addEvent(event);
-            AlertCollection alertCollection = new AlertCollection(event, calendar.getDataSaver());
-            alertCollection.addAlert(tomorrow);
-            calendar.addAlertCollection(alertCollection);
-        }
+//        //For testing purposes until supported by ui
+//        EventCollection singleEvents = calendar.getSingleEventCollection();
+//        if (singleEvents.getEvents().size() == 0) {
+//            GregorianCalendar tomorrow = new GregorianCalendar();
+//            tomorrow.add(GregorianCalendar.DATE, 1);
+//            GregorianCalendar tomorrowLater = (GregorianCalendar) tomorrow.clone();
+//            tomorrowLater.add(GregorianCalendar.HOUR_OF_DAY, 1);
+//            Event event = new Event("test%" + tomorrow.getTime().toString(), "test", tomorrow, tomorrowLater);
+//            singleEvents.addEvent(event);
+//            AlertCollection alertCollection = new AlertCollection(event, calendar.getDataSaver());
+//            alertCollection.addAlert(tomorrow);
+//            calendar.addAlertCollection(alertCollection);
+//        }
     }
 
     private void updateAlerts() {
