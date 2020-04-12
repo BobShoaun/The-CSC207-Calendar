@@ -29,8 +29,8 @@
             </TextField>
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
               <items>
-                <Button mnemonicParsing="false" text="Done" onAction="#createMemo" />
-                  <Button mnemonicParsing="false" text="Delete" onAction="#deleteMemo"/>
+                <Button mnemonicParsing="false" onAction="#createMemo" text="Done" />
+                  <Button mnemonicParsing="false" onAction="#deleteMemo" text="Delete" />
               </items>
             </ToolBar>
             <GridPane GridPane.rowIndex="2">
@@ -42,14 +42,14 @@
                 <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ListView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                  <ListView fx:id="eventsList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Events" />
                </children>
                <GridPane.margin>
                   <Insets left="30.0" right="30.0" />
                </GridPane.margin>
             </GridPane>
-            <Label text="Memo name already exists!" textFill="#ff4545" fx:id="memoExistsLabel">
+            <Label fx:id="memoExistsLabel" text="Memo title already exists!" textFill="#ff4545">
                <GridPane.margin>
                   <Insets left="200.0" top="15.0" />
                </GridPane.margin>
