@@ -1,13 +1,22 @@
 package gui;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.Event;
-import javafx.scene.Node;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import user.Calendar;
 
-import java.awt.*;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class Memo {
+public class Memo extends gui.GraphicalUserInterface implements Initializable {
+
+    ObservableList list = FXCollections.observableArrayList();
 
     private Calendar calendar;
 
@@ -17,10 +26,17 @@ public class Memo {
     private TextField memoTextField;
     @FXML
     private Label memoExistsLabel;
+    @FXML
+    private ListView<String> eventsList;
 
-    public void setCalendar(Calendar c) { this.calendar = c; }
 
-    public void init() { memoExistsLabel.setVisible(false);}
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        memoExistsLabel.setVisible(false);
+        loadEvents();
+    }
+
+    private void setCalendar(Calendar c) { this.calendar = c; }
 
     @FXML
     private void createMemo(Event e) {
@@ -44,9 +60,19 @@ public class Memo {
         showViewMemoUI(e);
     }
 
-    private void showViewMemoUI(Event e) {
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.hide();
+    private void loadEvents() {
+        list.remove(list);
+        mt.Memo memo = calendar.getMemo(memoTextField.getText());
+        List<String> events = memo.getEvents();
+        for (String s: events) {
+            list.add(s);
+        }
+        eventsList.getItems().addAll(list);
     }
+
+    private void showViewMemoUI(Event e) {
+        gui.viewMemos vm = showGUI("viewMemos.fxml");
+    }
+
 
 }

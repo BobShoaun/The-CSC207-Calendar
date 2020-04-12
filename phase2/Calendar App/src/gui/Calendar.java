@@ -51,7 +51,7 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     TextField searchTermField;
     @FXML
-    ListView displayedEventList;
+    ListView<String> displayedEventList;
     @FXML
     private Label lastLoginLabel;
 
