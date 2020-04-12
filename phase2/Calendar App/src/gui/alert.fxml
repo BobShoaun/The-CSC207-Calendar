@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Alert">
     <children>
         <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -35,16 +34,18 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <ListView fx:id="manAlertList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-                        <ListView fx:id="repAlertList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ListView fx:id="manAlertList" onMouseClicked="#manAlertListClicked" prefHeight="200.0"
+                                  prefWidth="200.0" GridPane.rowIndex="1"/>
+                        <ListView fx:id="repAlertList" onMouseClicked="#repAlertListClicked" prefHeight="200.0"
+                                  prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                         <Label text="Manual Alerts" GridPane.halignment="CENTER">
                             <font>
-                                <Font name="Source Code Pro" size="14.0" />
+                                <Font name="Source Code Pro" size="14.0"/>
                             </font>
                         </Label>
                         <Label text="Repeating Alerts" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                             <font>
-                                <Font name="Source Code Pro" size="14.0" />
+                                <Font name="Source Code Pro" size="14.0"/>
                             </font>
                         </Label>
                     </children>
@@ -60,7 +61,7 @@
                     <children>
                         <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="46.0" prefWidth="198.0">
                             <buttons>
-                                <Button mnemonicParsing="false" text="Delete" />
+                                <Button mnemonicParsing="false" onAction="#deleteManAlert" text="Delete"/>
                                 <Button mnemonicParsing="false" text="New" />
                             </buttons>
                             <padding>
@@ -69,7 +70,7 @@
                         </ButtonBar>
                         <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1">
                             <buttons>
-                                <Button mnemonicParsing="false" text="Delete" />
+                                <Button mnemonicParsing="false" onAction="#deleteRepeatingAlert" text="Delete"/>
                                 <Button mnemonicParsing="false" text="New" />
                             </buttons>
                             <padding>
