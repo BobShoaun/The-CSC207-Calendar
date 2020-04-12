@@ -120,6 +120,9 @@ public class UserManager {
         if (!username.matches("^[a-zA-Z0-9._-]{3,}$"))
             throw new InvalidUsernameException();
 
+        if (!password.matches("^[^;]+$"))
+            throw new InvalidPasswordException();
+
         for (User user : users)
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();

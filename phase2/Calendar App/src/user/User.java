@@ -98,6 +98,7 @@ public class User implements StringParsable {
      */
     public void setLastLoginTime (GregorianCalendar time) {
         this.lastLoginTime = time;
+        System.out.println("time:"+  time.getTime());
     }
 
     /**
@@ -125,6 +126,7 @@ public class User implements StringParsable {
     public User (String credentials) {
         firstLogin = false;
         unparse(credentials);
+        this.calendars = new ArrayList<>();
         dataSaver = new DataSaver("./users/" + name);
         loadCalendars();
     }
@@ -150,7 +152,6 @@ public class User implements StringParsable {
         this.name = split[0];
         this.password = split[1];
         this.darkTheme = Boolean.parseBoolean(split[2]);
-        this.calendars = new ArrayList<>();
         try {
             Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[3]);
             this.lastLoginTime = new GregorianCalendar();

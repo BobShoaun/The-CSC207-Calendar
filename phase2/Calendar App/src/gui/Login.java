@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Login extends GraphicalUserInterface implements Initializable {
+public class Login extends GraphicalUserInterface {
 
     @FXML
     private TextField username;
@@ -30,11 +30,6 @@ public class Login extends GraphicalUserInterface implements Initializable {
 
     private UserManager userManager = new UserManager();
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        setDarkTheme();
-    }
 
     public Login() {
         try {
