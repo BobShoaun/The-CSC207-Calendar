@@ -250,9 +250,9 @@ public class Calendar extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleLogout() {
+    private void handleLogout() throws IOException {
         System.out.println("logout: " + user.getName());
-
+        user.logout();
         Login login = showGUI("login.fxml");
         login.setDarkTheme();
     }
