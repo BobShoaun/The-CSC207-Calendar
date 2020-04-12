@@ -34,9 +34,6 @@ public class Register extends GraphicalUserInterface implements Initializable {
         this.userManager = userManager;
     }
 
-    public Register () {
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLabelsNotVisible();
