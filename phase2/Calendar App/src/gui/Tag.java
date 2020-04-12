@@ -9,7 +9,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import user.Calendar;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -44,7 +43,7 @@ public class Tag extends gui.GraphicalUserInterface implements Initializable {
     }
 
     public void showViewTagUI(ActionEvent actionEvent) {
-        gui.GraphicalUserInterface viewTags = showGUI("viewTags.fxml");
+        //gui.GraphicalUserInterface viewTags = showGUI("viewTags.fxml");
     }
 
 }

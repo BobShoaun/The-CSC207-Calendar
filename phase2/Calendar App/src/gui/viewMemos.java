@@ -6,10 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import mt.Memo;
 import user.Calendar;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
