@@ -100,8 +100,8 @@ public class DataSaver {
      * @return the list of files in the given path
      */
     public File[] getFilesInDirectory(String path) {
-        File[] files =  new File(basePath + path).listFiles();
-        if(files == null){
+        File[] files = new File(basePath + path).listFiles();
+        if (files == null) {
             return new File[0];
         }
         return files;
@@ -111,7 +111,9 @@ public class DataSaver {
      * @param path The path relative to the base directory of the user data
      * @return the list of filenames in the given path
      */
-    public String[] getFileNamesInDirectory(String path) { return new File(basePath + path).list(); }
+    public String[] getFileNamesInDirectory(String path) {
+        return new File(basePath + path).list();
+    }
 
     public void makeDirectory(String path) {
         new File(basePath + path).mkdirs();
@@ -176,7 +178,7 @@ public class DataSaver {
                     GregorianCalendar end = new GregorianCalendar();
                     start.setTimeInMillis(Long.parseLong(info[2]));
                     end.setTimeInMillis(Long.parseLong(info[2]));
-                    Event baseEvent = new Event(info[0],info[1],start,end);
+                    Event baseEvent = new Event(info[0], info[1], start, end);
 
                     String CG = loadStringFromFile("series/" + seriesName + "/CalenderGenerator.txt");
                     CalendarGenerator newCG = new CalendarGenerator(CG);
@@ -184,7 +186,7 @@ public class DataSaver {
                     GregorianCalendar newEnd = newCG.getStartTime();
                     List<Duration> durs = newCG.getPeriods();
 
-                    Series newSeries = new SeriesFactory().getSeries(seriesName,baseEvent,newStart,newEnd,durs);
+                    Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
 
                     newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
                     newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));
@@ -306,7 +308,6 @@ public class DataSaver {
     }
 
 
-
     /**
      * Load the data into this AlertCollection.
      *
@@ -322,26 +323,9 @@ public class DataSaver {
             e.printStackTrace();
         }
 
-        StringBuilder time = new StringBuilder();
-        try {
-            String[] times = eventId.split("%");
-            String[] times2 = new String[times.length - 1];
-            System.arraycopy(times, 1, times2, 0, times.length - 1);
-            for (String s : times2) {
-                time.append(s).append(" ");
-            }
-        } catch (StringIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        GregorianCalendar eventTime = new GregorianCalendar();
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
-        try {
-            eventTime.setTime(df.parse(time.toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ac.setEventTime(parseEventId(eventId));
 
-        assert strings != null;
+        if (strings == null) throw new AssertionError();
         eventId = strings.get(0).trim();
 
         String[] manTimes = strings.get(1).trim().split("\\n+");
@@ -357,6 +341,29 @@ public class DataSaver {
             ac.setCalGen(new CalendarGenerator(cgStr.toString()));
 
         return ac;
+    }
+
+    public GregorianCalendar parseEventId(String eventId) {
+        GregorianCalendar eventTime = new GregorianCalendar();
+        StringBuilder time = new StringBuilder();
+        try {
+            String[] times = eventId.split("%");
+            String[] times2 = new String[times.length - 1];
+            System.arraycopy(times, 1, times2, 0, times.length - 1);
+            for (String s : times2) {
+                time.append(s).append(" ");
+            }
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
+        try {
+            eventTime.setTime(df.parse(time.toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return eventTime;
     }
 
 }

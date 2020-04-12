@@ -4,9 +4,6 @@ import dates.CalendarGenerator;
 import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -19,10 +16,11 @@ import java.util.*;
 public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
     private String eventId;
+
     private GregorianCalendar eventTime;
+
     private CalendarGenerator calGen;
     private DataSaver saver;
-
     /**
      * Creates a new Alert group (possibly repeating)
      *
@@ -34,6 +32,10 @@ public class AlertCollection implements Observer {
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
         this.saver = saver;
+    }
+
+    public void setEventTime(GregorianCalendar eventTime) {
+        this.eventTime = eventTime;
     }
 
     public void setCalGen(CalendarGenerator calGen) {
