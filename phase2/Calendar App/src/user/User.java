@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Ng Bob Shoaun
  */
-public class User implements StringParsable {
+public class User {
 
     private String name;
     private String password;
@@ -98,7 +98,11 @@ public class User implements StringParsable {
      */
     public void setLastLoginTime (GregorianCalendar time) {
         this.lastLoginTime = time;
-        System.out.println("time:"+  time.getTime());
+    }
+
+    public void logout () throws IOException {
+        setLastLoginTime((GregorianCalendar) GregorianCalendar.getInstance());
+        save();
     }
 
     /**
@@ -125,7 +129,21 @@ public class User implements StringParsable {
      */
     public User (String credentials) {
         firstLogin = false;
-        unparse(credentials);
+
+        String[] split = credentials.split(";");
+        this.name = split[0];
+        this.password = split[1];
+        this.darkTheme = Boolean.parseBoolean(split[2]);
+        try {
+            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[3]);
+            this.lastLoginTime = new GregorianCalendar();
+            this.lastLoginTime.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e) {
+            this.lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
+        }
+
         this.calendars = new ArrayList<>();
         dataSaver = new DataSaver("./users/" + name);
         loadCalendars();
@@ -139,37 +157,6 @@ public class User implements StringParsable {
      */
     public boolean authenticate (String name, String password) {
         return this.name.equals(name) && this.password.equals(password);
-    }
-
-    //TODO: Move to datasaver
-    /**
-     * Unparse a string's data into this user's data.
-     * @param string string containing the user's data.
-     */
-    @Override
-    public void unparse(String string) {
-        String[] split = string.split(";");
-        this.name = split[0];
-        this.password = split[1];
-        this.darkTheme = Boolean.parseBoolean(split[2]);
-        try {
-            Date date = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(split[3]);
-            this.lastLoginTime = new GregorianCalendar();
-            this.lastLoginTime.setTime(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IndexOutOfBoundsException e) {
-            this.lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
-        }
-    }
-
-    /**
-     * Creates a string representation of this user
-     * @return string representation
-     */
-    @Override
-    public String parse() {
-        return toString();
     }
 
     /**
@@ -196,4 +183,10 @@ public class User implements StringParsable {
         for (Calendar calendar : calendars)
             dataSaver.makeDirectory(calendar.getName());
     }
+
+    public void save() throws IOException {
+        System.out.println("Saving user: " + toString());
+        dataSaver.saveToFile("credentials.txt", toString());
+    }
+
 }

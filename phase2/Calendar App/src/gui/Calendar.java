@@ -235,15 +235,20 @@ public class Calendar extends GraphicalUserInterface {
     }
 
     @FXML
+    private void handleNewEvent() {
+        openGUI("addEvent.fxml");
+    }
+
+    @FXML
     private void handleSwitchCalendar() {
         CalendarSwitcher controller = showGUI("calendarSwitcher.fxml");
         controller.setUser(user);
     }
 
     @FXML
-    private void handleLogout() {
+    private void handleLogout() throws IOException {
         System.out.println("logout: " + user.getName());
-
+        user.logout();
         Login login = showGUI("login.fxml");
         login.setDarkTheme();
     }

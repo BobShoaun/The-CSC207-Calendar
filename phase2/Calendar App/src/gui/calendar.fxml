@@ -64,7 +64,7 @@
                                 </DatePicker>
                                 <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                                     <items>
-                                        <Button mnemonicParsing="false" text="New" />
+                                        <Button mnemonicParsing="false" onAction="#handleNewEvent" text="New" />
                                         <Button mnemonicParsing="false" text="Edit" />
                                         <Button mnemonicParsing="false" text="Memos" />
                                         <Button mnemonicParsing="false" text="Tags" />

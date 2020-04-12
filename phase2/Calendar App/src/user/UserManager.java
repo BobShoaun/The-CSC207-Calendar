@@ -57,7 +57,7 @@ public class UserManager {
      */
     public void saveUsers() throws IOException {
         for (User user : users)
-            dataSaver.saveToFile("" + user.getName() + "/credentials.txt", user.parse());
+            user.save();
     }
 
     /**
@@ -66,7 +66,8 @@ public class UserManager {
      * @throws IOException
      */
     public void saveUser(User user) throws IOException {
-        dataSaver.saveToFile(user.getName() + "/credentials.txt", user.parse());
+        user.save();
+//        dataSaver.saveToFile(user.getName() + "/credentials.txt", user.parse());
     }
 
     /**
