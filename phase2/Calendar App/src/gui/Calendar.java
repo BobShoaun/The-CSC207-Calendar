@@ -10,15 +10,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -56,6 +52,8 @@ public class Calendar extends GraphicalUserInterface {
     TextField searchTermField;
     @FXML
     ListView displayedEventList;
+    @FXML
+    private Label lastLoginLabel;
 
     ObservableList<String> eventList;
 
@@ -158,6 +156,8 @@ public class Calendar extends GraphicalUserInterface {
         setActiveCalendar(user.getCalendar(0));
         Initialize();
         updateAlerts();
+
+        lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
     }
 
     public void setActiveCalendar(user.Calendar calendar) throws InvalidDateException {
@@ -234,6 +234,9 @@ public class Calendar extends GraphicalUserInterface {
         if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
             darkTheme.setSelected(true);
+        } else {
+            com.sun.javafx.css.StyleManager.getInstance().removeUserAgentStylesheet("gui/DarkTheme.css");
+            darkTheme.setSelected(false);
         }
     }
     public void searchTermValueChange(KeyEvent keyEvent) {
@@ -242,9 +245,16 @@ public class Calendar extends GraphicalUserInterface {
 
     @FXML
     private void handleSwitchCalendar() {
-        System.out.println("Switch Calendar clicked");
         CalendarSwitcher controller = showGUI("calendarSwitcher.fxml");
         controller.setUser(user);
+    }
+
+    @FXML
+    private void handleLogout() {
+        System.out.println("logout: " + user.getName());
+
+        Login login = showGUI("login.fxml");
+        login.setDarkTheme();
     }
 
 }
