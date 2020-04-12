@@ -29,8 +29,8 @@ public class GraphicalUserInterface {
     }
 
     /**
-     *
-     * @param fxml fmxl file of the GUI
+     * changes the scene within the same stage(window)
+     * @param fxml fmxl file of the scene
      * @param <T> type of GUI controller
      * @return GUI controller
      */
@@ -44,6 +44,24 @@ public class GraphicalUserInterface {
             window.setTitle(defaultWindowTitle);
             window.show();
             updateNextGUI(fxmlLoader.getController());
+            return fxmlLoader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * opens a new stage(window)
+     */
+    protected <T extends GraphicalUserInterface> T openGUI(String fxml) {
+        Stage newWindow = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
+        try {
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            newWindow.setScene(scene);
+            newWindow.show();
             return fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();

@@ -235,6 +235,11 @@ public class Calendar extends GraphicalUserInterface {
     }
 
     @FXML
+    private void handleNewEvent() {
+        openGUI("addEvent.fxml");
+    }
+
+    @FXML
     private void handleSwitchCalendar() {
         CalendarSwitcher controller = showGUI("calendarSwitcher.fxml");
         controller.setUser(user);
