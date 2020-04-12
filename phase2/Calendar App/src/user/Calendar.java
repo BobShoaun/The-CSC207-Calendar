@@ -61,7 +61,13 @@ public class Calendar {
      * @return the list of series
      */
     public List<Series> getSeries() {
-        throw new NotImplementedException();
+        List<Series> ret = new ArrayList<>();
+        for(EventCollection ec:this.eventCollections){
+            if(ec instanceof Series){
+                ret.add((Series) ec);
+            }
+        }
+        return ret;
     }
 
     public String getName() {

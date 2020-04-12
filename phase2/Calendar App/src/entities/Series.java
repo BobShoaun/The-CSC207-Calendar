@@ -30,6 +30,7 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.baseEvent = baseEvent;
         this.calGen = calGen;
         this.startTime = calGen.getStartTime();
+        this.subSeries = new ArrayList<>();
         if (baseEvent != null) {
             this.seriesEvents = generateEvents();
         } else
@@ -66,6 +67,9 @@ public class Series extends EventCollection implements Iterable<Event> {
         }
     }
 
+    public void setSubSeries(List<SubSeries> subSeries) {
+        this.subSeries = subSeries;
+    }
     //TODO: test
 
     /**
@@ -78,6 +82,10 @@ public class Series extends EventCollection implements Iterable<Event> {
 
     public CalendarGenerator getCalGen() {
         return calGen;
+    }
+
+    public List<SubSeries> getSubSeries() {
+        return subSeries;
     }
 
     /**
@@ -199,6 +207,8 @@ public class Series extends EventCollection implements Iterable<Event> {
         CalendarGenerator newCG = new CalendarGenerator(start, dur, end);
         subSeries.add(new SubSeries(baseEvent, newCG));
     }
+
+
 
 
     @Override

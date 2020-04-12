@@ -36,6 +36,10 @@ public class SubSeries {
         return calGen;
     }
 
+    public String getString() {
+        return (base.getString()+"\n").replaceAll("\n","§")+(calGen.getString()).replaceAll("\n","|");
+    }
+
     public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end){
         //TODO: set display time for all sub series
         setStartDisplayTime(start);

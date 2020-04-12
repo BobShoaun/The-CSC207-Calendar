@@ -174,11 +174,7 @@ public class DataSaver {
                     filenames) {
                 try {
                     String[] info = loadStringFromFile("series/" + seriesName + "/BaseEvent.txt").split("\\n");
-                    GregorianCalendar start = new GregorianCalendar();
-                    GregorianCalendar end = new GregorianCalendar();
-                    start.setTimeInMillis(Long.parseLong(info[2]));
-                    end.setTimeInMillis(Long.parseLong(info[2]));
-                    Event baseEvent = new Event(info[0], info[1], start, end);
+                    Event baseEvent = stringsToEvent(info);
 
                     String CG = loadStringFromFile("series/" + seriesName + "/CalenderGenerator.txt");
                     CalendarGenerator newCG = new CalendarGenerator(CG);
@@ -187,6 +183,7 @@ public class DataSaver {
                     List<Duration> durs = newCG.getPeriods();
 
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
+                    newSeries.setSubSeries(loadSubSeries(loadScannerFromFile("series/" + seriesName + "/SubSeries.txt")));
 
                     newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
                     newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));
@@ -213,6 +210,7 @@ public class DataSaver {
     }
 
 
+
     public void SaveCalendar(Calendar calendar) {
         //save EventCollection
         ECSaveHelper("events/", calendar.getSingleEventCollection().getEvents());
@@ -223,6 +221,7 @@ public class DataSaver {
             ECSaveHelper("series/" + series.getName() + "/", series.getManualEvents());
             ECSaveHelper("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
             try {
+                saveSubSeries(series,series.getSubSeries());
                 saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
                 saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
             } catch (IOException e) {
@@ -295,6 +294,31 @@ public class DataSaver {
             }
         }
         return loadedEvents;
+    }
+    private void saveSubSeries(Series series, List<SubSeries> subs) throws IOException {
+        StringBuilder ret = new StringBuilder();
+        for (SubSeries sub:subs){
+            ret.append(sub.getString()).append("\n");
+        }
+        saveToFile("series/" + series.getName() + "/SubSeries.txt", ret.toString());
+    }
+    private List<SubSeries> loadSubSeries(Scanner subs) throws InvalidDateException {
+        List<SubSeries> ret = new ArrayList<>();
+        while (subs.hasNext()) {
+            String subData = subs.nextLine();
+            String[] parts = subData.split("§");
+            Event baseEvent = stringsToEvent(parts);
+            CalendarGenerator CG = new CalendarGenerator(parts[4].replaceAll("\\|","\n"));
+            ret.add(new SubSeries(baseEvent,CG));
+        }
+        return ret;
+    }
+    private Event stringsToEvent(String[] parts) throws InvalidDateException {
+        GregorianCalendar start = new GregorianCalendar();
+        GregorianCalendar end = new GregorianCalendar();
+        start.setTimeInMillis(Long.parseLong(parts[2]));
+        end.setTimeInMillis(Long.parseLong(parts[3]));
+        return new Event(parts[0], parts[1], start, end);
     }
 
     public void saveAlertCollection(AlertCollection ac) {
