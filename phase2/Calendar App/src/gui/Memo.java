@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Memo implements Initializable {
+public class Memo extends gui.GraphicalUserInterface implements Initializable {
 
     ObservableList list = FXCollections.observableArrayList();
 
@@ -38,7 +38,7 @@ public class Memo implements Initializable {
         loadEvents();
     }
 
-    public void setCalendar(Calendar c) { this.calendar = c; }
+    private void setCalendar(Calendar c) { this.calendar = c; }
 
     @FXML
     private void createMemo(Event e) {
@@ -73,7 +73,7 @@ public class Memo implements Initializable {
     }
 
     private void showViewMemoUI(Event e) {
-        throw new NotImplementedException();
+        gui.viewMemos vm = showGUI("viewMemos.fxml");
     }
 
 

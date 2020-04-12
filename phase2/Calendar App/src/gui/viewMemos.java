@@ -7,16 +7,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.event.ActionEvent;
 import mt.Memo;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import user.Calendar;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class viewMemos implements Initializable {
+public class viewMemos extends gui.GraphicalUserInterface implements Initializable {
 
     @FXML
     private ListView<String> memoList;
@@ -30,16 +28,10 @@ public class viewMemos implements Initializable {
 
     ObservableList list = FXCollections.observableArrayList();
 
-    private void init() {
-        selectMemoLabel.setVisible(false);
-        if (calendar == null) {
-        } else {
-            loadMemo();
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        selectMemoLabel.setVisible(false);
         loadMemo();
     }
 
@@ -78,11 +70,12 @@ public class viewMemos implements Initializable {
 
     @FXML
     private void showMemoUI(ActionEvent actionEvent) {
-        throw new NotImplementedException();
+        //gui.Memo memo = showGUI("memo.fxml");
+        //memo.setDarkTheme();
     }
 
     @FXML
-    private void showEventUI(ActionEvent actionEvent) {
-        throw new NotImplementedException();
+    private void showCalendarUI(ActionEvent actionEvent) {
+        //gui.GraphicalUserInterface calendar = showGUI("calendar.fxml");
     }
 }

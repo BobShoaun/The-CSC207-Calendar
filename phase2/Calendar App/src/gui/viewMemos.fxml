@@ -33,7 +33,7 @@
               <items>
                   <Button mnemonicParsing="false" onAction="#editMemo" text="Edit" />
                 <Button mnemonicParsing="false" onAction="#showMemoUI" text="Create New" />
-                  <Button mnemonicParsing="false" onAction="#showEventUI" text="Done" />
+                  <Button mnemonicParsing="false" onAction="#showCalendarUI" text="Done" />
               </items>
             </ToolBar>
             <ListView fx:id="memoList" onMouseClicked="#chooseMemo" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
