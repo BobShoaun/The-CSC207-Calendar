@@ -36,6 +36,10 @@ public class AlertCollection implements Observer {
         this.saver = saver;
     }
 
+    public void setCalGen(CalendarGenerator calGen) {
+        this.calGen = calGen;
+    }
+
     /**
      * Create a new Alertcollection
      *
@@ -46,7 +50,6 @@ public class AlertCollection implements Observer {
         this.eventId = eventId;
         this.saver = saver;
         manAlerts = new ArrayList<>();
-        load(eventId);
     }
 
     /**
@@ -239,7 +242,7 @@ public class AlertCollection implements Observer {
      * @param end   The end time delimiter
      * @return The list of Alerts between start and end time.
      */
-    private List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
+    public List<Alert> getGeneratedAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new ArrayList<>();
         if (calGen == null)
             return alerts;
@@ -303,52 +306,5 @@ public class AlertCollection implements Observer {
         return result.toString();
     }
 
-    /**
-     * Load the data into this AlertCollection.
-     *
-     * @param eventId The ID of the event for which the Alerts are being loaded
-     */
-    public void load(String eventId) {
-        List<String> strings = null;
-        try {
-            strings = saver.loadStringsFromFile("/alerts/" + eventId + ".txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        StringBuilder time = new StringBuilder();
-        try {
-            String[] times = eventId.split("%");
-            String[] times2 = new String[times.length - 1];
-            System.arraycopy(times, 1, times2, 0, times.length - 1);
-            for (String s : times2) {
-                time.append(s).append(" ");
-            }
-        } catch (StringIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        this.eventTime = new GregorianCalendar();
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
-        try {
-            eventTime.setTime(df.parse(time.toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        assert strings != null;
-        this.eventId = strings.get(0).trim();
-
-        String[] manTimes = strings.get(1).trim().split("\\n+");
-        for (String timeStr : manTimes) {
-            manAlerts.add(new Alert(eventId, timeStr));
-        }
-
-        StringBuilder cgStr = new StringBuilder();
-        for (int i = 3; i < strings.size(); i++) {
-            cgStr.append(strings.get(i));
-        }
-        if (!cgStr.toString().equals(""))
-            this.calGen = new CalendarGenerator(cgStr.toString());
-    }
 }

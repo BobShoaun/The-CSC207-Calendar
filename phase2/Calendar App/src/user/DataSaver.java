@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -202,9 +204,7 @@ public class DataSaver {
                     files) {
                 String name = file.getName();
                 name = name.replaceAll(".txt", "");
-                AlertCollection alertCollection = new AlertCollection(name, calendarDataSaver);
-                alertCollection.load(name);
-                alertCollections.add(alertCollection);
+                AlertCollection alertCollection = loadAlertCollection(name);
             }
         }
         return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, calendarDataSaver);
@@ -306,5 +306,57 @@ public class DataSaver {
     }
 
 
+
+    /**
+     * Load the data into this AlertCollection.
+     *
+     * @param eventId The ID of the event for which the Alerts are being loaded
+     */
+    public AlertCollection loadAlertCollection(String eventId) {
+        AlertCollection ac = new AlertCollection(eventId, this);
+
+        List<String> strings = null;
+        try {
+            strings = loadStringsFromFile("/alerts/" + eventId + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder time = new StringBuilder();
+        try {
+            String[] times = eventId.split("%");
+            String[] times2 = new String[times.length - 1];
+            System.arraycopy(times, 1, times2, 0, times.length - 1);
+            for (String s : times2) {
+                time.append(s).append(" ");
+            }
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        GregorianCalendar eventTime = new GregorianCalendar();
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
+        try {
+            eventTime.setTime(df.parse(time.toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        assert strings != null;
+        eventId = strings.get(0).trim();
+
+        String[] manTimes = strings.get(1).trim().split("\\n+");
+        for (String timeStr : manTimes) {
+            ac.getManAlerts().add(new Alert(eventId, timeStr));
+        }
+
+        StringBuilder cgStr = new StringBuilder();
+        for (int i = 3; i < strings.size(); i++) {
+            cgStr.append(strings.get(i));
+        }
+        if (!cgStr.toString().equals(""))
+            ac.setCalGen(new CalendarGenerator(cgStr.toString()));
+
+        return ac;
+    }
 
 }
