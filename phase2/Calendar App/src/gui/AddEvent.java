@@ -21,16 +21,16 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
 
     @FXML private TextField nameField;
     @FXML private DatePicker startDate;
-    @FXML private DatePicker endDate;
     @FXML private TextField startTime;
+    @FXML private DatePicker endDate;
     @FXML private TextField endTime;
-    @FXML private TextField seriesField;
     @FXML private TextField tagsField;
     @FXML private TextField memosField;
+    @FXML private TextArea memoTextArea;
+    @FXML private TextField seriesField;
+    @FXML private Label seriesErrorLabel;
 
     public Button doneButton;
-    public TextArea memoTextArea;
-    public Label seriesErrorLabel;
 
     private Calendar calendar;
     private EventCollection currEvents;
@@ -40,7 +40,7 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
     }
 
     @FXML
-    private void handleDone(Event e) throws InvalidDateException {
+    private void handleDone() throws InvalidDateException {
         seriesErrorLabel.setVisible(false);
         String name = nameField.getText();
         GregorianCalendar start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
@@ -54,7 +54,9 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         addEvent(newEvent);
         addMemo(memoTitle, memoContent, id);
         addTags(tags, id);
+        closeGUI();
     }
+
     private void addEvent(entities.Event newEvent){
         String SeriesName = seriesField.getText();
 
