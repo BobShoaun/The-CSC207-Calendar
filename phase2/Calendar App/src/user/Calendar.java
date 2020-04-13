@@ -4,6 +4,7 @@ import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import dates.CalendarGenerator;
 import entities.*;
 import exceptions.InvalidDateException;
+import exceptions.NoSuchSeriesException;
 import mt.Memo;
 import mt.Tag;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -32,7 +33,7 @@ public class Calendar {
     /**
      * Constructor for creating a new calendar with no data
      */
-    public Calendar(String name, DataSaver dataSaver){
+    public Calendar(String name, DataSaver dataSaver) {
         this.name = name;
         this.dataSaver = dataSaver;
         eventCollections = new ArrayList<>();
@@ -57,17 +58,30 @@ public class Calendar {
     }
 
     /**
-     *
      * @return the list of series
      */
     public List<Series> getSeries() {
         List<Series> ret = new ArrayList<>();
-        for(EventCollection ec:this.eventCollections){
-            if(ec instanceof Series){
+        for (EventCollection ec : this.eventCollections) {
+            if (ec instanceof Series) {
                 ret.add((Series) ec);
             }
         }
         return ret;
+    }
+
+    /**
+     *
+     * @param name of the series to be searched
+     * @return the Series with this name
+     */
+    public Series getSeries(String name) throws NoSuchSeriesException {
+        for (Series s : getSeries()) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+        throw new NoSuchSeriesException();
     }
 
     public String getName() {
@@ -103,9 +117,7 @@ public class Calendar {
         return eventCollections;
     }
 
-    public List<Tag> getTags() {
-        return tags;
-    }
+
 
     /**
      * Return all events which occur at day of that event
@@ -247,6 +259,65 @@ public class Calendar {
     }
 
     /**
+     * Gets a memo by its title
+     *
+     * @param name Title of the memo
+     * @return Returns the memo with the corresponding title, if no memo is found returns null
+     */
+    public Memo getMemo(String name) {
+        return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
+    }
+
+    /**
+     * Gets a memo by its title and content
+     *
+     * @param name Title of the memo
+     * @return Returns the memo with the corresponding title and content, if no memo is found returns null
+     */
+    public Memo getMemo(String name,String content) {
+        return memos.stream().filter(m -> m.getTitle().equals(name)&&m.getText().equals(content)).findAny().orElse(null);
+    }
+
+    public void addMemo(String memoTitle, String memoText) {
+        memos.add(new Memo(memoTitle, memoText));
+        dataSaver.SaveCalendar(this);
+    }
+
+    /**
+     * edits the memo title
+     *
+     * @param memoName    Name of the memo to edit
+     * @param newMemoName New name of the memo
+     */
+    public void editMemoTitle(String memoName, String newMemoName) {
+        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
+        memo.setTitle(newMemoName);
+        dataSaver.SaveCalendar(this);
+    }
+
+    /**
+     * edits a memo text
+     *
+     * @param memoName    Name of the memo to edit
+     * @param newMemoText The new text for this memo
+     */
+    public void editMemoText(String memoName, String newMemoText) {
+        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
+        memo.setText(newMemoText);
+        dataSaver.SaveCalendar(this);
+    }
+
+    /**
+     * Remove the memo from all memos. Saves memos
+     *
+     * @param memo Memo to remove
+     */
+    public void removeMemo(Memo memo) {
+        memos.remove(memo);
+        dataSaver.SaveCalendar(this);
+    }
+
+    /**
      * Return all events linked to a memo
      *
      * @param memo The memo to search by
@@ -265,8 +336,15 @@ public class Calendar {
         return new EventIterator(new Date(0), (Event e) -> e.getName().equals(eventName));
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
     public Tag getTag(String tag) {
         return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
+    }
+    public void addTag(String text) {
+        tags.add(new Tag(text));
+        dataSaver.SaveCalendar(this);
     }
 
     public void removeOldAlerts() {
@@ -278,6 +356,7 @@ public class Calendar {
 
     /**
      * Get data saver
+     *
      * @return The data saver instance
      */
     public DataSaver getDataSaver() {
@@ -288,10 +367,6 @@ public class Calendar {
         timeController.setCurrentTime(gregorianCalendar);
     }
 
-    public void addMemo(String memoTitle, String memoText) {
-        memos.add(new Memo(memoTitle, memoText));
-        dataSaver.SaveCalendar(this);
-    }
 
     public List<Event> getPostponedEvents() {
         ArrayList<Event> postponedEvents = new ArrayList<>();
@@ -407,52 +482,9 @@ public class Calendar {
     }
 
     public GregorianCalendar getTime() {
-        return (GregorianCalendar)timeController.getTime().clone();
+        return (GregorianCalendar) timeController.getTime().clone();
     }
 
-    /**
-     * edits the memo title
-     *
-     * @param memoName    Name of the memo to edit
-     * @param newMemoName New name of the memo
-     */
-    public void editMemoTitle(String memoName, String newMemoName) {
-        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
-        memo.setTitle(newMemoName);
-        dataSaver.SaveCalendar(this);
-    }
-
-    /**
-     * edits a memo text
-     *
-     * @param memoName    Name of the memo to edit
-     * @param newMemoText The new text for this memo
-     */
-    public void editMemoText(String memoName, String newMemoText) {
-        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
-        memo.setText(newMemoText);
-        dataSaver.SaveCalendar(this);
-    }
-
-    /**
-     * Remove the memo from all memos. Saves memos
-     *
-     * @param memo Memo to remove
-     */
-    public void removeMemo(Memo memo) {
-        memos.remove(memo);
-        dataSaver.SaveCalendar(this);
-    }
-
-    /**
-     * Gets a memo by its title
-     *
-     * @param name Title of the memo
-     * @return Returns the memo with the corresponding title, if no memo is found returns null
-     */
-    public Memo getMemo(String name) {
-        return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
-    }
 
     /**
      * remove event
@@ -477,9 +509,10 @@ public class Calendar {
 
     /**
      * Add a new alert collection
+     *
      * @param alertCollection The alert collection to add
      */
-    public void addAlertCollection(AlertCollection alertCollection){
+    public void addAlertCollection(AlertCollection alertCollection) {
         alertCollections.add(alertCollection);
     }
 }

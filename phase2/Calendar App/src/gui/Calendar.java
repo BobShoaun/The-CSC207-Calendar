@@ -24,13 +24,19 @@ import java.util.stream.Stream;
 
 public class Calendar extends GraphicalUserInterface {
 
+
     private User user;
     private user.Calendar calendar;
     private String currAlert;
+    private String currSeries;
+    private String currSeriesEvent;
 
     @FXML
     ListView<String> alertList;
-
+    @FXML
+    ListView<String> seriesEventList;
+    @FXML
+    ListView<String> seriesList;
     @FXML
     CheckBox darkTheme;
     @FXML
@@ -185,6 +191,15 @@ public class Calendar extends GraphicalUserInterface {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currAlert);
     }
+    @FXML
+    private void seriesListClicked() {
+        currSeries = seriesList.getSelectionModel().getSelectedItem();
+        System.out.println("Clicked on series: " + currSeries);
+    }@FXML
+    private void seriesEventClicked() {
+        currSeriesEvent = alertList.getSelectionModel().getSelectedItem();
+        System.out.println("Clicked on series event: " + currSeriesEvent);
+    }
 
     public void showTimeController(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
@@ -236,7 +251,8 @@ public class Calendar extends GraphicalUserInterface {
 
     @FXML
     private void handleNewEvent() {
-        openGUI("addEvent.fxml");
+        AddEvent controller = openGUI("addEvent.fxml");
+        controller.setCalendar(calendar);
     }
 
     @FXML

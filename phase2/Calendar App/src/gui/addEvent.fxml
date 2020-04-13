@@ -5,14 +5,17 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AddEvent">
+<GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="597.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AddEvent">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -21,6 +24,8 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -64,17 +69,17 @@
             <DatePicker fx:id="endTime" />
          </children>
       </VBox>
-      <VBox prefHeight="127.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <VBox prefHeight="139.0" prefWidth="320.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
             <Label text="Add Memos">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="memosField" prefHeight="25.0" prefWidth="336.0" promptText="memo titles seperated by comma" />
+            <TextField fx:id="memosField" prefHeight="25.0" prefWidth="319.0" promptText="Title of the memo" />
          </children>
       </VBox>
-      <VBox prefHeight="127.0" prefWidth="100.0" GridPane.rowIndex="4">
+      <VBox prefHeight="127.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
          <children>
             <Label text="Add Tags">
                <font>
@@ -84,22 +89,32 @@
             <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="tags seperated by comma" />
          </children>
       </VBox>
-      <VBox prefHeight="127.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
-         <children>
-            <Label text="Add to an event series">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="seriesField" prefHeight="25.0" prefWidth="336.0" />
-         </children>
-      </VBox>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
         <buttons>
             <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
-            <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" />
         </buttons>
       </ButtonBar>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+         <children>
+            <TextArea fx:id="memoTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Content of the memo" />
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+         <children>
+            <HBox prefHeight="24.0" prefWidth="329.0">
+               <children>
+                  <Label text="Add Event to Series (optional)">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Region prefHeight="24.0" prefWidth="30.0" />
+                  <Label fx:id="seriesErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="13.0" prefWidth="109.0" text="Series does not exist" textFill="#ff4545" />
+               </children>
+            </HBox>
+            <TextField fx:id="seriesField" prefHeight="25.0" prefWidth="319.0" promptText="Series Name" />
+         </children>
+      </VBox>
    </children>
    <padding>
       <Insets left="40.0" right="40.0" top="60.0" />

@@ -2,6 +2,7 @@ package entities;
 
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
+import mt.Memo;
 import mt.Tag;
 
 import java.time.Duration;
@@ -187,6 +188,19 @@ public class Series extends EventCollection implements Iterable<Event> {
             for (Event e : seriesEvents) {
                 if (e.getId().equals(eventId)) {
                     tag.addEvent(eventId);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addMemo(String eventId, Memo memo) {
+        if (!super.addMemo(eventId, memo)){
+            for (Event e : seriesEvents) {
+                if (e.getId().equals(eventId)) {
+                    memo.addEvent(eventId);
                     return true;
                 }
             }

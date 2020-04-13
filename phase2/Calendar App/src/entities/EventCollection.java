@@ -1,6 +1,7 @@
 package entities;
 
 import exceptions.InvalidDateException;
+import mt.Memo;
 import mt.Tag;
 import user.DataSaver;
 
@@ -188,6 +189,17 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public void removeTag(String eventId, Tag tag) {
         tag.removeEvent(eventId);
+    }
+
+    public boolean addMemo(String eventId, Memo memo) {
+        for (Event e : this.events) {
+            //check if the event ID is valid
+            if (e.getId().equals(eventId)) {
+                memo.addEvent(eventId);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
