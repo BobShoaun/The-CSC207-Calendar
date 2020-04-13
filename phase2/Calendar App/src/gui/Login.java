@@ -1,13 +1,7 @@
 package gui;
 
 import exceptions.InvalidDateException;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,8 +10,6 @@ import javafx.scene.text.Font;
 import user.UserManager;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class Login extends GraphicalUserInterface {
 
@@ -28,7 +20,7 @@ public class Login extends GraphicalUserInterface {
     @FXML
     private Label bottomMessage;
 
-    private UserManager userManager = new UserManager();
+    private final UserManager userManager = new UserManager();
 
 
     public Login() {
@@ -68,7 +60,7 @@ public class Login extends GraphicalUserInterface {
     }
 
     private void showRegisterUI() {
-        Register g = this.showGUI("register.fxml");
+        Register g = showGUI("register.fxml");
         g.setUserManager(userManager);
         g.setDarkTheme();
     }
