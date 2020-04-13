@@ -7,7 +7,6 @@ public class IDGenerator {
         String id = eventStartTime.getTime().toString() + "%" + eventName;
         id = id.replaceAll(" ", "%");
         id = id.replaceAll(":", "%");
-        System.out.println("ID:" + id);
         return id;
     }
 }
