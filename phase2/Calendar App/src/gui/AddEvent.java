@@ -1,26 +1,19 @@
 package gui;
 
 import entities.EventCollection;
-import entities.Series;
+import entities.IDGenerator;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import mt.Memo;
 import mt.Tag;
 import user.Calendar;
 
-import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
@@ -59,11 +52,10 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         String memoTitle = tagsField.getText();
         String memoContent = memoTextArea.getText();
         String[] tags = memosField.getText().split(",");
-        String id = name + start.getTime();
-        entities.Event newEvent = new entities.Event(id, name, start, end);
-        //TODO: double check id format
+        String id = IDGenerator.generateEventId(name, start);
+        entities.Event newEvent = new entities.Event(name, start, end);
         addEvent(newEvent);
-        addMemo(memoTitle,memoContent,id);
+        addMemo(memoTitle, memoContent, id);
         addTags(tags, id);
     }
     private void addEvent(entities.Event newEvent){

@@ -252,7 +252,7 @@ public class CalendarUI extends UserInterface {
         String eventName = getStringInput("Name of new event: ");
         Event event = null;
         try {
-            event = new Event(time.getTime().toString() + eventName, eventName, time, endTime);
+            event = new Event(eventName, time, endTime);
         } catch (InvalidDateException e) {
             System.out.println("Creating event failed... Try again!");
         }

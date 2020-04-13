@@ -8,7 +8,6 @@ import user.Calendar;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class EventCollectionUI extends UserInterface {
@@ -73,7 +72,7 @@ public class EventCollectionUI extends UserInterface {
         Duration next = getDurationInput("How frequent is the repetition? ");
         GregorianCalendar endSeries = getDateInput("The end date for this series: ");
         try {
-            Event base = new Event(eventName + start1.getTimeInMillis(), eventName, start1, end1);
+            Event base = new Event(eventName, start1, end1);
             cal.addEventSeries(seriesName, start1, endSeries, next, base);
         } catch (InvalidDateException | IOException e) {
             e.printStackTrace();
