@@ -43,7 +43,9 @@ public class GraphicalUserInterface {
             window.setScene(scene);
             window.setTitle(defaultWindowTitle);
             window.show();
-            updateNextGUI(fxmlLoader.getController());
+            GraphicalUserInterface gui = fxmlLoader.getController();
+            gui.setWindow(window);
+            gui.setDefaultWindowTitle(defaultWindowTitle);
             return fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,6 +64,9 @@ public class GraphicalUserInterface {
             Scene scene = new Scene(root);
             newWindow.setScene(scene);
             newWindow.show();
+            GraphicalUserInterface gui = fxmlLoader.getController();
+            gui.setWindow(newWindow);
+            gui.setDefaultWindowTitle(defaultWindowTitle);
             return fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,9 +74,11 @@ public class GraphicalUserInterface {
         }
     }
 
-    private void updateNextGUI (GraphicalUserInterface gui) {
-        gui.setWindow(window);
-        gui.setDefaultWindowTitle(defaultWindowTitle);
+    /**
+     * Closes the window
+     */
+    protected void closeGUI () {
+        window.close();
     }
 
 

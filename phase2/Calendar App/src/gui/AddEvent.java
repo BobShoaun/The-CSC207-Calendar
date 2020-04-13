@@ -15,31 +15,29 @@ import java.util.ResourceBundle;
 
 public class AddEvent extends GraphicalUserInterface implements Initializable {
 
-    @FXML
-    private TextField nameField;
-    @FXML
-    private DatePicker startTime;
-    @FXML
-    private DatePicker endTime;
-    @FXML
-    private TextField seriesField;
-    @FXML
-    private TextField tagsField;
-    @FXML
-    private TextField memosField;
+    @FXML private TextField nameField;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+    @FXML private TextField startTime;
+    @FXML private TextField endTime;
+    @FXML private TextField seriesField;
+    @FXML private TextField tagsField;
+    @FXML private TextField memosField;
 
     @FXML
     private void handleDone(Event e) throws IOException, InvalidDateException {
-
+        // TODO add code here
+        closeGUI();
     }
 
     @FXML
     private void handleCancel () {
-
+        closeGUI();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
     }
 
 }
