@@ -14,19 +14,12 @@ import java.util.ResourceBundle;
 
 public class Register extends GraphicalUserInterface implements Initializable {
 
-    @FXML
-    private Label usernameErrorLabel;
-    @FXML
-    private Label passwordErrorLabel;
-    @FXML
-    private Label confirmPasswordErrorLabel;
-
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private PasswordField confirmPasswordField;
+    @FXML private Label usernameErrorLabel;
+    @FXML private Label passwordErrorLabel;
+    @FXML private Label confirmPasswordErrorLabel;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
 
     private UserManager userManager;
 

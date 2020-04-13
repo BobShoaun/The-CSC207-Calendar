@@ -213,7 +213,7 @@
             </VBox>
             <ButtonBar GridPane.rowIndex="7">
                <buttons>
-                  <Button mnemonicParsing="false" onAction="#handleDone" text="Add Alerts" />
+                  <Button mnemonicParsing="false" onAction="#handleAddAlerts" text="Add Alerts" />
                   <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
                </buttons>
             </ButtonBar>
