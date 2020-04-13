@@ -39,6 +39,8 @@ public class DataSaver {
      * @return loaded text file stream
      */
     public Scanner loadScannerFromFile(String path) throws FileNotFoundException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         return new Scanner(new File(basePath + path));
     }
 
