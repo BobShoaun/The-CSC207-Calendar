@@ -30,7 +30,7 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
     @FXML private TextField seriesField;
     @FXML private Label seriesErrorLabel;
 
-    public Button doneButton;
+    public Button doneButton; // done think we need this?
 
     private Calendar calendar;
     private EventCollection currEvents;

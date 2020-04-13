@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
     <children>
-        <SplitPane dividerPositions="0.41846153846153844, 0.6133333333333333, 0.8061538461538461" layoutX="100.0"
-                   layoutY="40.0" prefHeight="400.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <SplitPane dividerPositions="0.41846153846153844, 0.6133333333333333, 0.8061538461538461" layoutX="100.0" layoutY="40.0" prefHeight="400.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <GridPane layoutX="32.0" layoutY="102.0" AnchorPane.bottomAnchor="0.0"
-                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane layoutX="32.0" layoutY="102.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="0.0" prefHeight="50.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER"/>
-                                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="223.0"
-                                                vgrow="ALWAYS"/>
-                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                                                valignment="BOTTOM" vgrow="SOMETIMES"/>
-                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                                                valignment="BOTTOM" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="0.0" prefHeight="50.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER" />
+                                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="223.0" vgrow="ALWAYS" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                         <ChoiceBox fx:id="searchByList" prefHeight="25.0" prefWidth="94.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
@@ -65,7 +73,7 @@
                                 <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                                     <items>
                                         <Button mnemonicParsing="false" onAction="#handleNewEvent" text="New" />
-                                        <Button mnemonicParsing="false" text="Edit" />
+                                        <Button mnemonicParsing="false" onAction="#handleEditEvent" text="Edit" />
                                         <Button mnemonicParsing="false" text="Memos" />
                                         <Button mnemonicParsing="false" text="Tags" />
                                         <Button mnemonicParsing="false" text="Search" />
@@ -85,22 +93,21 @@
                            <children>
                               <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#handleLogout" prefHeight="25.0" text="Logout">
                                  <HBox.margin>
-                                     <Insets bottom="5.0" right="5.0" top="5.0"/>
+                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
                               </Button>
                                <Label fx:id="lastLoginLabel" minWidth="-Infinity" text="Last login on: ">
                                    <HBox.margin>
-                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                    </HBox.margin>
                                    <font>
-                                       <Font size="10.0"/>
+                                       <Font size="10.0" />
                                    </font>
                                </Label>
-                               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                               <CheckBox fx:id="darkTheme" minWidth="-Infinity" mnemonicParsing="false"
-                                         onAction="#updateTheme" text="Dark Theme">
+                               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                               <CheckBox fx:id="darkTheme" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateTheme" text="Dark Theme">
                                    <HBox.margin>
-                                       <Insets top="5.0"/>
+                                       <Insets top="5.0" />
                                    </HBox.margin>
                                </CheckBox>
                            </children>
@@ -119,11 +126,9 @@
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0"
-                                                vgrow="NEVER"/>
-                                <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES"/>
-                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                                                valignment="BOTTOM" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER" />
+                                <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" valignment="BOTTOM" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label text="Notifications" GridPane.halignment="CENTER">
@@ -131,22 +136,21 @@
                                         <Font name="Source Code Pro Black" size="18.0" />
                                     </font>
                                     <GridPane.margin>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </GridPane.margin>
                                 </Label>
                                 <ListView fx:id="alertList" onMouseClicked="#alertListClicked" GridPane.rowIndex="1">
                                     <GridPane.margin>
-                                        <Insets left="10.0" right="10.0"/>
+                                        <Insets left="10.0" right="10.0" />
                                     </GridPane.margin>
                                 </ListView>
                                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" GridPane.rowIndex="2">
                                     <buttons>
-                                        <Button mnemonicParsing="false" onAction="#clearAllNotifications"
-                                                text="Clear All"/>
-                                        <Button mnemonicParsing="false" onAction="#clearNotification" text="Delete"/>
+                                        <Button mnemonicParsing="false" onAction="#clearAllNotifications" text="Clear All" />
+                                        <Button mnemonicParsing="false" onAction="#clearNotification" text="Delete" />
                                     </buttons>
                                     <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                 </ButtonBar>
                             </children>
@@ -155,35 +159,32 @@
                 </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0">
                <children>
-                   <GridPane prefHeight="397.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0"
-                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <GridPane prefHeight="397.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                        <columnConstraints>
-                           <ColumnConstraints hgrow="SOMETIMES"/>
+                           <ColumnConstraints hgrow="SOMETIMES" />
                        </columnConstraints>
                        <rowConstraints>
-                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0"
-                                           vgrow="SOMETIMES"/>
-                           <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES"/>
-                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                                           vgrow="SOMETIMES"/>
+                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                        <children>
                            <ListView fx:id="seriesList" onMouseClicked="#seriesEventClicked" GridPane.rowIndex="1">
                                <GridPane.margin>
-                                   <Insets left="10.0" right="10.0"/>
+                                   <Insets left="10.0" right="10.0" />
                                </GridPane.margin>
                            </ListView>
                            <Label text="Event Series" GridPane.halignment="CENTER">
                                <font>
-                                   <Font name="Source Code Pro Black" size="18.0"/>
+                                   <Font name="Source Code Pro Black" size="18.0" />
                                </font>
                            </Label>
                            <ButtonBar GridPane.rowIndex="2">
                                <buttons>
-                                   <Button mnemonicParsing="false" text="Delete"/>
+                                   <Button mnemonicParsing="false" text="Delete" />
                                </buttons>
                                <padding>
-                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                </padding>
                            </ButtonBar>
                        </children>
@@ -191,35 +192,32 @@
                </children></AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="257.0">
                <children>
-                   <GridPane prefHeight="598.0" prefWidth="228.0" AnchorPane.bottomAnchor="0.0"
-                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <GridPane prefHeight="598.0" prefWidth="228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                        <columnConstraints>
-                           <ColumnConstraints hgrow="SOMETIMES"/>
+                           <ColumnConstraints hgrow="SOMETIMES" />
                        </columnConstraints>
                        <rowConstraints>
-                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0"
-                                           vgrow="SOMETIMES"/>
-                           <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES"/>
-                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                                           vgrow="SOMETIMES"/>
+                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                        <children>
                            <ListView fx:id="seriesEventList" onMouseClicked="#seriesListClicked" GridPane.rowIndex="1">
                                <GridPane.margin>
-                                   <Insets left="10.0" right="10.0"/>
+                                   <Insets left="10.0" right="10.0" />
                                </GridPane.margin>
                            </ListView>
                            <Label text="Events" GridPane.halignment="CENTER">
                                <font>
-                                   <Font name="Source Code Pro Black" size="18.0"/>
+                                   <Font name="Source Code Pro Black" size="18.0" />
                                </font>
                            </Label>
                            <ButtonBar GridPane.rowIndex="2">
                                <buttons>
-                                   <Button mnemonicParsing="false" text="Delete"/>
+                                   <Button mnemonicParsing="false" text="Delete" />
                                </buttons>
                                <padding>
-                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                </padding>
                            </ButtonBar>
                        </children>
