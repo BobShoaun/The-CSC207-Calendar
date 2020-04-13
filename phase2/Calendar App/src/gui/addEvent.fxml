@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,17 +22,17 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label prefHeight="91.0" prefWidth="320.0" text="Create New Event" GridPane.halignment="CENTER">
+            <Label alignment="BOTTOM_LEFT" prefHeight="91.0" prefWidth="320.0" text="Create New Event" GridPane.halignment="CENTER">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
@@ -42,7 +41,7 @@
                </GridPane.margin>
             </Label>
 
-            <VBox prefHeight="127.0" prefWidth="100.0" GridPane.rowIndex="1">
+            <VBox GridPane.rowIndex="1">
                <children>
                   <Label text="Name">
                      <font>
@@ -62,14 +61,14 @@
                   <Insets />
                </GridPane.margin>
             </VBox>
-            <HBox prefHeight="53.0" prefWidth="320.0" spacing="10.0" GridPane.rowIndex="2">
+            <HBox spacing="10.0" GridPane.rowIndex="2">
                <children>
-                  <Label prefHeight="70.0" prefWidth="50.0" text="Start">
+                  <Label prefHeight="50.0" prefWidth="50.0" text="Start">
                      <font>
                         <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
-                  <VBox prefHeight="70.0" prefWidth="144.0">
+                  <VBox prefWidth="140.0">
                      <children>
                         <Label text="Date">
                            <font>
@@ -89,7 +88,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="54.0" prefWidth="119.0">
+                  <VBox prefWidth="120.0">
                      <children>
                         <Label text="Time">
                            <font>
@@ -108,14 +107,14 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="53.0" prefWidth="320.0" spacing="10.0" GridPane.rowIndex="3">
+            <HBox spacing="10.0" GridPane.rowIndex="3">
                <children>
-                  <Label prefHeight="70.0" prefWidth="50.0" text="End">
+                  <Label prefHeight="50.0" prefWidth="50.0" text="End">
                      <font>
                         <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
-                  <VBox prefHeight="70.0" prefWidth="144.0">
+                  <VBox prefWidth="140.0">
                      <children>
                         <Label text="Date">
                            <font>
@@ -135,7 +134,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="54.0" prefWidth="119.0">
+                  <VBox prefWidth="120.0">
                      <children>
                         <Label text="Time">
                            <font>
@@ -154,7 +153,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="127.0" prefWidth="100.0" GridPane.rowIndex="4">
+            <VBox GridPane.rowIndex="4">
                <children>
                   <Label text="Add Tags">
                      <font>
@@ -186,41 +185,33 @@
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextArea fx:id="memoTextArea" promptText="Content of the memo">
+                  <TextArea fx:id="memoTextArea" prefRowCount="3" promptText="Content of the memo">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </TextArea>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="6">
+            <VBox GridPane.rowIndex="6">
                <children>
-                  <HBox prefHeight="24.0" prefWidth="329.0">
-                     <children>
-                        <Label text="Add Event to Series (optional)">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Region prefHeight="24.0" prefWidth="30.0" />
-                     </children>
-                  </HBox>
-                  <TextField fx:id="seriesField" prefHeight="25.0" prefWidth="319.0" promptText="Series Name">
+                  <Label text="Add Event to Series (optional)">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="seriesField" promptText="Series Name">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="seriesErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="67.0" prefWidth="200.0" text="Series does not exist!" textFill="#ff4545">
+                  <Label fx:id="seriesErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Series does not exist!" textFill="#ff4545">
                      <VBox.margin>
-                        <Insets />
+                        <Insets top="3.0" />
                      </VBox.margin>
                   </Label>
                </children>
             </VBox>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="7">
+            <ButtonBar GridPane.rowIndex="7">
                <buttons>
                   <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
                </buttons>
