@@ -20,6 +20,8 @@ import java.util.*;
 public class AddEvent extends GraphicalUserInterface implements Initializable {
 
     @FXML
+    public Label dateTimeErrorLabel;
+    @FXML
     private TextField nameField;
     @FXML
     private DatePicker startDate;
@@ -49,17 +51,37 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         this.calendar = calendar;
     }
 
+    /**
+     * Saves the event to Calendar according to user input
+     */
     @FXML
-    private void handleDone(Event e) throws InvalidDateException {
+    private void handleDone() {
         System.out.println("Done clicked");
-        seriesErrorLabel.setVisible(false);
+        setLabelInvisible();
         String name = nameField.getText();
         String memoTitle = memosField.getText();
         String memoContent = memoTextArea.getText();
         String[] tags = tagsField.getText().split(",");
         GregorianCalendar start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         GregorianCalendar end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        createEvent(name, start, end, tags, memoTitle, memoContent);
+    }
 
+    private void setLabelInvisible() {
+        seriesErrorLabel.setVisible(false);
+        dateTimeErrorLabel.setVisible(false);
+    }
+
+    /**
+     * Create the Event and its related info
+     * @param name of the event
+     * @param start start time of the event
+     * @param end   end time of the event
+     * @param tags that are associated with this event
+     * @param memoTitle the title of event memo
+     * @param memoContent the content of event memo
+     */
+    private void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
         String id = IDGenerator.generateEventId(name, start);
         try {
             setTime(start, end);
@@ -70,14 +92,18 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
             closeGUI();
             System.out.println("Event created:" + newEvent);
         } catch (InvalidDateException ex) {
-            System.out.println("Invalid date input");
-            //TODO: implement UI warning
+            dateTimeErrorLabel.setText("Invalid Date");
+            dateTimeErrorLabel.setVisible(true);
         } catch (InvalidTimeInputException ex) {
-            //TODO: add ErrorLabel
-            System.out.println("Incorrect Time input");
+            dateTimeErrorLabel.setText("Invalid Time");
+            dateTimeErrorLabel.setVisible(true);
         }
     }
 
+    /**
+     * Add the new event to Calendar
+     * @param newEvent be to added
+     */
     private void addEvent(entities.Event newEvent) {
         String SeriesName = seriesField.getText();
 
@@ -93,6 +119,12 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         currEvents.addEvent(newEvent);
     }
 
+    /**
+     * add the memo to the event with this id
+     * @param memoTitle the title of event memo
+     * @param memoContent the content of event memo
+     * @param id of the event
+     */
     private void addMemo(String memoTitle, String memoContent, String id) {
         Memo memo = calendar.getMemo(memoTitle, memoContent);
         if (memo == null) {
@@ -102,6 +134,11 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         currEvents.addMemo(id, memo);
     }
 
+    /**
+     * add the event to the tags
+     * @param tags collection of tags that event belongs to
+     * @param id of the event
+     */
     private void addTags(String[] tags, String id) {
         for (String text : tags) {
             Tag tag = calendar.getTag(text);
@@ -113,18 +150,30 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
         }
     }
 
+    /**
+     * get the time from text field
+     * @param input string representation of input time
+     * @return  a list of 2 int (Hour and minute)
+     * @throws InvalidTimeInputException Invalid time input from user
+     */
     private List<Integer> getTime(String input) throws InvalidTimeInputException {
         List<Integer> ret = new ArrayList<>();
         Scanner sc = new Scanner(input).useDelimiter(":");
         while (sc.hasNextInt()) {
             ret.add(sc.nextInt());
         }
-        if (ret.size() != 2||ret.get(0)<0|| 23<ret.get(0)||ret.get(1)<0||59<ret.get(1)) {
+        if (ret.size() != 2 || ret.get(0) < 0 || 23 < ret.get(0) || ret.get(1) < 0 || 59 < ret.get(1)) {
             throw new InvalidTimeInputException();
         }
         return ret;
     }
 
+    /**
+     * add the hour and minute to start and end
+     * @param start time of the event
+     * @param end time of the event
+     * @throws InvalidTimeInputException Invalid time input from user
+     */
     private void setTime(GregorianCalendar start, GregorianCalendar end) throws InvalidTimeInputException {
         start.set(java.util.Calendar.HOUR, getTime(startTime.getText()).get(0));
         start.set(java.util.Calendar.MINUTE, getTime(startTime.getText()).get(1));
@@ -134,7 +183,7 @@ public class AddEvent extends GraphicalUserInterface implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        seriesErrorLabel.setVisible(false);
+        setLabelInvisible();
     }
 
 }
