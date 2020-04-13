@@ -1,5 +1,6 @@
 package user;
 
+import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -46,12 +47,14 @@ public class User {
         return calendars.get(index);
     }
 
-    public void addCalendar (String calendarName) {
+    public void addCalendar(String calendarName) throws InvalidNameException {
+        if (calendarName.equals(" ") | calendarName.equals(""))
+            throw new InvalidNameException();
         this.calendars.add(new Calendar(calendarName, new DataSaver("./users/" + this.name + "/" + calendarName)));
         saveCalendars();
     }
 
-    public void removeCalendar (int index) {
+    public void removeCalendar(int index) {
         try {
             dataSaver.deleteDirectory(this.calendars.get(index).getName());
         } catch (IOException e) {
@@ -120,7 +123,11 @@ public class User {
         firstLogin = true;
         lastLoginTime = (GregorianCalendar) GregorianCalendar.getInstance();
         dataSaver = new DataSaver("./users/" + name);
-        addCalendar("Standard");
+        try {
+            addCalendar("Default");
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -168,7 +168,7 @@
                                            vgrow="SOMETIMES"/>
                        </rowConstraints>
                        <children>
-                           <ListView fx:id="alertList1" onMouseClicked="#alertListClicked" GridPane.rowIndex="1">
+                           <ListView fx:id="seriesList" onMouseClicked="#seriesEventClicked" GridPane.rowIndex="1">
                                <GridPane.margin>
                                    <Insets left="10.0" right="10.0"/>
                                </GridPane.margin>
@@ -204,7 +204,7 @@
                                            vgrow="SOMETIMES"/>
                        </rowConstraints>
                        <children>
-                           <ListView fx:id="alertList11" onMouseClicked="#alertListClicked" GridPane.rowIndex="1">
+                           <ListView fx:id="seriesEventList" onMouseClicked="#seriesListClicked" GridPane.rowIndex="1">
                                <GridPane.margin>
                                    <Insets left="10.0" right="10.0"/>
                                </GridPane.margin>

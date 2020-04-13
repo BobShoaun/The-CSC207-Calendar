@@ -1,11 +1,9 @@
 package entities;
 
 import exceptions.InvalidDateException;
+import mt.Memo;
 import mt.Tag;
-import user.DataSaver;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class EventCollection implements Iterable<Event>, Observer {
@@ -154,8 +152,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 postponedEvents.remove(e);
-                String newID = newStart.getTime().toString() + e.getName();
-                Event newEvent = new Event(newID, e.getName(), newStart, newEnd);
+                Event newEvent = new Event(e.getName(), newStart, newEnd);
                 addEvent(newEvent);
                 newEvent.addObserver(this);
                 return;
@@ -188,6 +185,17 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     public void removeTag(String eventId, Tag tag) {
         tag.removeEvent(eventId);
+    }
+
+    public boolean addMemo(String eventId, Memo memo) {
+        for (Event e : this.events) {
+            //check if the event ID is valid
+            if (e.getId().equals(eventId)) {
+                memo.addEvent(eventId);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

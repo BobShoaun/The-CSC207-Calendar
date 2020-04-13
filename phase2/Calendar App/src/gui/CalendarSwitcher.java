@@ -7,14 +7,18 @@ import javafx.scene.control.TextField;
 import user.Calendar;
 import user.User;
 
+import javax.naming.InvalidNameException;
+
 public class CalendarSwitcher extends GraphicalUserInterface {
 
     private User user;
 
-    @FXML private ListView<String> calendarListView;
-    @FXML private TextField calendarNameField;
+    @FXML
+    private ListView<String> calendarListView;
+    @FXML
+    private TextField calendarNameField;
 
-    public void setUser (User user) {
+    public void setUser(User user) {
         this.user = user;
         updateCalendarList();
     }
@@ -44,7 +48,11 @@ public class CalendarSwitcher extends GraphicalUserInterface {
     private void handleAddCalendar () {
         String newCalendarName = calendarNameField.getText();
         calendarNameField.clear();
-        user.addCalendar(newCalendarName);
+        try {
+            user.addCalendar(newCalendarName);
+        } catch (InvalidNameException e) {
+            System.out.println("Invalid calendar name: \"" + newCalendarName + "\"");
+        }
         updateCalendarList();
     }
 

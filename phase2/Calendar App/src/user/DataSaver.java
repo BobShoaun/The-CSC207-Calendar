@@ -274,7 +274,7 @@ public class DataSaver {
         }
     }
 
-    private List<Event> ECLoadHelper(String path) {
+    private List<Event> ECLoadHelper(String path) { // TODO: make use of ParseEventID()
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
         for (File f : data) {
@@ -287,7 +287,7 @@ public class DataSaver {
                 GregorianCalendar end = new GregorianCalendar();
                 start.setTimeInMillis(Long.parseLong(eventData[2]));
                 end.setTimeInMillis(Long.parseLong(eventData[3]));
-                loadedEvents.add(new Event(id, name, start, end));
+                loadedEvents.add(new Event(name, start, end));
 
             } catch (IOException | InvalidDateException e) {
                 e.printStackTrace();
@@ -318,7 +318,7 @@ public class DataSaver {
         GregorianCalendar end = new GregorianCalendar();
         start.setTimeInMillis(Long.parseLong(parts[2]));
         end.setTimeInMillis(Long.parseLong(parts[3]));
-        return new Event(parts[0], parts[1], start, end);
+        return new Event(parts[1], start, end);
     }
 
     public void saveAlertCollection(AlertCollection ac) {

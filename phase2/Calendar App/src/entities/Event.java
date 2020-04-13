@@ -17,15 +17,14 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
 
     /**
      * Constructor for a new Event
-     * @param id id of the Event
-     * @param name name of the Event
+     *
+     * @param name      name of the Event
      * @param startDate start time of the Event
-     * @param endDate end time of the Event
+     * @param endDate   end time of the Event
      */
-    public Event (String id, String name, GregorianCalendar startDate, GregorianCalendar endDate)
-            throws InvalidDateException{
-        this.id = id.replace(':', '%');
-        this.id = this.id.replace(' ', '%');
+    public Event(String name, GregorianCalendar startDate, GregorianCalendar endDate)
+            throws InvalidDateException {
+        this.id = IDGenerator.generateEventId(name, startDate);
         this.name = name;
         if (startDate.after(endDate)) {
             throw new InvalidDateException();

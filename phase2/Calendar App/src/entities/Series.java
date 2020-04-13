@@ -2,6 +2,7 @@ package entities;
 
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
+import mt.Memo;
 import mt.Tag;
 
 import java.time.Duration;
@@ -194,6 +195,19 @@ public class Series extends EventCollection implements Iterable<Event> {
         return false;
     }
 
+    @Override
+    public boolean addMemo(String eventId, Memo memo) {
+        if (!super.addMemo(eventId, memo)){
+            for (Event e : seriesEvents) {
+                if (e.getId().equals(eventId)) {
+                    memo.addEvent(eventId);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * @param baseEvent the event that the new subSeries is modelled on
      * @param start     start of the sub series
@@ -269,8 +283,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     private List<Event> generateEventsHelper(Event base, CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
         for (GregorianCalendar GC : CG) {
-            String id = base.getName() + "%" + GC.getTime();
-            Event event = new Event(id, base.getName(), GC, addTime(GC, base.getDuration()));
+            Event event = new Event(base.getName(), GC, addTime(GC, base.getDuration()));
             ret.add(event);
         }
         return ret;
