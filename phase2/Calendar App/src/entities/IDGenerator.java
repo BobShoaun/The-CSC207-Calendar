@@ -6,6 +6,7 @@ public class IDGenerator {
     public static String generateEventId(String eventName, GregorianCalendar eventStartTime) {
         String id = eventStartTime.getTime().toString() + "%" + eventName;
         id = id.replaceAll(" ", "%");
+        id = id.replaceAll(":", "%");
         System.out.println("ID:" + id);
         return id;
     }
