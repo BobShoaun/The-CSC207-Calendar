@@ -49,6 +49,8 @@ public class DataSaver {
      * @return list of strings from file
      */
     public List<String> loadStringsFromFile(String path) throws IOException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         return Files.readAllLines(Paths.get(basePath + path), StandardCharsets.UTF_8);
     }
 
@@ -57,6 +59,8 @@ public class DataSaver {
      * @return entire text file as a string
      */
     public String loadStringFromFile(String path) throws IOException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         return new String(Files.readAllBytes(Paths.get(basePath + path)));
     }
 
@@ -67,6 +71,8 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile(String path, List<String> contents) throws IOException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         try (PrintWriter out = new PrintWriter(basePath + path)) {
             for (String line : contents)
                 out.println(line);
@@ -86,6 +92,8 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile(String path, String contents) throws IOException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
@@ -102,6 +110,8 @@ public class DataSaver {
      * @return the list of files in the given path
      */
     public File[] getFilesInDirectory(String path) {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         File[] files = new File(basePath + path).listFiles();
         if (files == null) {
             return new File[0];
@@ -114,14 +124,20 @@ public class DataSaver {
      * @return the list of filenames in the given path
      */
     public String[] getFileNamesInDirectory(String path) {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         return new File(basePath + path).list();
     }
 
     public void makeDirectory(String path) {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         new File(basePath + path).mkdirs();
     }
 
     public void deleteDirectory(String path) throws IOException {
+        if (path.charAt(0) == '/')
+            path = path.substring(1);
         Files.walk(Paths.get(basePath + path))
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
