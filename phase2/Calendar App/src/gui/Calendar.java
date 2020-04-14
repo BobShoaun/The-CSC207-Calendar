@@ -58,7 +58,10 @@ public class Calendar extends GraphicalUserInterface {
 
     ObservableList<Event> eventList;
 
-    private void Initialize(){
+    /**
+     * initialize the calendar ui, namely the event list and search
+     */
+    private void initialize(){
         eventList = FXCollections.observableArrayList();
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -112,14 +115,18 @@ public class Calendar extends GraphicalUserInterface {
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-            EventEditUI eventUI = new EventEditUI();
+            EventEditUI eventUI = openGUI("EventEditUI.fxml");;
             eventUI.setEvent(selected);
-            eventUI.openGUI("EventEditUI.fxml");
         });
     }
 
+    /**
+     * Update the displayed events from search
+     */
     void updateDisplayedEvents(){
         String searchCriterion = (String)searchByList.getValue();
+        if(searchCriterion == null)
+            return;
         if(searchCriterion.equals("Date")){
             if(startDate.getValue() != null && endDate.getValue() != null){
                 if(startDate.getValue().isBefore(endDate.getValue())){
@@ -154,20 +161,32 @@ public class Calendar extends GraphicalUserInterface {
         }
     }
 
-    public void setUser(User user) throws InvalidDateException {
+    /**
+     * Set the user for this calendar
+     * @param user The user object
+     */
+    public void setUser(User user) {
         this.user = user;
         setActiveCalendar(user.getCalendar(0));
-        Initialize();
+        initialize();
         updateAlerts();
 
         lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
     }
 
-    public void setActiveCalendar(user.Calendar calendar) throws InvalidDateException {
+    /**
+     * Set the calendar to be displayed
+     * @param calendar
+     */
+    public void setActiveCalendar(user.Calendar calendar) {
         this.calendar = calendar;
         setWindowTitle(calendar.getName());
+        updateDisplayedEvents();
     }
 
+    /**
+     * Update the visible alerts
+     */
     private void updateAlerts() {
         GregorianCalendar past = calendar.getTime();
         past.add(GregorianCalendar.DATE, -1);
@@ -177,28 +196,49 @@ public class Calendar extends GraphicalUserInterface {
         alertList.setItems(alertStrings);
     }
 
+    /**
+     * Handles when the alert list is clicked, displays information about current alert
+     */
     @FXML
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currAlert);
     }
+
+    /**
+     * Handles when the series list is clicked
+     */
     @FXML
     private void seriesListClicked() {
         currSeries = seriesList.getSelectionModel().getSelectedItem();
         System.out.println("Clicked on series: " + currSeries);
-    }@FXML
+        //TODO: Actually do something
+    }
+
+    /**
+     * Handles when an event in a series is clicked
+     */
+    @FXML
     private void seriesEventClicked() {
         currSeriesEvent = alertList.getSelectionModel().getSelectedItem();
         System.out.println("Clicked on series event: " + currSeriesEvent);
+        //TODO: Actually do something
     }
 
-    public void showTimeController(MouseEvent mouseEvent) throws IOException {
+    /**
+     * Handles when the time button is clicked and shows the time controller window
+     * @param mouseEvent The event information of the click
+     */
+    public void showTimeController(MouseEvent mouseEvent) {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         TimeController timeController = new TimeController();
         timeController.setCalendar(calendar);
         timeController.start(stage);
     }
 
+    /**
+     * Clear the selected alert, if none selected, nothing happens
+     */
     @FXML
     private void clearNotification() {
         System.out.println("Clicked clear");
@@ -209,6 +249,9 @@ public class Calendar extends GraphicalUserInterface {
         } // TODO: actually delete the Alert?
     }
 
+    /**
+     * Clear the notifications
+     */
     @FXML
     private void clearAllNotifications() {
         System.out.println("Clicked clear all");
@@ -217,6 +260,9 @@ public class Calendar extends GraphicalUserInterface {
         // TODO: delete all shown Alerts
     }
 
+    /**
+     * Update the theme between light/dark
+     */
     @FXML
     private void updateTheme(){
         user.setDarkTheme(!user.getDarkTheme());
@@ -227,6 +273,9 @@ public class Calendar extends GraphicalUserInterface {
         }
     }
 
+    /**
+     * Set the active theme
+     */
     public void setTheme() {
         if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
@@ -236,10 +285,18 @@ public class Calendar extends GraphicalUserInterface {
             darkTheme.setSelected(false);
         }
     }
+
+    /**
+     * Event when the search text has been changed
+     * @param keyEvent Event from new key
+     */
     public void searchTermValueChange(KeyEvent keyEvent) {
         updateDisplayedEvents();
     }
 
+    /**
+     * Handle when a new event button is clicked
+     */
     @FXML
     private void handleNewEvent() {
         System.out.println("New clicked");
@@ -247,6 +304,10 @@ public class Calendar extends GraphicalUserInterface {
         controller.setCalendar(calendar);
     }
 
+    /**
+     * Handle when the edit button is clicked
+     */
+    //TODO: Is this still needed with how event list works?
     @FXML
     private void handleEditEvent() {
         System.out.println("Edit Clicked");
@@ -255,12 +316,19 @@ public class Calendar extends GraphicalUserInterface {
         controller.setEvent(null);
     }
 
+    /**
+     * Handl when the switch calendar button is clicked
+     */
     @FXML
     private void handleSwitchCalendar() {
         CalendarSwitcher controller = showGUI("calendarSwitcher.fxml");
         controller.setUser(user);
     }
 
+    /**
+     * Handle logout button clicked
+     * @throws IOException Error saving user last log out time
+     */
     @FXML
     private void handleLogout() throws IOException {
         System.out.println("logout: " + user.getName());

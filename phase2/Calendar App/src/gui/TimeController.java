@@ -72,9 +72,15 @@ public class TimeController extends Application {
     }
 
     @Override
-    public void start(Stage mainStage) throws IOException {
+    public void start(Stage mainStage) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
-        Parent root = fxmlLoader.load();
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Somehow failed to load the fxml");
+        }
 
         TimeController timeController = fxmlLoader.getController();
         timeController.setCalendar(calendar); // This is correct although I think we are creating a second instance of time controller, so this might not be the best design
