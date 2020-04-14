@@ -19,27 +19,27 @@ import java.util.*;
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
     @FXML
-    private TextField nameField;
+    protected TextField nameField;
     @FXML
-    private DatePicker startDate;
+    protected DatePicker startDate;
     @FXML
-    private TextField startTime;
+    protected TextField startTime;
     @FXML
-    private DatePicker endDate;
+    protected DatePicker endDate;
     @FXML
-    private TextField endTime;
+    protected TextField endTime;
     @FXML
-    private TextField tagsField;
+    protected TextField tagsField;
     @FXML
-    private TextField memosField;
+    protected TextField memosField;
     @FXML
-    private TextArea memoTextArea;
+    protected TextArea memoTextArea;
     @FXML
-    private TextField seriesField;
+    protected TextField seriesField;
     @FXML
-    private Label seriesErrorLabel;
+    protected Label seriesErrorLabel;
     @FXML
-    private Label dateTimeErrorLabel;
+    protected Label dateTimeErrorLabel;
     @FXML
     protected Button doneButton;
 
@@ -66,17 +66,18 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     private void handleDone() {
         System.out.println("Done clicked");
         setLabelInvisible();
+        createEvent(name, start, end, tags, memoTitle, memoContent);
+    }
+    protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
         memoTitle = memosField.getText();
         memoContent = memoTextArea.getText();
         tags = tagsField.getText().split(",");
-        try {
-            start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-            end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-            createEvent(name, start, end, tags, memoTitle, memoContent);
-        } catch (NullPointerException e) {
-            System.out.println("Missing dates!");
+        if (startDate.getValue() == null || endDate.getValue() == null) {
+            throw new InvalidDateException();
         }
+        start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
     }
 
 
@@ -91,8 +92,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param memoContent the content of event memo
      */
     protected void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
-        String id = IDManager.generateEventId(name, start);
         try {
+            String id = IDManager.generateEventId(name, start);
+            getUserInput();
             setTime(start, end);
             entities.Event newEvent = new entities.Event(name, start, end);
             addEvent(newEvent);
