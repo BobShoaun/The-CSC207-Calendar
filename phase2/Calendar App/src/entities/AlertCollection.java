@@ -24,7 +24,7 @@ public class AlertCollection implements Observer {
     /**
      * Creates a new Alert group (possibly repeating)
      *
-     * @param e The Event attached to the alert.Alert.
+     * @param e The Event attached to the Alert.
      */
     public AlertCollection(Event e, DataSaver saver) {
         this.eventId = e.getId();
@@ -32,14 +32,6 @@ public class AlertCollection implements Observer {
         this.eventTime.setTime(e.getStartDate().getTime());
         manAlerts = new ArrayList<>();
         this.saver = saver;
-    }
-
-    public void setEventTime(GregorianCalendar eventTime) {
-        this.eventTime = eventTime;
-    }
-
-    public void setCalGen(CalendarGenerator calGen) {
-        this.calGen = calGen;
     }
 
     /**
@@ -54,8 +46,16 @@ public class AlertCollection implements Observer {
         manAlerts = new ArrayList<>();
     }
 
+    public void setEventTime(GregorianCalendar eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public void setCalGen(CalendarGenerator calGen) {
+        this.calGen = calGen;
+    }
+
     /**
-     * Get the ID of the event associated with this alert.AlertCollection
+     * Get the ID of the event associated with this AlertCollection
      *
      * @return The ID of the event
      */
@@ -75,8 +75,8 @@ public class AlertCollection implements Observer {
     /**
      * Add an alert manually by setting the time.
      *
-     * @param time The time of the alert.Alert to be added.
-     * @return Whether or not the alert.Alert could be added.
+     * @param time The time of the Alert to be added.
+     * @return Whether or not the Alert could be added.
      */
     public boolean addAlert(GregorianCalendar time) {
         if (calGen != null) {
@@ -96,7 +96,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Add a recurring alert.Alert until the alert.Event occurs
+     * Add a recurring Alert until the Event occurs
      *
      * @param start  The start time
      * @param period The time between each alert

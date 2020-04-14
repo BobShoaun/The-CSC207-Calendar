@@ -80,4 +80,16 @@ public class Alert extends GraphicalUserInterface {
         }
     }
 
+    @FXML
+    private void addManualAlert() {
+        System.out.println("Clicked add manual alert");
+        openGUI("manualAlert.fxml");
+    }
+
+    @FXML
+    private void addRepeatingAlert() {
+        System.out.println("Clicked add repeating alert");
+        openGUI("repeatingAlert.fxml");
+    }
+
 }
