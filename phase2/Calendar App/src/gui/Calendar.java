@@ -1,7 +1,6 @@
 package gui;
 
 import entities.Alert;
-import entities.Event;
 import exceptions.InvalidDateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -113,8 +112,8 @@ public class Calendar extends GraphicalUserInterface {
                     end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
                     end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue());
                     end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth());
-                    List<Event> events = calendar.getEvents(start, end);
-                    for (Event event :
+                    List<entities.Event> events = calendar.getEvents(start, end);
+                    for (entities.Event event :
                             events) {
                         eventList.add(event.toString());
                     }
@@ -124,8 +123,8 @@ public class Calendar extends GraphicalUserInterface {
             String tagString = searchTermField.getText();
             Tag tag = calendar.getTag(tagString);
             if(tag != null){
-                List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                for (Event event :
+                List<entities.Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+                for (entities.Event event :
                         events) {
                     eventList.add(event.toString());
                 }
@@ -134,14 +133,14 @@ public class Calendar extends GraphicalUserInterface {
             String memoString = searchTermField.getText();
             Memo memo = calendar.getMemo(memoString);
             if(memo != null){
-                List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                for (Event event :
+                List<entities.Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+                for (entities.Event event :
                         events) {
                     eventList.add(event.toString());
                 }
             }
         } else if(searchCriterion.equals("Postponed")){
-            for (Event event :
+            for (entities.Event event :
                     calendar.getPostponedEvents()) {
                 eventList.add(event.toString());
             }
@@ -251,7 +250,7 @@ public class Calendar extends GraphicalUserInterface {
 
     @FXML
     private void handleNewEvent() {
-        AddEvent controller = openGUI("addEvent.fxml");
+        EventUI controller = openGUI("EventUI.fxml");
         controller.setCalendar(calendar);
     }
 

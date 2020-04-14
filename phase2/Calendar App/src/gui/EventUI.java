@@ -17,7 +17,7 @@ import java.net.URL;
 import java.time.ZoneId;
 import java.util.*;
 
-public class AddEvent extends GraphicalUserInterface implements Initializable {
+public class EventUI extends GraphicalUserInterface implements Initializable {
 
     @FXML
     public Label dateTimeErrorLabel;
