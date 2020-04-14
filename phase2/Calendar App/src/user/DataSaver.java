@@ -132,10 +132,10 @@ public class DataSaver {
         EventCollection eventCollections;
         ArrayList<Series> series = new ArrayList<>();
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
-        //load EC
 
-        eventCollections = new EventCollection(ECLoadHelper("events/"));
-        eventCollections.setPostponedEvents(ECLoadHelper("events/postponed/"));
+        //load EC
+        eventCollections = new EventCollection(ECLoadHelper(calendarName + "/events/"));
+        eventCollections.setPostponedEvents(ECLoadHelper(calendarName + "/events/postponed/"));
 
         //load memos
         try {
@@ -207,9 +207,7 @@ public class DataSaver {
         return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, calendarDataSaver);
     }
 
-
-
-    public void SaveCalendar(Calendar calendar) {
+    public void saveCalendar(Calendar calendar) {
         //save EventCollection
         ECSaveHelper("events/", calendar.getSingleEventCollection().getEvents());
         ECSaveHelper("events/postponed/", calendar.getSingleEventCollection().getPostponedEvents());

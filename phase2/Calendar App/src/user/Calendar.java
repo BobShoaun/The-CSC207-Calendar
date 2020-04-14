@@ -280,7 +280,7 @@ public class Calendar {
 
     public void addMemo(String memoTitle, String memoText) {
         memos.add(new Memo(memoTitle, memoText));
-        dataSaver.SaveCalendar(this);
+        dataSaver.saveCalendar(this);
     }
 
     /**
@@ -292,7 +292,7 @@ public class Calendar {
     public void editMemoTitle(String memoName, String newMemoName) {
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setTitle(newMemoName);
-        dataSaver.SaveCalendar(this);
+        dataSaver.saveCalendar(this);
     }
 
     /**
@@ -304,7 +304,7 @@ public class Calendar {
     public void editMemoText(String memoName, String newMemoText) {
         Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
         memo.setText(newMemoText);
-        dataSaver.SaveCalendar(this);
+        dataSaver.saveCalendar(this);
     }
 
     /**
@@ -314,7 +314,7 @@ public class Calendar {
      */
     public void removeMemo(Memo memo) {
         memos.remove(memo);
-        dataSaver.SaveCalendar(this);
+        dataSaver.saveCalendar(this);
     }
 
     /**
@@ -344,7 +344,7 @@ public class Calendar {
     }
     public void addTag(String text) {
         tags.add(new Tag(text));
-        dataSaver.SaveCalendar(this);
+        dataSaver.saveCalendar(this);
     }
 
     public void removeOldAlerts() {

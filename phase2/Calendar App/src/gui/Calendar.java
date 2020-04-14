@@ -121,6 +121,8 @@ public class Calendar extends GraphicalUserInterface {
                 eventUI.setEvent(selected);
             }
         });
+
+        updateDisplayedEvents();
     }
 
     /**
