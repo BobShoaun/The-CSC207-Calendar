@@ -70,9 +70,13 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         memoTitle = memosField.getText();
         memoContent = memoTextArea.getText();
         tags = tagsField.getText().split(",");
-        start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-        createEvent(name, start, end, tags, memoTitle, memoContent);
+        try {
+            start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+            end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+            createEvent(name, start, end, tags, memoTitle, memoContent);
+        } catch (NullPointerException e) {
+            System.out.println("Missing dates!");
+        }
     }
 
 
