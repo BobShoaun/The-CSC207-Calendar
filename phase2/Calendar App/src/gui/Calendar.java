@@ -29,6 +29,7 @@ public class Calendar extends GraphicalUserInterface {
 
     private User user;
     private user.Calendar calendar;
+    private String currEvent;
     private String currAlert;
     private String currSeries;
     private String currSeriesEvent;
@@ -53,39 +54,38 @@ public class Calendar extends GraphicalUserInterface {
     private ListView<String> displayedEventList;
     @FXML
     private Label lastLoginLabel;
-    @FXML
-    private ListView<String> alertList11;
+
 
     ObservableList<Event> eventList;
 
     /**
      * initialize the calendar ui, namely the event list and search
      */
-    private void initialize(){
+    private void initialize() {
         eventList = FXCollections.observableArrayList();
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String searchCriterion = (String)newValue;
-            if(searchCriterion.equals("Date")){
+            String searchCriterion = (String) newValue;
+            if (searchCriterion.equals("Date")) {
                 startDate.setVisible(true);
                 GregorianCalendar time = calendar.getTime();
                 LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
                         time.get(GregorianCalendar.DATE));
                 startDate.setValue(date);
-                LocalDate end =  LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
+                LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
                         time.get(GregorianCalendar.DATE) + 1);
                 endDate.setVisible(true);
                 endDate.setValue(end);
                 searchTermField.setVisible(false);
-            } else if(searchCriterion.equals("Tag")){
+            } else if (searchCriterion.equals("Tag")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(true);
-            } else if(searchCriterion.equals("Memo name")){
+            } else if (searchCriterion.equals("Memo name")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(true);
-            } else if(searchCriterion.equals("Postponed")){
+            } else if (searchCriterion.equals("Postponed")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(false);
@@ -114,10 +114,10 @@ public class Calendar extends GraphicalUserInterface {
 
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
-            if(displayedEventList.getSelectionModel().getSelectedIndex() != -1)
-            {
+            if (displayedEventList.getSelectionModel().getSelectedIndex() != -1) {
                 Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-                EventEditUI eventUI = openGUI("EventEditUI.fxml");;
+                EventEditUI eventUI = openGUI("EventEditUI.fxml");
+                ;
                 eventUI.setEvent(selected);
             }
         });
@@ -128,15 +128,15 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Update the displayed events from search
      */
-    void updateDisplayedEvents(){
-        String searchCriterion = (String)searchByList.getValue();
-        if(searchCriterion == null) {
+    void updateDisplayedEvents() {
+        String searchCriterion = (String) searchByList.getValue();
+        if (searchCriterion == null) {
             return;
         }
         eventList.clear();
-        if(searchCriterion.equals("Date")){
-            if(startDate.getValue() != null && endDate.getValue() != null){
-                if(startDate.getValue().isBefore(endDate.getValue())){
+        if (searchCriterion.equals("Date")) {
+            if (startDate.getValue() != null && endDate.getValue() != null) {
+                if (startDate.getValue().isBefore(endDate.getValue())) {
                     GregorianCalendar start = calendar.getTime();
                     start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
                     start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue());
@@ -149,27 +149,28 @@ public class Calendar extends GraphicalUserInterface {
                     eventList.addAll(events);
                 }
             }
-        } else if(searchCriterion.equals("Tag")){
+        } else if (searchCriterion.equals("Tag")) {
             String tagString = searchTermField.getText();
             Tag tag = calendar.getTag(tagString);
-            if(tag != null){
+            if (tag != null) {
                 List<entities.Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
                 eventList.addAll(events);
             }
-        } else if(searchCriterion.equals("Memo name")){
+        } else if (searchCriterion.equals("Memo name")) {
             String memoString = searchTermField.getText();
             Memo memo = calendar.getMemo(memoString);
-            if(memo != null){
+            if (memo != null) {
                 List<entities.Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
                 eventList.addAll(events);
             }
-        } else if(searchCriterion.equals("Postponed")){
+        } else if (searchCriterion.equals("Postponed")) {
             eventList.addAll(calendar.getPostponedEvents());
         }
     }
 
     /**
      * Set the user for this calendar
+     *
      * @param user The user object
      */
     public void setUser(User user) {
@@ -183,6 +184,7 @@ public class Calendar extends GraphicalUserInterface {
 
     /**
      * Set the calendar to be displayed
+     *
      * @param calendar
      */
     public void setActiveCalendar(user.Calendar calendar) {
@@ -201,6 +203,15 @@ public class Calendar extends GraphicalUserInterface {
                 calendar.getAlerts(calendar.getTime(), past).stream()
                         .map(Alert::toString).collect(Collectors.toList()));
         alertList.setItems(alertStrings);
+    }
+
+    /**
+     * Handles when the event list is clicked
+     */
+    @FXML
+    private void eventListClicked() {
+        currEvent = displayedEventList.getSelectionModel().getSelectedItem();
+        System.out.println("Clicked on alert: " + currEvent);
     }
 
     /**
@@ -234,6 +245,7 @@ public class Calendar extends GraphicalUserInterface {
 
     /**
      * Handles when the time button is clicked and shows the time controller window
+     *
      * @param mouseEvent The event information of the click
      */
     public void showTimeController(MouseEvent mouseEvent) {
@@ -271,9 +283,9 @@ public class Calendar extends GraphicalUserInterface {
      * Update the theme between light/dark
      */
     @FXML
-    private void updateTheme(){
+    private void updateTheme() {
         user.setDarkTheme(!user.getDarkTheme());
-        if(user.getDarkTheme()){
+        if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
         } else {
             com.sun.javafx.css.StyleManager.getInstance().removeUserAgentStylesheet("gui/DarkTheme.css");
@@ -295,6 +307,7 @@ public class Calendar extends GraphicalUserInterface {
 
     /**
      * Event when the search text has been changed
+     *
      * @param keyEvent Event from new key
      */
     public void searchTermValueChange(KeyEvent keyEvent) {
@@ -321,6 +334,7 @@ public class Calendar extends GraphicalUserInterface {
         EventEditUI controller = openGUI("EventEditUI.fxml");
         //TODO: require a current selected EVEN
         controller.setEvent(null);
+        //TODO: handle no event is selected
     }
 
     /**
@@ -334,6 +348,7 @@ public class Calendar extends GraphicalUserInterface {
 
     /**
      * Handle logout button clicked
+     *
      * @throws IOException Error saving user last log out time
      */
     @FXML

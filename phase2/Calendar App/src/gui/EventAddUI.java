@@ -102,7 +102,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             addTags(tags, id);
             closeGUI();
             System.out.println("Event created:" + newEvent);
-        } catch (InvalidDateException ex) {
+        } catch (InvalidDateException | NullPointerException ex) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         } catch (InvalidTimeInputException ex) {
