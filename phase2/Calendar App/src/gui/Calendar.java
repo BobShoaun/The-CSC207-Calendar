@@ -29,7 +29,7 @@ public class Calendar extends GraphicalUserInterface {
 
     private User user;
     private user.Calendar calendar;
-    private String currEvent;
+    private Event currEvent;
     private String currAlert;
     private String currSeries;
     private String currSeriesEvent;
@@ -54,6 +54,8 @@ public class Calendar extends GraphicalUserInterface {
     private ListView<String> displayedEventList;
     @FXML
     private Label lastLoginLabel;
+    @FXML
+    private Label eventErrorLabel;
 
 
     ObservableList<Event> eventList;
@@ -115,13 +117,9 @@ public class Calendar extends GraphicalUserInterface {
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             if (displayedEventList.getSelectionModel().getSelectedIndex() != -1) {
-                Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-                EventEditUI eventUI = openGUI("EventEditUI.fxml");
-                ;
-                eventUI.setEvent(selected);
+                currEvent = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
             }
         });
-
         updateDisplayedEvents();
     }
 
@@ -205,14 +203,14 @@ public class Calendar extends GraphicalUserInterface {
         alertList.setItems(alertStrings);
     }
 
-    /**
-     * Handles when the event list is clicked
-     */
-    @FXML
-    private void eventListClicked() {
-        currEvent = displayedEventList.getSelectionModel().getSelectedItem();
-        System.out.println("Clicked on alert: " + currEvent);
-    }
+//    /**
+//     * Handles when the event list is clicked
+//     */
+//    @FXML
+//    private void eventListClicked() {
+//        currEvent = displayedEventList.getSelectionModel().getSelectedItem();
+//        System.out.println("Clicked on alert: " + currEvent);
+//    }
 
     /**
      * Handles when the alert list is clicked, displays information about current alert
@@ -331,10 +329,19 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     private void handleEditEvent() {
         System.out.println("Edit Clicked");
-        EventEditUI controller = openGUI("EventEditUI.fxml");
-        //TODO: require a current selected EVEN
-        controller.setEvent(null);
+
+        if (currEvent == null) {
+            eventErrorLabel.setText("No Event has been selected");
+            eventErrorLabel.setVisible(true);
+        } else {
+            eventErrorLabel.setVisible(false);
+            EventEditUI controller = openGUI("EventEditUI.fxml");
+            controller.setEvent(currEvent);
+            controller.showEventDetails();
+        }
+
         //TODO: handle no event is selected
+
     }
 
     /**

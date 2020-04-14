@@ -67,7 +67,7 @@ public class EventEditUI extends EventAddUI {
     public void handleEdit(){
         System.out.println("Done (edit) clicked");
         try {
-            getUserInput();
+//            getUserInput();
             event.setName(name);
             event.setStartDate(start);
             event.setEndDate(end);

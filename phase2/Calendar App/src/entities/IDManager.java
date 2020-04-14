@@ -1,12 +1,14 @@
 package entities;
 
+import exceptions.InvalidDateException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class IDManager {
-    public static String generateEventId(String eventName, GregorianCalendar eventStartTime) {
+    public static String generateEventId(String eventName, GregorianCalendar eventStartTime)  {
         String id = eventStartTime.getTime().toString() + "%" + eventName;
         id = id.replaceAll(" ", "%");
         id = id.replaceAll(":", "%");

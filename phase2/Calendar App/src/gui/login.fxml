@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="250.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Login">
+<AnchorPane prefHeight="250.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Login">
 
 
     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
@@ -61,12 +61,12 @@
                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                 </GridPane.margin>
             </Label>
-            <PasswordField fx:id="password" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <PasswordField fx:id="password" text="Defaultpassword" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets bottom="10.0" left="110.0" right="30.0" top="10.0" />
                 </GridPane.margin>
             </PasswordField>
-            <TextField fx:id="username" GridPane.rowIndex="1">
+            <TextField fx:id="username" text="DefaultUsername" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets bottom="10.0" left="110.0" right="30.0" top="10.0" />
                 </GridPane.margin>

@@ -63,21 +63,30 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * Saves the event to Calendar according to user input
      */
     @FXML
-    private void handleDone() {
+    private void handleDone()  {
         System.out.println("Done clicked");
         setLabelInvisible();
-        createEvent(name, start, end, tags, memoTitle, memoContent);
+        try {
+            getUserInput();
+            createEvent(name, start, end, tags, memoTitle, memoContent);
+        } catch (InvalidDateException e) {
+            dateTimeErrorLabel.setText("Invalid Date");
+            dateTimeErrorLabel.setVisible(true);
+        }
+
     }
+
     protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
         memoTitle = memosField.getText();
         memoContent = memoTextArea.getText();
         tags = tagsField.getText().split(",");
-        if (startDate.getValue() == null || endDate.getValue() == null) {
+        if(startDate.getValue()== null|| endDate.getValue()==null){
             throw new InvalidDateException();
         }
         start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+
     }
 
 
@@ -93,8 +102,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      */
     protected void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
         try {
-            String id = IDManager.generateEventId(name, start);
             getUserInput();
+            String id = IDManager.generateEventId(name, start);
             setTime(start, end);
             entities.Event newEvent = new entities.Event(name, start, end);
             addEvent(newEvent);
@@ -102,7 +111,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             addTags(tags, id);
             closeGUI();
             System.out.println("Event created:" + newEvent);
-        } catch (InvalidDateException | NullPointerException ex) {
+        } catch (InvalidDateException ex) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         } catch (InvalidTimeInputException ex) {

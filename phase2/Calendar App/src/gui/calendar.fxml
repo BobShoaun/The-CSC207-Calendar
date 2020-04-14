@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
     <children>
         <SplitPane dividerPositions="0.41846153846153844, 0.6133333333333333, 0.8061538461538461" layoutX="100.0" layoutY="40.0" prefHeight="400.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -74,6 +74,7 @@
                                         <Button mnemonicParsing="false" text="Tags" />
                                         <Button mnemonicParsing="false" onAction="#handleSwitchCalendar" text="Calendars" />
                               <Button mnemonicParsing="false" onMouseClicked="#showTimeController" text="Time" />
+                              <Label fx:id="eventErrorLabel" prefHeight="17.0" prefWidth="177.0" text="ErrorLabel" textAlignment="RIGHT" textFill="RED" visible="false" />
                                     </items>
                                     <GridPane.margin>
                                         <Insets top="30.0" />
