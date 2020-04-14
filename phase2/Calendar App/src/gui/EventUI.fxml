@@ -31,6 +31,7 @@
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label alignment="BOTTOM_LEFT" text="Create New Event" GridPane.halignment="CENTER">
@@ -79,7 +80,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <DatePicker fx:id="startDate">
+                        <DatePicker fx:id="startDate" editable="false">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -99,7 +100,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="startTime" promptText="00:00 24hr format">
+                        <TextField fx:id="startTime" promptText="00:00 24hr format" text="12:30">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -125,7 +126,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <DatePicker fx:id="endDate">
+                        <DatePicker fx:id="endDate" editable="false">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -145,7 +146,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="endTime" promptText="00:00 24hr format">
+                        <TextField fx:id="endTime" promptText="00:00 24hr format" text="13:31">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -164,7 +165,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="tags seperated by comma">
+                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="Tags seperated by commas">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
@@ -218,6 +219,13 @@
                </buttons>
             </ButtonBar>
             <Label fx:id="dateTimeErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Date Time Error Label" textFill="#ff4545" GridPane.rowIndex="4" />
+            <ButtonBar GridPane.rowIndex="9">
+               <buttons>
+                  <Button fx:id="addAlertButton" mnemonicParsing="false" onAction="#handleDone" text="Add Alert" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDone" text="Delete" />
+                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
+               </buttons>
+            </ButtonBar>
          </children>
          <padding>
             <Insets bottom="20.0" left="40.0" right="40.0" top="40.0" />
