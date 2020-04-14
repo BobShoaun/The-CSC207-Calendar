@@ -61,8 +61,6 @@ public class Calendar extends GraphicalUserInterface {
     private void Initialize(){
         eventList = FXCollections.observableArrayList();
 
-        //displayedEventList.setItems(FXCollections.observableArrayList("Test", "Another"));
-
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String searchCriterion = (String)newValue;
             if(searchCriterion.equals("Date")){
@@ -114,8 +112,7 @@ public class Calendar extends GraphicalUserInterface {
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-            EventUI selectedUI = new EventUI();
-
+            //TODO: Display the event, waiting on EditEventUI
         });
     }
 
@@ -166,22 +163,7 @@ public class Calendar extends GraphicalUserInterface {
 
     public void setActiveCalendar(user.Calendar calendar) throws InvalidDateException {
         this.calendar = calendar;
-
         setWindowTitle(calendar.getName());
-
-//        //For testing purposes until supported by ui
-//        EventCollection singleEvents = calendar.getSingleEventCollection();
-//        if (singleEvents.getEvents().size() == 0) {
-//            GregorianCalendar tomorrow = new GregorianCalendar();
-//            tomorrow.add(GregorianCalendar.DATE, 1);
-//            GregorianCalendar tomorrowLater = (GregorianCalendar) tomorrow.clone();
-//            tomorrowLater.add(GregorianCalendar.HOUR_OF_DAY, 1);
-//            Event event = new Event("test%" + tomorrow.getTime().toString(), "test", tomorrow, tomorrowLater);
-//            singleEvents.addEvent(event);
-//            AlertCollection alertCollection = new AlertCollection(event, calendar.getDataSaver());
-//            alertCollection.addAlert(tomorrow);
-//            calendar.addAlertCollection(alertCollection);
-//        }
     }
 
     private void updateAlerts() {
@@ -280,5 +262,4 @@ public class Calendar extends GraphicalUserInterface {
         Login login = showGUI("login.fxml");
         login.setDarkTheme();
     }
-
 }
