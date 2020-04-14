@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditEvent">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EventAddUI">
    <children>
       <GridPane layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -26,13 +26,14 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label alignment="BOTTOM_LEFT" text="Edit Event" GridPane.halignment="CENTER">
+            <Label alignment="BOTTOM_LEFT" text="Create New Event" GridPane.halignment="CENTER">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
@@ -51,7 +52,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="nameField" prefHeight="25.0" prefWidth="336.0">
+                  <TextField fx:id="nameField" prefHeight="25.0" prefWidth="336.0" text="Default Event Name">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
@@ -78,7 +79,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <DatePicker fx:id="startDate">
+                        <DatePicker fx:id="startDate" editable="false">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -98,7 +99,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="startTime" promptText="00:00 24hr format">
+                        <TextField fx:id="startTime" promptText="00:00 24hr format" text="12:30">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -124,7 +125,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <DatePicker fx:id="endDate">
+                        <DatePicker fx:id="endDate" editable="false">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -144,7 +145,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="endTime" promptText="00:00 24hr format">
+                        <TextField fx:id="endTime" promptText="00:00 24hr format" text="13:31">
                            <VBox.margin>
                               <Insets top="3.0" />
                            </VBox.margin>
@@ -153,7 +154,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox GridPane.rowIndex="4">
+            <VBox GridPane.rowIndex="5">
                <children>
                   <Label text="Add Tags">
                      <font>
@@ -163,14 +164,14 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="tags seperated by comma">
+                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="Tags seperated by commas">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
                </children>
             </VBox>
-            <VBox GridPane.rowIndex="5">
+            <VBox GridPane.rowIndex="6">
                <children>
                   <Label text="Add Memos">
                      <font>
@@ -192,7 +193,7 @@
                   </TextArea>
                </children>
             </VBox>
-            <VBox GridPane.rowIndex="6">
+            <VBox GridPane.rowIndex="7">
                <children>
                   <Label text="Add Event to Series (optional)">
                      <font>
@@ -211,12 +212,12 @@
                   </Label>
                </children>
             </VBox>
-            <ButtonBar GridPane.rowIndex="7">
+            <ButtonBar GridPane.rowIndex="8">
                <buttons>
-                  <Button mnemonicParsing="false" onAction="#handleAddAlerts" text="Add Alerts" />
                   <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
                </buttons>
             </ButtonBar>
+            <Label fx:id="dateTimeErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Date Time Error Label" textFill="#ff4545" GridPane.rowIndex="4" />
          </children>
          <padding>
             <Insets bottom="20.0" left="40.0" right="40.0" top="40.0" />

@@ -16,10 +16,8 @@ import java.net.URL;
 import java.time.ZoneId;
 import java.util.*;
 
-public class EventUI extends GraphicalUserInterface implements Initializable {
+public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
-    @FXML
-    public Label dateTimeErrorLabel;
     @FXML
     private TextField nameField;
     @FXML
@@ -40,15 +38,26 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
     private TextField seriesField;
     @FXML
     private Label seriesErrorLabel;
+    @FXML
+    private Label dateTimeErrorLabel;
+    @FXML
+    protected Button doneButton;
 
-    public Button doneButton; // done think we need this?
 
-    private Calendar calendar;
-    private EventCollection currEvents;
+    protected Calendar calendar;
+    protected EventCollection currEvents;
+
+    protected String name;
+    protected String memoTitle;
+    protected String memoContent;
+    protected String[] tags;
+    protected GregorianCalendar start;
+    protected GregorianCalendar end;
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
+
 
     /**
      * Saves the event to Calendar according to user input
@@ -57,30 +66,27 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
     private void handleDone() {
         System.out.println("Done clicked");
         setLabelInvisible();
-        String name = nameField.getText();
-        String memoTitle = memosField.getText();
-        String memoContent = memoTextArea.getText();
-        String[] tags = tagsField.getText().split(",");
-        GregorianCalendar start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-        GregorianCalendar end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        name = nameField.getText();
+        memoTitle = memosField.getText();
+        memoContent = memoTextArea.getText();
+        tags = tagsField.getText().split(",");
+        start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         createEvent(name, start, end, tags, memoTitle, memoContent);
     }
 
-    private void setLabelInvisible() {
-        seriesErrorLabel.setVisible(false);
-        dateTimeErrorLabel.setVisible(false);
-    }
 
     /**
      * Create the Event and its related info
-     * @param name of the event
-     * @param start start time of the event
-     * @param end   end time of the event
-     * @param tags that are associated with this event
-     * @param memoTitle the title of event memo
+     *
+     * @param name        of the event
+     * @param start       start time of the event
+     * @param end         end time of the event
+     * @param tags        that are associated with this event
+     * @param memoTitle   the title of event memo
      * @param memoContent the content of event memo
      */
-    private void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
+    protected void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
         String id = IDManager.generateEventId(name, start);
         try {
             setTime(start, end);
@@ -101,12 +107,13 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
 
     /**
      * Add the new event to Calendar
+     *
      * @param newEvent be to added
      */
     private void addEvent(entities.Event newEvent) {
         String SeriesName = seriesField.getText();
 
-        if (SeriesName.equals("")) {
+        if (SeriesName.equals("") || SeriesName.equals("Default")) {
             currEvents = calendar.getSingleEventCollection();
         } else {
             try {
@@ -120,9 +127,10 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
 
     /**
      * add the memo to the event with this id
-     * @param memoTitle the title of event memo
+     *
+     * @param memoTitle   the title of event memo
      * @param memoContent the content of event memo
-     * @param id of the event
+     * @param id          of the event
      */
     private void addMemo(String memoTitle, String memoContent, String id) {
         Memo memo = calendar.getMemo(memoTitle, memoContent);
@@ -135,8 +143,9 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
 
     /**
      * add the event to the tags
+     *
      * @param tags collection of tags that event belongs to
-     * @param id of the event
+     * @param id   of the event
      */
     private void addTags(String[] tags, String id) {
         for (String text : tags) {
@@ -151,8 +160,9 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
 
     /**
      * get the time from text field
+     *
      * @param input string representation of input time
-     * @return  a list of 2 int (Hour and minute)
+     * @return a list of 2 int (Hour and minute)
      * @throws InvalidTimeInputException Invalid time input from user
      */
     private List<Integer> getTime(String input) throws InvalidTimeInputException {
@@ -169,8 +179,9 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
 
     /**
      * add the hour and minute to start and end
+     *
      * @param start time of the event
-     * @param end time of the event
+     * @param end   time of the event
      * @throws InvalidTimeInputException Invalid time input from user
      */
     private void setTime(GregorianCalendar start, GregorianCalendar end) throws InvalidTimeInputException {
@@ -184,5 +195,12 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setLabelInvisible();
     }
+
+    protected void setLabelInvisible() {
+        seriesErrorLabel.setVisible(false);
+        dateTimeErrorLabel.setVisible(false);
+    }
+
+
 
 }

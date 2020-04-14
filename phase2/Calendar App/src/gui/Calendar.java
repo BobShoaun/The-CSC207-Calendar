@@ -240,13 +240,17 @@ public class Calendar extends GraphicalUserInterface {
 
     @FXML
     private void handleNewEvent() {
-        EventUI controller = openGUI("EventUI.fxml");
+        System.out.println("New clicked");
+        EventAddUI controller = openGUI("EventAddUI.fxml");
         controller.setCalendar(calendar);
     }
 
     @FXML
     private void handleEditEvent() {
-        EditEvent controller = openGUI("editEvent.fxml");
+        System.out.println("Edit Clicked");
+        EventEditUI controller = openGUI("EventEditUI.fxml");
+        //TODO: require a current selected EVEN
+        controller.setEvent(null);
     }
 
     @FXML
