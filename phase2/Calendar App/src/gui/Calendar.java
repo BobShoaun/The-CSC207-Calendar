@@ -114,9 +114,12 @@ public class Calendar extends GraphicalUserInterface {
 
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
-            Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-            EventEditUI eventUI = openGUI("EventEditUI.fxml");;
-            eventUI.setEvent(selected);
+            if(displayedEventList.getSelectionModel().getSelectedIndex() != -1)
+            {
+                Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
+                EventEditUI eventUI = openGUI("EventEditUI.fxml");;
+                eventUI.setEvent(selected);
+            }
         });
     }
 
@@ -125,8 +128,10 @@ public class Calendar extends GraphicalUserInterface {
      */
     void updateDisplayedEvents(){
         String searchCriterion = (String)searchByList.getValue();
-        if(searchCriterion == null)
+        if(searchCriterion == null) {
             return;
+        }
+        eventList.clear();
         if(searchCriterion.equals("Date")){
             if(startDate.getValue() != null && endDate.getValue() != null){
                 if(startDate.getValue().isBefore(endDate.getValue())){
