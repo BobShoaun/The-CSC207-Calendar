@@ -94,10 +94,10 @@ public class Calendar extends GraphicalUserInterface {
         searchByList.setItems(searchOptions);
         searchByList.setValue("Date");
         startDate.valueProperty().addListener((time) -> {
-            UpdateDisplayedEvents();
+            updateDisplayedEvents();
         });
         endDate.valueProperty().addListener((time) -> {
-            UpdateDisplayedEvents();
+            updateDisplayedEvents();
         });
 
         eventList.addListener((ListChangeListener<Event>) c -> {
@@ -112,11 +112,13 @@ public class Calendar extends GraphicalUserInterface {
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
-            //TODO: Display the event, waiting on EditEventUI
+            EventEditUI eventUI = new EventEditUI();
+            eventUI.setEvent(selected);
+            eventUI.openGUI("EventEditUI.fxml");
         });
     }
 
-    void UpdateDisplayedEvents(){
+    void updateDisplayedEvents(){
         String searchCriterion = (String)searchByList.getValue();
         if(searchCriterion.equals("Date")){
             if(startDate.getValue() != null && endDate.getValue() != null){
@@ -235,7 +237,7 @@ public class Calendar extends GraphicalUserInterface {
         }
     }
     public void searchTermValueChange(KeyEvent keyEvent) {
-        UpdateDisplayedEvents();
+        updateDisplayedEvents();
     }
 
     @FXML

@@ -200,7 +200,4 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         seriesErrorLabel.setVisible(false);
         dateTimeErrorLabel.setVisible(false);
     }
-
-
-
 }

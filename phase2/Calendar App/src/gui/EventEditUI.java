@@ -28,7 +28,6 @@ public class EventEditUI extends EventAddUI {
         this.event = event;
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLabelInvisible();
