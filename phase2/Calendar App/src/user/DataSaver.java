@@ -11,8 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -347,7 +345,7 @@ public class DataSaver {
             e.printStackTrace();
         }
 
-        ac.setEventTime(parseEventId(eventId));
+        ac.setEventTime(IDManager.parseEventId(eventId));
 
         if (strings == null) throw new AssertionError();
         eventId = strings.get(0).trim();
@@ -367,27 +365,5 @@ public class DataSaver {
         return ac;
     }
 
-    public GregorianCalendar parseEventId(String eventId) {
-        GregorianCalendar eventTime = new GregorianCalendar();
-        StringBuilder time = new StringBuilder();
-        try {
-            String[] times = eventId.split("%");
-            String[] times2 = new String[times.length - 1];
-            System.arraycopy(times, 1, times2, 0, times.length - 1);
-            for (String s : times2) {
-                time.append(s).append(" ");
-            }
-        } catch (StringIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
-        try {
-            eventTime.setTime(df.parse(time.toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return eventTime;
-    }
 
 }

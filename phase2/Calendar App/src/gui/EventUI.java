@@ -1,11 +1,10 @@
 package gui;
 
 import entities.EventCollection;
-import entities.IDGenerator;
+import entities.IDManager;
 import exceptions.InvalidDateException;
 import exceptions.InvalidTimeInputException;
 import exceptions.NoSuchSeriesException;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -82,7 +81,7 @@ public class EventUI extends GraphicalUserInterface implements Initializable {
      * @param memoContent the content of event memo
      */
     private void createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
-        String id = IDGenerator.generateEventId(name, start);
+        String id = IDManager.generateEventId(name, start);
         try {
             setTime(start, end);
             entities.Event newEvent = new entities.Event(name, start, end);
