@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
+import static entities.IDManager.parseEventId;
+
 public class Alert extends GraphicalUserInterface {
     private AlertCollection ac;
     @FXML
@@ -59,7 +61,7 @@ public class Alert extends GraphicalUserInterface {
         System.out.println("Clicked delete manual alert");
         if (currManAlert != null) {
             DataSaver ds = new DataSaver("");
-            GregorianCalendar time = ds.parseEventId(currManAlert);
+            GregorianCalendar time = parseEventId(currManAlert);
 
             ac.removeManualAlert(time);
 
@@ -72,7 +74,7 @@ public class Alert extends GraphicalUserInterface {
         System.out.println("Clicked delete repeating alert");
         if (currRepAlert != null) {
             DataSaver ds = new DataSaver("");
-            GregorianCalendar time = ds.parseEventId(currRepAlert);
+            GregorianCalendar time = parseEventId(currRepAlert);
 
             ac.removeGeneratedAlert(time);
 
