@@ -1,9 +1,12 @@
 package gui;
 
 import entities.Alert;
+import entities.Event;
 import exceptions.InvalidDateException;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -47,16 +50,18 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     TextField searchTermField;
     @FXML
-    ListView<String> displayedEventList;
+    private ListView<String> displayedEventList;
     @FXML
     private Label lastLoginLabel;
+    @FXML
+    private ListView<String> alertList11;
 
-    ObservableList<String> eventList;
+    ObservableList<Event> eventList;
 
     private void Initialize(){
         eventList = FXCollections.observableArrayList();
 
-        displayedEventList.setItems(eventList);
+        //displayedEventList.setItems(FXCollections.observableArrayList("Test", "Another"));
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String searchCriterion = (String)newValue;
@@ -96,10 +101,25 @@ public class Calendar extends GraphicalUserInterface {
         endDate.valueProperty().addListener((time) -> {
             UpdateDisplayedEvents();
         });
+
+        eventList.addListener((ListChangeListener<Event>) c -> {
+            displayedEventList.getItems().clear();
+            for (Event event :
+                    eventList) {
+                displayedEventList.getItems().add(event.toString());
+            }
+            displayedEventList.refresh();
+        });
+
+        displayedEventList.setOnMouseClicked(event -> {
+            System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
+            Event selected = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
+            EventUI selectedUI = new EventUI();
+
+        });
     }
 
     void UpdateDisplayedEvents(){
-        eventList.clear();
         String searchCriterion = (String)searchByList.getValue();
         if(searchCriterion.equals("Date")){
             if(startDate.getValue() != null && endDate.getValue() != null){
@@ -113,10 +133,7 @@ public class Calendar extends GraphicalUserInterface {
                     end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue());
                     end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth());
                     List<entities.Event> events = calendar.getEvents(start, end);
-                    for (entities.Event event :
-                            events) {
-                        eventList.add(event.toString());
-                    }
+                    eventList.addAll(events);
                 }
             }
         } else if(searchCriterion.equals("Tag")){
@@ -124,26 +141,17 @@ public class Calendar extends GraphicalUserInterface {
             Tag tag = calendar.getTag(tagString);
             if(tag != null){
                 List<entities.Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                for (entities.Event event :
-                        events) {
-                    eventList.add(event.toString());
-                }
+                eventList.addAll(events);
             }
         } else if(searchCriterion.equals("Memo name")){
             String memoString = searchTermField.getText();
             Memo memo = calendar.getMemo(memoString);
             if(memo != null){
                 List<entities.Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                for (entities.Event event :
-                        events) {
-                    eventList.add(event.toString());
-                }
+                eventList.addAll(events);
             }
         } else if(searchCriterion.equals("Postponed")){
-            for (entities.Event event :
-                    calendar.getPostponedEvents()) {
-                eventList.add(event.toString());
-            }
+            eventList.addAll(calendar.getPostponedEvents());
         }
     }
 
