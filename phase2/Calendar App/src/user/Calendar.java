@@ -142,13 +142,9 @@ public class Calendar {
      * @return List of all events where start point <= end and end point >= start
      */
     public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
-        List<Event> toReturn = new ArrayList<>();
-
-        for (EventCollection eventCollection :
-                eventCollections) {
-            toReturn.addAll(eventCollection.getEvents(start, end));
-        }
-
+        ArrayList<Event> toReturn = new ArrayList<>();
+        EventIterator eventIterator = new EventIterator(start.getTime(), event -> event.getStartDate().before(end));
+        eventIterator.forEachRemaining(toReturn::add);
         return toReturn;
     }
 
