@@ -74,7 +74,7 @@ public class DataSaver {
             newFile.createNewFile();
             saveToFile(path, contents);
         }
-        System.out.println("Saved to " + basePath + path);
+        System.out.println("Saved multiple lines to " + basePath + path);
     }
 
     /**
@@ -84,7 +84,7 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile(String path, String contents) throws IOException {
-        System.out.println("Saved to " + basePath + path);
+        System.out.println("Saved single string to " + basePath + path);
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
@@ -129,7 +129,7 @@ public class DataSaver {
 
 
     public Calendar loadCalendar(String calendarName) {
-        DataSaver calendarDataSaver = new DataSaver(basePath + "/" + calendarName);
+        DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags = new ArrayList<>();
         EventCollection eventCollections;

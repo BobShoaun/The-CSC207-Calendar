@@ -102,6 +102,7 @@ public class Calendar extends GraphicalUserInterface {
             displayedEventList.refresh();
         });
 
+        // TODO: refactor this into a separate method
         displayedEventList.setOnMouseClicked(event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             if (displayedEventList.getSelectionModel().getSelectedIndex() != -1) {
@@ -208,6 +209,8 @@ public class Calendar extends GraphicalUserInterface {
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currAlert);
+        updateDisplayedEvents();
+        updateAlerts();
     }
 
     /**
