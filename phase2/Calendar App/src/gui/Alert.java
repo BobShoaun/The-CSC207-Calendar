@@ -2,6 +2,7 @@ package gui;
 
 import com.sun.istack.internal.NotNull;
 import entities.AlertCollection;
+import entities.IDManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,7 +36,8 @@ public class Alert extends GraphicalUserInterface {
      */
     public void initialize(@NotNull AlertCollection ac) {
         this.ac = ac;
-        title.setText("Alerts for " + ac.getEventId());
+        title.setText("Alerts for " + ac.getEventId().substring(29).replace('%', ' ')
+                + " at " + IDManager.parseEventId(ac.getEventId()).getTime());
         updateRepeatingAlerts();
         updateManAlerts();
     }
@@ -144,6 +146,18 @@ public class Alert extends GraphicalUserInterface {
     protected void update() {
         updateManAlerts();
         updateRepeatingAlerts();
+    }
+
+    @FXML
+    private void clearManAlerts() {
+        ac.removeAllManualAlerts();
+        update();
+    }
+
+    @FXML
+    private void clearRepeatingAlerts() {
+        ac.removeAllGeneratedAlerts();
+        update();
     }
 
 }

@@ -15,12 +15,12 @@ import java.util.*;
  */
 public class AlertCollection implements Observer {
     private List<Alert> manAlerts;
-    private String eventId;
+    private final String eventId;
 
     private GregorianCalendar eventTime;
 
     private CalendarGenerator calGen;
-    private DataSaver saver;
+    private final DataSaver saver;
     /**
      * Creates a new Alert group (possibly repeating)
      *
@@ -121,6 +121,16 @@ public class AlertCollection implements Observer {
      */
     public boolean removeAlert(GregorianCalendar d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
+    }
+
+    public void removeAllManualAlerts() {
+        manAlerts = new ArrayList<>();
+        saver.saveAlertCollection(this);
+    }
+
+    public void removeAllGeneratedAlerts() {
+        calGen = null;
+        saver.saveAlertCollection(this);
     }
 
     /**

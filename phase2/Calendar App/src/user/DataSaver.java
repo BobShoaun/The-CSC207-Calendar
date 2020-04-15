@@ -355,9 +355,11 @@ public class DataSaver {
 
         eventId = strings.get(0).trim(); // technically redundant
 
-        String[] manTimes = strings.get(2).trim().split(" ");
-        for (String timeStr : manTimes) {
-            ac.getManAlerts().add(new Alert(eventId, timeStr));
+        if (strings.size() > 2) {
+            String[] manTimes = strings.get(2).trim().split(" ");
+            for (String timeStr : manTimes) {
+                ac.getManAlerts().add(new Alert(eventId, timeStr));
+            }
         }
 
         StringBuilder cgStr = new StringBuilder();

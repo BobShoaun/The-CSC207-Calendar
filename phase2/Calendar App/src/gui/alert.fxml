@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.Alert">
     <children>
         <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
@@ -64,6 +64,7 @@
                     <children>
                         <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="46.0" prefWidth="198.0">
                             <buttons>
+                                <Button mnemonicParsing="false" onAction="#clearManAlerts" text="Clear All"/>
                                 <Button mnemonicParsing="false" onAction="#deleteManualAlert" text="Delete"/>
                                 <Button mnemonicParsing="false" onAction="#editManualAlert" text="Edit"/>
                                 <Button mnemonicParsing="false" onAction="#addManualAlert" text="New"/>
@@ -74,6 +75,7 @@
                         </ButtonBar>
                         <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1">
                             <buttons>
+                                <Button mnemonicParsing="false" onAction="#clearRepeatingAlerts" text="Clear All"/>
                                 <Button mnemonicParsing="false" onAction="#deleteRepeatingAlert" text="Delete"/>
                                 <Button mnemonicParsing="false" onAction="#editRepeatingAlert" text="Edit"/>
                                 <Button mnemonicParsing="false" onAction="#addRepeatingAlert" text="New"/>
