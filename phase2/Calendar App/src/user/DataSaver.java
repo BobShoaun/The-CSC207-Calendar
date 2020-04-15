@@ -228,7 +228,7 @@ public class DataSaver {
             }
         }
 
-        // save memos
+        // save memos TODO: extract method
         StringBuilder memoData = new StringBuilder();
         for (Memo memo :
                 calendar.getMemos()) {
@@ -245,7 +245,7 @@ public class DataSaver {
             ioException.printStackTrace();
         }
 
-        // save tags
+        // save tags TODO: extract method
         StringBuilder tagsData = new StringBuilder();
         for (Tag tag :
                 calendar.getTags()) {
@@ -263,7 +263,7 @@ public class DataSaver {
         }
     }
 
-    private void ECSaveHelper(String path, List<Event> events) {
+    private void ECSaveHelper(String path, List<Event> events) { //TODO: rename
         for (Event e : events) {
             try {
                 saveToFile(path + e.getId() + ".txt", e.getString());
@@ -273,7 +273,7 @@ public class DataSaver {
         }
     }
 
-    private List<Event> ECLoadHelper(String path) { // TODO: make use of ParseEventID()
+    private List<Event> ECLoadHelper(String path) { // TODO: make use of ParseEventID() and rename
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
         for (File f : data) {
