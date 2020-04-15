@@ -8,6 +8,9 @@ import javafx.scene.control.TextField;
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
 
+/**
+ * GUI Controller class for adding/editing manual alerts.
+ */
 public class ManualAlert extends GraphicalUserInterface {
 
     @FXML
@@ -17,11 +20,22 @@ public class ManualAlert extends GraphicalUserInterface {
     private AlertCollection ac;
     private Alert controller;
 
+    /**
+     * Give this controller the objects to act upon.
+     *
+     * @param c  The controller which called this
+     * @param ac The AlertCollection to act upon
+     */
     protected void initialize(Alert c, AlertCollection ac) {
         this.ac = ac;
         this.controller = c;
     }
 
+    /**
+     * Set the date in the DatePicker (for editing an alert)
+     *
+     * @param date The current time of the alert
+     */
     protected void setDate(GregorianCalendar date) {
         LocalDate localDate = LocalDate.of(date.get(GregorianCalendar.YEAR),
                 date.get(GregorianCalendar.MONTH) + 1,

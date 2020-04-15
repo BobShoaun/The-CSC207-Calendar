@@ -245,7 +245,6 @@ public class CalendarUI extends UserInterface {
     }
 
     private void addEvent() {
-        // TODO: fix event saving
         GregorianCalendar time = calendar.getTime();
         GregorianCalendar endTime = (GregorianCalendar) time.clone();
         endTime.roll(java.util.Calendar.DAY_OF_YEAR, 1);

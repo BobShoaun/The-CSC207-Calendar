@@ -143,6 +143,9 @@ public class Alert extends GraphicalUserInterface {
         update();
     }
 
+    /**
+     * Update the ListViews with the manual and repeating alerts.
+     */
     protected void update() {
         updateManAlerts();
         updateRepeatingAlerts();

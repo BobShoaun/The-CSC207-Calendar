@@ -114,7 +114,6 @@ public class UserManagerUI extends UserInterface {
     private void showCalendar() {
         CalendarUI calendarUI = new CalendarUI(userManager.getCurrentUser(),
                 userManager.getCurrentUser().getCalendar(0));
-        // TODO: support multiple calendars
         calendarUI.show();
     }
 

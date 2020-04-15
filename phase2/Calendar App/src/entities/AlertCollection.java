@@ -8,21 +8,22 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * A collection/group of one alert. Has a list of manually created alerts and possibly
- * a dates.CalendarGenerator for repeating Alerts.
+ * A collection/group of alerts for one Event.
+ * Has a list of manually created alerts and possibly
+ * a CalendarGenerator for repeating Alerts.
  *
- * @author colin
+ * @author Colin De Vlieghere
  */
 public class AlertCollection implements Observer {
+
     private List<Alert> manAlerts;
     private final String eventId;
-
     private GregorianCalendar eventTime;
-
     private CalendarGenerator calGen;
     private final DataSaver saver;
+
     /**
-     * Creates a new Alert group (possibly repeating)
+     * Creates a new Alert collection
      *
      * @param e The Event attached to the Alert.
      */
@@ -35,7 +36,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Create a new Alertcollection
+     * Create a new AlertCollection
      *
      * @param eventId The ID of the event
      * @param saver   The Datasaver representing the user filepath
@@ -46,10 +47,20 @@ public class AlertCollection implements Observer {
         manAlerts = new ArrayList<>();
     }
 
+    /**
+     * Set the time of the event this AC is associated with.
+     *
+     * @param eventTime The time of the Event
+     */
     public void setEventTime(GregorianCalendar eventTime) {
         this.eventTime = eventTime;
     }
 
+    /**
+     * Set the CalendarGenerator for generated Alerts.
+     *
+     * @param calGen CalendarGenerator to be set
+     */
     public void setCalGen(CalendarGenerator calGen) {
         this.calGen = calGen;
     }
@@ -123,11 +134,17 @@ public class AlertCollection implements Observer {
         return removeManualAlert(d) || removeGeneratedAlert(d);
     }
 
+    /**
+     * Clear all manually created alerts.
+     */
     public void removeAllManualAlerts() {
         manAlerts = new ArrayList<>();
         saver.saveAlertCollection(this);
     }
 
+    /**
+     * Clear all generated alerts.
+     */
     public void removeAllGeneratedAlerts() {
         calGen = null;
         saver.saveAlertCollection(this);
@@ -188,24 +205,6 @@ public class AlertCollection implements Observer {
         this.calGen.setStartTime(newStart);
         saver.saveAlertCollection(this);
     }
-
-//    /**
-//     * Replace the current dates.CalendarGenerator with a new one.
-//     *
-//     * @param cg The new dates.CalendarGenerator
-//     */
-//    public void setCalendarGenerator(dates.CalendarGenerator cg) {
-//        this.calGen = cg;
-//    }
-
-//    /**
-//     * Get the current dates.CalendarGenerator.
-//     *
-//     * @return The current dates.CalendarGenerator
-//     */
-//    public dates.CalendarGenerator getCalendarGenerator() {
-//        return calGen;
-//    }
 
     /**
      * Get all Alerts for the event between a set of times.
