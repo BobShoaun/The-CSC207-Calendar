@@ -167,6 +167,7 @@ public class Calendar extends GraphicalUserInterface {
         initialize();
         updateAlerts();
 
+        setTheme();
         lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
     }
 
@@ -283,7 +284,7 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Set the active theme
      */
-    public void setTheme() {
+    private void setTheme() {
         if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
             darkTheme.setSelected(true);

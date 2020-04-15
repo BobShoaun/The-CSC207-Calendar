@@ -84,7 +84,6 @@ public class Register extends GraphicalUserInterface implements Initializable {
     private void showCalendarUI() {
         Calendar calendarController = showGUI("calendar.fxml");
         calendarController.setUser(userManager.getCurrentUser());
-        calendarController.setTheme();
     }
 
     private void showLoginUI() {

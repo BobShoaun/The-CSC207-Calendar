@@ -44,7 +44,7 @@ public class Login extends GraphicalUserInterface {
             bottomMessage.setBackground(Background.EMPTY);
             System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
-            System.out.println("Logged in");
+            System.out.println("Logged in: " + usernameText);
             showCalendarUI();
         }
     }
@@ -55,10 +55,9 @@ public class Login extends GraphicalUserInterface {
         showRegisterUI();
     }
 
-    private void showCalendarUI() throws InvalidDateException {
+    private void showCalendarUI() {
         Calendar calendarController = showGUI("calendar.fxml");
         calendarController.setUser(userManager.getCurrentUser());
-        calendarController.setTheme();
     }
 
     private void showRegisterUI() {
