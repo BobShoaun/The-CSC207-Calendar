@@ -352,17 +352,19 @@ public class DataSaver {
 
         if (strings == null)
             return ac;
-        eventId = strings.get(0).trim();
 
-        String[] manTimes = strings.get(2).trim().split("\\n+");
+        eventId = strings.get(0).trim(); // technically redundant
+
+        String[] manTimes = strings.get(2).trim().split(" ");
         for (String timeStr : manTimes) {
             ac.getManAlerts().add(new Alert(eventId, timeStr));
         }
 
         StringBuilder cgStr = new StringBuilder();
         for (int i = 3; i < strings.size(); i++) {
-            cgStr.append(strings.get(i));
+            cgStr.append(strings.get(i)).append("\n");
         }
+        cgStr.deleteCharAt(cgStr.length() - 1);
         if (!cgStr.toString().equals(""))
             ac.setCalGen(new CalendarGenerator(cgStr.toString()));
 
