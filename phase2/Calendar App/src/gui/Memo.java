@@ -36,7 +36,7 @@ public class Memo extends GraphicalUserInterface implements Initializable {
         loadEvents();
     }
 
-    private void setCalendar(Calendar c) { this.calendar = c; }
+    protected void setCalendar(Calendar c) { this.calendar = c; }
 
     @FXML
     private void createMemo(Event e) {
@@ -71,7 +71,7 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     }
 
     private void showViewMemoUI(Event e) {
-        gui.viewMemos vm = showGUI("viewMemos.fxml");
+        gui.ViewMemos vm = showGUI("viewMemos.fxml");
     }
 
 

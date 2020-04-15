@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class viewTags extends gui.GraphicalUserInterface implements Initializable {
+public class ViewTags extends gui.GraphicalUserInterface implements Initializable {
 
     @FXML
     private ListView<String> tagList;
@@ -35,7 +35,7 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
         loadTag();
     }
 
-    private void setCalendar(Calendar c) { this.calendar = c; }
+    protected void setCalendar(Calendar c) { this.calendar = c; }
 
     private void loadTag() {
         list.remove(list);
@@ -71,13 +71,13 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
 
     @FXML
     private void showTagUI(Event e) {
-        Tag tag = showGUI("tag.fxml");
+        gui.Tag tag = showGUI("tag.fxml");
         tag.setCalendar(calendar);
     }
 
     @FXML
     private void showCalendarUI(Event e) {
-        Calendar calendar = showGUI("calendar.fxml");
+        gui.Calendar calendar = showGUI("calendar.fxml");
     }
 
 }

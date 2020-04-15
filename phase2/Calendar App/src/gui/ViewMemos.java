@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class viewMemos extends gui.GraphicalUserInterface implements Initializable {
+public class ViewMemos extends gui.GraphicalUserInterface implements Initializable {
 
     @FXML
     private ListView<String> memoList;
@@ -35,7 +35,7 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
         loadMemo();
     }
 
-    private void setCalendar(Calendar c) { this.calendar = c; }
+    protected void setCalendar(Calendar c) { this.calendar = c; }
 
     private void loadMemo() {
         list.remove(list);
@@ -71,14 +71,15 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
 
     @FXML
     private void showMemoUI(ActionEvent actionEvent) {
-        Memo memo = showGUI("memo.fxml");
+        gui.Memo memo = showGUI("memo.fxml");
         memo.setCalendar(calendar);
     }
 
     @FXML
     private void showCalendarUI(ActionEvent actionEvent) {
-        Calendar calendarController = showGUI("calendar.fxml");
-        calendarController.setUser(userManager.getCurrentUser());
-        calendarController.setTheme();
+        //TODO: Do we actually need this
+        //gui.Calendar calendarController = showGUI("calendar.fxml");
+        //calendarController.setUser(userManager.getCurrentUser());
+        //calendarController.setTheme();
     }
 }

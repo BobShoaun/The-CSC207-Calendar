@@ -286,7 +286,7 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Set the active theme
      */
-    private void setTheme() {
+    protected void setTheme() {
         if (user.getDarkTheme()) {
             com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("gui/DarkTheme.css");
             darkTheme.setSelected(true);

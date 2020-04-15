@@ -30,7 +30,7 @@ public class Tag extends gui.GraphicalUserInterface implements Initializable {
         loadEvents();
     }
 
-    private void setCalendar(Calendar c) { this.calendar = c; }
+    protected void setCalendar(Calendar c) { this.calendar = c; }
 
     private void loadEvents() {
         list.remove(list);
