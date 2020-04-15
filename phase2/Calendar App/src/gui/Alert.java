@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import user.DataSaver;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -20,7 +19,7 @@ import static entities.IDManager.parseEventId;
  */
 public class Alert extends GraphicalUserInterface {
 
-    private final AlertCollection ac;
+    private AlertCollection ac;
 
     @FXML private ListView<String> manAlertList;
     @FXML private ListView<String> repAlertList;
@@ -34,7 +33,7 @@ public class Alert extends GraphicalUserInterface {
      *
      * @param ac The AlertCollection
      */
-    public Alert(@NotNull AlertCollection ac) {
+    public void initialize(@NotNull AlertCollection ac) {
         this.ac = ac;
         title.setText("Alerts for " + ac.getEventId());
         updateRepeatingAlerts();
@@ -71,50 +70,52 @@ public class Alert extends GraphicalUserInterface {
     private void manAlertListClicked() {
         currManAlert = manAlertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currManAlert);
+        update();
     }
 
     @FXML
     private void repAlertListClicked() {
         currRepAlert = repAlertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currRepAlert);
+        update();
     }
 
     @FXML
     private void deleteManualAlert() {
         System.out.println("Clicked delete manual alert");
         if (currManAlert != null) {
-            DataSaver ds = new DataSaver("");
-            GregorianCalendar time = parseEventId(currManAlert);
-
+            GregorianCalendar time = parseEventId(currManAlert.replace(' ', '%'));
             ac.removeManualAlert(time);
-
             updateManAlerts();
         }
+        update();
     }
 
     @FXML
     private void deleteRepeatingAlert() {
         System.out.println("Clicked delete repeating alert");
         if (currRepAlert != null) {
-            DataSaver ds = new DataSaver("");
-            GregorianCalendar time = parseEventId(currRepAlert);
-
+            GregorianCalendar time = parseEventId(currRepAlert.replace(' ', '%'));
             ac.removeGeneratedAlert(time);
-
             updateRepeatingAlerts();
         }
+        update();
     }
 
     @FXML
     private void addManualAlert() {
         System.out.println("Clicked add manual alert");
-        openGUI("manualAlert.fxml");
+        ManualAlert controller = openGUI("manualAlert.fxml");
+        controller.initialize(ac);
+        update();
     }
 
     @FXML
     private void addRepeatingAlert() {
         System.out.println("Clicked add repeating alert");
-        openGUI("repeatingAlert.fxml");
+        RepeatingAlert controller = openGUI("repeatingAlert.fxml");
+        controller.initialize(ac);
+        update();
     }
 
     @FXML
@@ -123,7 +124,9 @@ public class Alert extends GraphicalUserInterface {
         if (currManAlert != null) {
             ManualAlert controller = openGUI("manualAlert.fxml");
             controller.setDate(parseEventId(currManAlert));
+            controller.initialize(ac);
         }
+        update();
     }
 
     @FXML
@@ -131,9 +134,16 @@ public class Alert extends GraphicalUserInterface {
         System.out.println("Clicked edit repeating alert");
         if (currRepAlert != null) {
             RepeatingAlert controller = openGUI("repeatingAlert.fxml");
+            controller.initialize(ac);
             controller.setDate(parseEventId(currRepAlert));
             controller.setPeriod(null); //TODO: fix
         }
+        update();
+    }
+
+    private void update() {
+        updateManAlerts();
+        updateRepeatingAlerts();
     }
 
 }

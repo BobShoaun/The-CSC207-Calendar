@@ -9,6 +9,7 @@ import mt.Tag;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -73,6 +74,7 @@ public class DataSaver {
             newFile.createNewFile();
             saveToFile(path, contents);
         }
+        System.out.println("Saved to " + basePath + path);
     }
 
     /**
@@ -82,6 +84,7 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile(String path, String contents) throws IOException {
+        System.out.println("Saved to " + basePath + path);
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
         } catch (FileNotFoundException e) {
@@ -339,13 +342,17 @@ public class DataSaver {
         List<String> strings = null;
         try {
             strings = loadStringsFromFile("/alerts/" + eventId + ".txt");
+        } catch (NoSuchFileException e) {
+            System.out.println("File does not exist for " + eventId);
+            ;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ac.setEventTime(IDManager.parseEventId(eventId));
 
-        if (strings == null) throw new AssertionError();
+        if (strings == null)
+            return ac;
         eventId = strings.get(0).trim();
 
         String[] manTimes = strings.get(1).trim().split("\\n+");

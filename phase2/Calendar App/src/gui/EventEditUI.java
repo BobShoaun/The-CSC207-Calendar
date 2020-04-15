@@ -4,6 +4,7 @@ import entities.Event;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import user.DataSaver;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -21,16 +22,21 @@ public class EventEditUI extends EventAddUI {
     @FXML protected Button shareEventButton;
     @FXML protected Button addAlertButton;
     @FXML protected Button deleteButton;
-    @FXML protected Button editButton;
+    @FXML
+    protected Button editButton;
 
     public Event getEvent() {
         return event;
     }
 
-    @FXML protected Button postponeButton;
-    @FXML protected Button duplicateButton;
+    @FXML
+    protected Button postponeButton;
+    @FXML
+    protected Button duplicateButton;
 
     private Event event;
+
+    private String username;
 
     public void setEvent(Event event) {
         this.event = event;
@@ -41,7 +47,11 @@ public class EventEditUI extends EventAddUI {
         setLabelInvisible();
     }
 
-    public void showEventDetails(){
+    protected void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void showEventDetails() {
         nameField.setText(event.getName());
         startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
         endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
@@ -49,7 +59,7 @@ public class EventEditUI extends EventAddUI {
         endTime.setText(getTime(event.getEndDate()));
         List<mt.Memo> memos = calendar.getMemos(event.getId());
         List<mt.Tag> tags = calendar.getTags(event.getId());
-        for (mt.Memo m:memos){
+        for (mt.Memo m : memos) {
             memosField.setText(m.getTitle());
             memoTextArea.setText(m.getText());
         }
@@ -85,9 +95,11 @@ public class EventEditUI extends EventAddUI {
     public void handleDelete(){
         System.out.println("Done delete clicked");
     }
-    public void handleAddAlert(){
+    public void handleAddAlert() {
         System.out.println("Done add clicked");
-        openGUI("alert.fxml");
+        Alert controller = openGUI("alert.fxml");
+        DataSaver ds = new DataSaver("users/" + username);
+        controller.initialize(ds.loadAlertCollection(event.getId()));
     }
     public void handleShareEvent(){
         System.out.println("Done share clicked");

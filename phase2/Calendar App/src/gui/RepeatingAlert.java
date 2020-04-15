@@ -1,5 +1,6 @@
 package gui;
 
+import entities.AlertCollection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ public class RepeatingAlert extends GraphicalUserInterface {
     private TextField durationAmount;
     @FXML
     private ChoiceBox<String> durationUnit;
+    private AlertCollection ac;
 
     public RepeatingAlert() {
         ObservableList<String> options = FXCollections.observableArrayList(
@@ -55,5 +57,9 @@ public class RepeatingAlert extends GraphicalUserInterface {
         }
         durationUnit.setValue(unit);
         durationAmount.setText("" + time);
+    }
+
+    public void initialize(AlertCollection ac) {
+        this.ac = ac;
     }
 }

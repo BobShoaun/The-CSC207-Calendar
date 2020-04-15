@@ -2,11 +2,9 @@ package gui;
 
 import entities.Alert;
 import entities.Event;
-import exceptions.InvalidDateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -330,6 +328,7 @@ public class Calendar extends GraphicalUserInterface {
             controller.setEvent(currEvent);
             controller.setCalendar(calendar);
             controller.showEventDetails();
+            controller.setUsername(user.getName());
         }
 
         //TODO: handle no event is selected

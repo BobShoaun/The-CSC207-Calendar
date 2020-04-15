@@ -39,14 +39,14 @@ public class Alert {
     /**
      * Get the alert's time.
      *
-     * @return The time of the alert.Alert.
+     * @return The time of the Alert.
      */
     public GregorianCalendar getTime() {
         return time;
     }
 
     /**
-     * Set the time of this alert.Alert.
+     * Set the time of this Alert.
      *
      * @param time The new time to be set
      */
@@ -57,7 +57,7 @@ public class Alert {
     /**
      * Get a string of data in of this alert.Alert.
      *
-     * @return The time in milliseconds for the alert.Alert
+     * @return The time in milliseconds for the Alert
      */
     protected String getString() {
         return "" + time.getTimeInMillis();
@@ -70,8 +70,9 @@ public class Alert {
      */
     @Override
     public String toString() {
-        return getEventId().replace('%', ' ');
-        //return "" + time.getTime().toString();
+        String s = getEventId();
+        String eventName = s.substring(29).replace('%', ' ');
+        return IDManager.generateEventId(eventName, time);
     }
 
     public String getEventId() {

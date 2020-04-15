@@ -1,7 +1,5 @@
 package entities;
 
-import exceptions.InvalidDateException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -19,16 +17,16 @@ public class IDManager {
         GregorianCalendar eventTime = new GregorianCalendar();
         StringBuilder time = new StringBuilder();
         try {
-            String[] times = eventId.split("%");
-            String[] times2 = new String[times.length - 1];
-            System.arraycopy(times, 1, times2, 0, times.length - 1);
-            for (String s : times2) {
+            String[] idSplit = eventId.split("%");
+            String[] times = new String[8];
+            System.arraycopy(idSplit, 0, times, 0, times.length);
+            for (String s : times) {
                 time.append(s).append(" ");
             }
         } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy", Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk mm ss z yyyy ", Locale.ENGLISH);
         try {
             eventTime.setTime(df.parse(time.toString()));
         } catch (ParseException e) {
