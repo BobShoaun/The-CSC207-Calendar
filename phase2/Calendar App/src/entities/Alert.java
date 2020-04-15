@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * An alert.Alert, representing a notification for an alert.Event.
+ * An Alert, representing a notification for an Event.
  *
- * @author colin
+ * @author Colin De Vlieghere
  */
 public class Alert {
 
-    private GregorianCalendar time;
-    private String eventId;
+    private final GregorianCalendar time;
+    private final String eventId;
 
     /**
      * Create an Alert
@@ -75,6 +75,11 @@ public class Alert {
         return IDManager.generateEventId(eventName, time);
     }
 
+    /**
+     * Get the event ID
+     *
+     * @return The ID of the event associated with this Alert.
+     */
     public String getEventId() {
         return eventId;
     }

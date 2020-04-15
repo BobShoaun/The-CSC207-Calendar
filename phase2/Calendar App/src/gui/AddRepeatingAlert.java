@@ -14,6 +14,9 @@ import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * GUI controller for adding repeating alerts
+ */
 public class AddRepeatingAlert extends GraphicalUserInterface {
 
     @FXML
@@ -27,32 +30,12 @@ public class AddRepeatingAlert extends GraphicalUserInterface {
     private AlertCollection ac;
     private Alert controller;
 
-//    protected void setDate(GregorianCalendar date) {
-//        LocalDate localDate = LocalDate.of(date.get(GregorianCalendar.YEAR), date.get(GregorianCalendar.MONTH),
-//                date.get(GregorianCalendar.DATE));
-//        datePicker.setValue(localDate);
-//        textField.setText("" + date.get(GregorianCalendar.HOUR) + date.get(GregorianCalendar.MINUTE));
-//    }
-//
-//    protected void setPeriod(Duration period) {
-//        double time = period.getSeconds();
-//        String unit;
-//        if (time >= 86400) {
-//            unit = "Days";
-//            time /= 86400;
-//        } else if (time >= 3600) {
-//            unit = "Hours";
-//            time /= 3600;
-//        } else if (time >= 60) {
-//            unit = "Minutes";
-//            time /= 60;
-//        } else {
-//            unit = "Seconds";
-//        }
-//        durationUnit.setValue(unit);
-//        durationAmount.setText("" + time);
-//    }
-
+    /**
+     * Initialize the controller to the correct config
+     *
+     * @param c  The controller for Alert which called this controller
+     * @param ac The AlertCollection to be managed
+     */
     public void initialize(Alert c, AlertCollection ac) {
         this.ac = ac;
         this.controller = c;
