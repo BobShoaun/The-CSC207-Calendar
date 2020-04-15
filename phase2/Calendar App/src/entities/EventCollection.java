@@ -107,7 +107,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @param event the event to br removed
      * @return if the event is removed or not
      */
-    public boolean removeEvent(Event event) {
+    public boolean removeEvent(Event event) throws InvalidDateException{
         String eventId = event.getId();
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
 
@@ -122,7 +122,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @param newEvent the replacement event
      * @return if the events was edited or not
      */
-    public boolean editEvent(Event oldEvent, Event newEvent) {
+    public boolean editEvent(Event oldEvent, Event newEvent) throws InvalidDateException {
         boolean removed = removeEvent(oldEvent);
         if (removed) {
             addEvent(newEvent);

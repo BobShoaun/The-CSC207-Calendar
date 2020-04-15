@@ -104,7 +104,7 @@ public class EventEditUI extends EventAddUI {
 //        }
 //        addTags(tags,event.getId());
 //    }
-    public void handleDelete() {
+    public void handleDelete() throws InvalidDateException {
         System.out.println("delete clicked");
         currEvents.removeEvent(event);
         closeGUI();
@@ -123,10 +123,13 @@ public class EventEditUI extends EventAddUI {
 
     public void handlePostpone() {
         System.out.println("postpone clicked");
+        //TODO: need an postpone UI window
+        //TODO: rechedual too
     }
 
     public void handleDuplicate() {
         System.out.println("Duplicate clicked");
+        //TODO: need
     }
 
     private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {
