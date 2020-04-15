@@ -343,7 +343,7 @@ public class DataSaver {
         try {
             strings = loadStringsFromFile("/alerts/" + eventId + ".txt");
         } catch (NoSuchFileException e) {
-            System.out.println("File does not exist for " + eventId);
+            System.out.println("Alert file does not exist for " + eventId);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -115,6 +115,7 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Update the displayed events from search
      */
+    @FXML
     protected void updateDisplayedEvents() {
         String searchCriterion = (String) searchByList.getValue();
         if (searchCriterion == null) {
