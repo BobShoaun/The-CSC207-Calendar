@@ -71,7 +71,6 @@ public class Calendar {
     }
 
     /**
-     *
      * @param name of the series to be searched
      * @return the Series with this name
      */
@@ -116,7 +115,6 @@ public class Calendar {
     public List<EventCollection> getEventCollections() {
         return eventCollections;
     }
-
 
 
     /**
@@ -274,8 +272,8 @@ public class Calendar {
      * @param name Title of the memo
      * @return Returns the memo with the corresponding title and content, if no memo is found returns null
      */
-    public Memo getMemo(String name,String content) {
-        return memos.stream().filter(m -> m.getTitle().equals(name)&&m.getText().equals(content)).findAny().orElse(null);
+    public Memo getMemo(String name, String content) {
+        return memos.stream().filter(m -> m.getTitle().equals(name) && m.getText().equals(content)).findAny().orElse(null);
     }
 
     public void addMemo(String memoTitle, String memoText) {
@@ -339,9 +337,11 @@ public class Calendar {
     public List<Tag> getTags() {
         return tags;
     }
+
     public Tag getTag(String tag) {
         return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
     }
+
     /**
      * Return all tags which are attributed with a certain event
      *
@@ -351,9 +351,24 @@ public class Calendar {
     public List<Tag> getTags(String eventId) {
         return tags.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
     }
+
     public void addTag(String text) {
         tags.add(new Tag(text));
         dataSaver.saveCalendar(this);
+    }
+
+    /**
+     * remove event from tags
+     *
+     * @param text the text of the tag
+     * @param id   the id of the event
+     */
+    public void removeTag(String text, String id) {
+        for (Tag t : tags) {
+            if (t.getText().equals(text)) {
+                t.removeEvent(id);
+            }
+        }
     }
 
     public void removeOldAlerts() {

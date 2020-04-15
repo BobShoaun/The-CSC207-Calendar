@@ -97,8 +97,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             setTime(start, end);
             entities.Event newEvent = new entities.Event(name, start, end);
             addEvent(newEvent);
-            addMemo(memoTitle, memoContent, id);
-            addTags(tags, id);
+            if(!memoTitle.equals("")){addMemo(memoTitle, memoContent, id);}
+            if(tags.length>1|| !tags[0].equals("")){addTags(tags, id);}
             closeGUI();
             System.out.println("Event created:" + newEvent);
         } catch (InvalidDateException ex) {
@@ -137,7 +137,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param memoContent the content of event memo
      * @param id          of the event
      */
-    private void addMemo(String memoTitle, String memoContent, String id) {
+    protected void addMemo(String memoTitle, String memoContent, String id) {
         Memo memo = calendar.getMemo(memoTitle, memoContent);
         if (memo == null) {
             calendar.addMemo(memoTitle, memoContent);
@@ -152,7 +152,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param tags collection of tags that event belongs to
      * @param id   of the event
      */
-    private void addTags(String[] tags, String id) {
+    protected void addTags(String[] tags, String id) {
         for (String text : tags) {
             Tag tag = calendar.getTag(text);
             if (tag == null) {
