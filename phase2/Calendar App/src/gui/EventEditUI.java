@@ -37,6 +37,11 @@ public class EventEditUI extends EventAddUI {
 
     private String username;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setLabelInvisible();
+    }
+
     public void setEvent(Event event) {
         this.event = event;
     }
@@ -45,10 +50,7 @@ public class EventEditUI extends EventAddUI {
         this.eventCollection = e;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setLabelInvisible();
-    }
+
 
     protected void setUsername(String username) {
         this.username = username;
@@ -63,6 +65,8 @@ public class EventEditUI extends EventAddUI {
             if (event.isPostponed()) {
                 eventCollection.rescheduleEvent(event,start,end);
             } else {
+                System.out.println(event==null);
+                System.out.println(editedEvent==null);
                 eventCollection.editEvent(event, editedEvent);
             }
 //            editMemo();
