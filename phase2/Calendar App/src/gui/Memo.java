@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Memo extends gui.GraphicalUserInterface implements Initializable {
+public class Memo extends GraphicalUserInterface implements Initializable {
 
     ObservableList list = FXCollections.observableArrayList();
 

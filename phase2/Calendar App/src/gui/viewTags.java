@@ -52,6 +52,7 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
         String tag = tagList.getSelectionModel().getSelectedItem();
         if (tag == null || tag.isEmpty()) {
             selectedTag = null;
+            selectTagLabel.setVisible(true);
         } else {
             selectedTag = tag;
         }
@@ -70,12 +71,13 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
 
     @FXML
     private void showTagUI(Event e) {
-        //gui.Tag tag = showGUI("tag.fxml");
+        Tag tag = showGUI("tag.fxml");
+        tag.setCalendar(calendar);
     }
 
     @FXML
     private void showCalendarUI(Event e) {
-        //Calendar calendar = showGUI("calendar.fxml");
+        Calendar calendar = showGUI("calendar.fxml");
     }
 
 }

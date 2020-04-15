@@ -62,8 +62,8 @@
                                     <items>
                                         <Button mnemonicParsing="false" onAction="#handleNewEvent" text="New" />
                                         <Button mnemonicParsing="false" onAction="#handleEditEvent" text="Edit" />
-                                        <Button mnemonicParsing="false" text="Memos" />
-                                        <Button mnemonicParsing="false" text="Tags" />
+                                        <Button mnemonicParsing="false" onAction="#showViewMemosUI" text="Memos"/>
+                                        <Button mnemonicParsing="false" onAction="#showViewTagsUI" text="Tags" />
                                         <Button mnemonicParsing="false" onAction="#handleSwitchCalendar" text="Calendars" />
                               <Button mnemonicParsing="false" onMouseClicked="#showTimeController" text="Time" />
                               <Label fx:id="eventErrorLabel" prefHeight="17.0" prefWidth="177.0" text="ErrorLabel" textAlignment="RIGHT" textFill="RED" visible="false" />

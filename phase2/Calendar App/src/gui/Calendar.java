@@ -342,7 +342,29 @@ public class Calendar extends GraphicalUserInterface {
     }
 
     /**
-     * Handl when the switch calendar button is clicked
+     * Show viewMemosUI
+     */
+    @FXML
+    private void showViewMemosUI() {
+        System.out.println("Memos clicked");
+
+        ViewMemos controller = showGUI("viewMemos.fxml");
+        controller.setCalendar(calendar);
+    }
+
+    /**
+     * Show viewTagsUI
+     */
+    @FXML
+    private void showViewTagsUI() {
+        System.out.println("Tags clicked");
+
+        ViewTags controller = showGUI("viewTags.fxml");
+        controller.setCalendar(calendar);
+    }
+
+    /**
+     * Handle when the switch calendar button is clicked
      */
     @FXML
     private void handleSwitchCalendar() {

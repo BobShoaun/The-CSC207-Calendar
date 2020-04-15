@@ -52,6 +52,7 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
         String memo = memoList.getSelectionModel().getSelectedItem();
         if (memo == null || memo.isEmpty()) {
             selectedMemo = null;
+            selectMemoLabel.setVisible(true);
         } else {
             selectedMemo = memo;
         }
@@ -70,12 +71,14 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
 
     @FXML
     private void showMemoUI(ActionEvent actionEvent) {
-        //gui.Memo memo = showGUI("memo.fxml");
-        //memo.setDarkTheme();
+        Memo memo = showGUI("memo.fxml");
+        memo.setCalendar(calendar);
     }
 
     @FXML
     private void showCalendarUI(ActionEvent actionEvent) {
-        //gui.GraphicalUserInterface calendar = showGUI("calendar.fxml");
+        Calendar calendarController = showGUI("calendar.fxml");
+        calendarController.setUser(userManager.getCurrentUser());
+        calendarController.setTheme();
     }
 }

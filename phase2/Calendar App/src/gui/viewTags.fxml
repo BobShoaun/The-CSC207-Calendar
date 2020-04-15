@@ -22,7 +22,6 @@
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2">
               <items>
-                  <Button mnemonicParsing="false" onAction="#showTagUI" text="New" />
                 <Button mnemonicParsing="false" onAction="#editTag" text="Edit" />
                   <Button mnemonicParsing="false" onAction="#showCalendarUI" text="Done" />
                   <Label fx:id="selectTagLabel" text="Please select a tag!" textFill="#ff4545">
