@@ -115,7 +115,7 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Update the displayed events from search
      */
-    void updateDisplayedEvents() {
+    protected void updateDisplayedEvents() {
         String searchCriterion = (String) searchByList.getValue();
         if (searchCriterion == null) {
             return;
@@ -312,6 +312,7 @@ public class Calendar extends GraphicalUserInterface {
         System.out.println("New clicked");
         EventAddUI controller = openGUI("EventAddUI.fxml");
         controller.setCalendar(calendar);
+        controller.setCalendarController(this);
     }
 
     /**
@@ -332,6 +333,7 @@ public class Calendar extends GraphicalUserInterface {
             controller.setCalendar(calendar);
             controller.showEventDetails();
             controller.setUsername(user.getName());
+            controller.setCalendarController(this);
         }
 
         //TODO: handle no event is selected

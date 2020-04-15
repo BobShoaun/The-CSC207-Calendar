@@ -56,11 +56,15 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected String[] tags;
     protected GregorianCalendar start;
     protected GregorianCalendar end;
+    protected gui.Calendar calendarController;
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
 
+    protected void setCalendarController(gui.Calendar c) {
+        this.calendarController = c;
+    }
 
     /**
      * Saves the event to Calendar according to user input
@@ -75,6 +79,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             if (newEvent != null) {
                 addEvent(newEvent);
                 closeGUI();
+                calendarController.updateDisplayedEvents();
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
