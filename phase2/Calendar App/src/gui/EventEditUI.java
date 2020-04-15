@@ -31,8 +31,8 @@ public class EventEditUI extends EventAddUI {
     protected Button duplicateButton;
 
     private Event event;
-    private String oldMemoTitle;
-    private String[] oldTags;
+//    private String oldMemoTitle;
+//    private String[] oldTags;
 
     private String username;
 
@@ -61,13 +61,13 @@ public class EventEditUI extends EventAddUI {
             memosField.setText(m.getTitle());
             memoTextArea.setText(m.getText());
         }
-        oldMemoTitle = memosField.getText();
+//        oldMemoTitle = memosField.getText();
         List<String> tagsText = new ArrayList<>();
         for (mt.Tag t : tags) {
             tagsText.add(t.getText());
         }
         tagsField.setText(String.join(",", tagsText));
-        oldTags = tagsField.getText().split(",");
+//        oldTags = tagsField.getText().split(",");
     }
 
 
@@ -75,16 +75,11 @@ public class EventEditUI extends EventAddUI {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            event.setName(name);
-            event.setStartDate(start);
-            event.setEndDate(end);
-            editMemo();
-            editTags();
-//            List<mt.Tag> tags = calendar.getTags(event.getId());
-//            List<String> tagsText = new ArrayList<>();
-//            for (mt.Tag t : tags) {
-//                tagsText.add(t.getText());
-//            }
+            Event editedEvent = createEvent(name, start, end);
+            currEvents.editEvent(event,editedEvent);
+
+//            editMemo();
+//            editTags();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
@@ -92,43 +87,46 @@ public class EventEditUI extends EventAddUI {
 
     }
 
-    private void editMemo(){
-        if (oldMemoTitle.equals("") && !memoTitle.equals("") ){
-            addMemo(memoTitle, memoContent, event.getId());
-        }else if (!oldMemoTitle.equals("") && memoTitle.equals("")){
-            calendar.getMemo(oldMemoTitle).removeEvent(event.getId());
-        }else if(!oldMemoTitle.equals(memoTitle)){
-            calendar.editMemoText(oldMemoTitle,memoContent);
-            calendar.editMemoTitle(oldMemoTitle,memoTitle);
-        }
-    }
+//    private void editMemo(){
+//        if (oldMemoTitle.equals("") && !memoTitle.equals("") ){
+//            addMemo(memoTitle, memoContent, event.getId());
+//        }else if (!oldMemoTitle.equals("") && memoTitle.equals("")){
+//            calendar.getMemo(oldMemoTitle).removeEvent(event.getId());
+//        }else if(!oldMemoTitle.equals(memoTitle)){
+//            calendar.editMemoText(oldMemoTitle,memoContent);
+//            calendar.editMemoTitle(oldMemoTitle,memoTitle);
+//        }
+//    }
 
-    private void editTags(){
-        for(String t:oldTags){
-            calendar.removeTag(t,event.getId());
-        }
-        addTags(tags,event.getId());
-    }
+//    private void editTags(){
+//        for(String t:oldTags){
+//            calendar.removeTag(t,event.getId());
+//        }
+//        addTags(tags,event.getId());
+//    }
     public void handleDelete() {
-        System.out.println("Done delete clicked");
+        System.out.println("delete clicked");
+        currEvents.removeEvent(event);
+        closeGUI();
     }
 
     public void handleAddAlert() {
-        System.out.println("Done add clicked");
+        System.out.println("add clicked");
         Alert controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username);
         controller.initialize(ds.loadAlertCollection(event.getId()));
     }
 
     public void handleShareEvent() {
-        System.out.println("Done share clicked");
+        System.out.println("share clicked");
     }
 
     public void handlePostpone() {
-        System.out.println("Done postpone clicked");
+        System.out.println("postpone clicked");
     }
 
     public void handleDuplicate() {
+        System.out.println("Duplicate clicked");
     }
 
     private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {
