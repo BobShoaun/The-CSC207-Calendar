@@ -332,7 +332,7 @@ public class DataSaver {
 
 
     /**
-     * Load the data into this AlertCollection.
+     * Load an AlertCollection from a file.
      *
      * @param eventId The ID of the event for which the Alerts are being loaded
      */
@@ -344,7 +344,6 @@ public class DataSaver {
             strings = loadStringsFromFile("/alerts/" + eventId + ".txt");
         } catch (NoSuchFileException e) {
             System.out.println("File does not exist for " + eventId);
-            ;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -355,7 +354,7 @@ public class DataSaver {
             return ac;
         eventId = strings.get(0).trim();
 
-        String[] manTimes = strings.get(1).trim().split("\\n+");
+        String[] manTimes = strings.get(2).trim().split("\\n+");
         for (String timeStr : manTimes) {
             ac.getManAlerts().add(new Alert(eventId, timeStr));
         }
