@@ -126,12 +126,12 @@ public class Calendar extends GraphicalUserInterface {
                 if (startDate.getValue().isBefore(endDate.getValue())) {
                     GregorianCalendar start = calendar.getTime();
                     start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
-                    start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue());
-                    start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth());
+                    start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue() - 1);
+                    start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth() - 1);
                     GregorianCalendar end = calendar.getTime();
                     end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
-                    end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue());
-                    end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth());
+                    end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
+                    end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
                     List<entities.Event> events = calendar.getEvents(start, end);
                     eventList.addAll(events);
                 }

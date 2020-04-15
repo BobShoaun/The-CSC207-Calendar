@@ -114,10 +114,10 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Remove a single alert.Alert.
+     * Remove a single Alert.
      *
-     * @param d The date of the alert.Alert to be removed
-     * @return Whether or not the alert.Alert could be removed.
+     * @param d The date of the Alert to be removed
+     * @return Whether or not the Alert could be removed.
      */
     public boolean removeAlert(GregorianCalendar d) {
         return removeManualAlert(d) || removeGeneratedAlert(d);
@@ -135,7 +135,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Remove an automatically generated alert.Alert.
+     * Remove an automatically generated Alert.
      *
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
@@ -150,7 +150,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Remove a manually created alert.Alert.
+     * Remove a manually created Alert.
      *
      * @param d The time of the alert being removed.
      * @return Whether the alert could be removed
@@ -162,9 +162,9 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Shift the time of all Alerts in this alert.AlertCollection.
+     * Shift the time of all Alerts in this AlertCollection.
      *
-     * @param newEventTime The new time of the alert.Event
+     * @param newEventTime The new time of the Event
      */
     private void shiftAlerts(GregorianCalendar newEventTime) {
         if (calGen == null) {
@@ -270,7 +270,7 @@ public class AlertCollection implements Observer {
     }
 
     /**
-     * Get a String representation of data in this alert.AlertCollection.
+     * Get a String representation of data in this AlertCollection.
      *
      * @return String representation of all the data in this AC, including the dates.CalendarGenerator.
      */

@@ -15,9 +15,11 @@ public class ManualAlert extends GraphicalUserInterface {
     @FXML
     private TextField textField;
     private AlertCollection ac;
+    private Alert controller;
 
-    protected void initialize(AlertCollection ac) {
+    protected void initialize(Alert c, AlertCollection ac) {
         this.ac = ac;
+        this.controller = c;
     }
 
     protected void setDate(GregorianCalendar date) {
@@ -55,6 +57,7 @@ public class ManualAlert extends GraphicalUserInterface {
             ac.addAlert(time);
             System.out.println("Added alert " + time.getTime());
             closeGUI();
+            controller.update();
         }
     }
 

@@ -5,21 +5,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="250.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RepeatingAlert">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AddRepeatingAlert">
     <children>
         <ButtonBar layoutY="254.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <buttons>
                 <Label text="(until event)"/>
-                <Button mnemonicParsing="false" text="Done"/>
+                <Button mnemonicParsing="false" onAction="#doneButton" text="Done"/>
             </buttons>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
         </ButtonBar>
-        <TextField layoutX="10.0" layoutY="65.0" promptText="Start time (24hr format)" AnchorPane.leftAnchor="10.0"
-                   AnchorPane.rightAnchor="10.0"/>
-        <DatePicker layoutX="6.0" layoutY="20.0" promptText="Start date" AnchorPane.leftAnchor="10.0"
+        <TextField fx:id="textField" layoutX="10.0" layoutY="65.0" promptText="Start time (24hr format)"
+                   AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+        <DatePicker fx:id="datePicker" layoutX="6.0" layoutY="20.0" promptText="Start date" AnchorPane.leftAnchor="10.0"
                     AnchorPane.rightAnchor="10.0"/>
         <Label layoutX="82.0" layoutY="108.0" text="Alert occurs every:" textAlignment="CENTER"
                AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
@@ -27,9 +27,9 @@
                 <Font name="Source Code Pro" size="14.0"/>
             </font>
         </Label>
-        <TextField layoutX="15.0" layoutY="137.0" promptText="Enter a number" AnchorPane.leftAnchor="10.0"
-                   AnchorPane.rightAnchor="10.0"/>
-        <ChoiceBox layoutX="14.0" layoutY="176.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0"
+        <TextField fx:id="durationAmount" layoutX="15.0" layoutY="137.0" promptText="Enter a number"
+                   AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+        <ChoiceBox fx:id="durationUnit" layoutX="14.0" layoutY="176.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0"
                    AnchorPane.rightAnchor="10.0"/>
     </children>
 </AnchorPane>

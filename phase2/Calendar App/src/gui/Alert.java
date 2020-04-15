@@ -106,15 +106,15 @@ public class Alert extends GraphicalUserInterface {
     private void addManualAlert() {
         System.out.println("Clicked add manual alert");
         ManualAlert controller = openGUI("manualAlert.fxml");
-        controller.initialize(ac);
+        controller.initialize(this, ac);
         update();
     }
 
     @FXML
     private void addRepeatingAlert() {
         System.out.println("Clicked add repeating alert");
-        RepeatingAlert controller = openGUI("repeatingAlert.fxml");
-        controller.initialize(ac);
+        AddRepeatingAlert controller = openGUI("addRepeatingAlert.fxml");
+        controller.initialize(this, ac);
         update();
     }
 
@@ -124,7 +124,7 @@ public class Alert extends GraphicalUserInterface {
         if (currManAlert != null) {
             ManualAlert controller = openGUI("manualAlert.fxml");
             controller.setDate(parseEventId(currManAlert));
-            controller.initialize(ac);
+            controller.initialize(this, ac);
         }
         update();
     }
@@ -133,15 +133,14 @@ public class Alert extends GraphicalUserInterface {
     private void editRepeatingAlert() {
         System.out.println("Clicked edit repeating alert");
         if (currRepAlert != null) {
-            RepeatingAlert controller = openGUI("repeatingAlert.fxml");
-            controller.initialize(ac);
+            ManualAlert controller = openGUI("manualAlert.fxml");
+            controller.initialize(this, ac);
             controller.setDate(parseEventId(currRepAlert));
-            controller.setPeriod(null); //TODO: fix
         }
         update();
     }
 
-    private void update() {
+    protected void update() {
         updateManAlerts();
         updateRepeatingAlerts();
     }
