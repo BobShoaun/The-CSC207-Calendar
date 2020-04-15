@@ -31,8 +31,8 @@ public class ViewMemos extends gui.GraphicalUserInterface implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        selectMemoLabel.setVisible(false);
-        loadMemo();
+//        selectMemoLabel.setVisible(false);
+//        loadMemo();
     }
 
     protected void setCalendar(Calendar c) { this.calendar = c; }

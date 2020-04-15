@@ -31,8 +31,8 @@ public class ViewTags extends gui.GraphicalUserInterface implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        selectTagLabel.setVisible(false);
-        loadTag();
+//        selectTagLabel.setVisible(false);
+//        loadTag();
     }
 
     protected void setCalendar(Calendar c) { this.calendar = c; }
