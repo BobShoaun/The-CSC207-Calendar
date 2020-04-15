@@ -319,7 +319,6 @@ public class Calendar extends GraphicalUserInterface {
     /**
      * Handle when the edit button is clicked
      */
-    //TODO: Is this still needed with how event list works?
     @FXML
     private void handleEditEvent() {
         System.out.println("Edit Clicked");
@@ -331,15 +330,13 @@ public class Calendar extends GraphicalUserInterface {
             eventErrorLabel.setVisible(false);
             EventEditUI controller = openGUI("EventEditUI.fxml");
             controller.setEvent(currEvent);
+            //This is specific to this button in manual event list
             controller.setEventCollection(calendar.getSingleEventCollection());
             controller.setCalendar(calendar);
             controller.showEventDetails(currEvent);
             controller.setUsername(user.getName());
             controller.setCalendarController(this);
         }
-
-        //TODO: handle no event is selected
-
     }
 
     /**

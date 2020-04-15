@@ -65,12 +65,11 @@ public class EventEditUI extends EventAddUI {
             if (event.isPostponed()) {
                 eventCollection.rescheduleEvent(event,start,end);
             } else {
-                System.out.println(event==null);
-                System.out.println(editedEvent==null);
                 eventCollection.editEvent(event, editedEvent);
             }
 //            editMemo();
 //            editTags();
+            closeGUI();
             save();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
