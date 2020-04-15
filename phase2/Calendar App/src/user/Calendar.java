@@ -342,6 +342,15 @@ public class Calendar {
     public Tag getTag(String tag) {
         return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
     }
+    /**
+     * Return all tags which are attributed with a certain event
+     *
+     * @param eventId The event which tag must be linked to
+     * @return Unsorted list of tags
+     */
+    public List<Tag> getTags(String eventId) {
+        return tags.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
+    }
     public void addTag(String text) {
         tags.add(new Tag(text));
         dataSaver.saveCalendar(this);

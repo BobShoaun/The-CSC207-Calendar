@@ -216,16 +216,16 @@
             <Label fx:id="dateTimeErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Date Time Error Label" textFill="#ff4545" GridPane.rowIndex="4" />
             <ButtonBar prefHeight="120.0" prefWidth="355.0" GridPane.rowIndex="8">
                <buttons>
-                  <Button fx:id="addAlertButton" mnemonicParsing="false" onAction="#handleDone" text="Add Alert" />
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDone" text="Delete" />
-                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
+                  <Button fx:id="addAlertButton" mnemonicParsing="false" onAction="#handleAddAlert" text="Add Alert" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Done" />
                </buttons>
             </ButtonBar>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="9">
               <buttons>
-                <Button fx:id="postponeButton" mnemonicParsing="false" text="Postpone" />
-                  <Button fx:id="duplicateButton" mnemonicParsing="false" text="Duplicate" />
-                  <Button fx:id="shareEventButton" mnemonicParsing="false" onAction="#handleDone" text="Share" />
+                <Button fx:id="postponeButton" mnemonicParsing="false" onAction="#handlePostpone" text="Postpone" />
+                  <Button fx:id="duplicateButton" mnemonicParsing="false" onAction="#handleDuplicate" text="Duplicate" />
+                  <Button fx:id="shareEventButton" mnemonicParsing="false" onAction="#handleShareEvent" text="Share" />
               </buttons>
             </ButtonBar>
          </children>

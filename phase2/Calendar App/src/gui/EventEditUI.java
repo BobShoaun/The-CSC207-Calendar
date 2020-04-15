@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EventEditUI extends EventAddUI {
@@ -49,17 +50,25 @@ public class EventEditUI extends EventAddUI {
         endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
         startTime.setText(getTime(event.getStartDate()));
         endTime.setText(getTime(event.getEndDate()));
+        List<mt.Memo> memos = calendar.getMemos(event.getId());
+        List<mt.Tag> tags = calendar.getTags(event.getId());
+        for (mt.Memo m:memos){
+            memosField.setText(m.getTitle());
+            memoTextArea.setText(m.getText());
+        }
+        StringBuilder tag = new StringBuilder();
+        for (mt.Tag t: tags){
+            tag.append(t.getText());
+        }
+        tagsField.setText(tag.toString());
     }
     private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC){
         Date date = GC.getTime();
         return  LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
-
     }
 
     private String getTime(GregorianCalendar GC){
-//        Date date = GC.getTime();
-//        return  date.getHours()+":"+date.getMinutes();
-        String pattern = " HH:mm";
+        String pattern = "HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(GC.getTime());
     }
@@ -67,7 +76,7 @@ public class EventEditUI extends EventAddUI {
     public void handleEdit(){
         System.out.println("Done (edit) clicked");
         try {
-//            getUserInput();
+            getUserInput();
             event.setName(name);
             event.setStartDate(start);
             event.setEndDate(end);
@@ -81,6 +90,7 @@ public class EventEditUI extends EventAddUI {
     }
     public void handleAddAlert(){
         System.out.println("Done add clicked");
+        openGUI("alert.fxml");
     }
     public void handleShareEvent(){
         System.out.println("Done share clicked");

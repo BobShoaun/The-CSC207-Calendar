@@ -337,6 +337,7 @@ public class Calendar extends GraphicalUserInterface {
             eventErrorLabel.setVisible(false);
             EventEditUI controller = openGUI("EventEditUI.fxml");
             controller.setEvent(currEvent);
+            controller.setCalendar(calendar);
             controller.showEventDetails();
         }
 
