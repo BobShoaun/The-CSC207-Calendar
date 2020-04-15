@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ViewTags extends gui.GraphicalUserInterface implements Initializable {
+public class viewTags extends gui.GraphicalUserInterface implements Initializable {
 
     @FXML
     private ListView<String> tagList;

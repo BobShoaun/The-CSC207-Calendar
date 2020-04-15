@@ -71,7 +71,7 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     }
 
     private void showViewMemoUI(Event e) {
-        gui.ViewMemos vm = showGUI("viewMemos.fxml");
+        viewMemos vm = showGUI("viewMemos.fxml");
     }
 
 

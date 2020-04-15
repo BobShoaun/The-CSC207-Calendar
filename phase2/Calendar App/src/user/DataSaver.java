@@ -84,9 +84,9 @@ public class DataSaver {
      * @param contents Data to save
      */
     public void saveToFile(String path, String contents) throws IOException {
-        System.out.println("Saved single string to " + basePath + path);
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
+            System.out.println("Saved single string to " + basePath + path);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
             File newFile = new File(basePath + path);
@@ -212,6 +212,11 @@ public class DataSaver {
 
     public void saveCalendar(Calendar calendar) {
         //save EventCollection
+        try {
+            deleteDirectory("events/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ECSaveHelper("events/", calendar.getSingleEventCollection().getEvents());
         ECSaveHelper("events/postponed/", calendar.getSingleEventCollection().getPostponedEvents());
 

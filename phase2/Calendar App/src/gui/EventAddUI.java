@@ -83,6 +83,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
                 closeGUI();
                 calendarController.updateDisplayedEvents();
                 save();
+                System.out.println(eventCollection.getEvents().size());
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");

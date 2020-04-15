@@ -6,7 +6,7 @@ import mt.Tag;
 
 import java.util.*;
 
-public class EventCollection implements Iterable<Event> {
+public class EventCollection implements Iterable<Event>, Observer{
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
@@ -98,7 +98,7 @@ public class EventCollection implements Iterable<Event> {
     public void addEvent(Event event) {
         this.events.add(event);
         Collections.sort(events);
-//        event.addObserver(this);
+        event.addObserver(this);
     }
 
     /**
@@ -110,9 +110,9 @@ public class EventCollection implements Iterable<Event> {
     public boolean removeEvent(Event event) throws InvalidDateException{
         String eventId = event.getId();
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
-//        if (removed) {
-//            event.addObserver(this);
-//        }
+        if (removed) {
+            event.addObserver(this);
+        }
         return removed;
     }
 
@@ -125,7 +125,7 @@ public class EventCollection implements Iterable<Event> {
         boolean removed = removeEvent(oldEvent);
         if (removed) {
             addEvent(newEvent);
-//            newEvent.addObserver(this);
+            newEvent.addObserver(this);
         }
         return removed;
     }
@@ -140,7 +140,7 @@ public class EventCollection implements Iterable<Event> {
     public boolean postponedEvent(Event event) throws InvalidDateException {
         if (removeEvent(event)) {
             addPostponedEvent(event);
-//            event.addObserver(this);
+            event.addObserver(this);
             return true;
         }
         return false;
@@ -152,7 +152,7 @@ public class EventCollection implements Iterable<Event> {
                 postponedEvents.remove(e);
                 Event newEvent = new Event(e.getName(), newStart, newEnd);
                 addEvent(newEvent);
-//                newEvent.addObserver(this);
+                newEvent.addObserver(this);
                 return;
             }
         }
@@ -224,46 +224,6 @@ public class EventCollection implements Iterable<Event> {
         return result.toString();
     }
 
-//    /**
-//     * Save this EventCollection's data into text files.
-//     */
-//    public void save() throws IOException {
-//        saveHelper("events/", this.events);
-//        saveHelper("events/postponed/", this.postponedEvents);
-//    }
-
-//    protected void saveHelper(String path, List<Event> events) throws IOException {
-//        for (Event e : events) {
-//            saver.saveToFile(path + e.getId() + ".txt", e.getString());
-//        }
-//    }
-
-//    /**
-//     * loads events from text file
-//     * problems with file path and date conversion.
-//     */
-//    public void load() throws IOException, InvalidDateException {
-//        events = loadHelper("events/");
-//        postponedEvents = loadHelper("events/postponed/");
-//    }
-
-//    protected List<Event> loadHelper(String path) throws IOException, InvalidDateException {
-//        List<Event> loadedEvents = new ArrayList<>();
-//        File[] data = saver.getFilesInDirectory(path);
-//        for (File f : data) {
-//            String id = f.getName();
-//            id = id.replaceAll(".txt", "");
-//            String[] eventData = saver.loadStringFromFile(path + id + ".txt").split("\\n");
-//            String name = eventData[1];
-//            GregorianCalendar start = new GregorianCalendar();
-//            GregorianCalendar end = new GregorianCalendar();
-//            start.setTimeInMillis(Long.parseLong(eventData[2]));
-//            end.setTimeInMillis(Long.parseLong(eventData[3]));
-//            loadedEvents.add(new Event(id, name, start, end));
-//        }
-//        return loadedEvents;
-//    }
-
     /**
      * @param event     the event to br checked
      * @param startTime start time
@@ -318,10 +278,10 @@ public class EventCollection implements Iterable<Event> {
         event.setPostponed(true);
     }
 
-//    @Override
-//    public void update(Observable o, Object arg) {
-//        //TODO: implement update
-//    }
+    @Override
+    public void update(Observable o, Object arg) {
+        //TODO: implement update
+    }
 
     /**
      * @param start the earliest start date of events in this iterator
@@ -376,7 +336,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
 
-    //TODO: re-evaluate this method with new UI
+    //Legacy method for console UI
     public String[] getEventOptions() {
         String[] eventList = new String[events.size() + 1];
         eventList[0] = "Exit";

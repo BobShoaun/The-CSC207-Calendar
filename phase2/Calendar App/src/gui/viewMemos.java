@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ViewMemos extends gui.GraphicalUserInterface implements Initializable {
+public class viewMemos extends gui.GraphicalUserInterface implements Initializable {
 
     @FXML
     private ListView<String> memoList;
