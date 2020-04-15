@@ -113,7 +113,7 @@ public class EventEditUI extends EventAddUI {
     public void handleAddAlert() {
         System.out.println("add clicked");
         Alert controller = openGUI("alert.fxml");
-        DataSaver ds = new DataSaver("users/" + username);
+        DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
         controller.initialize(ds.loadAlertCollection(event.getId()));
     }
 
