@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  */
 public class Calendar {
 
+    public static final int MARCH = ;
     List<EventCollection> eventCollections;
     List<AlertCollection> alertCollections;
     List<Memo> memos;
