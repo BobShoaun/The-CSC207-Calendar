@@ -82,12 +82,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
                 addEvent(newEvent);
                 closeGUI();
                 calendarController.updateDisplayedEvents();
+                save();
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         }
     }
+
 
     protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
@@ -268,5 +270,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected void setLabelInvisible() {
         seriesErrorLabel.setVisible(false);
         dateTimeErrorLabel.setVisible(false);
+    }
+
+    protected void save(){
+        calendar.getDataSaver().saveCalendar(calendar);
     }
 }

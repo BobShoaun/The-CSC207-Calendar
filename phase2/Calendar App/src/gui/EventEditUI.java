@@ -67,6 +67,7 @@ public class EventEditUI extends EventAddUI {
             }
 //            editMemo();
 //            editTags();
+            save();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
@@ -95,6 +96,7 @@ public class EventEditUI extends EventAddUI {
         System.out.println("delete clicked");
         try {
             eventCollection.removeEvent(event);
+            save();
             closeGUI();
         } catch (InvalidDateException e) {
             e.printStackTrace();
@@ -112,12 +114,15 @@ public class EventEditUI extends EventAddUI {
     public void handleShareEvent() throws InvalidDateException {
         System.out.println("share clicked");
         eventCollection.postponedEvent(event);
+
+        save();
     }
 
     public void handlePostpone() {
         System.out.println("postpone clicked");
         try {
             eventCollection.postponedEvent(event);
+            save();
         } catch (InvalidDateException e) {
             System.out.println("Something is wrong with event generator");
         }

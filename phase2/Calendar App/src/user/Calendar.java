@@ -206,6 +206,7 @@ public class Calendar {
      */
     public void addEventSeries(String eventSeriesName) throws InvalidDateException {
         eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null)));
+        dataSaver.saveCalendar(this);
     }
 
 
@@ -230,6 +231,7 @@ public class Calendar {
         SeriesFactory seriesFactory = new SeriesFactory();
         Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
         eventCollections.add(eventCollection);
+        dataSaver.saveCalendar(this);
     }
 
 
@@ -372,6 +374,7 @@ public class Calendar {
                 alertCollections) {
             aC.removeOldAlerts();
         }
+        dataSaver.saveCalendar(this);
     }
 
     /**

@@ -6,7 +6,7 @@ import mt.Tag;
 
 import java.util.*;
 
-public class EventCollection implements Iterable<Event>, Observer {
+public class EventCollection implements Iterable<Event> {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
@@ -98,7 +98,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     public void addEvent(Event event) {
         this.events.add(event);
         Collections.sort(events);
-        event.addObserver(this);
+//        event.addObserver(this);
     }
 
     /**
@@ -110,9 +110,9 @@ public class EventCollection implements Iterable<Event>, Observer {
     public boolean removeEvent(Event event) throws InvalidDateException{
         String eventId = event.getId();
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
-        if (removed) {
-            event.addObserver(this);
-        }
+//        if (removed) {
+//            event.addObserver(this);
+//        }
         return removed;
     }
 
@@ -125,7 +125,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         boolean removed = removeEvent(oldEvent);
         if (removed) {
             addEvent(newEvent);
-            newEvent.addObserver(this);
+//            newEvent.addObserver(this);
         }
         return removed;
     }
@@ -140,7 +140,7 @@ public class EventCollection implements Iterable<Event>, Observer {
     public boolean postponedEvent(Event event) throws InvalidDateException {
         if (removeEvent(event)) {
             addPostponedEvent(event);
-            event.addObserver(this);
+//            event.addObserver(this);
             return true;
         }
         return false;
@@ -152,7 +152,7 @@ public class EventCollection implements Iterable<Event>, Observer {
                 postponedEvents.remove(e);
                 Event newEvent = new Event(e.getName(), newStart, newEnd);
                 addEvent(newEvent);
-                newEvent.addObserver(this);
+//                newEvent.addObserver(this);
                 return;
             }
         }
@@ -318,10 +318,10 @@ public class EventCollection implements Iterable<Event>, Observer {
         event.setPostponed(true);
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        //TODO: implement update
-    }
+//    @Override
+//    public void update(Observable o, Object arg) {
+//        //TODO: implement update
+//    }
 
     /**
      * @param start the earliest start date of events in this iterator
