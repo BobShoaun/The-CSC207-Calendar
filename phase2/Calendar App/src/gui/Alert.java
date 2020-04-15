@@ -25,7 +25,7 @@ public class Alert extends GraphicalUserInterface {
     @FXML private ListView<String> manAlertList;
     @FXML private ListView<String> repAlertList;
     @FXML private Label title;
-    
+
     private String currManAlert;
     private String currRepAlert;
 

@@ -18,24 +18,18 @@ import java.util.ResourceBundle;
  */
 public class EventEditUI extends EventAddUI {
 
-
-    @FXML
-    protected Button shareEventButton;
-    @FXML
-    protected Button addAlertButton;
-    @FXML
-    protected Button deleteButton;
-    @FXML
-    protected Button editButton;
+    @FXML protected Button shareEventButton;
+    @FXML protected Button addAlertButton;
+    @FXML protected Button deleteButton;
+    @FXML protected Button editButton;
 
     public Event getEvent() {
         return event;
     }
 
-    @FXML
-    protected Button postponeButton;
-    @FXML
-    protected Button duplicateButton;
+    @FXML protected Button postponeButton;
+    @FXML protected Button duplicateButton;
+
     private Event event;
 
     public void setEvent(Event event) {

@@ -9,15 +9,22 @@ import user.User;
 
 import javax.naming.InvalidNameException;
 
+/**
+ * GUI controller for calendar switcher gui
+ *
+ * @author Ng Bob Shoaun
+ */
 public class CalendarSwitcher extends GraphicalUserInterface {
 
     private User user;
 
-    @FXML
-    private ListView<String> calendarListView;
-    @FXML
-    private TextField calendarNameField;
+    @FXML private ListView<String> calendarListView;
+    @FXML private TextField calendarNameField;
 
+    /**
+     * Set the current user using the gui
+     * @param user
+     */
     public void setUser(User user) {
         this.user = user;
         updateCalendarList();
@@ -30,7 +37,7 @@ public class CalendarSwitcher extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleOK () throws InvalidDateException {
+    private void handleOK () {
         int index = calendarListView.getSelectionModel().getSelectedIndex();
         gui.Calendar cal = showGUI("calendar.fxml");
         cal.setUser(user);
@@ -39,7 +46,7 @@ public class CalendarSwitcher extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleCancel () throws InvalidDateException {
+    private void handleCancel () {
         gui.Calendar cal = showGUI("calendar.fxml");
         cal.setUser(user);
     }

@@ -74,7 +74,7 @@ public class GraphicalUserInterface {
     }
 
     /**
-     * opens a new stage(window)
+     * opens a scene in a new stage(window)
      * @param fxml
      * @param <T>
      * @return

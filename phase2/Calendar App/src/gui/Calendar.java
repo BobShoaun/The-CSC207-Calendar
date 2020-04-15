@@ -48,8 +48,7 @@ public class Calendar extends GraphicalUserInterface {
     @FXML private Label lastLoginLabel;
     @FXML private Label eventErrorLabel;
 
-
-    ObservableList<Event> eventList;
+    private ObservableList<Event> eventList;
 
     /**
      * initialize the calendar ui, namely the event list and search
