@@ -59,11 +59,11 @@ public class Calendar extends GraphicalUserInterface {
             if (searchCriterion.equals("Date")) {
                 startDate.setVisible(true);
                 GregorianCalendar time = calendar.getTime();
-                LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
+                LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
                         time.get(GregorianCalendar.DATE));
                 startDate.setValue(date);
-                LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH),
-                        time.get(GregorianCalendar.DATE) + 1);
+                LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
+                        time.get(GregorianCalendar.DATE) + 14);
                 endDate.setVisible(true);
                 endDate.setValue(end);
                 searchTermField.setVisible(false);
