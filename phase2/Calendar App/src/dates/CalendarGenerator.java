@@ -35,7 +35,6 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
 
         periods = Arrays.stream(information[2].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
-        periods = Arrays.stream(information[3].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
     }
 
     /**
