@@ -1,6 +1,7 @@
 package gui;
 
 import entities.Event;
+import entities.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -40,6 +41,10 @@ public class EventEditUI extends EventAddUI {
         this.event = event;
     }
 
+    public void setEventCollection(EventCollection e) {
+        this.eventCollection = e;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLabelInvisible();
@@ -49,35 +54,17 @@ public class EventEditUI extends EventAddUI {
         this.username = username;
     }
 
-    public void showEventDetails() {
-        nameField.setText(event.getName());
-        startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
-        endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
-        startTime.setText(getTime(event.getStartDate()));
-        endTime.setText(getTime(event.getEndDate()));
-        List<mt.Memo> memos = calendar.getMemos(event.getId());
-        List<mt.Tag> tags = calendar.getTags(event.getId());
-        for (mt.Memo m : memos) {
-            memosField.setText(m.getTitle());
-            memoTextArea.setText(m.getText());
-        }
-//        oldMemoTitle = memosField.getText();
-        List<String> tagsText = new ArrayList<>();
-        for (mt.Tag t : tags) {
-            tagsText.add(t.getText());
-        }
-        tagsField.setText(String.join(",", tagsText));
-//        oldTags = tagsField.getText().split(",");
-    }
-
 
     public void handleEdit() {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
             Event editedEvent = createEvent(name, start, end);
-            currEvents.editEvent(event,editedEvent);
-
+            if (event.isPostponed()) {
+                eventCollection.rescheduleEvent(event,start,end);
+            } else {
+                eventCollection.editEvent(event, editedEvent);
+            }
 //            editMemo();
 //            editTags();
         } catch (InvalidDateException e) {
@@ -98,16 +85,21 @@ public class EventEditUI extends EventAddUI {
 //        }
 //    }
 
-//    private void editTags(){
+    //    private void editTags(){
 //        for(String t:oldTags){
 //            calendar.removeTag(t,event.getId());
 //        }
 //        addTags(tags,event.getId());
 //    }
-    public void handleDelete() throws InvalidDateException {
+    public void handleDelete() {
         System.out.println("delete clicked");
-        currEvents.removeEvent(event);
-        closeGUI();
+        try {
+            eventCollection.removeEvent(event);
+            closeGUI();
+        } catch (InvalidDateException e) {
+            e.printStackTrace();
+            System.out.println("Something is wrong with event Generator then");
+        }
     }
 
     public void handleAddAlert() {
@@ -117,29 +109,28 @@ public class EventEditUI extends EventAddUI {
         controller.initialize(ds.loadAlertCollection(event.getId()));
     }
 
-    public void handleShareEvent() {
+    public void handleShareEvent() throws InvalidDateException {
         System.out.println("share clicked");
+        eventCollection.postponedEvent(event);
     }
 
     public void handlePostpone() {
         System.out.println("postpone clicked");
-        //TODO: need an postpone UI window
-        //TODO: rechedual too
+        try {
+            eventCollection.postponedEvent(event);
+        } catch (InvalidDateException e) {
+            System.out.println("Something is wrong with event generator");
+        }
     }
 
     public void handleDuplicate() {
         System.out.println("Duplicate clicked");
-        //TODO: need
+        //TODO: need date input...
+        EventAddUI dup = openGUI("EventAddUI.fxml");
+        dup.setCalendar(calendar);
+        dup.setCalendarController(calendarController);
+        dup.showEventDetails(event);
     }
 
-    private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {
-        Date date = GC.getTime();
-        return LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
-    }
 
-    private String getTime(GregorianCalendar GC) {
-        String pattern = "HH:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(GC.getTime());
-    }
 }

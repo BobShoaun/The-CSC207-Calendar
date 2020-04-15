@@ -110,7 +110,6 @@ public class EventCollection implements Iterable<Event>, Observer {
     public boolean removeEvent(Event event) throws InvalidDateException{
         String eventId = event.getId();
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
-
         if (removed) {
             event.addObserver(this);
         }
@@ -316,6 +315,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      */
     protected void addPostponedEvent(Event event) {
         postponedEvents.add(event);
+        event.setPostponed(true);
     }
 
     @Override

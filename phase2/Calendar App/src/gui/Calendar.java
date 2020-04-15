@@ -331,7 +331,7 @@ public class Calendar extends GraphicalUserInterface {
             EventEditUI controller = openGUI("EventEditUI.fxml");
             controller.setEvent(currEvent);
             controller.setCalendar(calendar);
-            controller.showEventDetails();
+            controller.showEventDetails(currEvent);
             controller.setUsername(user.getName());
             controller.setCalendarController(this);
         }

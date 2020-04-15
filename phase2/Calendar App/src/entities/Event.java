@@ -14,6 +14,15 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
     private String name;
     private GregorianCalendar startDate;
     private GregorianCalendar endDate;
+    private boolean postponed;
+
+    public boolean isPostponed() {
+        return postponed;
+    }
+
+    public void setPostponed(boolean postponed) {
+        this.postponed = postponed;
+    }
 
     /**
      * Constructor for a new Event
@@ -26,6 +35,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
             throws InvalidDateException {
         this.id = IDManager.generateEventId(name, startDate);
         this.name = name;
+        this.postponed = false;
         if (startDate.after(endDate)) {
             throw new InvalidDateException();
         } else {
