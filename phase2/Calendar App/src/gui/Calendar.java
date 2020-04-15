@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * GUI controller class for the main calendar GUI
+ */
 public class Calendar extends GraphicalUserInterface {
-
 
     private User user;
     private user.Calendar calendar;
@@ -34,28 +36,17 @@ public class Calendar extends GraphicalUserInterface {
     private String currSeries;
     private String currSeriesEvent;
 
-    @FXML
-    ListView<String> alertList;
-    @FXML
-    ListView<String> seriesEventList;
-    @FXML
-    ListView<String> seriesList;
-    @FXML
-    CheckBox darkTheme;
-    @FXML
-    ChoiceBox searchByList;
-    @FXML
-    DatePicker startDate;
-    @FXML
-    DatePicker endDate;
-    @FXML
-    TextField searchTermField;
-    @FXML
-    private ListView<String> displayedEventList;
-    @FXML
-    private Label lastLoginLabel;
-    @FXML
-    private Label eventErrorLabel;
+    @FXML private ListView<String> alertList;
+    @FXML private ListView<String> seriesEventList;
+    @FXML private ListView<String> seriesList;
+    @FXML private CheckBox darkTheme;
+    @FXML private ChoiceBox searchByList;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+    @FXML private TextField searchTermField;
+    @FXML private ListView<String> displayedEventList;
+    @FXML private Label lastLoginLabel;
+    @FXML private Label eventErrorLabel;
 
 
     ObservableList<Event> eventList;

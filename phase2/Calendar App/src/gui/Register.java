@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * GUI for registering new users
+ * @author Ng Bob Shoaun
+ */
 public class Register extends GraphicalUserInterface implements Initializable {
 
     @FXML private Label usernameErrorLabel;
@@ -23,6 +27,10 @@ public class Register extends GraphicalUserInterface implements Initializable {
 
     private UserManager userManager;
 
+    /**
+     * Sets the user manager to be used by this GUI
+     * @param userManager
+     */
     public void setUserManager (UserManager userManager) {
         this.userManager = userManager;
     }

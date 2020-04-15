@@ -15,14 +15,17 @@ import java.util.stream.Collectors;
 
 import static entities.IDManager.parseEventId;
 
+/**
+ * GUI controller for alerts
+ */
 public class Alert extends GraphicalUserInterface {
+
     private final AlertCollection ac;
-    @FXML
-    ListView<String> manAlertList;
-    @FXML
-    ListView<String> repAlertList;
-    @FXML
-    Label title;
+
+    @FXML private ListView<String> manAlertList;
+    @FXML private ListView<String> repAlertList;
+    @FXML private Label title;
+    
     private String currManAlert;
     private String currRepAlert;
 

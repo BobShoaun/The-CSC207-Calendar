@@ -11,18 +11,20 @@ import user.UserManager;
 
 import java.io.IOException;
 
+/**
+ * GUI controller class for the Login GUI
+ */
 public class Login extends GraphicalUserInterface {
 
-    @FXML
-    private TextField username;
-    @FXML
-    private PasswordField password;
-    @FXML
-    private Label bottomMessage;
+    @FXML private TextField username;
+    @FXML private PasswordField password;
+    @FXML private Label bottomMessage;
 
     private final UserManager userManager = new UserManager();
 
-
+    /**
+     * constructor for the login gui controller
+     */
     public Login() {
         try {
             userManager.loadUsers();

@@ -16,6 +16,9 @@ import java.net.URL;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * GUI controller for adding new events.
+ */
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
     @FXML

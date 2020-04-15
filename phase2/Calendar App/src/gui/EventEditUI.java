@@ -13,6 +13,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * GUI controller for editing events
+ */
 public class EventEditUI extends EventAddUI {
 
 

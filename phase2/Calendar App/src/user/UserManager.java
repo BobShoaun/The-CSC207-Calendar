@@ -24,7 +24,7 @@ public class UserManager {
     private EventSharer eventSharer;
 
     /**
-     *
+     * Getter for current logged in user
      * @return current logged in user
      */
     public User getCurrentUser () { return currentUser; }
@@ -67,7 +67,6 @@ public class UserManager {
      */
     public void saveUser(User user) throws IOException {
         user.save();
-//        dataSaver.saveToFile(user.getName() + "/credentials.txt", user.parse());
     }
 
     /**

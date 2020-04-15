@@ -26,10 +26,18 @@ public class User {
     private EventSharer eventSharer;
     private boolean darkTheme;
 
+    /**
+     * getter for the user's preference of a dark theme or not
+     * @return
+     */
     public boolean getDarkTheme(){
         return darkTheme;
     }
 
+    /**
+     * sets the user's preference of dark theme
+     * @param darkTheme
+     */
     public void setDarkTheme(boolean darkTheme){
         this.darkTheme = darkTheme;
     }
@@ -42,7 +50,11 @@ public class User {
         return name;
     }
 
-
+    /**
+     * getter for one of the user's calendar
+     * @param index of the calendar
+     * @return calendar
+     */
     public Calendar getCalendar(int index) {
         return calendars.get(index);
     }
@@ -54,6 +66,10 @@ public class User {
         saveCalendars();
     }
 
+    /**
+     * Remove a calendar from the user
+     * @param index of calendar to remove
+     */
     public void removeCalendar(int index) {
         try {
             dataSaver.deleteDirectory(this.calendars.get(index).getName());
@@ -77,6 +93,10 @@ public class User {
         return null;
     }
 
+    /**
+     * Get all of user's calendars
+     * @return
+     */
     public List<Calendar> getCalendars () { return this.calendars; }
 
     /**
@@ -103,6 +123,10 @@ public class User {
         this.lastLoginTime = time;
     }
 
+    /**
+     * Logout this user, and saves all necessary information
+     * @throws IOException
+     */
     public void logout () throws IOException {
         setLastLoginTime((GregorianCalendar) GregorianCalendar.getInstance());
         save();
@@ -191,6 +215,10 @@ public class User {
             dataSaver.makeDirectory(calendar.getName());
     }
 
+    /**
+     * Save the user's credentials and information into disc
+     * @throws IOException
+     */
     public void save() throws IOException {
         System.out.println("Saving user: " + toString());
         dataSaver.saveToFile("credentials.txt", toString());
