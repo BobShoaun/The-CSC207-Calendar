@@ -262,7 +262,7 @@ public class AlertCollection implements Observer {
      * @param arg The new time for the event.
      */
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) { // TODO: make sure this is working
         if (arg instanceof GregorianCalendar) {
             shiftAlerts((GregorianCalendar) arg);
         } else
