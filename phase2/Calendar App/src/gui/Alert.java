@@ -95,8 +95,9 @@ public class Alert extends GraphicalUserInterface {
     private void deleteRepeatingAlert() {
         System.out.println("Clicked delete repeating alert");
         if (currRepAlert != null) {
-            GregorianCalendar time = parseEventId(currRepAlert.replace(' ', '%'));
-            ac.removeGeneratedAlert(time);
+            GregorianCalendar time = parseEventId(currRepAlert);
+            if (!ac.removeGeneratedAlert(time))
+                System.out.println("Could not remove generated alert");
             updateRepeatingAlerts();
         }
         update();

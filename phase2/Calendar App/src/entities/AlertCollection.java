@@ -145,8 +145,9 @@ public class AlertCollection implements Observer {
             if (d.equals(ignored))
                 return false;
         }
+        calGen.addIgnore(d);
         saver.saveAlertCollection(this);
-        return calGen.getIgnoreList().add(d);
+        return true;
     }
 
     /**

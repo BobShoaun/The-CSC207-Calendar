@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0"
-            prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.202" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.EventEditUI">
    <children>
       <GridPane layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -20,12 +20,12 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
          </rowConstraints>
          <children>
             <Label alignment="BOTTOM_LEFT" text="Edit Event" GridPane.halignment="CENTER">
@@ -210,7 +210,7 @@
             <Label fx:id="dateTimeErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Date Time Error Label" textFill="#ff4545" GridPane.rowIndex="4" />
             <ButtonBar prefHeight="120.0" prefWidth="355.0" GridPane.rowIndex="8">
                <buttons>
-                  <Button fx:id="addAlertButton" mnemonicParsing="false" onAction="#handleAddAlert" text="Add Alert" />
+                  <Button fx:id="addAlertButton" mnemonicParsing="false" onAction="#handleAddAlert" text="Alerts"/>
                   <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
                   <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Done" />
                </buttons>

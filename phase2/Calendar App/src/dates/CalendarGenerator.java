@@ -23,9 +23,10 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Create a CalendarGenerator from a String.
+     *
      * @param input
      */
-
+    // TODO: move to DataSaver class
     public CalendarGenerator(String input) {
         String[] information = input.split("\n");
         startTime = new GregorianCalendar();
@@ -34,15 +35,30 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         endTime = (new GregorianCalendar());
         endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
 
-        periods = Arrays.stream(information[2].split(" ")).map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
+        periods = Arrays.stream(information[2].split(" "))
+                .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
+
+        if (information.length > 3) {
+            String[] ignoreMillisStr = information[3].split(" ");
+            List<GregorianCalendar> ignored = new ArrayList<>();
+            for (String s : ignoreMillisStr) {
+                GregorianCalendar gc = new GregorianCalendar();
+                gc.setTimeInMillis(Long.parseLong(s));
+                ignored.add(gc);
+            }
+            this.ignoreList = ignored;
+        }
     }
+    // TODO: move to DataSaver?
 
     /**
      * Outputs all data in this CG into a String.
+     *
      * @return A savable representation of the data
      */
     public String getString() {
-        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n" + endTime.getTimeInMillis() + "\n");
+        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n"
+                + endTime.getTimeInMillis() + "\n");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(" ");
         }
@@ -55,6 +71,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Summarizes this object into a string
+     *
      * @return String representation of the data
      */
     @Override
@@ -68,6 +85,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Adds a period to the repeat periods
+     *
      * @param period the period being added
      */
     public void addPeriod(Duration period) {
@@ -76,9 +94,10 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * Adds a time to the times being ignored
+     *
      * @param newIgnoreTime the time to ignore
      */
-    public void addIgnore(GregorianCalendar newIgnoreTime){
+    public void addIgnore(GregorianCalendar newIgnoreTime) {
         ignoreList.add(newIgnoreTime);
     }
 
@@ -108,6 +127,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
     /**
      * creates a new iterator
+     *
      * @return the iterator
      */
     @Override
@@ -118,7 +138,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     /**
      * The CGI class
      */
-    private class CGI implements Iterator<GregorianCalendar>{
+    private class CGI implements Iterator<GregorianCalendar> {
         GregorianCalendar currentTime = new GregorianCalendar();
 
         /**
@@ -128,7 +148,7 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             currentTime.setTimeInMillis(startTime.getTimeInMillis());
         }
 
-        private List<GregorianCalendar> nextSet(){
+        private List<GregorianCalendar> nextSet() {
             List<GregorianCalendar> candidates = new ArrayList<>();
 
             for (Duration period : periods) {
@@ -153,17 +173,17 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
         @Override
         public GregorianCalendar next() {
-            if(hasNext()){
+            if (hasNext()) {
                 List<GregorianCalendar> set = nextSet();
                 GregorianCalendar result = set.get(0);
 
-                for(GregorianCalendar time : set){
-                    if (result.after(time)){
+                for (GregorianCalendar time : set) {
+                    if (result.after(time)) {
                         result.setTimeInMillis(time.getTimeInMillis());
                     }
                 }
 
-                currentTime.setTimeInMillis(result.getTimeInMillis()+1);
+                currentTime.setTimeInMillis(result.getTimeInMillis() + 1);
                 return result;
             } else {
                 throw new IndexOutOfBoundsException("No next date");

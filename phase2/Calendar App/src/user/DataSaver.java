@@ -364,9 +364,10 @@ public class DataSaver {
         for (int i = 3; i < strings.size(); i++) {
             cgStr.append(strings.get(i)).append("\n");
         }
-        cgStr.deleteCharAt(cgStr.length() - 1);
-        if (!cgStr.toString().equals(""))
+        if (!cgStr.toString().equals("")) {
+            cgStr.deleteCharAt(cgStr.length() - 1);
             ac.setCalGen(new CalendarGenerator(cgStr.toString()));
+        }
 
         return ac;
     }
