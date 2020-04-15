@@ -1,16 +1,11 @@
 package user;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import dates.CalendarGenerator;
 import entities.*;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import mt.Memo;
 import mt.Tag;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
@@ -108,10 +103,18 @@ public class Calendar {
         this.dataSaver = dataSaver;
     }
 
+    /**
+     * Get all alert collections
+     * @return List of all alert collections
+     */
     public List<AlertCollection> getAlertCollections() {
         return alertCollections;
     }
 
+    /**
+     * Get all event collections
+     * @return List of all event collections inluding all series
+     */
     public List<EventCollection> getEventCollections() {
         return eventCollections;
     }
@@ -274,8 +277,12 @@ public class Calendar {
         return memos.stream().filter(m -> m.getTitle().equals(name) && m.getText().equals(content)).findAny().orElse(null);
     }
 
-    public void addMemo(String memoTitle, String memoText) {
-        memos.add(new Memo(memoTitle, memoText));
+    /**
+     * Add a new memo
+     * @param memo Memo to add
+     */
+    public void addMemo(Memo memo) {
+        memos.add(memo);
         dataSaver.saveCalendar(this);
     }
 
@@ -323,21 +330,40 @@ public class Calendar {
         return memo.getEvents().stream().map(this::getEvent).collect(Collectors.toList());
     }
 
+    /**
+     * Get the event collection with a certain name
+     * @param eventSeriesName Name of the event collection
+     * @return Event collection if it exists otherwise null
+     */
     public EventCollection getEventCollection(String eventSeriesName) {
         return eventCollections.stream().filter(eC -> eC instanceof Series
                 && ((Series) eC).getName().equals(eventSeriesName)).findAny().orElse(null);
     }
 
+    /**
+     * Get all events with a certain name
+     * @param eventName The name of the event to search by
+     * @return Iterator with all events with same name
+     */
     public Iterator<Event> getEvents(String eventName) {
         return new EventIterator(new Date(0), (Event e) -> e.getName().equals(eventName));
     }
 
+    /**
+     * Get all tags
+     * @return List of all tags
+     */
     public List<Tag> getTags() {
         return tags;
     }
 
-    public Tag getTag(String tag) {
-        return tags.stream().filter(t -> t.getText().equals(tag)).findAny().orElse(null);
+    /**
+     * Get tag with a certain name
+     * @param tagName Name of the tag
+     * @return The corresponding tag, otherwise null
+     */
+    public Tag getTag(String tagName) {
+        return tags.stream().filter(t -> t.getText().equals(tagName)).findAny().orElse(null);
     }
 
     /**
@@ -350,8 +376,12 @@ public class Calendar {
         return tags.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
     }
 
-    public void addTag(String text) {
-        tags.add(new Tag(text));
+    /**
+     * Add a new tag
+     * @param tag The tag to add
+     */
+    public void addTag(Tag tag) {
+        tags.add(tag);
         dataSaver.saveCalendar(this);
     }
 
@@ -369,6 +399,9 @@ public class Calendar {
         }
     }
 
+    /**
+     * Remove all old alerts
+     */
     public void removeOldAlerts() {
         for (AlertCollection aC :
                 alertCollections) {
@@ -386,11 +419,18 @@ public class Calendar {
         return dataSaver;
     }
 
+    /**
+     * Set the current time of the time controller
+     * @param gregorianCalendar Value to be set
+     */
     public void setTime(GregorianCalendar gregorianCalendar) {
         timeController.setCurrentTime(gregorianCalendar);
     }
 
-
+    /**
+     * Get all postponed events
+     * @return List of all postponed events
+     */
     public List<Event> getPostponedEvents() {
         ArrayList<Event> postponedEvents = new ArrayList<>();
         for (EventCollection eventCollection :
@@ -488,6 +528,10 @@ public class Calendar {
             return first;
         }
 
+        /**
+         * Find the next event in a certain event collection
+         * @param i The index of the event collection iterator
+         */
         private void findNextInIterator(int i) {
             if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
                 Event next = null;
@@ -504,10 +548,13 @@ public class Calendar {
         }
     }
 
+    /**
+     * Get the current time of the calendar
+     * @return
+     */
     public GregorianCalendar getTime() {
         return (GregorianCalendar) timeController.getTime().clone();
     }
-
 
     /**
      * remove event

@@ -170,7 +170,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected void addMemo(String memoTitle, String memoContent, String id) {
         Memo memo = calendar.getMemo(memoTitle, memoContent);
         if (memo == null) {
-            calendar.addMemo(memoTitle, memoContent);
+            calendar.addMemo(new mt.Memo(memoTitle, memoContent));
             memo = calendar.getMemo(memoTitle, memoContent);
         }
         eventCollection.addMemo(id, memo);
@@ -188,8 +188,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         for (String text : tags) {
             Tag tag = calendar.getTag(text);
             if (tag == null) {
-                calendar.addTag(text);
-                tag = calendar.getTag(text);
+                tag = new Tag(text);
+                calendar.addTag(tag);
             }
             eventCollection.addTag(id, tag);
         }
