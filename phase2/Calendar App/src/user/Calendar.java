@@ -37,12 +37,6 @@ public class Calendar {
         tags = new ArrayList<>();
         eventCollections.add(new EventCollection(new ArrayList<>()));
         timeController = new TimeController();
-
-        try {
-            addEventSeries("Shared");
-        } catch (InvalidDateException ignored) {
-            //This should not fail
-        }
     }
 
     /**
@@ -239,13 +233,13 @@ public class Calendar {
 
 
     /**
-     * Return all memos which are attributed with a certain event
+     * Get the memo attributed with a certain event
      *
-     * @param eventId The event which memos must be linked to
-     * @return Unsorted list of memos
+     * @param event The event which memos must be linked to
+     * @return Memo, null if non is found
      */
-    public List<Memo> getMemos(String eventId) {
-        return memos.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
+    public Memo getMemo(Event event) {
+        return memos.stream().filter(m -> m.hasEvent(event)).findFirst().orElse(null);
     }
 
     /**
@@ -369,11 +363,11 @@ public class Calendar {
     /**
      * Return all tags which are attributed with a certain event
      *
-     * @param eventId The event which tag must be linked to
+     * @param event The event which tag must be linked to
      * @return Unsorted list of tags
      */
-    public List<Tag> getTags(String eventId) {
-        return tags.stream().filter(m -> m.hasEvent(eventId)).collect(Collectors.toList());
+    public List<Tag> getTags(Event event) {
+        return tags.stream().filter(m -> m.hasEvent(event)).collect(Collectors.toList());
     }
 
     /**
@@ -388,13 +382,13 @@ public class Calendar {
     /**
      * remove event from tags
      *
-     * @param text the text of the tag
-     * @param id   the id of the event
+     * @param tag the text of the tag
+     * @param event
      */
-    public void removeTag(String text, String id) {
+    public void removeTag(String tag, Event event) {
         for (Tag t : tags) {
-            if (t.getText().equals(text)) {
-                t.removeEvent(id);
+            if (t.getText().equals(tag)) {
+                t.removeEvent(event);
             }
         }
     }

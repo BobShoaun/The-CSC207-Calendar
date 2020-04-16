@@ -1,5 +1,7 @@
 package mt;
 
+import entities.Event;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,29 +77,29 @@ public class Memo {
     /**
      * Add an event to the memo
      *
-     * @param eventId ID of the event being added
+     * @param event event being added
      */
-    public void addEvent(String eventId) {
-        ids.add(eventId);
+    public void addEvent(Event event) {
+        ids.add(event.getId());
     }
 
     /**
      * Remove an event from the memo
      *
-     * @param eventId ID of the event being removed
+     * @param event event being removed
      */
-    public void removeEvent(String eventId) {
-        ids.remove(eventId);
+    public void removeEvent(Event event) {
+        ids.remove(event.getId());
     }
 
     /**
      * Find the event if it is in this memo
      *
-     * @param eventId Event ID to be searched for
+     * @param event Event to be searched for
      * @return True iff the memo is attached to the event
      */
-    public boolean hasEvent(String eventId) {
-        return ids.contains(eventId);
+    public boolean hasEvent(Event event) {
+        return ids.contains(event.getId());
     }
 
     /**

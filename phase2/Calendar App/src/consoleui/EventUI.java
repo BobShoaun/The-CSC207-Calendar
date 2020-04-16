@@ -116,7 +116,7 @@ public class EventUI extends UserInterface {
     private void showTags() {
         List<Tag> tags = calendar.getTags();
         for (Tag t : tags) {
-            if (t.hasEvent(event.getId())) {
+            if (t.hasEvent(event)) {
                 System.out.println(t.getText());
             }
         }
@@ -138,7 +138,7 @@ public class EventUI extends UserInterface {
         StringBuilder result = new StringBuilder();
         int i = 0;
         for (Memo m : memos) {
-            if (m.hasEvent(event.getId())) {
+            if (m.hasEvent(event)) {
                 String num = Integer.toString(i);
                 result.append("[").append(num).append("]").append(m.getTitle()).append("\n").append(m.getText()).append("\n\n");
                 i += 1;
@@ -210,11 +210,9 @@ public class EventUI extends UserInterface {
         }
     }
 
-    private void getMemoUIs() {
-        List<Memo> m = calendar.getMemos(event.getId());
-        for (Memo memo: m) {
-            memoUIs.add(new MemoUI(memo, calendar));
-        }
+    private void getMemoUIs() { //TODO: Is this still necessary if we only have a single memo?
+        Memo memo = calendar.getMemo(event);
+        memoUIs.add(new MemoUI(memo, calendar));
     }
 
     private void editTag() {

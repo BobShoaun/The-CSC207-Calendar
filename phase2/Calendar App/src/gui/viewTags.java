@@ -73,7 +73,7 @@ public class ViewTags extends gui.GraphicalUserInterface{
 
     @FXML
     private void showCalendarUI(Event e) {
-        Calendar calendar = showGUI("calendar.fxml");
+        GraphicalUserInterface calendar = showGUI("calendar.fxml");
     }
 
 }

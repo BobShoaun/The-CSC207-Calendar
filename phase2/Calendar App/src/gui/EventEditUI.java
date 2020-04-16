@@ -5,12 +5,17 @@ import entities.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import mt.Memo;
+import mt.Tag;
 import user.DataSaver;
+import user.UserManager;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GUI controller for editing events
@@ -32,10 +37,11 @@ public class EventEditUI extends EventAddUI {
     protected Button duplicateButton;
 
     private Event event;
-//    private String oldMemoTitle;
+    private String oldMemoTitle;
 //    private String[] oldTags;
 
     private String username;
+    private UserManager userManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,31 +50,50 @@ public class EventEditUI extends EventAddUI {
 
     public void setEvent(Event event) {
         this.event = event;
+        if(calendar.getMemo(event) != null)
+        {
+            oldMemoTitle = calendar.getMemo(event).getTitle();
+        }
+        showEventDetails(event);
+    }
+
+    public void setUserManager(UserManager userManager){
+        this.userManager = userManager;
     }
 
     public void setEventCollection(EventCollection e) {
         this.eventCollection = e;
     }
 
-
-
     protected void setUsername(String username) {
         this.username = username;
     }
-
 
     public void handleEdit() {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            Event editedEvent = createEvent(name, start, end);
-            if (event.isPostponed()) {
-                eventCollection.rescheduleEvent(event,start,end);
-            } else {
-                eventCollection.editEvent(event, editedEvent);
+            if(event.getName().equals(name)){
+
+            } else{
+                //Update all the references to tags and memos
+                List<Tag> tags = calendar.getTags(event);
+                for (Tag t :
+                        tags) {
+                    calendar.removeTag(t.getText(), event);
+                }
+                Memo memo = calendar.getMemo(event);
+                memo.removeEvent(event);
+                event.setName(name); //This changes the id, so this is all necessary
+                for (Tag t :
+                        tags) {
+                    t.addEvent(event.getId());
+                }
+                memo.addEvent(event);
             }
-//            editMemo();
-//            editTags();
+            eventCollection.rescheduleEvent(event, start, end);
+            editMemo();
+            editTags();
             closeGUI();
             save();
         } catch (InvalidDateException e) {
@@ -78,23 +103,32 @@ public class EventEditUI extends EventAddUI {
 
     }
 
-//    private void editMemo(){
-//        if (oldMemoTitle.equals("") && !memoTitle.equals("") ){
-//            addMemo(memoTitle, memoContent, event.getId());
-//        }else if (!oldMemoTitle.equals("") && memoTitle.equals("")){
-//            calendar.getMemo(oldMemoTitle).removeEvent(event.getId());
-//        }else if(!oldMemoTitle.equals(memoTitle)){
-//            calendar.editMemoText(oldMemoTitle,memoContent);
-//            calendar.editMemoTitle(oldMemoTitle,memoTitle);
-//        }
-//    }
+    private void editMemo(){
+        String newMemoTitle = memosField.getText();
+        if(calendar.getMemo(newMemoTitle) != null){ //The changed memo already exists, so we move the event to the new one
+            calendar.getMemo(newMemoTitle).addEvent(event);
+            calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
+            if(calendar.getMemo(oldMemoTitle) != null){
+                calendar.getMemo(oldMemoTitle).removeEvent(event);
+            }
+        } else {
+            if(calendar.getMemo(oldMemoTitle) != null){  //The new memo does not already exist so we change the old one
+                calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
+                calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
+            }
+            else{ //Or we create a new one
+                calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+                calendar.getMemo(newMemoTitle).addEvent(event);
+            }
+        }
+    }
 
-    //    private void editTags(){
-//        for(String t:oldTags){
-//            calendar.removeTag(t,event.getId());
-//        }
-//        addTags(tags,event.getId());
-//    }
+    private void editTags(){
+        for(Tag t: calendar.getTags(event)){
+            calendar.removeTag(t.getText(), event);
+        }
+        addTags(event.getId());
+    }
     public void handleDelete() {
         System.out.println("delete clicked");
         try {
@@ -115,9 +149,9 @@ public class EventEditUI extends EventAddUI {
     }
 
     public void handleShareEvent() throws InvalidDateException {
-        System.out.println("share clicked");
-        eventCollection.postponedEvent(event);
-
+        Share controller = openGUI("Share.fxml");
+        controller.setEvent(event);
+        controller.setUserManger(userManager);
         save();
     }
 
@@ -139,6 +173,4 @@ public class EventEditUI extends EventAddUI {
         dup.setCalendarController(calendarController);
         dup.showEventDetails(event);
     }
-
-
 }

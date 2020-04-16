@@ -57,6 +57,7 @@ public class Login extends GraphicalUserInterface {
 
     private void showCalendarUI() {
         Calendar calendarController = showGUI("calendar.fxml");
+        calendarController.setUserManager(userManager);
         calendarController.setUser(userManager.getCurrentUser());
     }
 

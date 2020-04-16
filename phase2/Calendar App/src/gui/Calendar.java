@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import mt.Memo;
 import mt.Tag;
 import user.User;
+import user.UserManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class Calendar extends GraphicalUserInterface {
     private String currAlert;
     private String currSeries;
     private String currSeriesEvent;
+    private UserManager userManager;
 
     @FXML private ListView<String> alertList;
     @FXML private ListView<String> seriesEventList;
@@ -110,6 +112,10 @@ public class Calendar extends GraphicalUserInterface {
             }
         });
         updateDisplayedEvents();
+    }
+
+    public void setUserManager(UserManager userManager){
+        this.userManager = userManager;
     }
 
     /**
@@ -329,11 +335,11 @@ public class Calendar extends GraphicalUserInterface {
         } else {
             eventErrorLabel.setVisible(false);
             EventEditUI controller = openGUI("EventEditUI.fxml");
+            controller.setUserManager(userManager);
+            controller.setCalendar(calendar);
             controller.setEvent(currEvent);
             //This is specific to this button in manual event list
             controller.setEventCollection(calendar.getSingleEventCollection());
-            controller.setCalendar(calendar);
-            controller.showEventDetails(currEvent);
             controller.setUsername(user.getName());
             controller.setCalendarController(this);
         }

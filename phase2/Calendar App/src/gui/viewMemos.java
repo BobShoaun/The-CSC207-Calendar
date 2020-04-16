@@ -74,6 +74,6 @@ public class ViewMemos extends gui.GraphicalUserInterface {
 
     @FXML
     private void showCalendarUI(ActionEvent actionEvent) {
-        Calendar calendar = showGUI("calendar.fxml");
+        GraphicalUserInterface calendar = showGUI("calendar.fxml");
     }
 }

@@ -200,7 +200,7 @@ public class Series extends EventCollection implements Iterable<Event> {
         if (!super.addMemo(eventId, memo)){
             for (Event e : seriesEvents) {
                 if (e.getId().equals(eventId)) {
-                    memo.addEvent(eventId);
+                    memo.addEvent(e);
                     return true;
                 }
             }
