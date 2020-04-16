@@ -1,5 +1,7 @@
 package mt;
 
+import entities.Event;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,19 +55,19 @@ public class Tag {
 
     /**
      * removes an event
-     * @param eventId of the event to remove
+     * @param event the event to remove
      */
-    public void removeEvent(String eventId) {
-        ids.remove(eventId);
+    public void removeEvent(Event event) {
+        ids.remove(event.getId());
     }
 
     /**
      * checks if this tag is applied to an event
-     * @param eventId
+     * @param event
      * @return
      */
-    public boolean hasEvent(String eventId) {
-        return ids.contains(eventId);
+    public boolean hasEvent(Event event) {
+        return ids.contains(event.getId());
     }
 
     /**

@@ -181,10 +181,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     /**
      * add the event to the tags
      *
-     * @param tags collection of tags that event belongs to
      * @param id   of the event
      */
-    protected void addTags(String[] tags, String id) {
+    protected void addTags(String id) {
         for (String text : tags) {
             Tag tag = calendar.getTag(text);
             if (tag == null) {
@@ -236,13 +235,13 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             startTime.setText(getTime(event.getStartDate()));
             endTime.setText(getTime(event.getEndDate()));
         }
-        List<mt.Memo> memos = calendar.getMemos(event.getId());
-        List<mt.Tag> tags = calendar.getTags(event.getId());
-        for (mt.Memo m : memos) {
-            memosField.setText(m.getTitle());
-            memoTextArea.setText(m.getText());
+        mt.Memo memo = calendar.getMemo(event);
+        List<mt.Tag> tags = calendar.getTags(event);
+        if(memo != null){
+            memosField.setText(memo.getTitle());
+            memoTextArea.setText(memo.getText());
         }
-//        oldMemoTitle = memosField.getText();
+        //        oldMemoTitle = memosField.getText();
         List<String> tagsText = new ArrayList<>();
         for (mt.Tag t : tags) {
             tagsText.add(t.getText());

@@ -6,12 +6,15 @@ import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import mt.Memo;
+import mt.Tag;
 import user.DataSaver;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GUI controller for editing events
@@ -32,11 +35,6 @@ public class EventEditUI extends EventAddUI {
     @FXML
     protected Button duplicateButton;
 
-    @FXML
-    protected TextField memoTitle;
-    @FXML
-    protected TextField memoText;
-
     private Event event;
     private String oldMemoTitle;
 //    private String[] oldTags;
@@ -50,31 +48,25 @@ public class EventEditUI extends EventAddUI {
 
     public void setEvent(Event event) {
         this.event = event;
+        showEventDetails(event);
     }
 
     public void setEventCollection(EventCollection e) {
         this.eventCollection = e;
     }
 
-
-
     protected void setUsername(String username) {
         this.username = username;
     }
-
 
     public void handleEdit() {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            Event editedEvent = createEvent(name, start, end);
-            if (event.isPostponed()) {
-                eventCollection.rescheduleEvent(event,start,end);
-            } else {
-                eventCollection.editEvent(event, editedEvent);
-            }
+            event.setName(name);
+            eventCollection.rescheduleEvent(event, start, end);
             editMemo();
-//            editTags();
+            editTags();
             closeGUI();
             save();
         } catch (InvalidDateException e) {
@@ -85,28 +77,30 @@ public class EventEditUI extends EventAddUI {
     }
 
     private void editMemo(){
-//        if (oldMemoTitle.equals("") && !memoTitle.equals("") ){
-//            addMemo(memoTitle, memoContent, event.getId());
-//        }else if (!oldMemoTitle.equals("") && memoTitle.equals("")){
-//            calendar.getMemo(oldMemoTitle).removeEvent(event.getId());
-//        }else if(!oldMemoTitle.equals(memoTitle)){
-//            calendar.editMemoText(oldMemoTitle,memoContent);
-//            calendar.editMemoTitle(oldMemoTitle,memoTitle);
-//        }
-        String newMemoTitle = memoTitle.getText();
-        boolean edited = !oldMemoTitle.equals(newMemoTitle);
-
-        calendar.editMemoTitle(oldMemoTitle, newMemoTitle);
-        calendar.editMemoText(oldMemoTitle, memoText.getText());
-        if (edited) { oldMemoTitle = newMemoTitle; }
+        String newMemoTitle = memosField.getText();
+        if(calendar.getMemo(newMemoTitle) != null){ //The changed memo already exists, so we move the event to the new one
+            calendar.getMemo(newMemoTitle).addEvent(event);
+            calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
+            if(calendar.getMemo(oldMemoTitle) != null){
+                calendar.getMemo(oldMemoTitle).removeEvent(event);
+            }
+        } else {
+            if(calendar.getMemo(oldMemoTitle) != null){  //The new memo does not already exist so we change the old one
+                calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
+                calendar.getMemo(oldMemoTitle).setText(memoTextArea.getText());
+            }
+            else{ //Or we create a new one
+                calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+            }
+        }
     }
 
-    //    private void editTags(){
-//        for(String t:oldTags){
-//            calendar.removeTag(t,event.getId());
-//        }
-//        addTags(tags,event.getId());
-//    }
+    private void editTags(){
+        for(Tag t: calendar.getTags(event)){
+            calendar.removeTag(t.getText(), event);
+        }
+        addTags(event.getId());
+    }
     public void handleDelete() {
         System.out.println("delete clicked");
         try {
@@ -151,6 +145,4 @@ public class EventEditUI extends EventAddUI {
         dup.setCalendarController(calendarController);
         dup.showEventDetails(event);
     }
-
-
 }

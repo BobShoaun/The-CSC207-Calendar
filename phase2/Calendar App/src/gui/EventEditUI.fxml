@@ -173,16 +173,16 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="memoTitle" promptText="Title of the memo">
+                  <TextField fx:id="memosField" promptText="Title of the memo">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField fx:id="memoText" prefHeight="65.0" prefWidth="355.0" promptText="Content of the memo">
+                  <TextArea fx:id="memoTextArea" prefHeight="65.0" prefWidth="355.0" promptText="Content of the memo">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
-                  </TextField>
+                  </TextArea>
                </children>
             </VBox>
             <VBox GridPane.rowIndex="7">

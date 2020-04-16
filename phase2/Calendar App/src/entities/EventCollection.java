@@ -150,8 +150,9 @@ public class EventCollection implements Iterable<Event> {
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 postponedEvents.remove(e);
-                Event newEvent = new Event(e.getName(), newStart, newEnd);
-                addEvent(newEvent);
+                e.setStartDate(newStart);
+                e.setEndDate(newEnd);
+                events.add(e);
 //                newEvent.addObserver(this);
                 return;
             }
@@ -182,14 +183,14 @@ public class EventCollection implements Iterable<Event> {
      * @param tag     the tag that needs to remove the event
      */
     public void removeTag(String eventId, Tag tag) {
-        tag.removeEvent(eventId);
+        tag.removeEvent(getEvent(eventId));
     }
 
     public boolean addMemo(String eventId, Memo memo) {
         for (Event e : this.events) {
             //check if the event ID is valid
             if (e.getId().equals(eventId)) {
-                memo.addEvent(eventId);
+                memo.addEvent(e);
                 return true;
             }
         }
