@@ -39,6 +39,10 @@ public class UserManager {
         eventSharer = new EventSharer(this);
     }
 
+    public EventSharer getEventSharer() {
+        return eventSharer;
+    }
+
     /**
      * Loads all users from the file system into memory
      * @throws IOException

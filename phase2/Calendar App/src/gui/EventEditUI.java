@@ -121,10 +121,9 @@ public class EventEditUI extends EventAddUI {
     }
 
     public void handleShareEvent() throws InvalidDateException {
-        System.out.println("share clicked");
-        eventCollection.postponedEvent(event);
-
-        save();
+        //System.out.println("share clicked");
+        //eventCollection.postponedEvent(event);
+        //save();
     }
 
     public void handlePostpone() {
