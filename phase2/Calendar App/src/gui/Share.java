@@ -2,34 +2,20 @@ package gui;
 
 import entities.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import user.UserManager;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class Share extends GraphicalUserInterface implements Initializable{
+public class Share extends GraphicalUserInterface{
     Event event;
     UserManager userManger;
     String recipientUsername;
     String recipientCalendar;
-    Calendar calendarController;
 
     @FXML
     protected Button Username;
 
     @FXML
     protected Button CalendarName;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    public void setCalendarController(Calendar calendarController){
-        this.calendarController = calendarController;
-    }
 
     public void setEvent(Event event){
         this.event = event;
@@ -53,6 +39,6 @@ public class Share extends GraphicalUserInterface implements Initializable{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        closeGUI();
     }
 }

@@ -121,9 +121,10 @@ public class EventEditUI extends EventAddUI {
     }
 
     public void handleShareEvent() throws InvalidDateException {
-        //System.out.println("share clicked");
-        //eventCollection.postponedEvent(event);
-        //save();
+        Share controller = openGUI("Share.fxml");
+        controller.setEvent(event);
+        //controller.userManger(userManger); TODO make sure this class has a um
+        save();
     }
 
     public void handlePostpone() {
