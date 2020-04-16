@@ -1,6 +1,6 @@
 package gui;
 
-import entities.Event;
+import event.Event;
 import exceptions.InvalidCalendarNameException;
 import exceptions.InvalidUsernameException;
 import javafx.fxml.FXML;

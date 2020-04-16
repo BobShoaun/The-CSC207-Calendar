@@ -1,6 +1,6 @@
-package mt;
+package memotag;
 
-import entities.Event;
+import event.Event;
 
 import java.util.ArrayList;
 import java.util.List;

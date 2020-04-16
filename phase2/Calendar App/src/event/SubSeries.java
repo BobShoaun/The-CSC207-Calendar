@@ -1,4 +1,4 @@
-package entities;
+package event;
 
 import dates.CalendarGenerator;
 

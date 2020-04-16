@@ -32,7 +32,7 @@ public class Tag extends gui.GraphicalUserInterface {
 
     private void loadEvents() {
         list.remove(list);
-        mt.Tag tag = calendar.getTag(tagNameTextField.getText());
+        memotag.Tag tag = calendar.getTag(tagNameTextField.getText());
         List<String> events = tag.getEvents();
         for (String s: events) {
             list.add(s);

@@ -1,6 +1,6 @@
 package gui;
 
-import entities.AlertCollection;
+import alert.AlertCollection;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;

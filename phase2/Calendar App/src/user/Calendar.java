@@ -1,12 +1,19 @@
 package user;
 
+import alert.Alert;
+import alert.AlertCollection;
+import alert.AlertComparator;
 import dates.CalendarGenerator;
-import entities.*;
+import dates.TimeController;
+import event.Event;
+import event.EventCollection;
+import event.Series;
+import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
-import mt.Memo;
-import mt.Tag;
-import java.io.IOException;
+import memotag.Memo;
+import memotag.Tag;
+
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
@@ -17,12 +24,12 @@ import java.util.stream.Collectors;
  */
 public class Calendar {
 
-    private String name;
+    private final String name;
     private List<EventCollection> eventCollections;
     private List<AlertCollection> alertCollections;
     private List<Memo> memos;
     private List<Tag> tags;
-    private DataSaver dataSaver;
+    private final DataSaver dataSaver;
     private TimeController timeController;
 
     /**
@@ -107,7 +114,8 @@ public class Calendar {
 
     /**
      * Get all event collections
-     * @return List of all event collections inluding all series
+     *
+     * @return List of all event collections including all series
      */
     public List<EventCollection> getEventCollections() {
         return eventCollections;
@@ -216,7 +224,7 @@ public class Calendar {
      * @param difference The time difference between two created events
      * @param baseEvent  The event on which the other events will be based
      */
-    public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException, IOException {
+    public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException {
         for (EventCollection eventCollection :
                 eventCollections) {
             if (eventCollection instanceof Series && ((Series) eventCollection).getName().equals(name)) {
@@ -382,8 +390,8 @@ public class Calendar {
     /**
      * remove event from tags
      *
-     * @param tag the text of the tag
-     * @param event
+     * @param tag   the text of the tag
+     * @param event Event to be removed
      */
     public void removeTag(String tag, Event event) {
         for (Tag t : tags) {
@@ -555,7 +563,8 @@ public class Calendar {
 
     /**
      * Get the current time of the calendar
-     * @return
+     *
+     * @return The current time
      */
     public GregorianCalendar getTime() {
         return (GregorianCalendar) timeController.getTime().clone();
@@ -566,9 +575,8 @@ public class Calendar {
      *
      * @param event The event to be removed
      * @throws InvalidDateException Internal error
-     * @throws IOException          Internal error when saving
      */
-    public void removeEvent(Event event) throws InvalidDateException, IOException {
+    public void removeEvent(Event event) throws InvalidDateException {
         eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
     }
 
@@ -588,6 +596,6 @@ public class Calendar {
      * @param alertCollection The alert collection to add
      */
     public void addAlertCollection(AlertCollection alertCollection) {
-        alertCollections.add(alertCollection);
+        alertCollections.add(alertCollection); //TODO: remove unused method?
     }
 }

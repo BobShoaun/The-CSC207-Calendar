@@ -1,5 +1,6 @@
 package user;
 
+import event.EventSharer;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
 import exceptions.PasswordMismatchException;

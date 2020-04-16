@@ -1,9 +1,10 @@
-package user;
+package event;
 
-import entities.Event;
 import exceptions.InvalidCalendarNameException;
 import exceptions.InvalidUsernameException;
-import java.io.IOException;
+import user.Calendar;
+import user.User;
+import user.UserManager;
 
 
 /**

@@ -1,16 +1,16 @@
 package gui;
 
-import entities.Event;
-import entities.EventCollection;
-import entities.IDManager;
+import event.Event;
+import event.EventCollection;
+import event.IDManager;
 import exceptions.InvalidDateException;
 import exceptions.InvalidTimeInputException;
 import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 import user.Calendar;
 
 import java.net.URL;
@@ -134,7 +134,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             getUserInput();
             String id = IDManager.generateEventId(name, start);
             setTime(start, end);
-            entities.Event newEvent = new entities.Event(name, start, end);
+            Event newEvent = new Event(name, start, end);
             System.out.println("Event created:" + newEvent);
             return newEvent;
 //            if(!memoTitle.equals("")){addMemo(memoTitle, memoContent, id);}
@@ -155,7 +155,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      *
      * @param newEvent be to added
      */
-    private void addEvent(entities.Event newEvent) {
+    private void addEvent(Event newEvent) {
         getEventCollection();
         eventCollection.addEvent(newEvent);
     }
@@ -185,7 +185,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         if(!memosField.getText().equals("")) {
             Memo memo = calendar.getMemo(memoTitle, memoContent);
             if (memo == null) {
-                calendar.addMemo(new mt.Memo(memoTitle, memoContent));
+                calendar.addMemo(new memotag.Memo(memoTitle, memoContent));
                 memo = calendar.getMemo(memoTitle, memoContent);
             }
             eventCollection.addMemo(id, memo);
@@ -247,7 +247,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
     public void showEventDetails(Event event) {
         nameField.setText(event.getName());
-        if(!event.isPostponed()){
+        if (!event.isPostponed()) {
             startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
             endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
             startTime.setText(getTime(event.getStartDate()));
@@ -257,14 +257,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         System.out.println(event.getEndDate().getTime());
 
 
-        mt.Memo memo = calendar.getMemo(event);
-        List<mt.Tag> tags = calendar.getTags(event);
-        if(memo != null){
+        memotag.Memo memo = calendar.getMemo(event);
+        List<Tag> tags = calendar.getTags(event);
+        if (memo != null) {
             memosField.setText(memo.getTitle());
             memoTextArea.setText(memo.getText());
         }
         List<String> tagsText = new ArrayList<>();
-        for (mt.Tag t : tags) {
+        for (Tag t : tags) {
             tagsText.add(t.getText());
         }
         tagsField.setText(String.join(",", tagsText));

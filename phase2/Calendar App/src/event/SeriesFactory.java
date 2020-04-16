@@ -1,8 +1,7 @@
-package entities;
+package event;
 
 import dates.CalendarGenerator;
 import exceptions.InvalidDateException;
-import user.DataSaver;
 
 import java.time.Duration;
 import java.util.GregorianCalendar;

@@ -6,8 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
-import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import user.Calendar;
 
 import java.io.IOException;
@@ -71,6 +71,7 @@ public class TimeController extends Application {
         Update();
     }
 
+    // TODO: make this not extend Application
     @Override
     public void start(Stage mainStage) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));

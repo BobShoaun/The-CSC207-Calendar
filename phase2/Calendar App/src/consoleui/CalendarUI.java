@@ -1,17 +1,16 @@
 package consoleui;
 
-import entities.Alert;
-import entities.Event;
-import entities.EventCollection;
-import entities.Series;
+import alert.Alert;
+import event.Event;
+import event.EventCollection;
+import event.Series;
 import exceptions.InvalidDateException;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 import user.Calendar;
 import user.DataSaver;
 import user.User;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -295,9 +294,6 @@ public class CalendarUI extends UserInterface {
             getEventsToday();
         } catch (InvalidDateException e) {
             System.out.println("Internal error when removing the event!");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Error saving events!");
             e.printStackTrace();
         }
     }

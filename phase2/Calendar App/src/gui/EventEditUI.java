@@ -1,18 +1,19 @@
 package gui;
 
-import entities.Event;
-import entities.EventCollection;
+import event.Event;
+import event.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 import user.DataSaver;
 import user.UserManager;
 
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * GUI controller for editing events

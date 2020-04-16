@@ -1,12 +1,11 @@
 package consoleui;
 
-import entities.Event;
-import entities.EventCollection;
-import entities.Series;
+import event.Event;
+import event.EventCollection;
+import event.Series;
 import exceptions.InvalidDateException;
 import user.Calendar;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.GregorianCalendar;
 
@@ -74,7 +73,7 @@ public class EventCollectionUI extends UserInterface {
         try {
             Event base = new Event(eventName, start1, end1);
             cal.addEventSeries(seriesName, start1, endSeries, next, base);
-        } catch (InvalidDateException | IOException e) {
+        } catch (InvalidDateException e) {
             e.printStackTrace();
         }
     }

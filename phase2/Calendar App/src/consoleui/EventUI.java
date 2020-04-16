@@ -1,10 +1,10 @@
 package consoleui;
 
-import entities.AlertCollection;
-import entities.Event;
+import alert.AlertCollection;
+import event.Event;
 import exceptions.InvalidDateException;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 import user.Calendar;
 import user.DataSaver;
 

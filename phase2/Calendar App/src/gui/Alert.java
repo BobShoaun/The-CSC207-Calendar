@@ -1,8 +1,8 @@
 package gui;
 
+import alert.AlertCollection;
 import com.sun.istack.internal.NotNull;
-import entities.AlertCollection;
-import entities.IDManager;
+import event.IDManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
-import static entities.IDManager.parseEventId;
+import static event.IDManager.parseEventId;
 
 /**
  * GUI controller for alerts
@@ -50,7 +50,7 @@ public class Alert extends GraphicalUserInterface {
             System.out.println("AC has not been set!");
         assert ac != null;
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
-                ac.getManAlerts().stream().map(entities.Alert::toString).collect(Collectors.toList()));
+                ac.getManAlerts().stream().map(alert.Alert::toString).collect(Collectors.toList()));
         manAlertList.setItems(alertStrings);
     }
 
@@ -64,7 +64,7 @@ public class Alert extends GraphicalUserInterface {
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
                 ac.getGeneratedAlerts(new GregorianCalendar(1950, Calendar.JANUARY, 0),
                         new GregorianCalendar(2100, Calendar.JANUARY, 0))
-                        .stream().map(entities.Alert::toString).collect(Collectors.toList()));
+                        .stream().map(alert.Alert::toString).collect(Collectors.toList()));
         repAlertList.setItems(alertStrings);
     }
 

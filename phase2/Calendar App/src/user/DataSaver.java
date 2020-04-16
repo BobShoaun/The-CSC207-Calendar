@@ -1,10 +1,12 @@
 package user;
 
+import alert.Alert;
+import alert.AlertCollection;
 import dates.CalendarGenerator;
-import entities.*;
+import event.*;
 import exceptions.InvalidDateException;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -370,8 +372,6 @@ public class DataSaver {
 
         if (strings == null)
             return ac;
-
-        eventId = strings.get(0).trim(); // technically redundant
 
         if (strings.size() > 2) {
             String[] manTimes = strings.get(2).trim().split(" ");

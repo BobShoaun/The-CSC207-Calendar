@@ -1,4 +1,6 @@
-package entities;
+package alert;
+
+import event.IDManager;
 
 import java.util.Date;
 import java.util.GregorianCalendar;

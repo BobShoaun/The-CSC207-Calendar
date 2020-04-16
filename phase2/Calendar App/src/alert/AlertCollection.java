@@ -1,6 +1,7 @@
-package entities;
+package alert;
 
 import dates.CalendarGenerator;
+import event.Event;
 import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 

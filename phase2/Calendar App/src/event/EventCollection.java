@@ -1,8 +1,8 @@
-package entities;
+package event;
 
 import exceptions.InvalidDateException;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 
 import java.util.*;
 

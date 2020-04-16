@@ -1,6 +1,6 @@
 package consoleui;
 
-import mt.Memo;
+import memotag.Memo;
 import user.Calendar;
 
 public class MemoUI extends UserInterface {

@@ -1,9 +1,9 @@
 package gui;
 
-import entities.Alert;
-import entities.Event;
-import entities.Series;
-import entities.SubSeries;
+import alert.Alert;
+import event.Event;
+import event.Series;
+import event.SubSeries;
 import exceptions.NoSuchSeriesException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -14,15 +14,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import mt.Memo;
-import mt.Tag;
+import memotag.Memo;
+import memotag.Tag;
 import user.User;
 import user.UserManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -166,7 +165,7 @@ public class Calendar extends GraphicalUserInterface {
                     end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
                     end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
                     end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
-                    List<entities.Event> events = calendar.getEvents(start, end);
+                    List<Event> events = calendar.getEvents(start, end);
                     eventList.addAll(events);
                 }
             }
@@ -174,14 +173,14 @@ public class Calendar extends GraphicalUserInterface {
             String tagString = searchTermField.getText();
             Tag tag = calendar.getTag(tagString);
             if (tag != null) {
-                List<entities.Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+                List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
                 eventList.addAll(events);
             }
         } else if (searchCriterion.equals("Memo name")) {
             String memoString = searchTermField.getText();
             Memo memo = calendar.getMemo(memoString);
             if (memo != null) {
-                List<entities.Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+                List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
                 eventList.addAll(events);
             }
         } else if (searchCriterion.equals("Postponed")) {

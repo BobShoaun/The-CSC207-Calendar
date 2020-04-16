@@ -2,11 +2,11 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import user.Calendar;
 
 import java.util.List;
@@ -58,14 +58,14 @@ public class Memo extends GraphicalUserInterface {
     @FXML
     private void deleteMemo(Event e) {
         String memoTitle = memoTitleField.getText();
-        mt.Memo memo = calendar.getMemo(memoTitle);
+        memotag.Memo memo = calendar.getMemo(memoTitle);
         calendar.removeMemo(memo);
         showViewMemoUI(e);
     }
 
     private void loadEvents() {
         list.remove(list);
-        mt.Memo memo = calendar.getMemo(memoTextField.getText());
+        memotag.Memo memo = calendar.getMemo(memoTextField.getText());
         List<String> events = memo.getEvents();
         for (String s: events) {
             list.add(s);

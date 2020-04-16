@@ -1,5 +1,7 @@
 package user;
 
+import event.EventSharer;
+
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
