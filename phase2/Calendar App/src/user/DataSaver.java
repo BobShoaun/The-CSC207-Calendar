@@ -294,6 +294,10 @@ public class DataSaver {
         for (File f : data) {
             String id = f.getName();
             id = id.replaceAll(".txt", "");
+            if(id.equals("postponed"))
+            {
+                continue;
+            }
             try {
                 String[] eventData = loadStringFromFile(path + id + ".txt").split("\\n");
                 String name = eventData[1];
@@ -344,7 +348,6 @@ public class DataSaver {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Load an AlertCollection from a file.

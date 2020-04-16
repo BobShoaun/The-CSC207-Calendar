@@ -351,7 +351,7 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     private void showViewMemosUI() {
         System.out.println("Memos clicked");
-        ViewMemos controller = showGUI("viewMemos.fxml");
+        ViewMemos controller = openGUI("viewMemos.fxml");
         controller.setCalendar(calendar);
     }
 
@@ -361,7 +361,7 @@ public class Calendar extends GraphicalUserInterface {
     @FXML
     private void showViewTagsUI() {
         System.out.println("Tags clicked");
-        ViewTags controller = showGUI("viewTags.fxml");
+        ViewTags controller = openGUI("viewTags.fxml");
         controller.setCalendar(calendar);
     }
 

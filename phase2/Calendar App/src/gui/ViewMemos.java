@@ -23,24 +23,25 @@ public class ViewMemos extends gui.GraphicalUserInterface {
 
     private String selectedMemo;
 
-    ObservableList list = FXCollections.observableArrayList();
-
+    ObservableList<String> list = FXCollections.observableArrayList();
 
     public void initialize() {
         selectMemoLabel.setVisible(false);
-        loadMemo();
+        memoList.setItems(list);
     }
 
-    public void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) {
+        this.calendar = c;
+        loadMemos();
+    }
 
-    private void loadMemo() {
-        list.remove(list);
+    private void loadMemos() {
+        list.clear();
         List<Memo> memos = calendar.getMemos();
         for (Memo m: memos) {
             String s = m.getTitle() + ": " + m.getText();
             list.add(s);
         }
-        memoList.getItems().addAll(list);
     }
 
     @FXML
@@ -72,7 +73,7 @@ public class ViewMemos extends gui.GraphicalUserInterface {
     }
 
     @FXML
-    private void showCalendarUI(ActionEvent actionEvent) {
-        GraphicalUserInterface calendar = showGUI("calendar.fxml");
+    private void close(ActionEvent actionEvent) {
+        closeGUI();
     }
 }
