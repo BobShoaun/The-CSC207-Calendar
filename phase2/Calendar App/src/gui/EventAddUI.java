@@ -180,12 +180,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param id          of the event
      */
     protected void addMemo(String memoTitle, String memoContent, String id) {
-        Memo memo = calendar.getMemo(memoTitle, memoContent);
-        if (memo == null) {
-            calendar.addMemo(new mt.Memo(memoTitle, memoContent));
-            memo = calendar.getMemo(memoTitle, memoContent);
+        if(!memosField.getText().equals("")) {
+            Memo memo = calendar.getMemo(memoTitle, memoContent);
+            if (memo == null) {
+                calendar.addMemo(new mt.Memo(memoTitle, memoContent));
+                memo = calendar.getMemo(memoTitle, memoContent);
+            }
+            eventCollection.addMemo(id, memo);
         }
-        eventCollection.addMemo(id, memo);
     }
 
     //TODO: use tag UI instead
@@ -193,16 +195,18 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     /**
      * add the event to the tags
      *
-     * @param id   of the event
+     * @param id   of the events
      */
     protected void addTags(String id) {
-        for (String text : tags) {
-            Tag tag = calendar.getTag(text);
-            if (tag == null) {
-                tag = new Tag(text);
-                calendar.addTag(tag);
+        if (!tagsField.getText().equals("")) {
+            for (String text : tags) {
+                Tag tag = calendar.getTag(text);
+                if (tag == null) {
+                    tag = new Tag(text);
+                    calendar.addTag(tag);
+                }
+                eventCollection.addTag(id, tag);
             }
-            eventCollection.addTag(id, tag);
         }
     }
 
@@ -241,25 +245,27 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
     public void showEventDetails(Event event) {
         nameField.setText(event.getName());
-        startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
-        endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
         if(!event.isPostponed()){
+            startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
+            endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
             startTime.setText(getTime(event.getStartDate()));
             endTime.setText(getTime(event.getEndDate()));
         }
+        System.out.println(event.getStartDate().getTime());
+        System.out.println(event.getEndDate().getTime());
+
+
         mt.Memo memo = calendar.getMemo(event);
         List<mt.Tag> tags = calendar.getTags(event);
         if(memo != null){
             memosField.setText(memo.getTitle());
             memoTextArea.setText(memo.getText());
         }
-        //        oldMemoTitle = memosField.getText();
         List<String> tagsText = new ArrayList<>();
         for (mt.Tag t : tags) {
             tagsText.add(t.getText());
         }
         tagsField.setText(String.join(",", tagsText));
-//        oldTags = tagsField.getText().split(",");
     }
 
     private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {

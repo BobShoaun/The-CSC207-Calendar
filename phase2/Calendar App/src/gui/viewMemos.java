@@ -3,7 +3,6 @@ package gui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
@@ -32,7 +31,7 @@ public class ViewMemos extends gui.GraphicalUserInterface {
         loadMemo();
     }
 
-    protected void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) { this.calendar = c; }
 
     private void loadMemo() {
         list.remove(list);

@@ -73,27 +73,23 @@ public class EventEditUI extends EventAddUI {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            if(event.getName().equals(name)){
-
-            } else{
+            if(!event.getName().equals(name)){
                 //Update all the references to tags and memos
+                event.setName(name); //This changes the id, so this is all necessary
                 List<Tag> tags = calendar.getTags(event);
-                for (Tag t :
-                        tags) {
+                for (Tag t :tags) {
                     calendar.removeTag(t.getText(), event);
                 }
-                Memo memo = calendar.getMemo(event);
-                if(memo != null){
-                    memo.removeEvent(event);
-                }
-                event.setName(name); //This changes the id, so this is all necessary
                 for (Tag t :
                         tags) {
                     t.addEvent(event.getId());
                 }
+                Memo memo = calendar.getMemo(event);
                 if(memo != null){
+                    memo.removeEvent(event);
                     memo.addEvent(event);
                 }
+
             }
             eventCollection.rescheduleEvent(event, start, end);
             editMemo();
