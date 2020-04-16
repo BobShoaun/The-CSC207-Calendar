@@ -1,8 +1,11 @@
 package gui;
 
 import entities.Event;
+import exceptions.InvalidCalendarNameException;
+import exceptions.InvalidUsernameException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import user.UserManager;
 
 public class Share extends GraphicalUserInterface{
@@ -12,10 +15,16 @@ public class Share extends GraphicalUserInterface{
     String recipientCalendar;
 
     @FXML
-    protected Button Username;
+    protected Label UsernameError;
 
     @FXML
-    protected Button CalendarName;
+    protected Label CalendarNameError;
+
+    @FXML
+    protected TextField Username;
+
+    @FXML
+    protected TextField CalendarName;
 
     public void setEvent(Event event){
         this.event = event;
@@ -34,11 +43,15 @@ public class Share extends GraphicalUserInterface{
     }
 
     public void ShareWith(){
+        CalendarNameError.setOpacity(0);
+        UsernameError.setOpacity(0);
         try {
             userManger.getEventSharer().share(event, recipientUsername, recipientCalendar);
-        } catch (Exception e) {
-            e.printStackTrace();
+            closeGUI();
+        } catch (InvalidCalendarNameException e) {
+            CalendarNameError.setOpacity(1);
+        } catch (InvalidUsernameException e){
+            UsernameError.setOpacity(1);
         }
-        closeGUI();
     }
 }
