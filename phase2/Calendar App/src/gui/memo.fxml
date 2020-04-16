@@ -29,7 +29,7 @@
             </TextField>
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
               <items>
-                <Button mnemonicParsing="false" onAction="#createMemo" text="Done" />
+                <Button mnemonicParsing="false" onAction="#editMemo" text="Done" />
                   <Button mnemonicParsing="false" onAction="#deleteMemo" text="Delete" />
               </items>
             </ToolBar>

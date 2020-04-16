@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Tag extends gui.GraphicalUserInterface implements Initializable {
+public class Tag extends gui.GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
@@ -25,8 +25,7 @@ public class Tag extends gui.GraphicalUserInterface implements Initializable {
     @FXML
     private ListView tagEventList;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Tag() {
         loadEvents();
     }
 

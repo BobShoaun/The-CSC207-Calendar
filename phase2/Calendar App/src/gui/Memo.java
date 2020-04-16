@@ -14,11 +14,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Memo extends GraphicalUserInterface implements Initializable {
+public class Memo extends GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
     private Calendar calendar;
+    private mt.Memo memo;
 
     @FXML
     private TextField memoTitleField;
@@ -30,21 +31,24 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     private ListView<String> eventsList;
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Memo() {
         memoExistsLabel.setVisible(false);
         loadEvents();
     }
 
-    protected void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) { this.calendar = c; }
+
+    public void setMemo(mt.Memo m) {this.memo = m;}
+
 
     @FXML
-    private void createMemo(Event e) {
+    private void editMemo(Event e) {
         String memoTitle = memoTitleField.getText();
         String memoText = memoTextField.getText();
 
         try {
-            calendar.addMemo(new mt.Memo(memoTitle, memoText));
+            calendar.editMemoTitle(memoTitle, memoTitle);
+            calendar.editMemoText(memoTitle, memoText);
         } catch (IllegalArgumentException ex) {
             memoExistsLabel.setText("Memo name already exists!");
             memoExistsLabel.setVisible(true);
@@ -71,7 +75,7 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     }
 
     private void showViewMemoUI(Event e) {
-        gui.ViewMemos vm = showGUI("viewMemos.fxml");
+        viewMemos vm = showGUI("viewMemos.fxml");
     }
 
 
