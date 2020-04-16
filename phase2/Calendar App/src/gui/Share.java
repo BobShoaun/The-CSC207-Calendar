@@ -42,6 +42,10 @@ public class Share extends GraphicalUserInterface{
         this.recipientUsername = Username.getText();
     }
 
+    public void exit(){
+        closeGUI();
+    }
+
     public void ShareWith(){
         CalendarNameError.setOpacity(0);
         UsernameError.setOpacity(0);
