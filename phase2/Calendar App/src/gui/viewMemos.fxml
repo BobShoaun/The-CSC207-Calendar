@@ -34,7 +34,7 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
               <items>
                   <Button mnemonicParsing="false" onAction="#editMemo" text="Edit" />
-                  <Button mnemonicParsing="false" onAction="#showCalendarUI" text="Done" />
+                  <Button mnemonicParsing="false" onAction="#close" text="Done" />
                   <Label fx:id="selectMemoLabel" text="Please select a memo!" textFill="#ff4545">
                      <font>
                         <Font size="14.0" />
