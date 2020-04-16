@@ -48,6 +48,10 @@ public class EventEditUI extends EventAddUI {
 
     public void setEvent(Event event) {
         this.event = event;
+        if(calendar.getMemo(event) != null)
+        {
+            oldMemoTitle = calendar.getMemo(event).getTitle();
+        }
         showEventDetails(event);
     }
 
@@ -63,7 +67,24 @@ public class EventEditUI extends EventAddUI {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            event.setName(name);
+            if(event.getName().equals(name)){
+
+            } else{
+                //Update all the references to tags and memos
+                List<Tag> tags = calendar.getTags(event);
+                for (Tag t :
+                        tags) {
+                    calendar.removeTag(t.getText(), event);
+                }
+                Memo memo = calendar.getMemo(event);
+                memo.removeEvent(event);
+                event.setName(name); //This changes the id, so this is all necessary
+                for (Tag t :
+                        tags) {
+                    t.addEvent(event.getId());
+                }
+                memo.addEvent(event);
+            }
             eventCollection.rescheduleEvent(event, start, end);
             editMemo();
             editTags();
@@ -87,10 +108,11 @@ public class EventEditUI extends EventAddUI {
         } else {
             if(calendar.getMemo(oldMemoTitle) != null){  //The new memo does not already exist so we change the old one
                 calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
-                calendar.getMemo(oldMemoTitle).setText(memoTextArea.getText());
+                calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
             }
             else{ //Or we create a new one
                 calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+                calendar.getMemo(newMemoTitle).addEvent(event);
             }
         }
     }

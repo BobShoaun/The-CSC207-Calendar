@@ -77,7 +77,8 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
      * @param newName the new name of the Event
      */
     public void setName(String newName) {
-        this.name = newName;
+        name = newName;
+        id = IDManager.generateEventId(name, startDate);
         setChanged();
         notifyObservers(null);
     }
@@ -90,9 +91,10 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
        if ( newStart.after(endDate) ) {
            throw new InvalidDateException();
        } else {
-           this.startDate = newStart;
+           id = IDManager.generateEventId(name, startDate);
+           startDate = newStart;
            setChanged();
-           notifyObservers(this.startDate);
+           notifyObservers(startDate);
        }
     }
 

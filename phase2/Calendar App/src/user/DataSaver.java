@@ -143,13 +143,16 @@ public class DataSaver {
         //load memos
         try {
             memos = new ArrayList<>();
-            Scanner scanner = loadScannerFromFile("memos.txt");
+            Scanner scanner = loadScannerFromFile(calendarName + "/memos.txt");
             while (scanner.hasNext()) {
                 String memoData = scanner.nextLine();
                 String[] parts = memoData.split("[§]+");
                 //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
-                memos.add(new Memo(parts[0], parts[1], idStrings));
+                List<String> idStrings = new ArrayList<>();
+                if(parts.length == 3){
+                    idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                }
+                memos.add(new Memo(parts[1], parts[0], idStrings));
             }
         } catch (FileNotFoundException ignored) {
 
@@ -157,37 +160,40 @@ public class DataSaver {
         //load tags
         try {
             tags = new ArrayList<>();
-            Scanner scanner = loadScannerFromFile("tags.txt");
+            Scanner scanner = loadScannerFromFile(calendarName + "/tags.txt");
             while (scanner.hasNext()) {
                 String tagData = scanner.nextLine();
                 String[] parts = tagData.split("[§]+");
                 //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                List<String> idStrings = new ArrayList<>();
+                if(parts.length == 2){
+                    idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                }
                 tags.add(new Tag(parts[0], idStrings));
             }
         } catch (FileNotFoundException ignored) {
 
         }
         //Load existing series
-        String[] filenames = getFileNamesInDirectory("series/");
+        String[] filenames = getFileNamesInDirectory(calendarName + "/series/");
         if (filenames != null) {
             for (String seriesName :
                     filenames) {
                 try {
-                    String[] info = loadStringFromFile("series/" + seriesName + "/BaseEvent.txt").split("\\n");
+                    String[] info = loadStringFromFile(calendarName + "/series/" + seriesName + "/BaseEvent.txt").split("\\n");
                     Event baseEvent = stringsToEvent(info);
 
-                    String CG = loadStringFromFile("series/" + seriesName + "/CalenderGenerator.txt");
+                    String CG = loadStringFromFile(calendarName + "/series/" + seriesName + "/CalenderGenerator.txt");
                     CalendarGenerator newCG = new CalendarGenerator(CG);
                     GregorianCalendar newStart = newCG.getStartTime();
                     GregorianCalendar newEnd = newCG.getStartTime();
                     List<Duration> durs = newCG.getPeriods();
 
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
-                    newSeries.setSubSeries(loadSubSeries(loadScannerFromFile("series/" + seriesName + "/SubSeries.txt")));
+                    newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
-                    newSeries.setEvents(ECLoadHelper("series/" + seriesName + "/"));
-                    newSeries.setPostponedEvents(ECLoadHelper("series/" + seriesName + "/postponed/"));
+                    newSeries.setEvents(ECLoadHelper(calendarName + "/series/" + seriesName + "/"));
+                    newSeries.setPostponedEvents(ECLoadHelper(calendarName + "/series/" + seriesName + "/postponed/"));
 
                     series.add(newSeries);
                 } catch (IOException | InvalidDateException e) {
@@ -198,7 +204,7 @@ public class DataSaver {
             }
         }
         //Load existing alert collection series
-        File[] files = calendarDataSaver.getFilesInDirectory("/alerts/");
+        File[] files = calendarDataSaver.getFilesInDirectory(calendarName +"/alerts/");
         if (files != null) {
             for (File file :
                     files) {

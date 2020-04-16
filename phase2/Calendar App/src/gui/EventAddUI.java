@@ -96,6 +96,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         memoTitle = memosField.getText();
         memoContent = memoTextArea.getText();
         tags = tagsField.getText().split(",");
+        for (int i = 0; i < tags.length; i++) {
+            tags[i]= tags[i].trim();
+        }
         if (startDate.getValue() == null || endDate.getValue() == null) {
             throw new InvalidDateException();
         }
