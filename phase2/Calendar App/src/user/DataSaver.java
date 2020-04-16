@@ -152,7 +152,7 @@ public class DataSaver {
                 if(parts.length == 3){
                     idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
                 }
-                memos.add(new Memo(parts[0], parts[1], idStrings));
+                memos.add(new Memo(parts[1], parts[0], idStrings));
             }
         } catch (FileNotFoundException ignored) {
 
@@ -165,7 +165,10 @@ public class DataSaver {
                 String tagData = scanner.nextLine();
                 String[] parts = tagData.split("[§]+");
                 //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                List<String> idStrings = new ArrayList<>();
+                if(parts.length == 2){
+                    idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                }
                 tags.add(new Tag(parts[0], idStrings));
             }
         } catch (FileNotFoundException ignored) {
