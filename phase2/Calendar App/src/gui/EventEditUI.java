@@ -5,6 +5,7 @@ import entities.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import user.DataSaver;
 
 import java.net.URL;
@@ -31,8 +32,13 @@ public class EventEditUI extends EventAddUI {
     @FXML
     protected Button duplicateButton;
 
+    @FXML
+    protected TextField memoTitle;
+    @FXML
+    protected TextField memoText;
+
     private Event event;
-//    private String oldMemoTitle;
+    private String oldMemoTitle;
 //    private String[] oldTags;
 
     private String username;
@@ -67,7 +73,7 @@ public class EventEditUI extends EventAddUI {
             } else {
                 eventCollection.editEvent(event, editedEvent);
             }
-//            editMemo();
+            editMemo();
 //            editTags();
             closeGUI();
             save();
@@ -78,7 +84,7 @@ public class EventEditUI extends EventAddUI {
 
     }
 
-//    private void editMemo(){
+    private void editMemo(){
 //        if (oldMemoTitle.equals("") && !memoTitle.equals("") ){
 //            addMemo(memoTitle, memoContent, event.getId());
 //        }else if (!oldMemoTitle.equals("") && memoTitle.equals("")){
@@ -87,7 +93,13 @@ public class EventEditUI extends EventAddUI {
 //            calendar.editMemoText(oldMemoTitle,memoContent);
 //            calendar.editMemoTitle(oldMemoTitle,memoTitle);
 //        }
-//    }
+        String newMemoTitle = memoTitle.getText();
+        boolean edited = !oldMemoTitle.equals(newMemoTitle);
+
+        calendar.editMemoTitle(oldMemoTitle, newMemoTitle);
+        calendar.editMemoText(oldMemoTitle, memoText.getText());
+        if (edited) { oldMemoTitle = newMemoTitle; }
+    }
 
     //    private void editTags(){
 //        for(String t:oldTags){

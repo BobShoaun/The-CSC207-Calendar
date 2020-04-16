@@ -41,7 +41,7 @@ public class Memo extends GraphicalUserInterface {
     private void editMemo(Event e) {
         String newMemoTitle = memoTitleField.getText();
         String memoText = memoTextField.getText();
-        boolean edited = memoTitle.equals(newMemoTitle);
+        boolean edited = !memoTitle.equals(newMemoTitle);
 
         try {
             calendar.editMemoTitle(memoTitle, newMemoTitle);
