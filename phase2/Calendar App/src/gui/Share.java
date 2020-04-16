@@ -9,10 +9,10 @@ import javafx.scene.control.TextField;
 import user.UserManager;
 
 public class Share extends GraphicalUserInterface{
-    Event event;
-    UserManager userManger;
-    String recipientUsername;
-    String recipientCalendar;
+    private Event event;
+    private UserManager userManger;
+    private String recipientUsername;
+    private String recipientCalendar;
 
     @FXML
     protected Label UsernameError;

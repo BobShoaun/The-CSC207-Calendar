@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import mt.Memo;
 import mt.Tag;
 import user.DataSaver;
+import user.UserManager;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,7 @@ public class EventEditUI extends EventAddUI {
 //    private String[] oldTags;
 
     private String username;
+    private UserManager userManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,6 +55,10 @@ public class EventEditUI extends EventAddUI {
             oldMemoTitle = calendar.getMemo(event).getTitle();
         }
         showEventDetails(event);
+    }
+
+    public void setUserManager(UserManager userManager){
+        this.userManager = userManager;
     }
 
     public void setEventCollection(EventCollection e) {
@@ -145,7 +151,7 @@ public class EventEditUI extends EventAddUI {
     public void handleShareEvent() throws InvalidDateException {
         Share controller = openGUI("Share.fxml");
         controller.setEvent(event);
-        //controller.userManger(userManger); TODO make sure this class has a um
+        controller.setUserManger(userManager);
         save();
     }
 
