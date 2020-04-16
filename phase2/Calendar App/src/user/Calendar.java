@@ -37,12 +37,6 @@ public class Calendar {
         tags = new ArrayList<>();
         eventCollections.add(new EventCollection(new ArrayList<>()));
         timeController = new TimeController();
-
-        try {
-            addEventSeries("Shared");
-        } catch (InvalidDateException ignored) {
-            //This should not fail
-        }
     }
 
     /**

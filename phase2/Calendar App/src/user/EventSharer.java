@@ -44,6 +44,6 @@ public class EventSharer {
             e.printStackTrace();
         }
 
-        recipientCal.getEventCollection("Shared").addEvent(newEvent);
+        recipientCal.getSingleEventCollection().addEvent(newEvent);
     }
 }
