@@ -104,6 +104,11 @@ public class EventEditUI extends EventAddUI {
 
     private void editMemo(){
         String newMemoTitle = memosField.getText();
+        if(newMemoTitle.equals("")){
+            if(calendar.getMemo(oldMemoTitle) != null)
+                calendar.getMemo(oldMemoTitle).removeEvent(event);
+            return;
+        }
         if(calendar.getMemo(newMemoTitle) != null){ //The changed memo already exists, so we move the event to the new one
             calendar.getMemo(newMemoTitle).addEvent(event);
             calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
