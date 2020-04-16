@@ -34,7 +34,7 @@ public class Login extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleLogin() throws InvalidDateException {
+    private void handleLogin() {
         String usernameText = username.getText();
         String passwordText = password.getText();
 
