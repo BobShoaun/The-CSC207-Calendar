@@ -137,7 +137,7 @@ public class EventCollection implements Iterable<Event>, Observer{
      * @return if the event is found and postponed
      * @throws InvalidDateException invalid date for an event
      */
-    public boolean postponedEvent(Event event) throws InvalidDateException {
+    public boolean postponeEvent(Event event) throws InvalidDateException {
         if (removeEvent(event)) {
             addPostponedEvent(event);
             event.addObserver(this);
@@ -147,6 +147,9 @@ public class EventCollection implements Iterable<Event>, Observer{
     }
 
     public void rescheduleEvent(Event event, GregorianCalendar newStart, GregorianCalendar newEnd) throws InvalidDateException {
+        if(!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
+                && !newEnd.before(event.getEndDate()) && !newEnd.after(event.getEndDate()))
+            return;
         event.setStartDate(newStart);
         event.setEndDate(newEnd);
         for (Event e : postponedEvents) {

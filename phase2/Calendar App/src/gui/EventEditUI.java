@@ -5,17 +5,13 @@ import entities.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import mt.Memo;
 import mt.Tag;
 import user.DataSaver;
 import user.UserManager;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * GUI controller for editing events
@@ -161,7 +157,7 @@ public class EventEditUI extends EventAddUI {
     public void handlePostpone() {
         System.out.println("postpone clicked");
         try {
-            eventCollection.postponedEvent(event);
+            eventCollection.postponeEvent(event);
             save();
         } catch (InvalidDateException e) {
             System.out.println("Something is wrong with event generator");

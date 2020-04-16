@@ -168,8 +168,8 @@ public class Series extends EventCollection implements Iterable<Event> {
     }
 
     @Override
-    public boolean postponedEvent(Event event) throws InvalidDateException {
-        if (!super.postponedEvent(event)) {
+    public boolean postponeEvent(Event event) throws InvalidDateException {
+        if (!super.postponeEvent(event)) {
             for (Event e : seriesEvents) {
                 if (e.getId().equals(event.getId())) {
                     calGen.addIgnore(e.getStartDate());
