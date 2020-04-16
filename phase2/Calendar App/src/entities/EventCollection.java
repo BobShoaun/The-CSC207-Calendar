@@ -147,13 +147,12 @@ public class EventCollection implements Iterable<Event> {
     }
 
     public void rescheduleEvent(Event event, GregorianCalendar newStart, GregorianCalendar newEnd) throws InvalidDateException {
+        event.setStartDate(newStart);
+        event.setEndDate(newEnd);
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 postponedEvents.remove(e);
-                e.setStartDate(newStart);
-                e.setEndDate(newEnd);
-                events.add(e);
-//                newEvent.addObserver(this);
+                events.add(event);
                 return;
             }
         }

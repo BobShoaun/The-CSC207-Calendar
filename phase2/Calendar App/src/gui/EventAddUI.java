@@ -80,6 +80,10 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             Event newEvent = createEvent(name, start, end);
             if (newEvent != null) {
                 addEvent(newEvent);
+                addTags(newEvent.getId());
+                if(!memoTitle.equals("")){
+                    addMemo(memoTitle, memoContent, newEvent.getId());
+                }
                 closeGUI();
                 calendarController.updateDisplayedEvents();
                 save();
@@ -89,7 +93,6 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             dateTimeErrorLabel.setVisible(true);
         }
     }
-
 
     protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
@@ -104,7 +107,11 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
         start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-
+        try {
+            setTime(start, end);
+        } catch (InvalidTimeInputException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -121,6 +128,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 //    protected Event createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
     protected Event createEvent(String name, GregorianCalendar start, GregorianCalendar end) {
         try {
+            getUserInput();
             String id = IDManager.generateEventId(name, start);
             setTime(start, end);
             entities.Event newEvent = new entities.Event(name, start, end);
@@ -224,9 +232,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @throws InvalidTimeInputException Invalid time input from user
      */
     private void setTime(GregorianCalendar start, GregorianCalendar end) throws InvalidTimeInputException {
-        start.set(java.util.Calendar.HOUR, getTime(startTime.getText()).get(0));
+        start.set(java.util.Calendar.HOUR_OF_DAY, getTime(startTime.getText()).get(0));
         start.set(java.util.Calendar.MINUTE, getTime(startTime.getText()).get(1));
-        end.set(java.util.Calendar.HOUR, getTime(endTime.getText()).get(0));
+        end.set(java.util.Calendar.HOUR_OF_DAY, getTime(endTime.getText()).get(0));
         end.set(java.util.Calendar.MINUTE, getTime(endTime.getText()).get(1));
     }
 
@@ -254,8 +262,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
     private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {
-        Date date = GC.getTime();
-        return LocalDate.of(date.getYear()+1900, date.getMonth(), date.getDay());
+        return LocalDate.of(GC.get(GregorianCalendar.YEAR),GC.get(GregorianCalendar.MONTH) + 1, GC.get(GregorianCalendar.DATE));
     }
 
     private String getTime(GregorianCalendar GC) {
