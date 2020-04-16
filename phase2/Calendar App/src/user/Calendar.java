@@ -435,9 +435,20 @@ public class Calendar {
         return postponedEvents;
     }
 
+    /**
+     * Changes the name of an event
+     * @param event Event to change name of
+     * @param name new name
+     */
+    public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
+        dataSaver.deleteFile("/events/" + event.getId() + ".txt");
+        event.setName(name);
+        dataSaver.saveCalendar(this);
+    }
+
 
     /**
-     * alert.Event Iterator is used to iterate over the individual event collections to get the next time
+     * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
         private Predicate<Event> isValid;

@@ -120,13 +120,17 @@ public class DataSaver {
         new File(basePath + path).mkdirs();
     }
 
+    public void deleteFile(String path){
+        File file = new File(basePath + path);
+        file.delete();
+    }
+
     public void deleteDirectory(String path) throws IOException {
         Files.walk(Paths.get(basePath + path))
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
                 .forEach(File::delete);
     }
-
 
     public Calendar loadCalendar(String calendarName) {
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
