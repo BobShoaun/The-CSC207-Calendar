@@ -86,6 +86,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
                 }
                 closeGUI();
                 calendarController.updateDisplayedEvents();
+                calendarController.updateDisplayedSeries();
+                calendarController.updateDisplayedSubSeries();
                 save();
                 System.out.println(eventCollection.getEvents().size());
             }

@@ -2,6 +2,9 @@ package gui;
 
 import entities.Alert;
 import entities.Event;
+import entities.Series;
+import entities.SubSeries;
+import exceptions.NoSuchSeriesException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,6 +21,8 @@ import user.UserManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,13 +37,13 @@ public class Calendar extends GraphicalUserInterface {
     private user.Calendar calendar;
     private Event currEvent;
     private String currAlert;
-    private String currSeries;
-    private String currSeriesEvent;
+    private String currSeries = null;
+    private String currSubSeries = null;
     private UserManager userManager;
 
     @FXML private ListView<String> alertList;
-    @FXML private ListView<String> seriesEventList;
-    @FXML private ListView<String> seriesList;
+    @FXML private ListView<String> displayedSubSeriesList;
+    @FXML private ListView<String> displayedSeriesList;
     @FXML private CheckBox darkTheme;
     @FXML private ChoiceBox searchByList;
     @FXML private DatePicker startDate;
@@ -112,6 +117,28 @@ public class Calendar extends GraphicalUserInterface {
             }
         });
         updateDisplayedEvents();
+        updateDisplayedSeries();
+        updateDisplayedSubSeries();
+    }
+
+    protected void updateDisplayedSeries() {
+        ArrayList<String> stringSeries = new ArrayList<>();
+        for(Series series : calendar.getSeries()){
+            stringSeries.add(series.getName());
+        }
+        displayedSeriesList.setItems(FXCollections.observableArrayList(stringSeries));
+    }
+
+    protected void updateDisplayedSubSeries() {
+        ArrayList<String> stringSubSeries = new ArrayList<>();
+        try {
+            for (SubSeries subSeries : calendar.getSeries(currSeries).getSubSeries()) {
+                stringSubSeries.add(subSeries.getString());
+            }
+        } catch (NoSuchSeriesException e){
+            e.printStackTrace();
+        }
+        displayedSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
     }
 
     public void setUserManager(UserManager userManager){
@@ -225,19 +252,35 @@ public class Calendar extends GraphicalUserInterface {
      */
     @FXML
     private void seriesListClicked() {
-        currSeries = seriesList.getSelectionModel().getSelectedItem();
+        currSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
         System.out.println("Clicked on series: " + currSeries);
-        //TODO: Actually do something
+        currSubSeries = null;
+        updateDisplayedSubSeries();
+    }
+
+    @FXML
+    private void deleteSeries() {
+        if(currSeries != null){
+
+        }
+        //TODO make work
     }
 
     /**
      * Handles when an event in a series is clicked
      */
     @FXML
-    private void seriesEventClicked() {
-        currSeriesEvent = alertList.getSelectionModel().getSelectedItem();
-        System.out.println("Clicked on series event: " + currSeriesEvent);
-        //TODO: Actually do something
+    private void subSeriesListClicked() {
+        currSubSeries = displayedSubSeriesList.getSelectionModel().getSelectedItem();
+        System.out.println("Clicked on sub series: " + currSubSeries);
+    }
+
+    @FXML
+    private void deleteSubSeries() {
+        if(currSubSeries != null){
+
+        }
+        //TODO make work
     }
 
     /**
