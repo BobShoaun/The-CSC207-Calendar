@@ -154,6 +154,7 @@ public class EventCollection implements Iterable<Event>, Observer{
         event.setEndDate(newEnd);
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
+                e.setPostponed(false);
                 postponedEvents.remove(e);
                 events.add(event);
                 return;

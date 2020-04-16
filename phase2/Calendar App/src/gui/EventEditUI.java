@@ -5,6 +5,7 @@ import entities.EventCollection;
 import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import mt.Memo;
 import mt.Tag;
 import user.DataSaver;
@@ -18,6 +19,7 @@ import java.util.*;
  */
 public class EventEditUI extends EventAddUI {
 
+    public CheckBox postponeCheckbox;
     @FXML
     protected Button shareEventButton;
     @FXML
@@ -26,9 +28,6 @@ public class EventEditUI extends EventAddUI {
     protected Button deleteButton;
     @FXML
     protected Button editButton;
-
-    @FXML
-    protected Button postponeButton;
     @FXML
     protected Button duplicateButton;
 
@@ -46,14 +45,14 @@ public class EventEditUI extends EventAddUI {
 
     public void setEvent(Event event) {
         this.event = event;
-        if(calendar.getMemo(event) != null)
-        {
+        if (calendar.getMemo(event) != null) {
             oldMemoTitle = calendar.getMemo(event).getTitle();
         }
         showEventDetails(event);
+        postponeCheckbox.setSelected(event.isPostponed());
     }
 
-    public void setUserManager(UserManager userManager){
+    public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
@@ -69,14 +68,14 @@ public class EventEditUI extends EventAddUI {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
-            if(!event.getName().equals(name)){
+            if (!event.getName().equals(name)) {
                 //Update all the references to tags and memos
                 List<Tag> tags = calendar.getTags(event);
-                for (Tag t :tags) {
+                for (Tag t : tags) {
                     calendar.removeTag(t.getText(), event);
                 }
                 Memo memo = calendar.getMemo(event);
-                if(memo != null){
+                if (memo != null) {
                     memo.removeEvent(event);
                 }
                 calendar.renameEvent(event, name); //This changes the id, so this is all necessary
@@ -84,12 +83,13 @@ public class EventEditUI extends EventAddUI {
                         tags) {
                     t.addEvent(event.getId());
                 }
-                if(memo != null){
+                if (memo != null) {
                     memo.addEvent(event);
                 }
 
             }
             eventCollection.rescheduleEvent(event, start, end);
+            postPoneEvent();
             editMemo();
             editTags();
             calendarController.updateDisplayedEvents();
@@ -102,32 +102,32 @@ public class EventEditUI extends EventAddUI {
 
     }
 
-    private void editMemo(){
+    private void editMemo() {
         String newMemoTitle = memosField.getText();
-        if(calendar.getMemo(newMemoTitle) != null){ //The changed memo already exists, so we move the event to the new one
+        if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
             calendar.getMemo(newMemoTitle).addEvent(event);
             calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-            if(calendar.getMemo(oldMemoTitle) != null){
+            if (calendar.getMemo(oldMemoTitle) != null) {
                 calendar.getMemo(oldMemoTitle).removeEvent(event);
             }
         } else {
-            if(calendar.getMemo(oldMemoTitle) != null){  //The new memo does not already exist so we change the old one
+            if (calendar.getMemo(oldMemoTitle) != null) {  //The new memo does not already exist so we change the old one
                 calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
                 calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-            }
-            else{ //Or we create a new one
+            } else { //Or we create a new one
                 calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
                 calendar.getMemo(newMemoTitle).addEvent(event);
             }
         }
     }
 
-    private void editTags(){
-        for(Tag t: calendar.getTags(event)){
+    private void editTags() {
+        for (Tag t : calendar.getTags(event)) {
             calendar.removeTag(t.getText(), event);
         }
         addTags(event.getId());
     }
+
     public void handleDelete() {
         System.out.println("delete clicked");
         try {
@@ -154,13 +154,15 @@ public class EventEditUI extends EventAddUI {
         save();
     }
 
-    public void handlePostpone() {
-        System.out.println("postpone clicked");
-        try {
-            eventCollection.postponeEvent(event);
-            save();
-        } catch (InvalidDateException e) {
-            System.out.println("Something is wrong with event generator");
+    public void postPoneEvent() {
+        if (postponeCheckbox.isSelected() && !event.isPostponed()) {
+            System.out.println("postpone clicked");
+            try {
+                eventCollection.postponeEvent(event);
+                save();
+            } catch (InvalidDateException e) {
+                System.out.println("Something is wrong with event generator");
+            }
         }
     }
 
