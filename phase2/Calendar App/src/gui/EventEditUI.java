@@ -83,17 +83,22 @@ public class EventEditUI extends EventAddUI {
                     calendar.removeTag(t.getText(), event);
                 }
                 Memo memo = calendar.getMemo(event);
-                memo.removeEvent(event);
+                if(memo != null){
+                    memo.removeEvent(event);
+                }
                 event.setName(name); //This changes the id, so this is all necessary
                 for (Tag t :
                         tags) {
                     t.addEvent(event.getId());
                 }
-                memo.addEvent(event);
+                if(memo != null){
+                    memo.addEvent(event);
+                }
             }
             eventCollection.rescheduleEvent(event, start, end);
             editMemo();
             editTags();
+            calendarController.updateDisplayedEvents();
             closeGUI();
             save();
         } catch (InvalidDateException e) {
