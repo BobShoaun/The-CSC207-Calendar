@@ -163,4 +163,9 @@ public class Alert extends GraphicalUserInterface {
         update();
     }
 
+    @FXML
+    private void doneButton() {
+        closeGUI();
+    }
+
 }

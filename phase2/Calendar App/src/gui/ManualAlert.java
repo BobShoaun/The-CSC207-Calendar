@@ -42,7 +42,7 @@ public class ManualAlert extends GraphicalUserInterface {
                 date.get(GregorianCalendar.DATE));
         datePicker.setValue(localDate);
 
-        String hour = "" + date.get(GregorianCalendar.HOUR);
+        String hour = "" + date.get(GregorianCalendar.HOUR_OF_DAY);
         String minute = "" + date.get(GregorianCalendar.MINUTE);
 
         if (hour.length() == 1)
