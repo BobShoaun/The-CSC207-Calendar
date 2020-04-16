@@ -108,6 +108,7 @@ public class EventEditUI extends EventAddUI {
             }
             else{ //Or we create a new one
                 calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+                calendar.getMemo(newMemoTitle).addEvent(event);
             }
         }
     }

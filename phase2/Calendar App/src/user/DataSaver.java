@@ -148,7 +148,10 @@ public class DataSaver {
                 String memoData = scanner.nextLine();
                 String[] parts = memoData.split("[§]+");
                 //Split ids
-                List<String> idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                List<String> idStrings = new ArrayList<>();
+                if(parts.length == 3){
+                    idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                }
                 memos.add(new Memo(parts[0], parts[1], idStrings));
             }
         } catch (FileNotFoundException ignored) {
