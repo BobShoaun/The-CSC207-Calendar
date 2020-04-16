@@ -4,21 +4,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.Event;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import user.Calendar;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class Memo extends GraphicalUserInterface implements Initializable {
+public class Memo extends GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
     private Calendar calendar;
+    private String memoTitle;
 
     @FXML
     private TextField memoTitleField;
@@ -30,25 +28,30 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     private ListView<String> eventsList;
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Memo() {
         memoExistsLabel.setVisible(false);
+        memoTitle = memoTitleField.getText();
         loadEvents();
     }
 
-    protected void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) { this.calendar = c; }
+
 
     @FXML
-    private void createMemo(Event e) {
-        String memoTitle = memoTitleField.getText();
+    private void editMemo(Event e) {
+        String newMemoTitle = memoTitleField.getText();
         String memoText = memoTextField.getText();
+        boolean edited = memoTitle.equals(newMemoTitle);
 
         try {
-            calendar.addMemo(new mt.Memo(memoTitle, memoText));
+            calendar.editMemoTitle(memoTitle, newMemoTitle);
+            calendar.editMemoText(memoTitle, memoText);
         } catch (IllegalArgumentException ex) {
             memoExistsLabel.setText("Memo name already exists!");
             memoExistsLabel.setVisible(true);
         }
+
+        if (edited) { memoTitle = newMemoTitle; }
         showViewMemoUI(e);
     }
 
@@ -71,7 +74,8 @@ public class Memo extends GraphicalUserInterface implements Initializable {
     }
 
     private void showViewMemoUI(Event e) {
-        viewMemos vm = showGUI("viewMemos.fxml");
+        ViewMemos controller = showGUI("viewMemos.fxml");
+        controller.setCalendar(calendar);
     }
 
 

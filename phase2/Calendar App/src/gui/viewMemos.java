@@ -10,11 +10,9 @@ import javafx.scene.control.Label;
 import mt.Memo;
 import user.Calendar;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class viewMemos extends gui.GraphicalUserInterface implements Initializable {
+public class ViewMemos extends gui.GraphicalUserInterface {
 
     @FXML
     private ListView<String> memoList;
@@ -29,10 +27,9 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
     ObservableList list = FXCollections.observableArrayList();
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        selectMemoLabel.setVisible(false);
-//        loadMemo();
+    public void initialize() {
+        selectMemoLabel.setVisible(false);
+        loadMemo();
     }
 
     protected void setCalendar(Calendar c) { this.calendar = c; }
@@ -77,9 +74,6 @@ public class viewMemos extends gui.GraphicalUserInterface implements Initializab
 
     @FXML
     private void showCalendarUI(ActionEvent actionEvent) {
-        //TODO: Do we actually need this
-        //gui.Calendar calendarController = showGUI("calendar.fxml");
-        //calendarController.setUser(userManager.getCurrentUser());
-        //calendarController.setTheme();
+        Calendar calendar = showGUI("calendar.fxml");
     }
 }

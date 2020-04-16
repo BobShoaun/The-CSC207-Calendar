@@ -4,17 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
 import mt.Tag;
 import user.Calendar;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class viewTags extends gui.GraphicalUserInterface implements Initializable {
+public class ViewTags extends gui.GraphicalUserInterface{
 
     @FXML
     private ListView<String> tagList;
@@ -29,13 +26,12 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
     ObservableList list = FXCollections.observableArrayList();
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        selectTagLabel.setVisible(false);
-//        loadTag();
+    public void initialize() {
+        selectTagLabel.setVisible(false);
+        loadTag();
     }
 
-    protected void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) { this.calendar = c; }
 
     private void loadTag() {
         list.remove(list);
@@ -77,7 +73,7 @@ public class viewTags extends gui.GraphicalUserInterface implements Initializabl
 
     @FXML
     private void showCalendarUI(Event e) {
-        gui.Calendar calendar = showGUI("calendar.fxml");
+        Calendar calendar = showGUI("calendar.fxml");
     }
 
 }

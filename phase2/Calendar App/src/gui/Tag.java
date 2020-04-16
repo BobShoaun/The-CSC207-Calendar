@@ -4,20 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import user.Calendar;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class Tag extends gui.GraphicalUserInterface implements Initializable {
+public class Tag extends gui.GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
     private Calendar calendar;
+    private String tagName;
 
     @FXML
     private TextField tagNameTextField;
@@ -25,8 +23,8 @@ public class Tag extends gui.GraphicalUserInterface implements Initializable {
     @FXML
     private ListView tagEventList;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Tag() {
+        tagName = tagNameTextField.getText();
         loadEvents();
     }
 
@@ -42,8 +40,17 @@ public class Tag extends gui.GraphicalUserInterface implements Initializable {
         tagEventList.getItems().addAll(list);
     }
 
+    private void editTag() {
+        String newTagName = tagNameTextField.getText();
+        if ( !tagName.equals(newTagName) ) {
+            calendar.getTag(tagName).setText(newTagName);
+        }
+    }
+
     public void showViewTagUI(ActionEvent actionEvent) {
-        //gui.GraphicalUserInterface viewTags = showGUI("viewTags.fxml");
+        editTag();
+        ViewTags controller = showGUI("viewTags.fxml");
+        controller.setCalendar(calendar);
     }
 
 }
