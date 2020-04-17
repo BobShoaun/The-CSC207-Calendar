@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -11,20 +10,33 @@ import user.Calendar;
 
 import java.util.List;
 
-public class ViewMemosUI extends gui.GraphicalUserInterface {
+/**
+ * GUI controller class for viewing memos.
+ */
+public class ViewMemosController extends gui.GraphicalUserInterface {
 
-    @FXML private ListView<String> memoList;
-    @FXML private Label selectMemoLabel;
+    @FXML
+    private ListView<String> memoList;
+    @FXML
+    private Label selectMemoLabel;
 
     private Calendar calendar;
     private String selectedMemo;
-    private ObservableList<String> list = FXCollections.observableArrayList();
+    private final ObservableList<String> list = FXCollections.observableArrayList();
 
+    /**
+     * Set the GUI to the correct config upon start
+     */
     public void initialize() {
         selectMemoLabel.setVisible(false);
         memoList.setItems(list);
     }
 
+    /**
+     * Set the Calendar
+     *
+     * @param c Calendar
+     */
     public void setCalendar(Calendar c) {
         this.calendar = c;
         loadMemos();
@@ -33,14 +45,17 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     private void loadMemos() {
         list.clear();
         List<Memo> memos = calendar.getMemos();
-        for (Memo m: memos) {
+        for (Memo m : memos) {
             String s = m.getTitle() + ": " + m.getText();
             list.add(s);
         }
     }
 
+    /**
+     * Set the Memo to the selected Memo.
+     */
     @FXML
-    public void chooseMemo() {
+    private void chooseMemo() {
         String memo = memoList.getSelectionModel().getSelectedItem();
         if (memo == null || memo.isEmpty()) {
             selectedMemo = null;
@@ -55,7 +70,6 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     private void editMemo() {
         if (selectedMemo == null || selectedMemo.isEmpty()) {
             selectMemoLabel.setVisible(true);
-            System.out.println("No memo selected!");
         } else {
             showMemoUI();
         }
@@ -63,8 +77,11 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
 
     @FXML
     private void showMemoUI() {
-        MemoUI memoUI = showGUI("memo.fxml");
-        memoUI.setCalendar(calendar);
+        if (memoList.getSelectionModel().getSelectedIndex() >= 0) {
+            MemoController memoController = showGUI("memo.fxml");
+            memoController.setCalendar(calendar);
+            memoController.setMemo(calendar.getMemos().get(memoList.getSelectionModel().getSelectedIndex()));
+        }
     }
 
     @FXML

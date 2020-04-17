@@ -1,5 +1,5 @@
 # Calendar App - Group 0248
-* To run the program as a GUI, execute the main() method gui.Main.java
+* To run the program as a GUI, execute the main() method Main.java
 * To run the console interface (which doesn't have phase 2 features), run consoleui.UserManagerUI.main().
 
 ## Feature List
@@ -7,7 +7,7 @@
 * Infinitely recurring event series
 * GUI created using JavaFX and FXML
 * Postponing (possibly indefinitely), rescheduling, and duplicating events
-
+* [Deprecated] Console ui for part 1 functionality
 ## Configuration Files
 * Project files are inside the 'Calendar App' folder.
 * Each user has its own directory in users/, with the username as the directory name.

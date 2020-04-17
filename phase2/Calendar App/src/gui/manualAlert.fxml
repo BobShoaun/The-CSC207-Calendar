@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="77.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ManualAlertUI">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ManualAlertController">
     <children>
         <ButtonBar layoutY="110.0" prefHeight="40.0" prefWidth="200.0">
             <buttons>

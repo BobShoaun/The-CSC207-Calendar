@@ -11,13 +11,15 @@ import java.util.GregorianCalendar;
 /**
  * GUI Controller class for adding/editing manual alerts.
  */
-public class ManualAlertUI extends GraphicalUserInterface {
+public class ManualAlertController extends GraphicalUserInterface {
 
-    @FXML private DatePicker datePicker;
-    @FXML private TextField textField;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private TextField textField;
 
     private AlertCollection ac;
-    private AlertUI controller;
+    private AlertController controller;
 
     /**
      * Give this controller the objects to act upon.
@@ -25,7 +27,7 @@ public class ManualAlertUI extends GraphicalUserInterface {
      * @param c  The controller which called this
      * @param ac The AlertCollection to act upon
      */
-    protected void initialize(AlertUI c, AlertCollection ac) {
+    protected void initialize(AlertController c, AlertCollection ac) {
         this.ac = ac;
         this.controller = c;
     }
@@ -58,7 +60,6 @@ public class ManualAlertUI extends GraphicalUserInterface {
         String text = textField.getText();
         if (localDate != null && text != null) {
             if (!text.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
-                System.out.println("Invalid time");
                 return;
             }
             GregorianCalendar time = new GregorianCalendar(localDate.getYear(),
@@ -68,7 +69,6 @@ public class ManualAlertUI extends GraphicalUserInterface {
                     Integer.parseInt(text.substring(3)));
             ac.removeManualAlert(time);
             ac.addAlert(time);
-            System.out.println("Added alert " + time.getTime());
             closeGUI();
             controller.update();
         }

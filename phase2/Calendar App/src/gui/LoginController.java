@@ -13,22 +13,25 @@ import java.io.IOException;
 /**
  * GUI controller class for the Login GUI
  */
-public class LoginUI extends GraphicalUserInterface {
+public class LoginController extends GraphicalUserInterface {
 
-    @FXML private TextField username;
-    @FXML private PasswordField password;
-    @FXML private Label bottomMessage;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Label bottomMessage;
 
     private final UserManager userManager = new UserManager();
 
     /**
      * constructor for the login gui controller
      */
-    public LoginUI() {
+    public LoginController() {
         try {
             userManager.loadUsers();
         } catch (IOException e) {
-            System.out.println("Problem loading users!");
+            e.printStackTrace();
         }
     }
 
@@ -41,29 +44,21 @@ public class LoginUI extends GraphicalUserInterface {
             bottomMessage.setText("Sorry, that didn't work. Please try again.");
             bottomMessage.setFont(new Font("Source Code Pro", 14));
             bottomMessage.setBackground(Background.EMPTY);
-            System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
-            System.out.println("Logged in: " + usernameText);
             showCalendarUI();
         }
     }
 
-    @FXML
-    private void handleRegister() {
-        System.out.println("register clicked");
-        showRegisterUI();
-    }
-
     private void showCalendarUI() {
-        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        CalendarController calendarUIController = showGUI("calendar.fxml");
         calendarUIController.setUserManager(userManager);
         calendarUIController.setUser(userManager.getCurrentUser());
     }
 
-    private void showRegisterUI() {
-        RegisterUI g = showGUI("register.fxml");
+    @FXML
+    private void handleRegister() {
+        RegisterController g = showGUI("register.fxml");
         g.setUserManager(userManager);
         g.setDarkTheme();
     }
-
 }

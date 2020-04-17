@@ -6,9 +6,9 @@ import dates.TimeController;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
+import gui.AlertController;
 import memotag.Memo;
 import memotag.Tag;
 
@@ -37,16 +37,15 @@ public class Calendar {
         this.eventManager = new EventManager(new ArrayList<>(), dataSaver);
         timeController = new TimeController();
         this.dataSaver = dataSaver;
-
-        this.alertCollectionManager = new AlertCollectionManager(new ArrayList<>(), dataSaver);
+        this.alertCollectionManager = new AlertCollectionManager(dataSaver);
         tagManager = new TagManager(new ArrayList<>(), dataSaver);
     }
 
     /**
      * @return the single regular list of Event
      */
-    public EventCollection getSingleEventCollection() {
-        return eventManager.getSingleEventCollection();
+    public EventCollection getManualEventCollection() {
+        return eventManager.getManualEventCollection();
     }
 
     /**
@@ -73,15 +72,13 @@ public class Calendar {
      *
      * @param name             Name of the calendar
      * @param eventCollections List of  event collections for new calendar
-     * @param alertCollections List of alert collections for new calendar
      */
     public Calendar(String name,
                     List<EventCollection> eventCollections,
-                    List<AlertCollection> alertCollections,
                     List<Memo> memos,
                     List<Tag> tags,
                     DataSaver dataSaver) {
-        if (eventCollections == null || alertCollections == null) {
+        if (eventCollections == null) {
             throw new NullPointerException();
         }
         this.name = name;
@@ -90,12 +87,13 @@ public class Calendar {
         timeController = new TimeController();
         this.dataSaver = dataSaver;
 
-        this.alertCollectionManager = new AlertCollectionManager(alertCollections, dataSaver);
+        this.alertCollectionManager = new AlertCollectionManager(dataSaver);
         tagManager = new TagManager(tags, dataSaver);
     }
 
     /**
      * Get all alert collections
+     *
      * @return List of all alert collections
      */
     public List<AlertCollection> getAlertCollections() {
@@ -109,6 +107,14 @@ public class Calendar {
      */
     public List<EventCollection> getEventCollections() {
         return eventManager.getEventCollections();
+    }
+
+    /**
+     * @param event the Event to be searched
+     * @return the EventCollection that this event belongs to
+     */
+    public EventCollection getEventCollection(Event event) {
+        return eventManager.getEventCollection(event);
     }
 
 
@@ -169,11 +175,11 @@ public class Calendar {
     /**
      * Create a new event series
      *
-     * @param eventSeriesName name of the new series
+     * @param event the event that is series is modeled upon
      * @throws InvalidDateException If incorrect data is passed in
      */
-    public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventManager.addEventSeries(eventSeriesName);
+    public void addEventSeries(Event event, String seriesName) throws InvalidDateException {
+        eventManager.addEventSeries(event,seriesName);
     }
 
 
@@ -232,6 +238,7 @@ public class Calendar {
 
     /**
      * Add a new memo
+     *
      * @param memo Memo to add
      */
     public void addMemo(Memo memo) {
@@ -279,6 +286,7 @@ public class Calendar {
 
     /**
      * Get the event collection with a certain name
+     *
      * @param eventSeriesName Name of the event collection
      * @return Event collection if it exists otherwise null
      */
@@ -288,6 +296,7 @@ public class Calendar {
 
     /**
      * Get all events with a certain name
+     *
      * @param eventName The name of the event to search by
      * @return Iterator with all events with same name
      */
@@ -297,6 +306,7 @@ public class Calendar {
 
     /**
      * Get all tags
+     *
      * @return List of all tags
      */
     public List<Tag> getTags() {
@@ -305,6 +315,7 @@ public class Calendar {
 
     /**
      * Get tag with a certain name
+     *
      * @param tagName Name of the tag
      * @return The corresponding tag, otherwise null
      */
@@ -324,6 +335,7 @@ public class Calendar {
 
     /**
      * Add a new tag
+     *
      * @param tag The tag to add
      */
     public void addTag(Tag tag) {
@@ -358,6 +370,7 @@ public class Calendar {
 
     /**
      * Set the current time of the time controller
+     *
      * @param gregorianCalendar Value to be set
      */
     public void setTime(GregorianCalendar gregorianCalendar) {
@@ -366,6 +379,7 @@ public class Calendar {
 
     /**
      * Get all postponed events
+     *
      * @return List of all postponed events
      */
     public List<Event> getPostponedEvents() {
@@ -374,10 +388,11 @@ public class Calendar {
 
     /**
      * Changes the name of an event
+     *
      * @param event Event to change name of
-     * @param name new name
+     * @param name  new name
      */
-    public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
+    public void renameEvent(Event event, String name) {
         eventManager.renameEvent(event, name);
     }
 
@@ -435,5 +450,31 @@ public class Calendar {
      */
     public TagManager getTagManager() {
         return tagManager;
+    }
+
+    /**
+     * Remove an event collection from the event manager
+     *
+     * @param eventCollection Event collection to remove
+     */
+    public void removeEventCollection(EventCollection eventCollection) {
+        eventManager.removeEventCollection(eventCollection);
+    }
+
+    /**
+     * Remove all alerts with a specified toString
+     *
+     * @param alertToString toString of alert to be removed
+     */
+    public void removeAlert(String alertToString) {
+        alertCollectionManager.removeAlert(alertToString);
+    }
+
+    /**
+     * Get the alert collection manager
+     * @return The alert collection manager. Is not null
+     */
+    public AlertCollectionManager getAlertCollectionManager(){
+        return alertCollectionManager;
     }
 }

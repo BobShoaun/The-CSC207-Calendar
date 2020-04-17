@@ -4,30 +4,41 @@ import dates.CalendarGenerator;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Manages a Calendar's EventCollections.
+ */
 public class EventManager {
 
     private final DataSaver dataSaver;
     private final List<EventCollection> eventCollections;
 
+    /**
+     * Constructor for EventManager
+     *
+     * @param eventCollections Calendar's EventCollections.
+     * @param dataSaver        DataSaver for saving
+     */
     public EventManager(List<EventCollection> eventCollections, DataSaver dataSaver) {
         this.eventCollections = eventCollections;
+        List<Event> defaultList = new ArrayList<>();
+        eventCollections.add(new EventCollection(defaultList));
         this.dataSaver = dataSaver;
     }
 
     /**
      * @return the single regular list of Event
      */
-    public EventCollection getSingleEventCollection() {
+    public EventCollection getManualEventCollection() {
         return eventCollections.stream().filter(eC -> !(eC instanceof Series)).findAny().get();
     }
 
@@ -64,6 +75,20 @@ public class EventManager {
      */
     public List<EventCollection> getEventCollections() {
         return eventCollections;
+    }
+
+    /**
+     * @param event the Event to be searched
+     * @return the EventCollection that this event belongs to
+     */
+    public EventCollection getEventCollection(Event event) {
+        for (EventCollection e : getEventCollections()) {
+            if (e.getEvent(event.getId()) != null) {
+                return e;
+            }
+        }
+        System.out.println("Didn't find any EventCollection");
+        return getManualEventCollection();
     }
 
     /**
@@ -130,11 +155,13 @@ public class EventManager {
     /**
      * Create a new event series
      *
-     * @param eventSeriesName name of the new series
+     * @param event the event that thi series is modeled upon
      * @throws InvalidDateException If incorrect data is passed in
      */
-    public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null)));
+    public void addEventSeries(Event event, String seriesName) throws InvalidDateException {
+        Series newSeries = new Series(seriesName, event, new CalendarGenerator(event.getStartDate(), Collections.singletonList(Duration.ofDays(7)), null));
+        eventCollections.add(newSeries);
+        System.out.println(newSeries);
         dataSaver.saveEvents(this);
     }
 
@@ -150,15 +177,13 @@ public class EventManager {
     public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException {
         try {
             Series existingSeries = getSeries(name);
-            existingSeries.addRepeatingEvent(baseEvent,start,end,difference);
+            existingSeries.addRepeatingEvent(baseEvent, start, end, difference);
         } catch (NoSuchSeriesException e) {
-            SeriesFactory seriesFactory = new SeriesFactory();
-            Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
+            Series eventCollection = new Series(name, baseEvent, new CalendarGenerator(start, Collections.singletonList(difference), end));
             System.out.println(eventCollection.getClass());
             eventCollections.add(eventCollection);
-
-            dataSaver.saveEvents(this);
         }
+        dataSaver.saveEvents(this);
     }
 
     /**
@@ -213,7 +238,7 @@ public class EventManager {
      * @param event Event to change name of
      * @param name  new name
      */
-    public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
+    public void renameEvent(Event event, String name) {
         dataSaver.deleteFile("/events/" + event.getId() + ".txt");
         event.setName(name);
         dataSaver.saveEvents(this);
@@ -240,12 +265,29 @@ public class EventManager {
     }
 
     /**
+     * Remove the event collection
+     *
+     * @param eventCollection Event collection to remove
+     */
+    public void removeEventCollection(EventCollection eventCollection) {
+        Series series = (Series)eventCollection;
+        if(series != null){
+            try {
+                dataSaver.deleteDirectory("/series/"+series.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        eventCollections.remove(eventCollection);
+    }
+
+    /**
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
-        private Predicate<Event> isValid;
-        private List<Iterator<Event>> eventCollectionEventIterators;
-        private List<Event> possibleNext;
+        private final Predicate<Event> isValid;
+        private final List<Iterator<Event>> eventCollectionEventIterators;
+        private final List<Event> possibleNext;
 
         /**
          * Initialise a new event iterator which iterates overall event collections at once returning events by their

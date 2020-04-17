@@ -6,11 +6,13 @@ import memotag.Tag;
 
 import java.util.*;
 
-public class EventCollection implements Iterable<Event>, Observer{
+/**
+ * A collection of events
+ */
+public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
-
 
     /**
      * constructor for a finite/manually created series, or a list of regular events if name == ""
@@ -22,11 +24,25 @@ public class EventCollection implements Iterable<Event>, Observer{
         this.postponedEvents = new ArrayList<>();
     }
 
+    /**
+     * Set the list of manual events
+     *
+     * @param events Manual events list
+     */
     public void setEvents(List<Event> events) {
         this.events = events;
     }
 
+    /**
+     * Set the list of postponed events
+     *
+     * @param postponedEvents List of postponed events
+     */
     public void setPostponedEvents(List<Event> postponedEvents) {
+        for (Event event :
+                postponedEvents) {
+            event.setPostponed(true);
+        }
         this.postponedEvents = postponedEvents;
     }
 
@@ -86,6 +102,11 @@ public class EventCollection implements Iterable<Event>, Observer{
         return getEvents(startTime, endTime);
     }
 
+    /**
+     * Get the list of postponed events
+     *
+     * @return Postponed events List
+     */
     public List<Event> getPostponedEvents() {
         return postponedEvents;
     }
@@ -104,20 +125,21 @@ public class EventCollection implements Iterable<Event>, Observer{
     /**
      * remove the given event from events/ or ignore if it is an infinite series
      *
-     * @param event the event to br removed
+     * @param event the event to be removed
      * @return if the event is removed or not
      */
-    public boolean removeEvent(Event event) throws InvalidDateException{
+    public boolean removeEvent(Event event) throws InvalidDateException {
         String eventId = event.getId();
-        System.out.println("target id :"+eventId);
+        System.out.println("target id :" + eventId);
         System.out.println();
-        for (Event e:events) {
-            System.out.println(e.getId()+"\t"+e.getId().equals(eventId));
+        for (Event e : events) {
+            System.out.println(e.getId() + "\t" + e.getId().equals(eventId));
         }
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
         if (removed) {
             event.addObserver(this);
         }
+        System.out.println("Is is removed?"+removed);
         return removed;
     }
 
@@ -151,12 +173,20 @@ public class EventCollection implements Iterable<Event>, Observer{
         return false;
     }
 
+    /**
+     * Reschedule an event.
+     *
+     * @param event    Event to reschedule
+     * @param newStart New start time
+     * @param newEnd   New end time
+     * @throws InvalidDateException if the date is bad
+     */
     public void rescheduleEvent(Event event, GregorianCalendar newStart, GregorianCalendar newEnd) throws InvalidDateException {
-        if(!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
+        if (!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
                 && !newEnd.before(event.getEndDate()) && !newEnd.after(event.getEndDate()))
             return;
-        event.setStartDate(newStart);
         event.setEndDate(newEnd);
+        event.setStartDate(newStart);
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 e.setPostponed(false);
@@ -185,15 +215,12 @@ public class EventCollection implements Iterable<Event>, Observer{
     }
 
     /**
-     * Remove the event from the tag
+     * Add a memo to an event
      *
-     * @param eventId the id of the event to be removed
-     * @param tag     the tag that needs to remove the event
+     * @param eventId ID of the event
+     * @param memo    Memo to add
+     * @return True iff the memo could be added
      */
-    public void removeTag(String eventId, Tag tag) {
-        tag.removeEvent(getEvent(eventId));
-    }
-
     public boolean addMemo(String eventId, Memo memo) {
         for (Event e : this.events) {
             //check if the event ID is valid
@@ -205,6 +232,11 @@ public class EventCollection implements Iterable<Event>, Observer{
         return false;
     }
 
+    /**
+     * toString method for easy reading
+     *
+     * @return String representation of the EventCollection
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("===== EVENTS =====\n");
@@ -240,13 +272,7 @@ public class EventCollection implements Iterable<Event>, Observer{
      * @return true if the event's start time is within the start and end time
      */
     protected boolean isOnTime(Event event, GregorianCalendar startTime, GregorianCalendar endTime) {
-        //TODO: not inclusive of end points, test this
         return event.getStartDate().before(endTime) && event.getEndDate().after(startTime);
-//        Date startEvent = GCToDate(event.getStartDate());
-//        Date endEvent = GCToDate(event.getEndDate());
-//        boolean within1 = startTime.before(startEvent) && endTime.after(startEvent);
-//        boolean within2 = startTime.before(endEvent) && endTime.after(endEvent);
-//        return within1 && within2;
     }
 
     /**
@@ -287,6 +313,12 @@ public class EventCollection implements Iterable<Event>, Observer{
         event.setPostponed(true);
     }
 
+    /**
+     * Update the observers
+     *
+     * @param o   Observable object
+     * @param arg The update
+     */
     @Override
     public void update(Observable o, Object arg) {
         //TODO: implement update
@@ -343,7 +375,6 @@ public class EventCollection implements Iterable<Event>, Observer{
             return res;
         }
     }
-
 
     //Legacy method for console UI
     public String[] getEventOptions() {

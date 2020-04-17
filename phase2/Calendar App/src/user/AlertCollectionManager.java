@@ -4,18 +4,51 @@ import alert.Alert;
 import alert.AlertCollection;
 import alert.AlertComparator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Manager for Calendar's AlertCollections
+ */
 public class AlertCollectionManager {
 
-    private final List<AlertCollection> alertCollections;
+    private List<AlertCollection> alertCollections;
     private final DataSaver dataSaver;
 
-    public AlertCollectionManager(List<AlertCollection> alertCollections, DataSaver dataSaver) {
-        this.alertCollections = alertCollections;
+    public AlertCollectionManager(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
+        reloadAlertCollections();
+    }
+
+
+    /**
+     * Reload the alert collections from the disk
+     */
+    public void reloadAlertCollections() {
+        alertCollections = dataSaver.loadAlertCollections();
+    }
+
+    /**
+     * Remove an alert based on its string; formatted:
+     * Event Name at Time
+     *
+     * @param alertString String of alert
+     */
+    public void removeAlert(String alertString) {
+        alertString = alertString.split("at ")[1];
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy");
+        GregorianCalendar alertTime = new GregorianCalendar();
+        try {
+            alertTime.setTime(df.parse(alertString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        for (AlertCollection ac : alertCollections) {
+            ac.removeAlert(alertTime);
+        }
     }
 
     /**

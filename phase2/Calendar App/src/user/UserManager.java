@@ -3,13 +3,11 @@ package user;
 import event.EventSharer;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
-import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -21,32 +19,41 @@ public class UserManager {
 
     private List<User> users;
     private User currentUser;
-    private DataSaver dataSaver;
-    private EventSharer eventSharer;
+    private final DataSaver dataSaver;
+    private final EventSharer eventSharer;
 
     /**
      * Getter for current logged in user
+     *
      * @return current logged in user
      */
-    public User getCurrentUser () { return currentUser; }
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     /**
      * Constructor for UserManager
      */
-    public UserManager () {
+    public UserManager() {
         dataSaver = new DataSaver("./users/");
-        users = new ArrayList<> ();
+        users = new ArrayList<>();
         currentUser = null;
         eventSharer = new EventSharer(this);
     }
 
+    /**
+     * Get the EventSharer
+     *
+     * @return EventSharer
+     */
     public EventSharer getEventSharer() {
         return eventSharer;
     }
 
     /**
      * Loads all users from the file system into memory
-     * @throws IOException
+     *
+     * @throws IOException if users could not be loaded
      */
     public void loadUsers() throws IOException {
         File[] files = dataSaver.getFilesInDirectory("");
@@ -57,8 +64,9 @@ public class UserManager {
     }
 
     /**
-     * Serializes all users from memory into the file system
-     * @throws IOException
+     * Saves all users from memory into the file system
+     *
+     * @throws IOException if user credentials could not be saved
      */
     public void saveUsers() throws IOException {
         for (User user : users)
@@ -66,24 +74,18 @@ public class UserManager {
     }
 
     /**
-     * Serializes a user from memory into the file system
+     * Saves a user from memory into the file system
+     *
      * @param user to save
-     * @throws IOException
+     * @throws IOException if the user could not be saved
      */
     public void saveUser(User user) throws IOException {
         user.save();
     }
 
     /**
-     * Prints out all registered users
-     */
-    public void displayUsers() {
-        for (User user : users)
-            System.out.println(user);
-    }
-
-    /**
      * Logs in a user
+     *
      * @param username username of the user
      * @param password password of the user
      * @return true if the user has successfully log in, false otherwise
@@ -100,28 +102,15 @@ public class UserManager {
     }
 
     /**
-     * Logout the current user
-     */
-    public void logoutCurrentUser () {
-        if (currentUser == null)
-            return;
-        currentUser.setLastLoginTime(new GregorianCalendar()); // by default it is the current time
-    }
-
-    /**
      * Register a new user
+     *
      * @param username new username
      * @param password new password
-     * @param confirmPassword new password again
-     * @throws UsernameTakenException
-     * @throws PasswordMismatchException
-     * @throws IOException
+     * @throws UsernameTakenException if username has been taken
+     * @throws IOException            if user could not be saved
      */
-    public void registerUser(String username, String password, String confirmPassword)
-            throws UsernameTakenException, PasswordMismatchException, InvalidUsernameException, InvalidPasswordException, IOException {
-        if (!password.equals(confirmPassword))
-            throw new PasswordMismatchException();
-
+    public void registerUser(String username, String password)
+            throws UsernameTakenException, InvalidUsernameException, InvalidPasswordException, IOException {
         if (!username.matches("^[a-zA-Z0-9._-]{3,}$"))
             throw new InvalidUsernameException();
 
@@ -132,19 +121,20 @@ public class UserManager {
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();
 
-        User newUser = new User(username, password, eventSharer);
+        User newUser = new User(username, password);
         users.add(newUser);
         saveUser(newUser);
     }
 
     /**
      * Gets a user by username
+     *
      * @param username the username of the user you're looking for
      * @return the user with the name of username or null if one doesn't exist
      */
-    public User getUser(String username){
-        for (User user : users){
-            if (user.getName().equals(username)){
+    public User getUser(String username) {
+        for (User user : users) {
+            if (user.getName().equals(username)) {
                 return user;
             }
         }

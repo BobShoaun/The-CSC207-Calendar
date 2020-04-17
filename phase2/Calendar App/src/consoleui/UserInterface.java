@@ -26,6 +26,7 @@ public abstract class UserInterface {
 
     /**
      * Sources and validates the user's string input
+     *
      * @param prompt message to prompt the user on what to input
      * @return validated string input
      */
@@ -35,7 +36,8 @@ public abstract class UserInterface {
 
     /**
      * Sources and validates the user's string input
-     * @param prompt message to prompt the user on what to input
+     *
+     * @param prompt      message to prompt the user on what to input
      * @param bannedWords words that will not be validated.
      * @return validated string input
      */
@@ -43,17 +45,18 @@ public abstract class UserInterface {
         System.out.print(prompt);
         String input;
         boolean first = true;
-        do{
+        do {
             if (!first)
                 System.out.println("This input is not valid/has already been chosen");
             input = scanner.nextLine();
             first = false;
-        } while(bannedWords.contains(input));
+        } while (bannedWords.contains(input));
         return input;
     }
 
     /**
      * Sources and validates the user's word input, only one word allowed
+     *
      * @param prompt message to prompt user on what to input
      * @return validated word, no spaces allowed
      */
@@ -67,9 +70,10 @@ public abstract class UserInterface {
 
     /**
      * Sources and validates the user's integer input
+     *
      * @param prompt message to prompt the user on what to input
-     * @param min: minimum acceptable int, inclusive
-     * @param max: maximum acceptable int, inclusive
+     * @param min:   minimum acceptable int, inclusive
+     * @param max:   maximum acceptable int, inclusive
      * @return validated int
      */
     protected int getIntInput(String prompt, int min, int max) {
@@ -96,9 +100,9 @@ public abstract class UserInterface {
         System.out.print(prompt + " Format: Number [w/d/h/m/s]");
         String[] split = scanner.nextLine().split("\\s+"); // split text by whitespaces
         int amount;
-        try{
+        try {
             amount = Integer.parseInt(split[0]);
-        } catch (NumberFormatException n){
+        } catch (NumberFormatException n) {
             return getDurationInput("Invalid duration, try again: ");
         }
         switch (split[1]) {
@@ -116,6 +120,12 @@ public abstract class UserInterface {
         return getDurationInput("Please re-enter a valid duration <amount> <{w,d,h,m,s}>: ");
     }
 
+    /**
+     * Get the date input, not allowing null values.
+     *
+     * @param prompt Prompt from user
+     * @return The GregorianCalendar with the time
+     */
     protected GregorianCalendar getDateInput(String prompt) {
         return getDateInput(prompt, false);
     }
@@ -123,7 +133,8 @@ public abstract class UserInterface {
     /**
      * Sources and validates user input of a date
      * in the form DD/MM/YYYY HH:MM
-     * @param prompt message to prompt the user on what to input
+     *
+     * @param prompt    message to prompt the user on what to input
      * @param allowNull whether a null date is acceptable as an output
      * @return validated input as a GregorianCalendar object
      */

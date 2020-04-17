@@ -1,24 +1,36 @@
 package dates;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Epic time-travelling wizardry class
+ */
 public class TimeController {
     private GregorianCalendar currentTime;
 
-    public TimeController(){
+    /**
+     * Initialize this TimeTravellerController
+     */
+    public TimeController() {
         currentTime = new GregorianCalendar();
     }
 
-    public GregorianCalendar getTime(){
+    /**
+     * Get the current time
+     *
+     * @return Current Time
+     */
+    public GregorianCalendar getTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(GregorianCalendar newTime){
+    /**
+     * Set the current time by travelling 80 mph in a DeLorean.
+     *
+     * @param newTime New Time to be set.
+     */
+    public void setCurrentTime(GregorianCalendar newTime) {
         currentTime = newTime;
     }
 
-    public void incrementTime(GregorianCalendar timeIncrease){
-        currentTime.setTime(new Date(currentTime.getTime().getTime() + timeIncrease.getTime().getTime()));
-    }
 }

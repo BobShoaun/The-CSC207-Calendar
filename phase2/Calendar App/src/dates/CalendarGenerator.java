@@ -1,11 +1,13 @@
 package dates;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * The CalendarGenerator class
+ * CalendarGenerator, which is an Iterable to go through GregorianCalendars.
  */
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
@@ -14,7 +16,14 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     private List<Duration> periods;
     private GregorianCalendar endTime;
 
-    // end==null means forever
+    /**
+     * Initialize the CalendarGenerator.
+     * end==null means it goes on forever
+     *
+     * @param start   Start time
+     * @param periods The duration of repetition
+     * @param end     End time
+     */
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
         this.startTime = start;
         this.periods = periods;
@@ -22,34 +31,21 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     }
 
     /**
-     * Create a CalendarGenerator from a String.
+     * Initialize the CalendarGenerator.
+     * end==null means it goes on forever
      *
-     * @param input
+     * @param start      Start time
+     * @param periods    The duration of repetition
+     * @param end        End time
+     * @param ignoreList List of ignored times
      */
-    // TODO: move to DataSaver class
-    public CalendarGenerator(String input) {
-        String[] information = input.split("\n");
-        startTime = new GregorianCalendar();
-        startTime.setTimeInMillis(Long.parseLong(information[0].trim()));
-
-        endTime = (new GregorianCalendar());
-        endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
-
-        periods = Arrays.stream(information[2].split(" "))
-                .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
-
-        if (information.length > 3) {
-            String[] ignoreMillisStr = information[3].split(" ");
-            List<GregorianCalendar> ignored = new ArrayList<>();
-            for (String s : ignoreMillisStr) {
-                GregorianCalendar gc = new GregorianCalendar();
-                gc.setTimeInMillis(Long.parseLong(s));
-                ignored.add(gc);
-            }
-            this.ignoreList = ignored;
-        }
+    public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end, List<GregorianCalendar> ignoreList) {
+        this.startTime = start;
+        this.periods = periods;
+        this.endTime = end;
+        this.ignoreList = ignoreList;
     }
-    // TODO: move to DataSaver?
+
 
     /**
      * Outputs all data in this CG into a String.
@@ -57,8 +53,11 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * @return A savable representation of the data
      */
     public String getString() {
-        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n"
-                + endTime.getTimeInMillis() + "\n");
+        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n");
+        if(endTime != null)
+                result.append(endTime.getTimeInMillis()).append("\n");
+        else
+            result.append("\n");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(" ");
         }
@@ -76,7 +75,8 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ");
+        StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + (endTime != null ? endTime.getTime().toString() : "")
+                + "\nRepeat Durations: ");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(", ");
         }
@@ -101,26 +101,56 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         ignoreList.add(newIgnoreTime);
     }
 
+    /**
+     * Get the list of ignored times.
+     *
+     * @return IgnoreList
+     */
     public List<GregorianCalendar> getIgnoreList() {
         return ignoreList;
     }
 
+    /**
+     * Get the list of periods of repetition.
+     *
+     * @return List of Durations
+     */
     public List<Duration> getPeriods() {
         return periods;
     }
 
+    /**
+     * Get the time the GregorianCalendars start.
+     *
+     * @return Start Time
+     */
     public GregorianCalendar getStartTime() {
         return startTime;
     }
 
+    /**
+     * Get the time the GregorianCalendars end.
+     *
+     * @return End Time
+     */
     public GregorianCalendar getEndTime() {
         return endTime;
     }
 
+    /**
+     * Set the end time for the Iterator.
+     *
+     * @param endTime End Time GregorianCalendar
+     */
     public void setEndTime(GregorianCalendar endTime) {
         this.endTime = endTime;
     }
 
+    /**
+     * Set the start time for the Iterator.
+     *
+     * @param startTime Start Time GregorianCalendar
+     */
     public void setStartTime(GregorianCalendar startTime) {
         this.startTime = startTime;
     }
@@ -166,11 +196,21 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             return candidates;
         }
 
+        /**
+         * Returns true iff the next GregorianCalendar is within the range (StartTime, EndTime)
+         *
+         * @return True iff the Iterator has next
+         */
         @Override
         public boolean hasNext() {
             return nextSet().size() != 0;
         }
 
+        /**
+         * Get the next GregorianCalendar in the Iterator
+         *
+         * @return Next GregorianCalendar
+         */
         @Override
         public GregorianCalendar next() {
             if (hasNext()) {

@@ -1,7 +1,5 @@
 package user;
 
-import event.EventSharer;
-
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
@@ -19,33 +17,35 @@ import java.util.List;
  */
 public class User {
 
-    private String name;
+    private final String name;
     private String password;
-    private List<Calendar> calendars;
+    private final List<Calendar> calendars;
     private GregorianCalendar lastLoginTime;
-    private boolean firstLogin;
-    private DataSaver dataSaver;
-    private EventSharer eventSharer;
+    private final boolean firstLogin;
+    private final DataSaver dataSaver;
     private boolean darkTheme;
 
     /**
      * getter for the user's preference of a dark theme or not
-     * @return
+     *
+     * @return True iff theme is dark
      */
-    public boolean getDarkTheme(){
+    public boolean getDarkTheme() {
         return darkTheme;
     }
 
     /**
      * sets the user's preference of dark theme
-     * @param darkTheme
+     *
+     * @param darkTheme True if the theme should be dark
      */
-    public void setDarkTheme(boolean darkTheme){
+    public void setDarkTheme(boolean darkTheme) {
         this.darkTheme = darkTheme;
     }
 
     /**
      * getter for the user's name
+     *
      * @return name
      */
     public String getName() {
@@ -54,6 +54,7 @@ public class User {
 
     /**
      * getter for one of the user's calendar
+     *
      * @param index of the calendar
      * @return calendar
      */
@@ -61,6 +62,12 @@ public class User {
         return calendars.get(index);
     }
 
+    /**
+     * Add a new Calendar to the User
+     *
+     * @param calendarName Name of new Calendar
+     * @throws InvalidNameException if the name is invalid
+     */
     public void addCalendar(String calendarName) throws InvalidNameException {
         if (calendarName.equals(" ") | calendarName.equals(""))
             throw new InvalidNameException();
@@ -70,6 +77,7 @@ public class User {
 
     /**
      * Remove a calendar from the user
+     *
      * @param index of calendar to remove
      */
     public void removeCalendar(int index) {
@@ -83,12 +91,13 @@ public class User {
 
     /**
      * Gets a calendar by name
+     *
      * @param name the name of the calendar you're looking for
      * @return the calendar with the title of name or null if one doesn't exist
      */
-    public Calendar getCalendar(String name){
-        for (Calendar calendar : calendars){
-            if (calendar.getName().equals(name)){
+    public Calendar getCalendar(String name) {
+        for (Calendar calendar : calendars) {
+            if (calendar.getName().equals(name)) {
                 return calendar;
             }
         }
@@ -97,12 +106,16 @@ public class User {
 
     /**
      * Get all of user's calendars
-     * @return
+     *
+     * @return List of Calendars
      */
-    public List<Calendar> getCalendars () { return this.calendars; }
+    public List<Calendar> getCalendars() {
+        return this.calendars;
+    }
 
     /**
      * getter for firstLogin, whether if its the user's first time logging in
+     *
      * @return firstLogin
      */
     public boolean isFirstLogin() {
@@ -111,6 +124,7 @@ public class User {
 
     /**
      * Getter for last login time
+     *
      * @return lastLoginTime
      */
     public GregorianCalendar getLastLoginTime() {
@@ -119,29 +133,30 @@ public class User {
 
     /**
      * setter for last login time
+     *
      * @param time new last login time
      */
-    public void setLastLoginTime (GregorianCalendar time) {
+    public void setLastLoginTime(GregorianCalendar time) {
         this.lastLoginTime = time;
     }
 
     /**
      * Logout this user, and saves all necessary information
-     * @throws IOException
+     *
+     * @throws IOException if there is an IO error
      */
-    public void logout () throws IOException {
+    public void logout() throws IOException {
         setLastLoginTime((GregorianCalendar) GregorianCalendar.getInstance());
         save();
     }
 
     /**
      * Constructor for User
-     * @param name the user's name
+     *
+     * @param name     the user's name
      * @param password the user's password
-     * @param eventSharer the eventSharer
      */
-    public User(String name, String password, EventSharer eventSharer) {
-        this.eventSharer = eventSharer;
+    public User(String name, String password) {
         this.name = name;
         this.password = password;
         this.calendars = new ArrayList<>();
@@ -158,9 +173,10 @@ public class User {
 
     /**
      * Constructor for User
+     *
      * @param credentials string containing the user's data.
      */
-    public User (String credentials) {
+    public User(String credentials) {
         firstLogin = false;
 
         String[] split = credentials.split(";");
@@ -184,20 +200,22 @@ public class User {
 
     /**
      * Check if the name and password matches this user's
-     * @param name name to check
+     *
+     * @param name     name to check
      * @param password password to check
      * @return whether the name and password are an exact match
      */
-    public boolean authenticate (String name, String password) {
+    public boolean authenticate(String name, String password) {
         return this.name.equals(name) && this.password.equals(password);
     }
 
     /**
      * Creates a string representation of this user
+     *
      * @return string representation
      */
     @Override
-    public String toString () {
+    public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         String dateFormatted = sdf.format(lastLoginTime.getTime());
         return name + ";" + password + ";" + darkTheme + ";" + dateFormatted;
@@ -206,7 +224,7 @@ public class User {
     private void loadCalendars() {
         File[] files = dataSaver.getFilesInDirectory("");
         for (File file : files) {
-            if (file.isFile()) // dont want credentials.txt
+            if (file.isFile()) // don't want credentials.txt
                 continue;
             this.calendars.add(dataSaver.loadCalendar(file.getName()));
         }
@@ -219,7 +237,8 @@ public class User {
 
     /**
      * Save the user's credentials and information into disc
-     * @throws IOException
+     *
+     * @throws IOException if there was an error saving the user credentials.
      */
     public void save() throws IOException {
         System.out.println("Saving user: " + toString());

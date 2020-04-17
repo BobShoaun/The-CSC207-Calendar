@@ -1,6 +1,8 @@
 package gui;
 
-import exceptions.*;
+import exceptions.InvalidPasswordException;
+import exceptions.InvalidUsernameException;
+import exceptions.UsernameTakenException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,33 +16,47 @@ import java.util.ResourceBundle;
 
 /**
  * GUI for registering new users
+ *
  * @author Ng Bob Shoaun
  */
-public class RegisterUI extends GraphicalUserInterface implements Initializable {
+public class RegisterController extends GraphicalUserInterface implements Initializable {
 
-    @FXML private Label usernameErrorLabel;
-    @FXML private Label passwordErrorLabel;
-    @FXML private Label confirmPasswordErrorLabel;
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
+    @FXML
+    private Label usernameErrorLabel;
+    @FXML
+    private Label passwordErrorLabel;
+    @FXML
+    private Label confirmPasswordErrorLabel;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
 
     private UserManager userManager;
 
     /**
      * Sets the user manager to be used by this GUI
-     * @param userManager
+     *
+     * @param userManager UserManager for login/register
      */
-    public void setUserManager (UserManager userManager) {
+    public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Initialize the GUI to hide error messages
+     *
+     * @param location  URL
+     * @param resources ResourceBundle
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLabelsNotVisible();
     }
 
-    private void setLabelsNotVisible () {
+    private void setLabelsNotVisible() {
         usernameErrorLabel.setVisible(false);
         passwordErrorLabel.setVisible(false);
         confirmPasswordErrorLabel.setVisible(false);
@@ -49,47 +65,45 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
     @FXML
     private void handleRegister() throws IOException {
         setLabelsNotVisible();
-        System.out.println("Register");
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-
+        if (!password.equals(confirmPassword)) {
+            confirmPasswordErrorLabel.setText("Passwords do not match!");
+            confirmPasswordErrorLabel.setVisible(true);
+            return;
+        }
         try {
-            userManager.registerUser(username, password, confirmPassword);
+            userManager.registerUser(username, password);
             userManager.loginUser(username, password);
             showCalendarUI();
 
         } catch (UsernameTakenException ex) {
             usernameErrorLabel.setText("Username already taken!");
             usernameErrorLabel.setVisible(true);
-        } catch (InvalidUsernameException ex){
+        } catch (InvalidUsernameException ex) {
             usernameErrorLabel.setText("Invalid username!");
             usernameErrorLabel.setVisible(true);
-        } catch (PasswordMismatchException ex) {
-            confirmPasswordErrorLabel.setText("Passwords do not match!");
-            confirmPasswordErrorLabel.setVisible(true);
         } catch (InvalidPasswordException ex) {
             passwordErrorLabel.setText("Invalid password!");
             passwordErrorLabel.setVisible(true);
         }
-
     }
 
     @FXML
     private void handleCancel() { // go back to login page
-        System.out.println("Cancel");
         showLoginUI();
     }
 
     private void showCalendarUI() {
-        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        CalendarController calendarUIController = showGUI("calendar.fxml");
         calendarUIController.setUserManager(userManager);
         calendarUIController.setUser(userManager.getCurrentUser());
     }
 
     private void showLoginUI() {
-        LoginUI loginUI = showGUI("login.fxml");
-        loginUI.setDarkTheme();
+        LoginController loginController = showGUI("login.fxml");
+        loginController.setDarkTheme();
     }
 
 }

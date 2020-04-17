@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Terminal interface for alert.Event.
+ * Terminal interface for Event.
  */
 
 public class EventUI extends UserInterface {
@@ -61,7 +61,7 @@ public class EventUI extends UserInterface {
     @Override
     public void show() {
         boolean running = true;
-        getMemoUIs();
+        getMemoUI();
         while (running) {
             display();
             int option = getOptionsInput(new String[]{"Exit",
@@ -210,7 +210,8 @@ public class EventUI extends UserInterface {
         }
     }
 
-    private void getMemoUIs() { //TODO: Is this still necessary if we only have a single memo?
+
+    private void getMemoUI() {
         Memo memo = calendar.getMemo(event);
         memoUIs.add(new MemoUI(memo, calendar));
     }
@@ -218,8 +219,8 @@ public class EventUI extends UserInterface {
     private void editTag() {
         List<Tag> tags = calendar.getTags();
         String tagName = getStringInput("Enter tag name: ");
-        for (Tag t: tags) {
-            if ( t.getText().equals(tagName) )  {
+        for (Tag t : tags) {
+            if (t.getText().equals(tagName)) {
                 String newText = getStringInput("Enter new tag text: ");
                 t.setText(newText);
             }

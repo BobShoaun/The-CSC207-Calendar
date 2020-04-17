@@ -2,14 +2,13 @@ package consoleui;
 
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
-import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import user.UserManager;
 
 import java.io.IOException;
 
 /**
- * consoleui.UserManagerUI, the starting point of the program
+ * UserManagerUI, the starting point of the program
  */
 public class UserManagerUI extends UserInterface {
 
@@ -17,6 +16,7 @@ public class UserManagerUI extends UserInterface {
 
     /**
      * Constructor for UserManagerUI
+     *
      * @param userManager the userManager to display
      */
     public UserManagerUI(UserManager userManager) {
@@ -84,13 +84,18 @@ public class UserManagerUI extends UserInterface {
         showCalendar();
     }
 
-    private void showRegisterMenu () {
+    private void showRegisterMenu() {
         displayLine();
         String username = getWordInput("Enter username: ");
         String password = getWordInput("Enter password: ");
         String confirmPassword = getWordInput("Confirm password: ");
+        if (!confirmPassword.equals(password)) {
+            System.out.println("Password mismatch!");
+            showRegisterMenu();
+            return;
+        }
         try {
-            userManager.registerUser(username, password, confirmPassword);
+            userManager.registerUser(username, password);
             System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
             showCalendar();
@@ -102,9 +107,6 @@ public class UserManagerUI extends UserInterface {
             showRegisterMenu();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
-            showRegisterMenu();
-        } catch (PasswordMismatchException e) {
-            System.out.println("Password mismatch!");
             showRegisterMenu();
         } catch (IOException ee) {
             System.out.println("Failed to create user:" + ee.toString());
@@ -119,13 +121,14 @@ public class UserManagerUI extends UserInterface {
 
     /**
      * Main Method
-     * @param args
+     *
+     * @param args Command-line arguments
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         UserManager userManager = new UserManager();
         try {
             userManager.loadUsers();
-        } catch(IOException ee){
+        } catch (IOException ee) {
             System.out.print("Unhandled exception: " + ee.toString());
         }
         new UserManagerUI(userManager).show();

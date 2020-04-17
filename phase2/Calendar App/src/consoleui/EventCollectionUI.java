@@ -9,6 +9,9 @@ import user.Calendar;
 import java.time.Duration;
 import java.util.GregorianCalendar;
 
+/**
+ * Terminal interface for EventCollections
+ */
 public class EventCollectionUI extends UserInterface {
     private EventCollection events;
     private user.Calendar cal;
@@ -18,11 +21,17 @@ public class EventCollectionUI extends UserInterface {
         this.cal = cal;
     }
 
+    /**
+     * Display the contents of this EventCollection.
+     */
     @Override
     public void display() {
         System.out.println(this.events);
     }
 
+    /**
+     * Start the UI with menu options.
+     */
     @Override
     public void show() {
         display();
@@ -38,7 +47,7 @@ public class EventCollectionUI extends UserInterface {
                 displayTimeFrame();
                 break;
             case 2:
-                if(this.events instanceof Series) {
+                if (this.events instanceof Series) {
 //                String name = getStringInput("name of the series:");
                     EventCollection regularEvents = cal.getEventCollection("");
 

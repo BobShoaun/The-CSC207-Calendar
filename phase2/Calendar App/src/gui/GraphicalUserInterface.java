@@ -10,6 +10,7 @@ import java.io.IOException;
 /**
  * General class for any graphical user interface
  * handles ui transitions and window management.
+ *
  * @author Ng Bob Shoaun
  */
 public class GraphicalUserInterface {
@@ -19,22 +20,25 @@ public class GraphicalUserInterface {
 
     /**
      * Set window(stage) of the current GUI
+     *
      * @param window
      */
-    protected void setWindow (Stage window) {
+    public void setWindow(Stage window) {
         this.window = window;
     }
 
     /**
      * Set the default window title, the window title when none is specified
+     *
      * @param title
      */
-    protected void setDefaultWindowTitle(String title) {
+    public void setDefaultWindowTitle(String title) {
         defaultWindowTitle = title;
     }
 
     /**
      * Set the title of the window
+     *
      * @param title
      */
     protected void setWindowTitle(String title) {
@@ -44,17 +48,18 @@ public class GraphicalUserInterface {
     /**
      * Set the GUI to be dark theme
      */
-    protected void setDarkTheme () {
+    public void setDarkTheme() {
         window.getScene().getStylesheets().add("gui/DarkTheme.css");
     }
 
     /**
      * changes the scene within the same stage(window)
-     * @param fxml fmxl file of the scene
-     * @param <T> type of GUI controller
+     *
+     * @param fxml fxml file of the scene (including .fxml extension)
+     * @param <T>  type of GUI controller
      * @return GUI controller
      */
-    protected <T extends GraphicalUserInterface> T showGUI (String fxml) {
+    public <T extends GraphicalUserInterface> T showGUI(String fxml) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
         try {
             window.hide();
@@ -75,9 +80,10 @@ public class GraphicalUserInterface {
 
     /**
      * opens a scene in a new stage(window)
-     * @param fxml
-     * @param <T>
-     * @return
+     *
+     * @param fxml File path of fxml file (including .fxml extension)
+     * @param <T>  Type of GUI
+     * @return Controller for the new GUI page
      */
     protected <T extends GraphicalUserInterface> T openGUI(String fxml) {
         Stage newWindow = new Stage();
@@ -100,9 +106,8 @@ public class GraphicalUserInterface {
     /**
      * Closes the current stage (window)
      */
-    protected void closeGUI () {
+    protected void closeGUI() {
         window.close();
     }
-
 
 }

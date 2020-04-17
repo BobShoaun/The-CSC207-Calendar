@@ -1,50 +1,37 @@
 package gui;
 
+import alert.AlertCollection;
 import event.Event;
 import event.EventCollection;
+import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import memotag.Memo;
 import memotag.Tag;
 import user.DataSaver;
 import user.UserManager;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * GUI controller for editing events
  */
-public class EventEditUI extends EventAddUI {
+public class EditEventController extends AddEventController {
 
-    @FXML private CheckBox postponeCheckbox;
-//    @FXML
-//    private Button shareEventButton;
-//    @FXML
-//    private Button addAlertButton;
-//    @FXML
-//    private Button deleteButton;
-//    @FXML
-//    private Button editButton;
-//    @FXML
-//    private Button duplicateButton;
-
+    @FXML
+    private CheckBox postponeCheckbox;
     private Event event;
     private String oldMemoTitle;
-//    private String[] oldTags;
-
     private String username;
     private UserManager userManager;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setLabelInvisible();
-    }
-
+    /**
+     * Set the Event to edit, with the correct fields in the GUI.
+     *
+     * @param event Event to edit.
+     */
     public void setEvent(Event event) {
         this.event = event;
         if (calendar.getMemo(event) != null) {
@@ -54,21 +41,35 @@ public class EventEditUI extends EventAddUI {
         postponeCheckbox.setSelected(event.isPostponed());
     }
 
+    /**
+     * Set the User Manager (for event sharing and such)
+     *
+     * @param userManager UserManager to set
+     */
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Set the EventCollection to edit
+     *
+     * @param e EventCollection to be set
+     */
     public void setEventCollection(EventCollection e) {
         this.eventCollection = e;
     }
 
+    /**
+     * Set the name of the user
+     *
+     * @param username Username
+     */
     protected void setUsername(String username) {
         this.username = username;
     }
 
     @FXML
     private void handleEdit() {
-        System.out.println("Done (edit) clicked");
         try {
             getUserInput();
             if (!event.getName().equals(name)) {
@@ -81,6 +82,7 @@ public class EventEditUI extends EventAddUI {
                 if (memo != null) {
                     memo.removeEvent(event);
                 }
+
                 calendar.renameEvent(event, name); //This changes the id, so this is all necessary
                 for (Tag t :
                         tags) {
@@ -92,52 +94,22 @@ public class EventEditUI extends EventAddUI {
 
             }
             EventCollection old = eventCollection;
-            if(isEventCollectionChanged(eventCollection)){
-//                System.out.println(old);
-//                System.out.println("=====================================");
-//                System.out.println(eventCollection);
-                System.out.println("removed:::"+old.removeEvent(event));
+            if (isEventCollectionChanged(eventCollection)) {
                 eventCollection.addEvent(event);
-            }else {
+            } else {
                 eventCollection.rescheduleEvent(event, start, end);
-                postPoneEvent();
-                editMemo();
-                editTags();
-                calendarUIController.updateDisplayedEvents();
-                closeGUI();
-                save();
             }
+            postponeEvent();
+            editMemo(event, oldMemoTitle);
+            editTags();
+            closeGUI();
+            calendarUIController.updateDisplays();
+            save();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         } catch (NoSuchSeriesException e) {
             seriesErrorLabel.setVisible(true);
-        }
-    }
-
-    private void editMemo() {
-        String newMemoTitle = memosField.getText();
-        if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
-            if (newMemoTitle.equals("")) {
-                if (calendar.getMemo(oldMemoTitle) != null)
-                    calendar.getMemo(oldMemoTitle).removeEvent(event);
-                return;
-            }
-            if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
-                calendar.getMemo(newMemoTitle).addEvent(event);
-                calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-                if (calendar.getMemo(oldMemoTitle) != null) {
-                    calendar.getMemo(oldMemoTitle).removeEvent(event);
-                }
-            } else {
-                if (calendar.getMemo(oldMemoTitle) != null) {  //The new memo does not already exist so we change the old one
-                    calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
-                    calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-                } else { //Or we create a new one
-                    calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
-                    calendar.getMemo(newMemoTitle).addEvent(event);
-                }
-            }
         }
     }
 
@@ -150,50 +122,50 @@ public class EventEditUI extends EventAddUI {
 
     @FXML
     private void handleDelete() {
-        System.out.println("delete clicked");
         try {
             eventCollection.removeEvent(event);
             save();
             closeGUI();
         } catch (InvalidDateException e) {
             e.printStackTrace();
-            System.out.println("Something is wrong with event Generator then");
         }
     }
 
     @FXML
     private void handleAddAlert() {
-        System.out.println("add clicked");
-        AlertUI controller = openGUI("alert.fxml");
+        AlertController controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
-        controller.initialize(ds.loadAlertCollection(event.getId()));
+        AlertCollection alertCollection = ds.loadAlertCollection(event.getId());
+        controller.initialize(alertCollection, calendar);
     }
 
     @FXML
     private void handleShareEvent() {
-        ShareUI controller = openGUI("Share.fxml");
+        ShareController controller = openGUI("share.fxml");
         controller.setEvent(event);
         controller.setUserManger(userManager);
         save();
     }
 
-    private void postPoneEvent() {
+    private void postponeEvent() {
         if (postponeCheckbox.isSelected() && !event.isPostponed()) {
-            System.out.println("postpone clicked");
             try {
                 eventCollection.postponeEvent(event);
                 save();
             } catch (InvalidDateException e) {
-                System.out.println("Something is wrong with event generator");
+                e.printStackTrace();
             }
         }
     }
 
     @FXML
+    private void handleCancel() {
+        closeGUI();
+    }
+
+    @FXML
     private void handleDuplicate() {
-        System.out.println("Duplicate clicked");
-        //TODO: need date input...
-        EventAddUI dup = openGUI("EventAddUI.fxml");
+        AddEventController dup = openGUI("addEvent.fxml");
         dup.setCalendar(calendar);
         dup.setCalendarUIController(calendarUIController);
         dup.showEventDetails(event);
