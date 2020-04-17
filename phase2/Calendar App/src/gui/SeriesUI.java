@@ -1,6 +1,8 @@
 package gui;
 
 import event.Event;
+import event.EventCollection;
+import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.InvalidTimeInputException;
 import exceptions.NoSuchSeriesException;
@@ -37,6 +39,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     private TextField nameField;
 
     private Event baseEvent;
+    private Series series;
     private user.Calendar calendar;
     private String name;
     private String seriesName;
@@ -60,7 +63,12 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     private void handleCreateSeries() {
         try {
             getUserInput();
-            calendar.addEventSeries(name, start, end, timeSpan, baseEvent);
+            if(seriesName.equals("")){
+            calendar.addEventSeries(name, start, end, timeSpan, baseEvent);}
+            else {
+                getSeries();
+                series.addRepeatingEvent(baseEvent,start,end,timeSpan);
+            }
             System.out.println(calendar.getSeries(name));
         } catch (InvalidDateException e) {
             System.out.println("Invalid Time");
@@ -76,7 +84,8 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         closeGUI();
     }
 
-    private void getUserInput() throws InvalidDateException, InvalidTimeInputException {
+
+    protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         name = nameField.getText();
         getTimeSpan();
         seriesName = seriesField.getText();
@@ -85,6 +94,12 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
             end = null;
         } else if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
             throw new InvalidDateException();
+        }
+    }
+
+    private void getSeries() throws NoSuchSeriesException {
+        if (!seriesName.equals("")) {
+            series = calendar.getSeries(seriesName);
         }
     }
 

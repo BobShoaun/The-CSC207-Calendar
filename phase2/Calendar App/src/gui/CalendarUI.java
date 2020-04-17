@@ -144,15 +144,6 @@ public class CalendarUI extends GraphicalUserInterface {
         displayedSubSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
     }
 
-    /*protected void updateDisplayedSeriesEvents() {
-        ArrayList<String> events = new ArrayList<>();
-        if (currSeries != null) {
-            for (Event event : currSeries) {
-                events.add(event.toString());
-            }
-            displayedSubSeriesList.setItems(FXCollections.observableArrayList(events));
-        }
-    }*/
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
@@ -163,10 +154,6 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     protected void updateDisplayedEvents() {
-//        System.out.println(calendar.getSeries().size());
-//        for (Series s:calendar.getSeries()) {
-//            System.out.println(s);
-//        }
         String searchCriterion = searchByList.getValue();
         if (searchCriterion == null) {
             return;
