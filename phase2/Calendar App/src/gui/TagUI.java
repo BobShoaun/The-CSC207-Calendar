@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -10,7 +9,7 @@ import user.Calendar;
 
 import java.util.List;
 
-public class Tag extends gui.GraphicalUserInterface {
+public class TagUI extends gui.GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
@@ -23,7 +22,7 @@ public class Tag extends gui.GraphicalUserInterface {
     @FXML
     private ListView tagEventList;
 
-    public Tag() {
+    public TagUI() {
         tagName = tagNameTextField.getText();
         loadEvents();
     }
@@ -49,7 +48,7 @@ public class Tag extends gui.GraphicalUserInterface {
 
     public void showViewTagUI() {
         editTag();
-        ViewTags controller = showGUI("viewTags.fxml");
+        ViewTagsUI controller = showGUI("viewTags.fxml");
         controller.setCalendar(calendar);
     }
 

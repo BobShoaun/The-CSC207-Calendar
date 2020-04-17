@@ -11,14 +11,14 @@ import java.util.GregorianCalendar;
 /**
  * GUI Controller class for adding/editing manual alerts.
  */
-public class ManualAlert extends GraphicalUserInterface {
+public class ManualAlertUI extends GraphicalUserInterface {
 
     @FXML
     private DatePicker datePicker;
     @FXML
     private TextField textField;
     private AlertCollection ac;
-    private Alert controller;
+    private AlertUI controller;
 
     /**
      * Give this controller the objects to act upon.
@@ -26,7 +26,7 @@ public class ManualAlert extends GraphicalUserInterface {
      * @param c  The controller which called this
      * @param ac The AlertCollection to act upon
      */
-    protected void initialize(Alert c, AlertCollection ac) {
+    protected void initialize(AlertUI c, AlertCollection ac) {
         this.ac = ac;
         this.controller = c;
     }

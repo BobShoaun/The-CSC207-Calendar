@@ -184,12 +184,12 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="memosField" promptText="Title of the memo">
+                  <TextField fx:id="memosField" promptText="Title of the memoUI">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextArea fx:id="memoTextArea" prefHeight="65.0" prefWidth="355.0" promptText="Content of the memo">
+                  <TextArea fx:id="memoTextArea" prefHeight="65.0" prefWidth="355.0" promptText="Content of the memoUI">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>

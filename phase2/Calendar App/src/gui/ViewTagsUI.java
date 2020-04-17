@@ -12,7 +12,7 @@ import user.Calendar;
 
 import java.util.List;
 
-public class ViewTags extends gui.GraphicalUserInterface{
+public class ViewTagsUI extends gui.GraphicalUserInterface{
 
     @FXML
     private ListView<String> tagList;
@@ -69,8 +69,8 @@ public class ViewTags extends gui.GraphicalUserInterface{
 
     @FXML
     private void showTagUI(Event e) {
-        gui.Tag tag = showGUI("tag.fxml");
-        tag.setCalendar(calendar);
+        TagUI tagUI = showGUI("tag.fxml");
+        tagUI.setCalendar(calendar);
     }
 
     public void close(ActionEvent actionEvent) {

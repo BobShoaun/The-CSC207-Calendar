@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -11,7 +10,7 @@ import user.Calendar;
 
 import java.util.List;
 
-public class Memo extends GraphicalUserInterface {
+public class MemoUI extends GraphicalUserInterface {
 
     ObservableList list = FXCollections.observableArrayList();
 
@@ -28,7 +27,7 @@ public class Memo extends GraphicalUserInterface {
     private ListView<String> eventsList;
 
 
-    public Memo() {
+    public MemoUI() {
         memoExistsLabel.setVisible(false);
         memoTitle = memoTitleField.getText();
         loadEvents();
@@ -73,7 +72,7 @@ public class Memo extends GraphicalUserInterface {
     }
 
     private void showViewMemoUI() {
-        ViewMemos controller = showGUI("viewMemos.fxml");
+        ViewMemosUI controller = showGUI("viewMemos.fxml");
         controller.setCalendar(calendar);
     }
 

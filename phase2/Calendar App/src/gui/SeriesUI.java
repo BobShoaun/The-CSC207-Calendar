@@ -41,4 +41,8 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     }
 
+    private void getUserInput(){
+
+    }
+
 }

@@ -95,7 +95,7 @@ public class EventEditUI extends EventAddUI {
             postPoneEvent();
             editMemo();
             editTags();
-            calendarController.updateDisplayedEvents();
+            calendarUIController.updateDisplayedEvents();
             closeGUI();
             save();
         } catch (InvalidDateException e) {
@@ -154,14 +154,13 @@ public class EventEditUI extends EventAddUI {
     @FXML
     private void handleAddAlert() {
         System.out.println("add clicked");
-        Alert controller = openGUI("alert.fxml");
+        AlertUI controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
         controller.initialize(ds.loadAlertCollection(event.getId()));
     }
 
-    @FXML
-    private void handleShareEvent() {
-        Share controller = openGUI("Share.fxml");
+    public void handleShareEvent() throws InvalidDateException {
+        ShareUI controller = openGUI("Share.fxml");
         controller.setEvent(event);
         controller.setUserManger(userManager);
         save();
@@ -185,7 +184,7 @@ public class EventEditUI extends EventAddUI {
         //TODO: need date input...
         EventAddUI dup = openGUI("EventAddUI.fxml");
         dup.setCalendar(calendar);
-        dup.setCalendarController(calendarController);
+        dup.setCalendarUIController(calendarUIController);
         dup.showEventDetails(event);
     }
 }

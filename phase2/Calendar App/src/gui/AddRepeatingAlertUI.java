@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 /**
  * GUI controller for adding repeating alerts
  */
-public class AddRepeatingAlert extends GraphicalUserInterface {
+public class AddRepeatingAlertUI extends GraphicalUserInterface {
 
     @FXML
     private DatePicker datePicker;
@@ -28,7 +28,7 @@ public class AddRepeatingAlert extends GraphicalUserInterface {
     @FXML
     private ChoiceBox<String> durationUnit;
     private AlertCollection ac;
-    private Alert controller;
+    private AlertUI controller;
 
     /**
      * Initialize the controller to the correct config
@@ -36,7 +36,7 @@ public class AddRepeatingAlert extends GraphicalUserInterface {
      * @param c  The controller for Alert which called this controller
      * @param ac The AlertCollection to be managed
      */
-    public void initialize(Alert c, AlertCollection ac) {
+    public void initialize(AlertUI c, AlertCollection ac) {
         this.ac = ac;
         this.controller = c;
         ObservableList<String> options = FXCollections.observableArrayList(

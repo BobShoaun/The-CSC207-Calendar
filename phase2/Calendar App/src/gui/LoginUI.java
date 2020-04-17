@@ -1,6 +1,5 @@
 package gui;
 
-import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -14,7 +13,7 @@ import java.io.IOException;
 /**
  * GUI controller class for the Login GUI
  */
-public class Login extends GraphicalUserInterface {
+public class LoginUI extends GraphicalUserInterface {
 
     @FXML private TextField username;
     @FXML private PasswordField password;
@@ -25,7 +24,7 @@ public class Login extends GraphicalUserInterface {
     /**
      * constructor for the login gui controller
      */
-    public Login() {
+    public LoginUI() {
         try {
             userManager.loadUsers();
         } catch (IOException e) {
@@ -56,13 +55,13 @@ public class Login extends GraphicalUserInterface {
     }
 
     private void showCalendarUI() {
-        Calendar calendarController = showGUI("calendar.fxml");
-        calendarController.setUserManager(userManager);
-        calendarController.setUser(userManager.getCurrentUser());
+        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        calendarUIController.setUserManager(userManager);
+        calendarUIController.setUser(userManager.getCurrentUser());
     }
 
     private void showRegisterUI() {
-        Register g = showGUI("register.fxml");
+        RegisterUI g = showGUI("register.fxml");
         g.setUserManager(userManager);
         g.setDarkTheme();
     }

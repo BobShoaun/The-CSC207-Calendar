@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * GUI for registering new users
  * @author Ng Bob Shoaun
  */
-public class Register extends GraphicalUserInterface implements Initializable {
+public class RegisterUI extends GraphicalUserInterface implements Initializable {
 
     @FXML private Label usernameErrorLabel;
     @FXML private Label passwordErrorLabel;
@@ -82,13 +82,13 @@ public class Register extends GraphicalUserInterface implements Initializable {
     }
 
     private void showCalendarUI() {
-        Calendar calendarController = showGUI("calendar.fxml");
-        calendarController.setUserManager(userManager);
-        calendarController.setUser(userManager.getCurrentUser());
+        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        calendarUIController.setUserManager(userManager);
+        calendarUIController.setUser(userManager.getCurrentUser());
     }
 
     private void showLoginUI() {
-        Login login = showGUI("login.fxml");
-        login.setDarkTheme();
+        LoginUI loginUI = showGUI("login.fxml");
+        loginUI.setDarkTheme();
     }
 }

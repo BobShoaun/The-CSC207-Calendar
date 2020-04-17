@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Calendar">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CalendarUI">
     <children>
         <SplitPane dividerPositions="0.41846153846153844, 0.6133333333333333, 0.8061538461538461" layoutX="100.0" layoutY="40.0" prefHeight="400.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -73,7 +73,7 @@
                                      <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
                               </Button>
-                               <Label fx:id="lastLoginLabel" minWidth="-Infinity" text="Last login on: ">
+                               <Label fx:id="lastLoginLabel" minWidth="-Infinity" text="Last loginUI on: ">
                                    <HBox.margin>
                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                    </HBox.margin>
