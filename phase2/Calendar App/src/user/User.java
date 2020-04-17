@@ -1,7 +1,5 @@
 package user;
 
-import event.EventSharer;
-
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
@@ -226,7 +224,7 @@ public class User {
     private void loadCalendars() {
         File[] files = dataSaver.getFilesInDirectory("");
         for (File file : files) {
-            if (file.isFile()) // dont want credentials.txt
+            if (file.isFile()) // don't want credentials.txt
                 continue;
             this.calendars.add(dataSaver.loadCalendar(file.getName()));
         }

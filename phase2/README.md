@@ -1,5 +1,5 @@
 # Calendar App - Group 0248
-* To run the program as a GUI, execute the main() method gui.Main.java
+* To run the program as a GUI, execute the main() method Main.java
 * To run the console interface (which doesn't have phase 2 features), run consoleui.UserManagerUI.main().
 
 ## Feature List
