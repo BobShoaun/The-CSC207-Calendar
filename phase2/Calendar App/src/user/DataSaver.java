@@ -86,7 +86,6 @@ public class DataSaver {
     public void saveToFile(String path, String contents) throws IOException {
         try (FileWriter fileWriter = new FileWriter(basePath + path)) {
             fileWriter.write(contents);
-            System.out.println("Saved single string to " + basePath + path);
         } catch (FileNotFoundException e) {
             // file and/or directory doesn't exist
             File newFile = new File(basePath + path);
