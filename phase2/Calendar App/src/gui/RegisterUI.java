@@ -53,9 +53,13 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-
+        if(!password.equals(confirmPassword)){
+            confirmPasswordErrorLabel.setText("Passwords do not match!");
+            confirmPasswordErrorLabel.setVisible(true);
+            return;
+        }
         try {
-            userManager.registerUser(username, password, confirmPassword);
+            userManager.registerUser(username, password);
             userManager.loginUser(username, password);
             showCalendarUI();
 
@@ -65,14 +69,10 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
         } catch (InvalidUsernameException ex){
             usernameErrorLabel.setText("Invalid username!");
             usernameErrorLabel.setVisible(true);
-        } catch (PasswordMismatchException ex) {
-            confirmPasswordErrorLabel.setText("Passwords do not match!");
-            confirmPasswordErrorLabel.setVisible(true);
         } catch (InvalidPasswordException ex) {
             passwordErrorLabel.setText("Invalid password!");
             passwordErrorLabel.setVisible(true);
         }
-
     }
 
     @FXML

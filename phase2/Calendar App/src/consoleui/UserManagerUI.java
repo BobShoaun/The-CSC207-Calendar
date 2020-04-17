@@ -2,7 +2,6 @@ package consoleui;
 
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
-import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 import user.UserManager;
 
@@ -89,8 +88,13 @@ public class UserManagerUI extends UserInterface {
         String username = getWordInput("Enter username: ");
         String password = getWordInput("Enter password: ");
         String confirmPassword = getWordInput("Confirm password: ");
+        if(!confirmPassword.equals(password)){
+            System.out.println("Password mismatch!");
+            showRegisterMenu();
+            return;
+        }
         try {
-            userManager.registerUser(username, password, confirmPassword);
+            userManager.registerUser(username, password);
             System.out.println("User registered successfully...");
             userManager.loginUser(username, password);
             showCalendar();
@@ -102,9 +106,6 @@ public class UserManagerUI extends UserInterface {
             showRegisterMenu();
         } catch (UsernameTakenException e) {
             System.out.println("Username already taken!");
-            showRegisterMenu();
-        } catch (PasswordMismatchException e) {
-            System.out.println("Password mismatch!");
             showRegisterMenu();
         } catch (IOException ee) {
             System.out.println("Failed to create user:" + ee.toString());

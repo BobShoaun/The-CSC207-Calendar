@@ -3,7 +3,6 @@ package user;
 import event.EventSharer;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
-import exceptions.PasswordMismatchException;
 import exceptions.UsernameTakenException;
 
 import java.io.File;
@@ -100,28 +99,14 @@ public class UserManager {
     }
 
     /**
-     * Logout the current user
-     */
-    public void logoutCurrentUser () {
-        if (currentUser == null)
-            return;
-        currentUser.setLastLoginTime(new GregorianCalendar()); // by default it is the current time
-    }
-
-    /**
      * Register a new user
      * @param username new username
      * @param password new password
-     * @param confirmPassword new password again
      * @throws UsernameTakenException
-     * @throws PasswordMismatchException
      * @throws IOException
      */
-    public void registerUser(String username, String password, String confirmPassword)
-            throws UsernameTakenException, PasswordMismatchException, InvalidUsernameException, InvalidPasswordException, IOException {
-        if (!password.equals(confirmPassword))
-            throw new PasswordMismatchException();
-
+    public void registerUser(String username, String password)
+            throws UsernameTakenException,  InvalidUsernameException, InvalidPasswordException, IOException {
         if (!username.matches("^[a-zA-Z0-9._-]{3,}$"))
             throw new InvalidUsernameException();
 
