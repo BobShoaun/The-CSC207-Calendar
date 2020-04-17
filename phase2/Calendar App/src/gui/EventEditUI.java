@@ -108,7 +108,7 @@ public class EventEditUI extends EventAddUI {
                 eventCollection.rescheduleEvent(event, start, end);
             }
             postPoneEvent();
-            editMemo();
+            editMemo(event, oldMemoTitle);
             editTags();
             calendarUIController.updateDisplayedEvents();
             closeGUI();
@@ -118,32 +118,6 @@ public class EventEditUI extends EventAddUI {
             dateTimeErrorLabel.setVisible(true);
         } catch (NoSuchSeriesException e) {
             seriesErrorLabel.setVisible(true);
-        }
-    }
-
-    private void editMemo() {
-        String newMemoTitle = memosField.getText();
-        if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
-            if (newMemoTitle.equals("")) {
-                if (calendar.getMemo(oldMemoTitle) != null)
-                    calendar.getMemo(oldMemoTitle).removeEvent(event);
-                return;
-            }
-            if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
-                calendar.getMemo(newMemoTitle).addEvent(event);
-                calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-                if (calendar.getMemo(oldMemoTitle) != null) {
-                    calendar.getMemo(oldMemoTitle).removeEvent(event);
-                }
-            } else {
-                if (calendar.getMemo(oldMemoTitle) != null) {  //The new memo does not already exist so we change the old one
-                    calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
-                    calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
-                } else { //Or we create a new one
-                    calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
-                    calendar.getMemo(newMemoTitle).addEvent(event);
-                }
-            }
         }
     }
 
