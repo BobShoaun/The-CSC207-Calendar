@@ -11,24 +11,29 @@ import java.util.List;
 
 public class AlertCollectionManager {
 
-    private final List<AlertCollection> alertCollections;
+    private List<AlertCollection> alertCollections;
+    private final DataSaver dataSaver;
 
-    public AlertCollectionManager(List<AlertCollection> alertCollections) {
-        this.alertCollections = alertCollections;
+    public AlertCollectionManager(DataSaver dataSaver) {
+        this.dataSaver = dataSaver;
+        reloadAlertCollections();
     }
 
+
     /**
-     * Remove all alerts with a specified toString
-     *
-     * @param alertToString toString of alert to be removed
+     * Reload the alert collections from the disk
      */
+    public void reloadAlertCollections(){
+        alertCollections = dataSaver.loadAlertCollections();
+    }
+
     public void removeAlert(String alertToString) {
         GregorianCalendar alertTime = IDManager.parseEventId(alertToString);
         for (AlertCollection ac : alertCollections) {
             ac.removeAlert(alertTime);
         }
-    }
-
+	}
+    
     /**
      * Get all alert collections
      *

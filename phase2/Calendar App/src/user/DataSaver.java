@@ -172,34 +172,19 @@ public class DataSaver {
 
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
-        ArrayList<Tag> tags = new ArrayList<>();
+        ArrayList<Tag> tags;
         ArrayList<EventCollection> eventCollections = new ArrayList<>();
-        ArrayList<AlertCollection> alertCollections = new ArrayList<>();
+        EventCollection manualEvents;
 
         loadEvents(calendarName, eventCollections);
 
         memos = loadMemos(calendarName, memos);
 
-        tags = loadTags(calendarName, tags);
+        tags = loadTags(calendarName);
 
         loadSeries(calendarName, eventCollections);
 
-        loadAlertCollections(calendarName, calendarDataSaver, alertCollections);
-
-        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags, calendarDataSaver);
-    }
-
-    private void loadAlertCollections(String calendarName, DataSaver calendarDataSaver, ArrayList<AlertCollection> alertCollections) {
-        //Load existing alert collection series
-        File[] files = calendarDataSaver.getFilesInDirectory(calendarName + "/alerts/");
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName();
-                name = name.replaceAll(".txt", "");
-                AlertCollection alertCollection = loadAlertCollection(name);
-                alertCollections.add(alertCollection);
-            }
-        }
+        return new Calendar(calendarName, eventCollections, memos, tags, calendarDataSaver);
     }
 
     private void loadSeries(String calendarName, ArrayList<EventCollection> eventCollections) {
@@ -239,16 +224,13 @@ public class DataSaver {
                 } catch (IOException | InvalidDateException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }
     }
 
-    private ArrayList<Tag> loadTags(String calendarName, ArrayList<Tag> tags) {
-
+    private ArrayList<Tag> loadTags(String calendarName) {
+        ArrayList<Tag> tags = new ArrayList<>();
         try {
-            tags = new ArrayList<>();
             Scanner scanner = loadScannerFromFile(calendarName + "/tags.txt");
             while (scanner.hasNext()) {
                 String tagData = scanner.nextLine();
@@ -260,10 +242,26 @@ public class DataSaver {
                 }
                 tags.add(new Tag(parts[0], idStrings));
             }
-        } catch (FileNotFoundException ignored) {
+    	} catch (FileNotFoundException ignored) {
 
         }
         return tags;
+    }
+
+    public List<AlertCollection> loadAlertCollections() {
+        ArrayList<AlertCollection>  alertCollections = new ArrayList<>();
+        //Load existing alert collection series
+        File[] files = getFilesInDirectory("/alerts/");
+        if (files != null) {
+            for (File file :
+                    files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                AlertCollection alertCollection = loadAlertCollection(name);
+                alertCollections.add(alertCollection);
+            }
+        }
+        return alertCollections;
     }
 
     private ArrayList<Memo> loadMemos(String calendarName, ArrayList<Memo> memos) {
@@ -288,7 +286,6 @@ public class DataSaver {
     }
 
     private void loadEvents(String calendarName, ArrayList<EventCollection> eventCollections) {
-
         EventCollection manualEvents;
         manualEvents = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
         manualEvents.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
@@ -312,7 +309,6 @@ public class DataSaver {
      * @param tagManager TagManager to save
      */
     public void saveTags(TagManager tagManager) {
-
         StringBuilder tagsData = new StringBuilder();
         for (Tag tag :
                 tagManager.getTags()) {
@@ -499,6 +495,4 @@ public class DataSaver {
 
         return ac;
     }
-
-
 }

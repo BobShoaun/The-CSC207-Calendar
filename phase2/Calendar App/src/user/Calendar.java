@@ -36,8 +36,7 @@ public class Calendar {
         this.eventManager = new EventManager(new ArrayList<>(), dataSaver);
         timeController = new TimeController();
         this.dataSaver = dataSaver;
-
-        this.alertCollectionManager = new AlertCollectionManager(new ArrayList<>());
+        this.alertCollectionManager = new AlertCollectionManager(dataSaver);
         tagManager = new TagManager(new ArrayList<>(), dataSaver);
     }
 
@@ -72,15 +71,13 @@ public class Calendar {
      *
      * @param name             Name of the calendar
      * @param eventCollections List of  event collections for new calendar
-     * @param alertCollections List of alert collections for new calendar
      */
     public Calendar(String name,
                     List<EventCollection> eventCollections,
-                    List<AlertCollection> alertCollections,
                     List<Memo> memos,
                     List<Tag> tags,
                     DataSaver dataSaver) {
-        if (eventCollections == null || alertCollections == null) {
+        if (eventCollections == null) {
             throw new NullPointerException();
         }
         this.name = name;
@@ -89,7 +86,7 @@ public class Calendar {
         timeController = new TimeController();
         this.dataSaver = dataSaver;
 
-        this.alertCollectionManager = new AlertCollectionManager(alertCollections);
+        this.alertCollectionManager = new AlertCollectionManager(dataSaver);
         tagManager = new TagManager(tags, dataSaver);
     }
 
@@ -385,7 +382,7 @@ public class Calendar {
      * @param event Event to change name of
      * @param name new name
      */
-    public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
+    public void renameEvent(Event event, String name) {
         eventManager.renameEvent(event, name);
     }
 
