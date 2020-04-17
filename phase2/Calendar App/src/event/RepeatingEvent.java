@@ -86,22 +86,6 @@ public class RepeatingEvent {
         return base.getName() + " repeats every " + durString + " day(s) from " + startString + endString;
     }
 
-    /**
-     * Set the display window for the repeating event.
-     *
-     * @param start Start time
-     * @param end   End time
-     */
-    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
-        //TODO: set display time for all sub series
-        setStartDisplayTime(start);
-        if (inf) {
-            this.calGen.setEndTime(end);
-        } else {
-            setEndDisplayTime(end);
-        }
-    }
-
     private void setStartDisplayTime(GregorianCalendar start) {
         if (start.before(startTime)) {
             //The anchor for the startTime

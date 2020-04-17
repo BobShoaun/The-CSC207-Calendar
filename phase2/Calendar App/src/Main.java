@@ -1,6 +1,7 @@
 import gui.GraphicalUserInterface;
 import gui.LoginController;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -20,6 +21,7 @@ public class Main extends Application {
         gui.setDefaultWindowTitle("The CSC207 Calendar");
         LoginController loginController = gui.showGUI("login.fxml");
         loginController.setDarkTheme();
+        primaryStage.getIcons().add(new Image("file:icon.png"));
     }
 
     /**
