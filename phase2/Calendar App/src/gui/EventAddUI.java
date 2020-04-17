@@ -79,22 +79,35 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             getUserInput();
             Event newEvent = createEvent(name, start, end);
             if (newEvent != null) {
-                addEvent(newEvent);
-                addTags(newEvent.getId());
-                if(!memoTitle.equals("")){
-                    addMemo(memoTitle, memoContent, newEvent.getId());
-                }
-                closeGUI();
-                calendarController.updateDisplayedEvents();
-                calendarController.updateDisplayedSeries();
-                calendarController.updateDisplayedSubSeries();
-                save();
-                System.out.println(eventCollection.getEvents().size());
+                finializeEvent(newEvent);
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         }
+    }
+
+    public void handleAddToSeries(){
+        SeriesUI controller = showGUI("SeriesUI.fxml");
+        Event newEvent = createEvent(name, start, end);
+        if (newEvent != null) {
+            finializeEvent(newEvent);
+        }
+        controller.setBaseEvent(newEvent);
+    }
+
+    private void finializeEvent(Event newEvent){
+        addEvent(newEvent);
+        addTags(newEvent.getId());
+        if(!memoTitle.equals("")){
+            addMemo(memoTitle, memoContent, newEvent.getId());
+        }
+        calendarController.updateDisplayedEvents();
+        calendarController.updateDisplayedSeries();
+        calendarController.updateDisplayedSubSeries();
+        save();
+        closeGUI();
+        System.out.println(eventCollection.getEvents().size());
     }
 
     protected void getUserInput() throws InvalidDateException {
