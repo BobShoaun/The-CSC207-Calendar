@@ -2,6 +2,7 @@ package gui;
 
 import event.Event;
 import event.EventCollection;
+import event.RepeatingEvent;
 import event.Series;
 import exceptions.NoSuchSeriesException;
 import javafx.collections.FXCollections;
@@ -148,7 +149,7 @@ public class CalendarUI extends GraphicalUserInterface {
     protected void updateDisplayedRepeatingEvents() {
         ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
-            for (event.repeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
+            for (RepeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
                 stringRepeatingEvents.add(repeatingEvent.getString());
             }
         }

@@ -421,22 +421,22 @@ public class DataSaver {
         return loadedEvents;
     }
 
-    private void saveRepeatingEvents(Series series, List<repeatingEvent> events) throws IOException {
+    private void saveRepeatingEvents(Series series, List<RepeatingEvent> events) throws IOException {
         StringBuilder ret = new StringBuilder();
-        for (repeatingEvent event:events){
+        for (RepeatingEvent event:events){
             ret.append(event.getString()).append("\n");
         }
         saveToFile("series/" + series.getName() + "/SubSeries.txt", ret.toString());
     }
 
-    private List<repeatingEvent> loadRepeatingEvents(Scanner events) throws InvalidDateException {
-        List<repeatingEvent> ret = new ArrayList<>();
+    private List<RepeatingEvent> loadRepeatingEvents(Scanner events) throws InvalidDateException {
+        List<RepeatingEvent> ret = new ArrayList<>();
         while (events.hasNext()) {
             String eventData = events.nextLine();
             String[] parts = eventData.split("§");
             Event baseEvent = stringsToEvent(parts);
             CalendarGenerator CG = loadCalendarGenerator(parts[4].replaceAll("\\|", "\n"));
-            ret.add(new repeatingEvent(baseEvent,CG));
+            ret.add(new RepeatingEvent(baseEvent,CG));
         }
         return ret;
     }

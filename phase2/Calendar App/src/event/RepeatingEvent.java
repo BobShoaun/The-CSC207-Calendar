@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 /**
  * Repeating Events.
  */
-public class repeatingEvent {
+public class RepeatingEvent {
     private Event base;
     private CalendarGenerator calGen;
     private GregorianCalendar startTime;
@@ -21,7 +21,7 @@ public class repeatingEvent {
      * @param base   Base Event (start)
      * @param calGen CalendarGenerator for repetition
      */
-    public repeatingEvent(Event base, CalendarGenerator calGen) {
+    public RepeatingEvent(Event base, CalendarGenerator calGen) {
         this.base = base;
         this.calGen = calGen;
         this.startTime = calGen.getStartTime();
