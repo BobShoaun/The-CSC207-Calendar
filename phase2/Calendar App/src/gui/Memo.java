@@ -36,7 +36,6 @@ public class Memo extends GraphicalUserInterface {
 
     public void setCalendar(Calendar c) { this.calendar = c; }
 
-
     @FXML
     private void editMemo() {
         String newMemoTitle = memoTitleField.getText();
