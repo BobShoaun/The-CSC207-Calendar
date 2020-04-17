@@ -393,6 +393,12 @@ public class DataSaver {
     }
 
     private void saveEventsToFile(String path, List<Event> events) {
+        try {
+            deleteDirectory(path);
+            makeDirectory(path);
+        } catch (IOException e) {
+            System.out.println("Error in saving events to file");
+        }
         for (Event e : events) {
             try {
                 saveToFile(path + e.getId() + ".txt", e.getString());
