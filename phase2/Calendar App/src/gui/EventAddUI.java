@@ -24,6 +24,7 @@ import java.util.*;
  */
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
+    @FXML Button createSeriesButton;
     @FXML
     protected TextField nameField;
     @FXML
@@ -79,7 +80,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             getUserInput();
             Event newEvent = createEvent(name, start, end);
             if (newEvent != null) {
-                finializeEvent(newEvent);
+                finalizeEvent(newEvent);
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
@@ -87,16 +88,16 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
-    public void handleAddToSeries(){
+    public void handleCreateSeries(){
         SeriesUI controller = showGUI("SeriesUI.fxml");
         Event newEvent = createEvent(name, start, end);
         if (newEvent != null) {
-            finializeEvent(newEvent);
+            finalizeEvent(newEvent);
         }
         controller.setBaseEvent(newEvent);
     }
 
-    private void finializeEvent(Event newEvent){
+    private void finalizeEvent(Event newEvent){
         addEvent(newEvent);
         addTags(newEvent.getId());
         if(!memoTitle.equals("")){
@@ -137,11 +138,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param name  of the event
      * @param start start time of the event
      * @param end   end time of the event
-     *              //     * @param tags        that are associated with this event
-     *              //     * @param memoTitle   the title of event memo
-     *              //     * @param memoContent the content of event memo
      */
-//    protected Event createEvent(String name, GregorianCalendar start, GregorianCalendar end, String[] tags, String memoTitle, String memoContent) {
     protected Event createEvent(String name, GregorianCalendar start, GregorianCalendar end) {
         try {
             getUserInput();
@@ -150,8 +147,6 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             Event newEvent = new Event(name, start, end);
             System.out.println("Event created:" + newEvent);
             return newEvent;
-//            if(!memoTitle.equals("")){addMemo(memoTitle, memoContent, id);}
-//            if(tags.length>1|| !tags[0].equals("")){addTags(tags, id);}
         } catch (InvalidDateException ex) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);

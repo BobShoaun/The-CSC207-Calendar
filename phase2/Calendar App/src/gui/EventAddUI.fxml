@@ -214,8 +214,8 @@
             </VBox>
             <ButtonBar GridPane.rowIndex="8">
                <buttons>
-                  <Button fx:id="addToSeriesButton" mnemonicParsing="false" onAction="#handleAddToSeries" text="Add to Series" />
-                  <Button fx:id="doneButton1" mnemonicParsing="false" onAction="#handleDone" text="Done" />
+                  <Button fx:id="createSeriesButton" mnemonicParsing="false" onAction="#handleCreateSeries" text="Create Series" />
+                  <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
                </buttons>
             </ButtonBar>
             <Label fx:id="dateTimeErrorLabel" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" text="Date Time Error Label" textFill="#ff4545" GridPane.rowIndex="4" />
