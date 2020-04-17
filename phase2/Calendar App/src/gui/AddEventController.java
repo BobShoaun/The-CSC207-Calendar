@@ -166,7 +166,11 @@ public class AddEventController extends GraphicalUserInterface implements Initia
                 Event newEvent = createEvent(name, start, end);
                 controller.setDetails(newEvent, calendar,seriesName);
             }else{
-                calendar.getSeries(seriesName);
+                try {
+                    calendar.getSeries(seriesName);
+                } catch (NoSuchSeriesException e) {
+                    calendar.addEventSeries(name, null, null, null, null);
+                }
                 RepeatingEventController controller = showGUI("repeatingEvent.fxml");
                 Event newEvent = createEvent(name, start, end);
                 controller.setDetails(newEvent, calendar,seriesName);
@@ -176,9 +180,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
-        } catch (NoSuchSeriesException e) {
-            seriesErrorLabel.setVisible(true);
-            System.out.println("No such series");
         }
     }
 

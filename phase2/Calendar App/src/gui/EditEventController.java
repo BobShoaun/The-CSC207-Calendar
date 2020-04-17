@@ -93,7 +93,6 @@ public class EditEventController extends AddEventController {
                 }
 
             }
-            EventCollection old = eventCollection;
             if (isEventCollectionChanged(eventCollection)) {
                 eventCollection.addEvent(event);
             } else {
