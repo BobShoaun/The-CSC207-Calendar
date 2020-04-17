@@ -47,7 +47,7 @@ public class EventCollectionUI extends UserInterface {
                 displayTimeFrame();
                 break;
             case 2:
-                if(this.events instanceof Series) {
+                if (this.events instanceof Series) {
 //                String name = getStringInput("name of the series:");
                     EventCollection regularEvents = cal.getEventCollection("");
 

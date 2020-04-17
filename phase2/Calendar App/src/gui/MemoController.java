@@ -26,7 +26,7 @@ public class MemoController extends GraphicalUserInterface {
      *
      * @param memo Memo to be edited
      */
-    public void setMemo(Memo memo){
+    public void setMemo(Memo memo) {
         this.memo = memo;
         eventsList.setItems(list);
         memoExistsLabel.setVisible(false);
@@ -76,7 +76,7 @@ public class MemoController extends GraphicalUserInterface {
 
     private void loadEvents() {
         list.clear();
-        if(memo != null){
+        if (memo != null) {
             List<String> events = memo.getEvents();
             for (String eventId :
                     events) {

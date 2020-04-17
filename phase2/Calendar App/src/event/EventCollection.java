@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * A collection of events
  */
-public class EventCollection implements Iterable<Event>, Observer{
+public class EventCollection implements Iterable<Event>, Observer {
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
@@ -124,12 +124,12 @@ public class EventCollection implements Iterable<Event>, Observer{
      * @param event the event to be removed
      * @return if the event is removed or not
      */
-    public boolean removeEvent(Event event) throws InvalidDateException{
+    public boolean removeEvent(Event event) throws InvalidDateException {
         String eventId = event.getId();
-        System.out.println("target id :"+eventId);
+        System.out.println("target id :" + eventId);
         System.out.println();
-        for (Event e:events) {
-            System.out.println(e.getId()+"\t"+e.getId().equals(eventId));
+        for (Event e : events) {
+            System.out.println(e.getId() + "\t" + e.getId().equals(eventId));
         }
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
         if (removed) {
@@ -211,8 +211,9 @@ public class EventCollection implements Iterable<Event>, Observer{
 
     /**
      * Add a memo to an event
-     * @param eventId   ID of the event
-     * @param memo      Memo to add
+     *
+     * @param eventId ID of the event
+     * @param memo    Memo to add
      * @return True iff the memo could be added
      */
     public boolean addMemo(String eventId, Memo memo) {

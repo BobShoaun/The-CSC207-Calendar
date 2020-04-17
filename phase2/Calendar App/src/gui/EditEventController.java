@@ -171,7 +171,7 @@ public class EditEventController extends AddEventController {
     }
 
     @FXML
-    private void handleCancel(){
+    private void handleCancel() {
         closeGUI();
     }
 

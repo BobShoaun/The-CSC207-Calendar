@@ -38,8 +38,10 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
     private DatePicker endDate;
     @FXML
     private ChoiceBox<String> timeChoiceBox;
-    @FXML private TextField repeatNumField;
-    @FXML private TextField nameField;
+    @FXML
+    private TextField repeatNumField;
+    @FXML
+    private TextField nameField;
 
     private Event baseEvent;
     private Series series;

@@ -69,21 +69,21 @@ public class RepeatingEvent {
 
     /**
      * Get a string representation of repeating events for viewing
+     *
      * @return string representation
      */
     @Override
-    public String toString(){
+    public String toString() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String startString = simpleDateFormat.format(calGen.getStartTime().getTime());
         String endString;
-        String durString = ""+calGen.getPeriods().get(0).toDays();
-        if(calGen.getEndTime()==null){
+        String durString = "" + calGen.getPeriods().get(0).toDays();
+        if (calGen.getEndTime() == null) {
             endString = "onwards";
+        } else {
+            endString = " to " + simpleDateFormat.format(calGen.getEndTime().getTime());
         }
-        else{
-            endString = " to "+simpleDateFormat.format(calGen.getEndTime().getTime());
-        }
-        return base.getName()+" repeats every "+durString+" day(s) from "+startString+endString;
+        return base.getName() + " repeats every " + durString + " day(s) from " + startString + endString;
     }
 
     /**
@@ -106,15 +106,15 @@ public class RepeatingEvent {
         if (start.before(startTime)) {
             //The anchor for the startTime
             calGen.setStartTime(startTime);
-        }else{
+        } else {
             calGen.setStartTime(start);
         }
     }
 
     private void setEndDisplayTime(GregorianCalendar end) {
-        if(end.after(endTime)){
+        if (end.after(endTime)) {
             calGen.setEndTime(endTime);
-        }else{
+        } else {
             calGen.setEndTime(end);
         }
     }

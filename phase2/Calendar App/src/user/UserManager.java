@@ -65,6 +65,7 @@ public class UserManager {
 
     /**
      * Saves all users from memory into the file system
+     *
      * @throws IOException if user credentials could not be saved
      */
     public void saveUsers() throws IOException {
@@ -74,6 +75,7 @@ public class UserManager {
 
     /**
      * Saves a user from memory into the file system
+     *
      * @param user to save
      * @throws IOException if the user could not be saved
      */
@@ -83,6 +85,7 @@ public class UserManager {
 
     /**
      * Logs in a user
+     *
      * @param username username of the user
      * @param password password of the user
      * @return true if the user has successfully log in, false otherwise
@@ -100,13 +103,14 @@ public class UserManager {
 
     /**
      * Register a new user
+     *
      * @param username new username
      * @param password new password
      * @throws UsernameTakenException if username has been taken
-     * @throws IOException  if user could not be saved
+     * @throws IOException            if user could not be saved
      */
     public void registerUser(String username, String password)
-            throws UsernameTakenException,  InvalidUsernameException, InvalidPasswordException, IOException {
+            throws UsernameTakenException, InvalidUsernameException, InvalidPasswordException, IOException {
         if (!username.matches("^[a-zA-Z0-9._-]{3,}$"))
             throw new InvalidUsernameException();
 
@@ -124,12 +128,13 @@ public class UserManager {
 
     /**
      * Gets a user by username
+     *
      * @param username the username of the user you're looking for
      * @return the user with the name of username or null if one doesn't exist
      */
-    public User getUser(String username){
-        for (User user : users){
-            if (user.getName().equals(username)){
+    public User getUser(String username) {
+        for (User user : users) {
+            if (user.getName().equals(username)) {
                 return user;
             }
         }

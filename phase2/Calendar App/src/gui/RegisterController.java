@@ -69,7 +69,7 @@ public class RegisterController extends GraphicalUserInterface implements Initia
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-        if(!password.equals(confirmPassword)){
+        if (!password.equals(confirmPassword)) {
             confirmPasswordErrorLabel.setText("Passwords do not match!");
             confirmPasswordErrorLabel.setVisible(true);
             return;

@@ -158,7 +158,7 @@ public class CalendarUI extends UserInterface {
     }
 
     private void showAllEventSeries() {
-        List<Series> eventCollections = calendar.getEventCollections().stream().map(events -> (Series)events).filter(Objects::nonNull).collect(Collectors.toList());
+        List<Series> eventCollections = calendar.getEventCollections().stream().map(events -> (Series) events).filter(Objects::nonNull).collect(Collectors.toList());
         System.out.println("Event series:");
         int i = 0;
         for (Series eC : eventCollections) {

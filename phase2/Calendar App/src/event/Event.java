@@ -56,6 +56,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the name of the Event
+     *
      * @return the name of the Event
      */
     public String getName() {
@@ -64,6 +65,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the id of the Event
+     *
      * @return the id of the Event
      */
     public String getId() {
@@ -72,18 +74,25 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the start time of the Event
+     *
      * @return the startDate of the Event
      */
-    public GregorianCalendar getStartDate() { return startDate; }
+    public GregorianCalendar getStartDate() {
+        return startDate;
+    }
 
     /**
      * Return the end time of the Event
+     *
      * @return the endDate of the Event
      */
-    public GregorianCalendar getEndDate() {return endDate;}
+    public GregorianCalendar getEndDate() {
+        return endDate;
+    }
 
     /**
      * Set the name of the Event
+     *
      * @param newName the new name of the Event
      */
     public void setName(String newName) {
@@ -95,25 +104,27 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Set the start time of the Event
+     *
      * @param newStart the new startDate of the Event
      */
     public void setStartDate(GregorianCalendar newStart) throws InvalidDateException {
-       if ( newStart.after(endDate) ) {
-           throw new InvalidDateException();
-       } else {
-           id = IDManager.generateEventId(name, startDate);
-           startDate = newStart;
-           setChanged();
-           notifyObservers(startDate);
-       }
+        if (newStart.after(endDate)) {
+            throw new InvalidDateException();
+        } else {
+            id = IDManager.generateEventId(name, startDate);
+            startDate = newStart;
+            setChanged();
+            notifyObservers(startDate);
+        }
     }
 
     /**
      * Set the end time of the Event
+     *
      * @param newEnd the new endDate of the Event
      */
     public void setEndDate(GregorianCalendar newEnd) throws InvalidDateException {
-        if ( newEnd.before(startDate) ) {
+        if (newEnd.before(startDate)) {
             throw new InvalidDateException();
         } else {
             this.endDate = newEnd;
@@ -124,6 +135,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Shift the event to the new start time and notify Observer.
+     *
      * @param shifted the new startDate of the Event
      */
     public void shiftEvent(GregorianCalendar shifted) {
@@ -138,6 +150,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the duration of the Event in Date
+     *
      * @return duration of the Event
      */
     public long getDuration() {
@@ -150,6 +163,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the String representation of this Event
+     *
      * @return the String representation of the Event
      */
     public String toString() {
@@ -160,6 +174,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     /**
      * Return the String representation of this Event with Date as milliseconds
+     *
      * @return the String representation of this Event
      */
     public String getString() {
@@ -168,6 +183,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
                 startDate.getTimeInMillis() + "\n" +
                 endDate.getTimeInMillis();
     }
+
     /**
      * @param compareEvent the Event to be compared.
      * @return a negative integer, zero, or a positive integer as this object
@@ -179,11 +195,12 @@ public class Event extends Observable implements Cloneable, Comparable<Event> {
     @Override
     public int compareTo(Event compareEvent) {
         long time = compareEvent.getStartDate().getTimeInMillis();
-        return (int)(this.getStartDate().getTimeInMillis()-time);
+        return (int) (this.getStartDate().getTimeInMillis() - time);
     }
 
     /**
      * Return a clone of this event
+     *
      * @return a clone of this event
      */
     public Object clone() throws CloneNotSupportedException {
