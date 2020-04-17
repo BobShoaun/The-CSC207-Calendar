@@ -1,5 +1,5 @@
-package gui;
-
+import gui.GraphicalUserInterface;
+import gui.LoginController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

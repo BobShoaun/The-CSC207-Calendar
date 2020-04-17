@@ -19,17 +19,19 @@ public class GraphicalUserInterface {
 
     /**
      * Set window(stage) of the current GUI
+     *
      * @param window
      */
-    protected void setWindow (Stage window) {
+    public void setWindow(Stage window) {
         this.window = window;
     }
 
     /**
      * Set the default window title, the window title when none is specified
+     *
      * @param title
      */
-    protected void setDefaultWindowTitle(String title) {
+    public void setDefaultWindowTitle(String title) {
         defaultWindowTitle = title;
     }
 
@@ -44,7 +46,7 @@ public class GraphicalUserInterface {
     /**
      * Set the GUI to be dark theme
      */
-    protected void setDarkTheme () {
+    public void setDarkTheme() {
         window.getScene().getStylesheets().add("gui/DarkTheme.css");
     }
 
@@ -55,7 +57,7 @@ public class GraphicalUserInterface {
      * @param <T>  type of GUI controller
      * @return GUI controller
      */
-    protected <T extends GraphicalUserInterface> T showGUI (String fxml) {
+    public <T extends GraphicalUserInterface> T showGUI(String fxml) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
         try {
             window.hide();

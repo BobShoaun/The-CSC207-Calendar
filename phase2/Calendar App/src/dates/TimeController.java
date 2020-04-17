@@ -9,7 +9,7 @@ public class TimeController {
     private GregorianCalendar currentTime;
 
     /**
-     * Initialize this TimeController
+     * Initialize this TimeTravellerController
      */
     public TimeController() {
         currentTime = new GregorianCalendar();
