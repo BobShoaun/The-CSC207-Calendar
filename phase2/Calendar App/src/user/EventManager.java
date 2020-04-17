@@ -67,6 +67,21 @@ public class EventManager {
     }
 
     /**
+     *
+     * @param event the Event to be searched
+     * @return the EventCollection that this event belongs to
+     */
+    public EventCollection getEventCollection(Event event) {
+        for (EventCollection e : getEventCollections()) {
+            if (e.getEvent(event.getId())!=null) {
+                return e;
+            }
+        }
+        System.out.println("Didn't find any EventCollection");
+        return getSingleEventCollection();
+    }
+
+    /**
      * Return all events which occur at day of that event
      *
      * @param date Date during which the event should occur

@@ -2,6 +2,7 @@ package gui;
 
 import event.Event;
 import event.EventCollection;
+import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
@@ -59,6 +60,13 @@ public class EventEditUI extends EventAddUI {
     }
 
     public void setEventCollection(EventCollection e) {
+        if(e instanceof Series){
+            System.out.println("EventC set to:"+((Series) e).getName());
+        }else if(e instanceof EventCollection){
+            System.out.println("EventC set to default");
+        }else{
+            System.out.println("Something is wrong");
+        }
         this.eventCollection = e;
     }
 
@@ -93,20 +101,17 @@ public class EventEditUI extends EventAddUI {
             }
             EventCollection old = eventCollection;
             if(isEventCollectionChanged(eventCollection)){
-//                System.out.println(old);
-//                System.out.println("=====================================");
-//                System.out.println(eventCollection);
                 System.out.println("removed:::"+old.removeEvent(event));
                 eventCollection.addEvent(event);
             }else {
                 eventCollection.rescheduleEvent(event, start, end);
-                postPoneEvent();
-                editMemo();
-                editTags();
-                calendarUIController.updateDisplayedEvents();
-                closeGUI();
-                save();
             }
+            postPoneEvent();
+            editMemo();
+            editTags();
+            calendarUIController.updateDisplayedEvents();
+            closeGUI();
+            save();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);

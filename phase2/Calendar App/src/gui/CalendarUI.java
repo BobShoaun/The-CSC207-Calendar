@@ -406,7 +406,7 @@ public class CalendarUI extends GraphicalUserInterface {
             controller.setCalendar(calendar);
             controller.setEvent(currEvent);
             //This is specific to this button in manual event list
-            controller.setEventCollection(calendar.getSingleEventCollection());
+            controller.setEventCollection(calendar.getEventCollection(currEvent));
             controller.setUsername(user.getName());
             controller.setCalendarUIController(this);
         }

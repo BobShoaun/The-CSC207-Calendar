@@ -111,6 +111,15 @@ public class Calendar {
         return eventManager.getEventCollections();
     }
 
+    /**
+     *
+     * @param event the Event to be searched
+     * @return the EventCollection that this event belongs to
+     */
+    public EventCollection getEventCollection(Event event){
+        return eventManager.getEventCollection(event);
+    }
+
 
     /**
      * Return all events which occur at day of that event
