@@ -105,5 +105,4 @@ public class GraphicalUserInterface {
         window.close();
     }
 
-
 }
