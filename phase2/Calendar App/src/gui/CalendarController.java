@@ -314,7 +314,9 @@ public class CalendarController extends GraphicalUserInterface {
             }
         }
         currRepeatingEvent = null;
-        updateDisplays();
+        updateDisplayedAlerts();
+        updateDisplayedEvents(); //We cant use updateDisplays here because updating series list, will remove index
+        updateDisplayedRepeatingEvents();
     }
 
     @FXML
