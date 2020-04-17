@@ -104,7 +104,7 @@ public class TimeController extends Application {
     // TODO: make this not extend Application
     @Override
     public void start(Stage mainStage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeTraveller.fxml"));
         Parent root = null;
         try {
             root = fxmlLoader.load();

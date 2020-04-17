@@ -17,7 +17,7 @@ import java.util.GregorianCalendar;
 /**
  * GUI controller for alerts
  */
-public class AlertUI extends GraphicalUserInterface {
+public class AlertController extends GraphicalUserInterface {
 
     private AlertCollection ac;
 
@@ -122,7 +122,7 @@ public class AlertUI extends GraphicalUserInterface {
     @FXML
     private void addManualAlert() {
         System.out.println("Clicked add manual alert");
-        ManualAlertUI controller = openGUI("manualAlert.fxml");
+        ManualAlertController controller = openGUI("manualAlert.fxml");
         controller.initialize(this, ac);
         update();
     }
@@ -130,7 +130,7 @@ public class AlertUI extends GraphicalUserInterface {
     @FXML
     private void addRepeatingAlert() {
         System.out.println("Clicked add repeating alert");
-        AddRepeatingAlertUI controller = openGUI("addRepeatingAlert.fxml");
+        RepeatingAlertController controller = openGUI("repeatingAlert.fxml");
         controller.initialize(this, ac);
         update();
     }
@@ -139,7 +139,7 @@ public class AlertUI extends GraphicalUserInterface {
     private void editManualAlert() {
         System.out.println("Clicked edit manual alert");
         if (currManAlert != null) {
-            ManualAlertUI controller = openGUI("manualAlert.fxml");
+            ManualAlertController controller = openGUI("manualAlert.fxml");
             controller.setDate(currManAlert.getTime());
             controller.initialize(this, ac);
         }
@@ -150,7 +150,7 @@ public class AlertUI extends GraphicalUserInterface {
     private void editRepeatingAlert() {
         System.out.println("Clicked edit repeating alert");
         if (currRepAlert != null) {
-            ManualAlertUI controller = openGUI("manualAlert.fxml");
+            ManualAlertController controller = openGUI("manualAlert.fxml");
             controller.initialize(this, ac);
             controller.setDate(currRepAlert.getTime());
         }

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * GUI controller for editing events
  */
-public class EventEditUI extends EventAddUI {
+public class EditEventController extends AddEventController {
 
     @FXML
     private CheckBox postponeCheckbox;
@@ -144,7 +144,7 @@ public class EventEditUI extends EventAddUI {
     @FXML
     private void handleAddAlert() {
         System.out.println("add clicked");
-        AlertUI controller = openGUI("alert.fxml");
+        AlertController controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
         AlertCollection alertCollection = ds.loadAlertCollection(event.getId());
         controller.initialize(alertCollection);
@@ -152,7 +152,7 @@ public class EventEditUI extends EventAddUI {
 
     @FXML
     private void handleShareEvent() {
-        ShareUI controller = openGUI("Share.fxml");
+        ShareController controller = openGUI("share.fxml");
         controller.setEvent(event);
         controller.setUserManger(userManager);
         save();
@@ -179,7 +179,7 @@ public class EventEditUI extends EventAddUI {
     private void handleDuplicate() {
         System.out.println("Duplicate clicked");
         //TODO: need date input...
-        EventAddUI dup = openGUI("EventAddUI.fxml");
+        AddEventController dup = openGUI("AddEventController.fxml");
         dup.setCalendar(calendar);
         dup.setCalendarUIController(calendarUIController);
         dup.showEventDetails(event);

@@ -14,10 +14,12 @@ import java.util.List;
 /**
  * GUI controller for viewing Tags
  */
-public class ViewTagsUI extends gui.GraphicalUserInterface {
+public class ViewTagsController extends gui.GraphicalUserInterface {
 
-    @FXML private ListView<String> tagList;
-    @FXML private Label selectTagLabel;
+    @FXML
+    private ListView<String> tagList;
+    @FXML
+    private Label selectTagLabel;
 
     private Calendar calendar;
     private String selectedTag;
@@ -76,9 +78,9 @@ public class ViewTagsUI extends gui.GraphicalUserInterface {
 
     @FXML
     private void showTagUI(Event e) {
-        TagUI tagUI = showGUI("tag.fxml");
-        tagUI.setCalendar(calendar);
-        tagUI.setTag(calendar.getTag(tagList.getSelectionModel().getSelectedItem()));
+        TagController tagController = showGUI("tag.fxml");
+        tagController.setCalendar(calendar);
+        tagController.setTag(calendar.getTag(tagList.getSelectionModel().getSelectedItem()));
     }
 
     /**

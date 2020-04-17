@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 /**
  * GUI controller class for the main calendar GUI
  */
-public class CalendarUI extends GraphicalUserInterface {
+public class CalendarController extends GraphicalUserInterface {
 
     private User user;
     private user.Calendar calendar;
@@ -389,7 +389,7 @@ public class CalendarUI extends GraphicalUserInterface {
     private void handleNewEvent() {
         System.out.println(calendar.getSeries().size());
         System.out.println("New clicked");
-        EventAddUI controller = openGUI("EventAddUI.fxml");
+        AddEventController controller = openGUI("AddEventController.fxml");
         controller.setCalendar(calendar);
         controller.setCalendarUIController(this);
     }
@@ -406,7 +406,7 @@ public class CalendarUI extends GraphicalUserInterface {
             eventErrorLabel.setVisible(true);
         } else {
             eventErrorLabel.setVisible(false);
-            EventEditUI controller = openGUI("EventEditUI.fxml");
+            EditEventController controller = openGUI("EditEventController.fxml");
             controller.setUserManager(userManager);
             controller.setCalendar(calendar);
             controller.setEvent(currEvent);
@@ -422,7 +422,7 @@ public class CalendarUI extends GraphicalUserInterface {
     @FXML
     private void showViewMemosUI() {
         System.out.println("Memos clicked");
-        ViewMemosUI controller = openGUI("viewMemos.fxml");
+        ViewMemosController controller = openGUI("viewMemos.fxml");
         controller.setCalendar(calendar);
     }
 
@@ -432,7 +432,7 @@ public class CalendarUI extends GraphicalUserInterface {
     @FXML
     private void showViewTagsUI() {
         System.out.println("Tags clicked");
-        ViewTagsUI controller = openGUI("viewTags.fxml");
+        ViewTagsController controller = openGUI("viewTags.fxml");
         controller.setCalendar(calendar);
     }
 
@@ -441,7 +441,7 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     private void handleSwitchCalendar() {
-        CalendarSwitcherUI controller = showGUI("calendarSwitcher.fxml");
+        CalendarSwitcherController controller = showGUI("calendarSwitcher.fxml");
         controller.setUser(user);
     }
 
@@ -454,8 +454,8 @@ public class CalendarUI extends GraphicalUserInterface {
     private void handleLogout() throws IOException {
         System.out.println("logout: " + user.getName());
         user.logout();
-        LoginUI loginUI = showGUI("login.fxml");
-        loginUI.setDarkTheme();
+        LoginController loginController = showGUI("login.fxml");
+        loginController.setDarkTheme();
     }
 
 }

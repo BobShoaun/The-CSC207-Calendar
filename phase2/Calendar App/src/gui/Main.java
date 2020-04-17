@@ -18,8 +18,8 @@ public class Main extends Application {
         GraphicalUserInterface gui = new GraphicalUserInterface();
         gui.setWindow(primaryStage);
         gui.setDefaultWindowTitle("The CSC207 Calendar");
-        LoginUI loginUI = gui.showGUI("login.fxml");
-        loginUI.setDarkTheme();
+        LoginController loginController = gui.showGUI("login.fxml");
+        loginController.setDarkTheme();
     }
 
     /**

@@ -13,15 +13,18 @@ import javax.naming.InvalidNameException;
  *
  * @author Ng Bob Shoaun
  */
-public class CalendarSwitcherUI extends GraphicalUserInterface {
+public class CalendarSwitcherController extends GraphicalUserInterface {
 
     private User user;
 
-    @FXML private ListView<String> calendarListView;
-    @FXML private TextField calendarNameField;
+    @FXML
+    private ListView<String> calendarListView;
+    @FXML
+    private TextField calendarNameField;
 
     /**
      * Set the current user using the gui
+     *
      * @param user
      */
     public void setUser(User user) {
@@ -38,7 +41,7 @@ public class CalendarSwitcherUI extends GraphicalUserInterface {
     @FXML
     private void handleOK () {
         int index = calendarListView.getSelectionModel().getSelectedIndex();
-        CalendarUI cal = showGUI("calendar.fxml");
+        CalendarController cal = showGUI("calendar.fxml");
         cal.setUser(user);
         if (index != -1) //something is selected
             cal.setActiveCalendar(user.getCalendar(index));
@@ -46,7 +49,7 @@ public class CalendarSwitcherUI extends GraphicalUserInterface {
 
     @FXML
     private void handleCancel () {
-        CalendarUI cal = showGUI("calendar.fxml");
+        CalendarController cal = showGUI("calendar.fxml");
         cal.setUser(user);
     }
 

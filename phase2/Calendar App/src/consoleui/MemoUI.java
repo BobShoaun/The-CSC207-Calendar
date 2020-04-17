@@ -30,7 +30,7 @@ public class MemoUI extends UserInterface {
     }
 
     /**
-     * Start this MemoUI with menu options.
+     * Start this MemoController with menu options.
      */
     @Override
     public void show() {

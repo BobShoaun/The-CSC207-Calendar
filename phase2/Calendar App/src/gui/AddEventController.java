@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * GUI controller for adding new events.
  */
-public class EventAddUI extends GraphicalUserInterface implements Initializable {
+public class AddEventController extends GraphicalUserInterface implements Initializable {
 
     @FXML
     protected TextField nameField;
@@ -60,7 +60,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected String[] tags;
     protected GregorianCalendar start;
     protected GregorianCalendar end;
-    protected CalendarUI calendarUIController;
+    protected CalendarController calendarUIController;
 
     /**
      * Set the Calendar to which the Events belong.
@@ -72,11 +72,11 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
     /**
-     * Set the CalendarUI controller class (for updating ListViews)
+     * Set the CalendarController controller class (for updating ListViews)
      *
-     * @param c CalendarUI controller
+     * @param c CalendarController controller
      */
-    public void setCalendarUIController(CalendarUI c) {
+    public void setCalendarUIController(CalendarController c) {
         this.calendarUIController = c;
     }
 
@@ -148,7 +148,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         System.out.println("Repeat Series clicked");
         try {
             getUserInput();
-            SeriesUI controller = showGUI("SeriesUI.fxml");
+            SeriesController controller = showGUI("SeriesController.fxml");
             Event newEvent = createEvent(name, start, end);
             controller.setDetails(newEvent, calendar);
         } catch (InvalidDateException e) {

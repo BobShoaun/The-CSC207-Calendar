@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * GUI class for editing/adding memos to events
  */
-public class MemoUI extends GraphicalUserInterface {
+public class MemoController extends GraphicalUserInterface {
 
     private final ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;

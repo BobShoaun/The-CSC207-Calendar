@@ -13,18 +13,21 @@ import java.io.IOException;
 /**
  * GUI controller class for the Login GUI
  */
-public class LoginUI extends GraphicalUserInterface {
+public class LoginController extends GraphicalUserInterface {
 
-    @FXML private TextField username;
-    @FXML private PasswordField password;
-    @FXML private Label bottomMessage;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Label bottomMessage;
 
     private final UserManager userManager = new UserManager();
 
     /**
      * constructor for the login gui controller
      */
-    public LoginUI() {
+    public LoginController() {
         try {
             userManager.loadUsers();
         } catch (IOException e) {
@@ -55,13 +58,13 @@ public class LoginUI extends GraphicalUserInterface {
     }
 
     private void showCalendarUI() {
-        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        CalendarController calendarUIController = showGUI("calendar.fxml");
         calendarUIController.setUserManager(userManager);
         calendarUIController.setUser(userManager.getCurrentUser());
     }
 
     private void showRegisterUI() {
-        RegisterUI g = showGUI("register.fxml");
+        RegisterController g = showGUI("register.fxml");
         g.setUserManager(userManager);
         g.setDarkTheme();
     }
