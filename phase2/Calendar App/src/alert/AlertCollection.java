@@ -2,6 +2,7 @@ package alert;
 
 import dates.CalendarGenerator;
 import event.Event;
+import event.IDManager;
 import exceptions.PeriodAlreadyExistsException;
 import user.DataSaver;
 
@@ -18,7 +19,7 @@ import java.util.*;
 public class AlertCollection implements Observer {
 
     private List<Alert> manAlerts;
-    private final String eventId;
+    private String eventId;
     private GregorianCalendar eventTime;
     private CalendarGenerator calGen;
     private final DataSaver saver;
@@ -269,6 +270,11 @@ public class AlertCollection implements Observer {
     public void update(Observable o, Object arg) { // TODO: make sure this is working
         if (arg instanceof GregorianCalendar) {
             shiftAlerts((GregorianCalendar) arg);
+            GregorianCalendar eventTime = IDManager.parseEventId(eventId);
+            long diff = ((GregorianCalendar) arg).getTimeInMillis();
+            long newMillis = eventTime.getTimeInMillis() + diff;
+            eventTime.setTimeInMillis(newMillis);
+            eventId = IDManager.generateEventId(eventId.split("$")[1], eventTime);
         } else
             throw new IllegalArgumentException();
     }

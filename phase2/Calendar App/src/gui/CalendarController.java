@@ -333,7 +333,8 @@ public class CalendarController extends GraphicalUserInterface {
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         TimeTravellerController timeTravellerController = new TimeTravellerController();
         timeTravellerController.setCalendar(calendar);
-        timeTravellerController.start(stage);
+        timeTravellerController.setCalendarController(this);
+        timeTravellerController.start();
     }
 
     @FXML

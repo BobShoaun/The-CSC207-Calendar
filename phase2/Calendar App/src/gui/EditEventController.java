@@ -90,6 +90,7 @@ public class EditEventController extends AddEventController {
                 if (memo != null) {
                     memo.removeEvent(event);
                 }
+
                 calendar.renameEvent(event, name); //This changes the id, so this is all necessary
                 for (Tag t :
                         tags) {
@@ -146,7 +147,7 @@ public class EditEventController extends AddEventController {
         AlertController controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
         AlertCollection alertCollection = ds.loadAlertCollection(event.getId());
-        controller.initialize(alertCollection);
+        controller.initialize(alertCollection, calendar);
     }
 
     @FXML

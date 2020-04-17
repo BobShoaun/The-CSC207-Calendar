@@ -8,6 +8,7 @@ import event.EventCollection;
 import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
+import gui.AlertController;
 import memotag.Memo;
 import memotag.Tag;
 
@@ -467,5 +468,13 @@ public class Calendar {
      */
     public void removeAlert(String alertToString) {
         alertCollectionManager.removeAlert(alertToString);
+    }
+
+    /**
+     * Get the alert collection manager
+     * @return The alert collection manager. Is not null
+     */
+    public AlertCollectionManager getAlertCollectionManager(){
+        return alertCollectionManager;
     }
 }

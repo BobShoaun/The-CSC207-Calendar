@@ -35,14 +35,17 @@ public class AlertController extends GraphicalUserInterface {
     private ObservableList<String> manualAlertStrings;
     private ObservableList<Alert> repeatingAlerts;
     private ObservableList<String> repeatingAlertStrings;
+    private user.Calendar calendar;
 
     /**
      * Initialize this controller
      *
      * @param ac The AlertCollection
+     * @param calendar The calendar to which the alert collection belongs
      */
-    public void initialize(@NotNull AlertCollection ac) {
+    public void initialize(@NotNull AlertCollection ac, user.Calendar calendar) {
         this.ac = ac;
+        this.calendar = calendar;
         title.setText("Alerts for " + ac.getEventId().substring(29).replace('%', ' ')
                 + " at " + IDManager.parseEventId(ac.getEventId()).getTime());
         manualAlerts = FXCollections.observableArrayList();
@@ -86,9 +89,11 @@ public class AlertController extends GraphicalUserInterface {
 
     @FXML
     private void manAlertListClicked() {
-        currManAlert = manualAlerts.get(manAlertList.getSelectionModel().getSelectedIndex());
-        System.out.println("Clicked on alert: " + currManAlert);
-        update();
+        if(manAlertList.getSelectionModel().getSelectedIndex() >= 0){
+            currManAlert = manualAlerts.get(manAlertList.getSelectionModel().getSelectedIndex());
+            System.out.println("Clicked on alert: " + currManAlert);
+            update();
+        }
     }
 
     @FXML
@@ -163,6 +168,7 @@ public class AlertController extends GraphicalUserInterface {
     protected void update() {
         updateManAlerts();
         updateRepeatingAlerts();
+        calendar.getAlertCollectionManager().reloadAlertCollections();
     }
 
     @FXML

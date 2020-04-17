@@ -181,8 +181,8 @@ public class EventCollection implements Iterable<Event>, Observer {
         if (!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
                 && !newEnd.before(event.getEndDate()) && !newEnd.after(event.getEndDate()))
             return;
-        event.setStartDate(newStart);
         event.setEndDate(newEnd);
+        event.setStartDate(newStart);
         for (Event e : postponedEvents) {
             if (e.getId().equals(event.getId())) {
                 e.setPostponed(false);

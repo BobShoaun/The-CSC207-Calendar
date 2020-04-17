@@ -16,12 +16,13 @@ import java.util.GregorianCalendar;
 /**
  * GUI controller class for time-travel magic
  */
-public class TimeTravellerController extends Application {
+public class TimeTravellerController {
 
     @FXML
     private DatePicker timeView;
 
     private Calendar calendar;
+    private CalendarController calendarController;
 
     /**
      * Set the Calendar to control
@@ -31,6 +32,14 @@ public class TimeTravellerController extends Application {
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
         Update();
+    }
+
+    /**
+     * Set the calendar controller
+     * @param calendarController Value to set
+     */
+    public void setCalendarController(CalendarController calendarController){
+        this.calendarController = calendarController;
     }
 
     /**
@@ -49,6 +58,8 @@ public class TimeTravellerController extends Application {
                     time.get(GregorianCalendar.DATE));
             if (timeView != null)
                 timeView.setValue(date);
+            if(calendarController != null)
+                calendarController.updateDisplays();
         }
     }
 
@@ -99,11 +110,8 @@ public class TimeTravellerController extends Application {
     /**
      * Start this GUI page
      *
-     * @param mainStage Stage
      */
-    // TODO: make this not extend Application
-    @Override
-    public void start(Stage mainStage) {
+    public void start() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeTraveller.fxml"));
         Parent root = null;
         try {
