@@ -25,30 +25,18 @@ import java.util.*;
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
     @FXML Button createSeriesButton;
-    @FXML
-    protected TextField nameField;
-    @FXML
-    protected DatePicker startDate;
-    @FXML
-    protected TextField startTime;
-    @FXML
-    protected DatePicker endDate;
-    @FXML
-    protected TextField endTime;
-    @FXML
-    protected TextField tagsField;
-    @FXML
-    protected TextField memosField;
-    @FXML
-    protected TextArea memoTextArea;
-    @FXML
-    protected TextField seriesField;
-    @FXML
-    protected Label seriesErrorLabel;
-    @FXML
-    protected Label dateTimeErrorLabel;
-    @FXML
-    protected Button doneButton;
+    @FXML protected TextField nameField;
+    @FXML protected DatePicker startDate;
+    @FXML protected TextField startTime;
+    @FXML protected DatePicker endDate;
+    @FXML protected TextField endTime;
+    @FXML protected TextField tagsField;
+    @FXML protected TextField memosField;
+    @FXML protected TextArea memoTextArea;
+    @FXML protected TextField seriesField;
+    @FXML protected Label seriesErrorLabel;
+    @FXML protected Label dateTimeErrorLabel;
+//    @FXML private Button doneButton;
 
     protected Calendar calendar;
     protected EventCollection eventCollection;
@@ -88,7 +76,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
-    public void handleCreateSeries(){
+    @FXML
+    private void handleCreateSeries(){
         System.out.println("Create Series clicked");
         SeriesUI controller = showGUI("SeriesUI.fxml");
         try {
