@@ -36,21 +36,32 @@ public class CalendarUI extends GraphicalUserInterface {
     private user.Calendar calendar;
     private Event currEvent;
     private String currAlert;
-    private String currSeries;
+    private Series currSeries;
     private String currSubSeries = null;
     private UserManager userManager;
 
-    @FXML private ListView<String> alertList;
-    @FXML private ListView<String> displayedSubSeriesList;
-    @FXML private ListView<String> displayedSeriesList;
-    @FXML private CheckBox darkTheme;
-    @FXML private ChoiceBox searchByList;
-    @FXML private DatePicker startDate;
-    @FXML private DatePicker endDate;
-    @FXML private TextField searchTermField;
-    @FXML private ListView<String> displayedEventList;
-    @FXML private Label lastLoginLabel;
-    @FXML private Label eventErrorLabel;
+    @FXML
+    private ListView<String> alertList;
+    @FXML
+    private ListView<String> displayedSubSeriesList;
+    @FXML
+    private ListView<String> displayedSeriesList;
+    @FXML
+    private CheckBox darkTheme;
+    @FXML
+    private ChoiceBox searchByList;
+    @FXML
+    private DatePicker startDate;
+    @FXML
+    private DatePicker endDate;
+    @FXML
+    private TextField searchTermField;
+    @FXML
+    private ListView<String> displayedEventList;
+    @FXML
+    private Label lastLoginLabel;
+    @FXML
+    private Label eventErrorLabel;
 
     private ObservableList<Event> eventList;
 
@@ -121,29 +132,37 @@ public class CalendarUI extends GraphicalUserInterface {
     }
 
     protected void updateDisplayedSeries() {
-        System.out.println(calendar.getSeries().size());
+//        System.out.println("Update");
+//        System.out.println("Series"+calendar.getSeries());
         ArrayList<String> stringSeries = new ArrayList<>();
-        for(Series series : calendar.getSeries()){
+        for (Series series : calendar.getSeries()) {
             stringSeries.add(series.getName());
         }
         displayedSeriesList.setItems(FXCollections.observableArrayList(stringSeries));
     }
 
+    //TODO: honestly have no idea why you are updating subseries
     protected void updateDisplayedSubSeries() {
         ArrayList<String> stringSubSeries = new ArrayList<>();
-        try {
-            if(currSeries!=null) {
-                for (SubSeries subSeries : calendar.getSeries(currSeries).getSubSeries()) {
-                    stringSubSeries.add(subSeries.getString());
-                }
+        if (currSeries != null) {
+            for (SubSeries subSeries : currSeries.getSubSeries()) {
+                stringSubSeries.add(subSeries.getString());
             }
-        } catch (NoSuchSeriesException e){
-            e.printStackTrace();
         }
         displayedSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
     }
 
-    public void setUserManager(UserManager userManager){
+    protected void updateDisplayedSeriesEvents() {
+        ArrayList<String> events = new ArrayList<>();
+        if (currSeries != null) {
+            for (Event event : currSeries) {
+                events.add(event.toString());
+            }
+            displayedSubSeriesList.setItems(FXCollections.observableArrayList(events));
+        }
+    }
+
+    public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
@@ -258,15 +277,21 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     private void seriesListClicked() {
-        currSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
-        System.out.println("Clicked on series: " + currSeries);
+        String seriesName = displayedSeriesList.getSelectionModel().getSelectedItem();
+        try {
+            currSeries = calendar.getSeries(seriesName);
+            System.out.println("Clicked on series: " + currSeries.getName());
+        } catch (NoSuchSeriesException e) {
+            System.out.println("currSeries is null");
+        }
         currSubSeries = null;
-        updateDisplayedSubSeries();
+        updateDisplayedSeries();
+        updateDisplayedSeriesEvents();
     }
 
     @FXML
     private void deleteSeries() {
-        if(currSeries != null){
+        if (currSeries != null) {
 
         }
         //TODO make work
@@ -279,11 +304,12 @@ public class CalendarUI extends GraphicalUserInterface {
     private void subSeriesListClicked() {
         currSubSeries = displayedSubSeriesList.getSelectionModel().getSelectedItem();
         System.out.println("Clicked on sub series: " + currSubSeries);
+        updateDisplayedSubSeries();
     }
 
     @FXML
     private void deleteSubSeries() {
-        if(currSubSeries != null){
+        if (currSubSeries != null) {
 
         }
         //TODO make work
@@ -365,6 +391,7 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     private void handleNewEvent() {
+        System.out.println(calendar.getSeries().size());
         System.out.println("New clicked");
         EventAddUI controller = openGUI("EventAddUI.fxml");
         controller.setCalendar(calendar);

@@ -138,14 +138,14 @@ public class DataSaver {
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags = new ArrayList<>();
-        EventCollection eventCollections;
-        ArrayList<Series> series = new ArrayList<>();
+        ArrayList<EventCollection> eventCollections = new ArrayList<>();
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
+        EventCollection manualEvents;
 
         //load EC
-        eventCollections = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
-        eventCollections.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
-
+        manualEvents = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
+        manualEvents.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
+        eventCollections.add(manualEvents);
         //load memos
         try {
             memos = new ArrayList<>();
@@ -212,7 +212,7 @@ public class DataSaver {
                     newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/"));
                     newSeries.setPostponedEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/postponed/"));
 
-                    series.add(newSeries);
+                    eventCollections.add(newSeries);
                 } catch (IOException | InvalidDateException e) {
                     e.printStackTrace();
                 }
@@ -230,9 +230,8 @@ public class DataSaver {
                 AlertCollection alertCollection = loadAlertCollection(name);
             }
         }
-        List<EventCollection> eventList = new ArrayList<>();
-        eventList.add(eventCollections);
-        return new Calendar(calendarName, eventList, alertCollections, memos, tags, calendarDataSaver);
+
+        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags, calendarDataSaver);
     }
 
     /**

@@ -239,21 +239,6 @@ public class Series extends EventCollection implements Iterable<Event> {
         return result.toString();
     }
 
-//    @Override
-//    public void save() throws IOException {
-//        saveHelper("series/" + this.name + "/", super.getEvents());
-//        saveHelper("series/" + this.name + "/postponed/", super.getPostponedEvents());
-//        getSaver().saveToFile("series/" + this.name + "/CalenderGenerator.txt", this.calGen.getString());
-//    }
-
-//    @Override
-//    public void load() throws IOException, InvalidDateException {
-//        setEvents(loadHelper("series/" + this.name + "/"));
-//        setPostponedEvents(loadHelper("series/" + this.name + "/postponed/"));
-//        String CG = getSaver().loadStringFromFile("series/" + this.name + "/CalenderGenerator.txt");
-//        this.calGen = new CalendarGenerator(CG);
-//    }
-
     /**
      * Generate events based on the current CalGen
      * if calGen.endTime == null i.e. the current display endtime of this infinite series is undefined
