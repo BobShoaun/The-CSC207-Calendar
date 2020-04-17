@@ -6,7 +6,6 @@ import dates.TimeController;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;
@@ -444,5 +443,13 @@ public class Calendar {
      */
     public TagManager getTagManager() {
         return tagManager;
+    }
+
+    /**
+     * Remove an event collection from the event manager
+     * @param eventCollection Event collection to remove
+     */
+    public void removeEventCollection(EventCollection eventCollection){
+        eventManager.removeEventCollection(eventCollection);
     }
 }
