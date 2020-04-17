@@ -24,18 +24,29 @@ import java.util.*;
  */
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
-//    @FXML private Button createSeriesButton;
-    @FXML protected TextField nameField;
-    @FXML protected DatePicker startDate;
-    @FXML protected TextField startTime;
-    @FXML protected DatePicker endDate;
-    @FXML protected TextField endTime;
-    @FXML protected TextField tagsField;
-    @FXML protected TextField memosField;
-    @FXML protected TextArea memoTextArea;
-    @FXML protected TextField seriesField;
-    @FXML protected Label seriesErrorLabel;
-    @FXML protected Label dateTimeErrorLabel;
+    //    @FXML private Button createSeriesButton;
+    @FXML
+    protected TextField nameField;
+    @FXML
+    protected DatePicker startDate;
+    @FXML
+    protected TextField startTime;
+    @FXML
+    protected DatePicker endDate;
+    @FXML
+    protected TextField endTime;
+    @FXML
+    protected TextField tagsField;
+    @FXML
+    protected TextField memosField;
+    @FXML
+    protected TextArea memoTextArea;
+    @FXML
+    protected TextField seriesField;
+    @FXML
+    protected Label seriesErrorLabel;
+    @FXML
+    protected Label dateTimeErrorLabel;
 //    @FXML private Button doneButton;
 
     protected Calendar calendar;
@@ -52,6 +63,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
+
     public void setCalendarUIController(CalendarUI c) {
         this.calendarUIController = c;
     }
@@ -94,7 +106,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             if (newEvent != null) {
                 addEvent(newEvent);
                 addTags(newEvent.getId());
-                if(!memoTitle.equals("")){
+                if (!memoTitle.equals("")) {
                     addMemo(memoTitle, memoContent, newEvent.getId());
                 }
                 calendarUIController.updateDisplayedEvents();
@@ -111,21 +123,19 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
 
-
     @FXML
-    private void handleCreateSeries(){
+    private void handleCreateSeries() {
         System.out.println("Create Series clicked");
         try {
             SeriesUI controller = showGUI("SeriesUI.fxml");
             getUserInput();
             Event newEvent = createEvent(name, start, end);
-            controller.setDetails(newEvent,calendar);
+            controller.setDetails(newEvent, calendar);
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         }
     }
-
 
 
     protected void getUserInput() throws InvalidDateException {
@@ -134,7 +144,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         memoContent = memoTextArea.getText();
         tags = tagsField.getText().split(",");
         for (int i = 0; i < tags.length; i++) {
-            tags[i]= tags[i].trim();
+            tags[i] = tags[i].trim();
         }
         if (startDate.getValue() == null || endDate.getValue() == null) {
             throw new InvalidDateException();
@@ -182,8 +192,12 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param newEvent be to added
      */
     private void addEvent(Event newEvent) {
-        getEventCollection();
-        eventCollection.addEvent(newEvent);
+        try {
+            isEventCollectionChanged(eventCollection);
+            eventCollection.addEvent(newEvent);
+        } catch (NoSuchSeriesException e) {
+            seriesErrorLabel.setVisible(true);
+        }
     }
 
 
@@ -197,7 +211,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
      * @param id          of the event
      */
     protected void addMemo(String memoTitle, String memoContent, String id) {
-        if(!memosField.getText().equals("")) {
+        if (!memosField.getText().equals("")) {
             Memo memo = calendar.getMemo(memoTitle, memoContent);
             if (memo == null) {
                 calendar.addMemo(new memotag.Memo(memoTitle, memoContent));
@@ -212,7 +226,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     /**
      * add the event to the tags
      *
-     * @param id   of the events
+     * @param id of the events
      */
     protected void addTags(String id) {
         if (!tagsField.getText().equals("")) {
@@ -262,9 +276,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
 
-
     private LocalDate gregorianCalendarToLocalDate(GregorianCalendar GC) {
-        return LocalDate.of(GC.get(GregorianCalendar.YEAR),GC.get(GregorianCalendar.MONTH) + 1, GC.get(GregorianCalendar.DATE));
+        return LocalDate.of(GC.get(GregorianCalendar.YEAR), GC.get(GregorianCalendar.MONTH) + 1, GC.get(GregorianCalendar.DATE));
     }
 
     private String getTime(GregorianCalendar GC) {
@@ -273,17 +286,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         return simpleDateFormat.format(GC.getTime());
     }
 
-    private void getEventCollection() {
-        String SeriesName = seriesField.getText();
-        if (SeriesName.equals("") || SeriesName.equals("Default")) {
+    protected boolean isEventCollectionChanged(EventCollection oldEC) throws NoSuchSeriesException {
+        String seriesName = seriesField.getText();
+        if (seriesName.equals("") || seriesName.equals("Default")) {
             eventCollection = calendar.getSingleEventCollection();
         } else {
-            try {
-                eventCollection = calendar.getSeries(SeriesName);
-            } catch (NoSuchSeriesException ex) {
-                seriesErrorLabel.setVisible(true);
-            }
+            eventCollection = calendar.getSeries(seriesName);
         }
+        return !oldEC.equals(eventCollection);
     }
 
     @Override
@@ -296,7 +306,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         dateTimeErrorLabel.setVisible(false);
     }
 
-    protected void save(){
+    protected void save() {
         calendar.getDataSaver().saveCalendar(calendar);
     }
 }

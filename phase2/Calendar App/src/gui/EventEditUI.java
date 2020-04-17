@@ -3,6 +3,7 @@ package gui;
 import event.Event;
 import event.EventCollection;
 import exceptions.InvalidDateException;
+import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -90,18 +91,28 @@ public class EventEditUI extends EventAddUI {
                 }
 
             }
-            eventCollection.rescheduleEvent(event, start, end);
-            postPoneEvent();
-            editMemo();
-            editTags();
-            calendarUIController.updateDisplayedEvents();
-            closeGUI();
-            save();
+            EventCollection old = eventCollection;
+            if(isEventCollectionChanged(eventCollection)){
+//                System.out.println(old);
+//                System.out.println("=====================================");
+//                System.out.println(eventCollection);
+                System.out.println("removed:::"+old.removeEvent(event));
+                eventCollection.addEvent(event);
+            }else {
+                eventCollection.rescheduleEvent(event, start, end);
+                postPoneEvent();
+                editMemo();
+                editTags();
+                calendarUIController.updateDisplayedEvents();
+                closeGUI();
+                save();
+            }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
+        } catch (NoSuchSeriesException e) {
+            seriesErrorLabel.setVisible(true);
         }
-
     }
 
     private void editMemo() {

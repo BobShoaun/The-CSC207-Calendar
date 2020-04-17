@@ -109,6 +109,11 @@ public class EventCollection implements Iterable<Event>, Observer{
      */
     public boolean removeEvent(Event event) throws InvalidDateException{
         String eventId = event.getId();
+        System.out.println("target id :"+eventId);
+        System.out.println();
+        for (Event e:events) {
+            System.out.println(e.getId()+"\t"+e.getId().equals(eventId));
+        }
         boolean removed = this.events.removeIf(e -> e.getId().equals(eventId));
         if (removed) {
             event.addObserver(this);
