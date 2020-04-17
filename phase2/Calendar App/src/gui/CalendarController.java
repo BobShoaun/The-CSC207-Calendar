@@ -182,7 +182,7 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     protected void updateDisplayedEvents() {
-        // TODO: extract methods
+
         String searchCriterion = searchByList.getValue();
         if (searchCriterion == null) {
             return;
@@ -190,49 +190,65 @@ public class CalendarController extends GraphicalUserInterface {
         eventList.clear();
         switch (searchCriterion) {
             case "Date":
-                if (startDate.getValue() != null && endDate.getValue() != null) {
-                    if (startDate.getValue().isBefore(endDate.getValue())) {
-                        GregorianCalendar start = calendar.getTime();
-                        start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
-                        start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue() - 1);
-                        start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth() - 1);
-                        GregorianCalendar end = calendar.getTime();
-                        end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
-                        end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
-                        end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
-                        List<Event> events = calendar.getEvents(start, end);
-                        eventList.addAll(events);
-                    }
-                }
+                searchByDate();
                 break;
             case "Tag":
-                String tagString = searchTermField.getText();
-                Tag tag = calendar.getTag(tagString);
-                if (tag != null) {
-                    List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                    eventList.addAll(events);
-                }
+                searchByTag();
                 break;
             case "Memo name":
-                String memoString = searchTermField.getText();
-                Memo memo = calendar.getMemo(memoString);
-                if (memo != null) {
-                    List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                    eventList.addAll(events);
-                }
+                searchByMemo();
                 break;
             case "Postponed":
                 eventList.addAll(calendar.getPostponedEvents());
                 break;
             case "Series name":
-                try {
-                    EventCollection eventCollection = calendar.getSeries(searchTermField.getText());
-                    eventList.addAll(eventCollection.getEvents(new GregorianCalendar(0, Calendar.JANUARY, 1),
-                            new GregorianCalendar(2100, Calendar.JANUARY, 1)));
-                } catch (NoSuchSeriesException ignored) {
-
-                }
+                searchBySeries();
                 break;
+        }
+    }
+
+    private void searchBySeries() {
+        try {
+            EventCollection eventCollection = calendar.getSeries(searchTermField.getText());
+            eventList.addAll(eventCollection.getEvents(new GregorianCalendar(0, Calendar.JANUARY, 1),
+                    new GregorianCalendar(2100, Calendar.JANUARY, 1)));
+        } catch (NoSuchSeriesException ignored) {
+
+        }
+    }
+
+    private void searchByMemo() {
+        String memoString = searchTermField.getText();
+        Memo memo = calendar.getMemo(memoString);
+        if (memo != null) {
+            List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+            eventList.addAll(events);
+        }
+    }
+
+    private void searchByTag() {
+        String tagString = searchTermField.getText();
+        Tag tag = calendar.getTag(tagString);
+        if (tag != null) {
+            List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+            eventList.addAll(events);
+        }
+    }
+
+    private void searchByDate() {
+        if (startDate.getValue() != null && endDate.getValue() != null) {
+            if (startDate.getValue().isBefore(endDate.getValue())) {
+                GregorianCalendar start = calendar.getTime();
+                start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
+                start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue() - 1);
+                start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth() - 1);
+                GregorianCalendar end = calendar.getTime();
+                end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
+                end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
+                end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
+                List<Event> events = calendar.getEvents(start, end);
+                eventList.addAll(events);
+            }
         }
     }
 

@@ -75,7 +75,6 @@ public class DataSaver {
             newFile.createNewFile();
             saveToFile(path, contents);
         }
-        System.out.println("Saved multiple lines to " + basePath + path);
     }
 
     /**
@@ -358,7 +357,6 @@ public class DataSaver {
         try {
             deleteDirectory("events/");
         } catch (IOException e) {
-            System.out.println("Yeah, I know there is no such file...there will be very soon");
         }
         saveEventsToFile("events/", eventManager.getManualEventCollection().getEvents());
         saveEventsToFile("events/postponed/", eventManager.getManualEventCollection().getPostponedEvents());
@@ -399,7 +397,7 @@ public class DataSaver {
         }
     }
 
-    private List<Event> loadEventsFromFile(String path) { // TODO: make use of ParseEventID()
+    private List<Event> loadEventsFromFile(String path) {
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
         for (File f : data) {

@@ -210,7 +210,7 @@ public class EventUI extends UserInterface {
         }
     }
 
-    private void getMemoUIs() { //TODO: Is this still necessary if we only have a single memo?
+    private void getMemoUIs() {
         Memo memo = calendar.getMemo(event);
         memoUIs.add(new MemoUI(memo, calendar));
     }
