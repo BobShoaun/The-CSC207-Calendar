@@ -273,7 +273,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     }
 
     private CalendarGenerator defaultCG(CalendarGenerator CG) {
-        long time = Duration.ofDays(365).toMillis();
+        long time = Duration.ofDays(1).toMillis();
         GregorianCalendar startTime = CG.getStartTime();
         GregorianCalendar endTime = addTime(startTime, time);
         return new CalendarGenerator(startTime, calGen.getPeriods(), endTime);

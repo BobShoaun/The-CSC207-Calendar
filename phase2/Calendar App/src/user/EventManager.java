@@ -145,11 +145,13 @@ public class EventManager {
     /**
      * Create a new event series
      *
-     * @param eventSeriesName name of the new series
+     * @param event the event that thi series is modeled upon
      * @throws InvalidDateException If incorrect data is passed in
      */
-    public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null)));
+    public void addEventSeries(Event event) throws InvalidDateException {
+        Series newSeries = new Series(event.getName(), event, new CalendarGenerator(event.getStartDate(), Collections.singletonList(Duration.ofDays(7)), null));
+        eventCollections.add(newSeries);
+        System.out.println(newSeries);
         dataSaver.saveEvents(this);
     }
 

@@ -115,7 +115,6 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
                 calendarUIController.updateDisplayedSubSeries();
                 save();
                 closeGUI();
-                System.out.println(eventCollection.getEvents().size());
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
@@ -126,10 +125,10 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
     @FXML
     private void handleRepeatEvent() {
-        System.out.println("Create Series clicked");
+        System.out.println("Repeat Series clicked");
         try {
-            SeriesUI controller = showGUI("SeriesUI.fxml");
             getUserInput();
+            SeriesUI controller = showGUI("SeriesUI.fxml");
             Event newEvent = createEvent(name, start, end);
             controller.setDetails(newEvent, calendar);
         } catch (InvalidDateException e) {
@@ -140,16 +139,19 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
     @FXML
     private void handleCreateSeries(){
+        System.out.println("Create new series");
         try {
             getUserInput();
             Event newEvent = createEvent(name,start,end);
-            CalendarGenerator CG = new CalendarGenerator(start,Collections.singletonList(Duration.ofDays(7)),end);
-            Series newSeries = new Series(newEvent.getName(),newEvent,CG);
-//            calendar.addEventSeries();
+            calendar.addEventSeries(newEvent);
+            calendarUIController.updateDisplayedEvents();
+            calendarUIController.updateDisplayedSeries();
+            calendarUIController.updateDisplayedSubSeries();
+            closeGUI();
         } catch (InvalidDateException e) {
-            e.printStackTrace();
+            dateTimeErrorLabel.setText("Invalid Date");
+            dateTimeErrorLabel.setVisible(true);
         }
-
     }
 
 

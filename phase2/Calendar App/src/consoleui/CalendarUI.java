@@ -233,12 +233,7 @@ public class CalendarUI extends UserInterface {
 
     private void addEventSeries() {
         String eventSeriesName = getStringInput("Name of event series: ", calendar.getEventSeriesNames());
-        try {
-            calendar.addEventSeries(eventSeriesName);
-        } catch (InvalidDateException e) {
-            System.out.println("Error saving events!");
-            e.printStackTrace();
-        }
+        //            calendar.addEventSeries(eventSeriesName);
         EventCollectionUI eventCollectionUI = new EventCollectionUI(calendar.getEventCollection(eventSeriesName), calendar);
         eventCollectionUI.show();
     }

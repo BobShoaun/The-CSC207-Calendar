@@ -174,11 +174,11 @@ public class Calendar {
     /**
      * Create a new event series
      *
-     * @param eventSeriesName name of the new series
+     * @param event the event that is series is modeled upon
      * @throws InvalidDateException If incorrect data is passed in
      */
-    public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventManager.addEventSeries(eventSeriesName);
+    public void addEventSeries(Event event) throws InvalidDateException {
+        eventManager.addEventSeries(event);
     }
 
 
