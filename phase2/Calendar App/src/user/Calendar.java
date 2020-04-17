@@ -381,8 +381,6 @@ public class Calendar {
     }
 
 
-    // TODO: extract this class
-
     /**
      * Get the current time of the calendar
      *
