@@ -19,12 +19,10 @@ public class TagUI extends gui.GraphicalUserInterface {
     private final ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;
     private String tagName;
-    Tag tag;
+    private Tag tag;
 
-    @FXML
-    private TextField tagNameTextField;
-    @FXML
-    private ListView<String> tagEventList;
+    @FXML private TextField tagNameTextField;
+    @FXML private ListView<String> tagEventList;
 
     /**
      * Set the tag to edit

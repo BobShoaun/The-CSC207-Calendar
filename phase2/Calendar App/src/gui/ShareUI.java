@@ -16,14 +16,10 @@ public class ShareUI extends GraphicalUserInterface {
     private Event event;
     private UserManager userManger;
 
-    @FXML
-    protected Label UsernameError;
-    @FXML
-    protected Label CalendarNameError;
-    @FXML
-    protected TextField Username;
-    @FXML
-    protected TextField CalendarName;
+    @FXML private Label usernameError;
+    @FXML private Label calendarNameError;
+    @FXML private TextField username;
+    @FXML private TextField calendarName;
 
     /**
      * Set the Event to be shared.
@@ -54,17 +50,17 @@ public class ShareUI extends GraphicalUserInterface {
      * Share the event with the set user.
      */
     public void shareWith() {
-        CalendarNameError.setOpacity(0);
-        UsernameError.setOpacity(0);
-        String recipientUsername = Username.getText();
-        String recipientCalendar = CalendarName.getText();
+        calendarNameError.setOpacity(0);
+        usernameError.setOpacity(0);
+        String recipientUsername = username.getText();
+        String recipientCalendar = calendarName.getText();
         try {
             userManger.getEventSharer().share(event, recipientUsername, recipientCalendar);
             closeGUI();
         } catch (InvalidCalendarNameException e) {
-            CalendarNameError.setOpacity(1);
+            calendarNameError.setOpacity(1);
         } catch (InvalidUsernameException e) {
-            UsernameError.setOpacity(1);
+            usernameError.setOpacity(1);
         }
     }
 

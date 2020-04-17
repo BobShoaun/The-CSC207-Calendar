@@ -25,7 +25,6 @@ public class User {
     private GregorianCalendar lastLoginTime;
     private final boolean firstLogin;
     private final DataSaver dataSaver;
-    private EventSharer eventSharer; // TODO: bug?
     private boolean darkTheme;
 
     /**
@@ -146,10 +145,8 @@ public class User {
      * Constructor for User
      * @param name the user's name
      * @param password the user's password
-     * @param eventSharer the eventSharer
      */
-    public User(String name, String password, EventSharer eventSharer) {
-        this.eventSharer = eventSharer;
+    public User(String name, String password) {
         this.name = name;
         this.password = password;
         this.calendars = new ArrayList<>();

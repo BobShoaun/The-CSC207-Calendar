@@ -16,10 +16,8 @@ import java.util.List;
  */
 public class ViewTagsUI extends gui.GraphicalUserInterface {
 
-    @FXML
-    private ListView<String> tagList;
-    @FXML
-    private Label selectTagLabel;
+    @FXML private ListView<String> tagList;
+    @FXML private Label selectTagLabel;
 
     private Calendar calendar;
     private String selectedTag;

@@ -20,8 +20,8 @@
           <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="Username" promptText="Recipient Username" GridPane.rowIndex="1" />
-            <TextField fx:id="CalendarName" promptText="Recipient Calendar Name" GridPane.rowIndex="3" />
+            <TextField fx:id="username" promptText="Recipient Username" GridPane.rowIndex="1" />
+            <TextField fx:id="calendarName" promptText="Recipient Calendar Name" GridPane.rowIndex="3" />
             <Label text="Share" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="30.0" />
@@ -33,8 +33,8 @@
                      <Insets/>
                  </GridPane.margin>
              </Button>
-            <Label fx:id="UsernameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Username!" textFill="#ff4545" GridPane.rowIndex="2" />
-            <Label fx:id="CalendarNameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Calendar!" textFill="#ff4545" GridPane.rowIndex="4" />
+            <Label fx:id="usernameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Username!" textFill="#ff4545" GridPane.rowIndex="2" />
+            <Label fx:id="calendarNameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Calendar!" textFill="#ff4545" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#exit" text="Cancel" GridPane.rowIndex="5" />
          </children>
          <padding>

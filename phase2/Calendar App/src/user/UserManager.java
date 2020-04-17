@@ -117,7 +117,7 @@ public class UserManager {
             if (user.getName().toLowerCase().equals(username.toLowerCase()))
                 throw new UsernameTakenException();
 
-        User newUser = new User(username, password, eventSharer);
+        User newUser = new User(username, password);
         users.add(newUser);
         saveUser(newUser);
     }
