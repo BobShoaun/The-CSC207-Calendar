@@ -198,8 +198,8 @@ public class DataSaver {
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
                     newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
-                    newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/"));
-                    newSeries.setPostponedEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/postponed/"));
+                    newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/"));
+                    newSeries.setPostponedEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/postponed/"));
 
                     series.add(newSeries);
                 } catch (IOException | InvalidDateException e) {
@@ -298,8 +298,8 @@ public class DataSaver {
 
         //save Series
         for (Series series : eventManager.getSeries()) {
-            saveEventsToFile("series/" + series.getName() + "/", series.getManualEvents());
-            saveEventsToFile("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
+            saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
+            saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
             try {
                 saveSubSeries(series, series.getSubSeries());
                 saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
@@ -323,6 +323,9 @@ public class DataSaver {
     private List<Event> loadEventsFromFile(String path) { // TODO: make use of ParseEventID()
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
+        for(File f: data){
+            System.out.println(f.getName());
+        }
         for (File f : data) {
             String id = f.getName();
             id = id.replaceAll(".txt", "");
