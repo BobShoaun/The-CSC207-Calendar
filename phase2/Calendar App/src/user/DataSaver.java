@@ -148,9 +148,11 @@ public class DataSaver {
         GregorianCalendar endTime = (new GregorianCalendar());
         endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
 
-        List<Duration> periods = Arrays.stream(information[2].split(" "))
-                .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
-
+        List<Duration> periods = new ArrayList<>();
+        if (information.length > 2) {
+            periods = Arrays.stream(information[2].split(" "))
+                    .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
+        }
         List<GregorianCalendar> ignoreList = new ArrayList<>();
         if (information.length > 3) {
             String[] ignoreMillisStr = information[3].split(" ");
