@@ -43,9 +43,12 @@ public class CalendarUI extends GraphicalUserInterface {
     @FXML private ListView<String> alertList;
     @FXML private ListView<String> displayedSubSeriesList;
     @FXML private ListView<String> displayedSeriesList;
-    @FXML private CheckBox darkTheme;
-    @FXML private ChoiceBox searchByList;
-    @FXML private DatePicker startDate;
+    @FXML
+    private CheckBox darkTheme;
+    @FXML
+    private ChoiceBox<String> searchByList;
+    @FXML
+    private DatePicker startDate;
     @FXML private DatePicker endDate;
     @FXML private TextField searchTermField;
     @FXML private ListView<String> displayedEventList;
@@ -61,8 +64,7 @@ public class CalendarUI extends GraphicalUserInterface {
         eventList = FXCollections.observableArrayList();
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String searchCriterion = (String) newValue;
-            if (searchCriterion.equals("Date")) {
+            if (newValue.equals("Date")) {
                 startDate.setVisible(true);
                 GregorianCalendar time = calendar.getTime();
                 LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
@@ -73,15 +75,15 @@ public class CalendarUI extends GraphicalUserInterface {
                 endDate.setVisible(true);
                 endDate.setValue(end);
                 searchTermField.setVisible(false);
-            } else if (searchCriterion.equals("Tag")) {
+            } else if (newValue.equals("Tag")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(true);
-            } else if (searchCriterion.equals("Memo name")) {
+            } else if (newValue.equals("Memo name")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(true);
-            } else if (searchCriterion.equals("Postponed")) {
+            } else if (newValue.equals("Postponed")) {
                 startDate.setVisible(false);
                 endDate.setVisible(false);
                 searchTermField.setVisible(false);
@@ -212,7 +214,7 @@ public class CalendarUI extends GraphicalUserInterface {
         this.user = user;
         setActiveCalendar(user.getCalendar(0));
         initialize();
-        updateAlerts();
+        updateDisplayedAlerts();
 
         setTheme();
         lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
@@ -221,7 +223,7 @@ public class CalendarUI extends GraphicalUserInterface {
     /**
      * Set the calendar to be displayed
      *
-     * @param calendar
+     * @param calendar the Calendar to display
      */
     public void setActiveCalendar(user.Calendar calendar) {
         this.calendar = calendar;
@@ -232,11 +234,11 @@ public class CalendarUI extends GraphicalUserInterface {
     /**
      * Update the visible alerts
      */
-    private void updateAlerts() {
+    protected void updateDisplayedAlerts() {
         GregorianCalendar past = calendar.getTime();
-        past.add(GregorianCalendar.DATE, -1);
+        past.add(GregorianCalendar.DATE, -30);
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
-                calendar.getAlerts(calendar.getTime(), past).stream()
+                calendar.getAlerts(past, calendar.getTime()).stream()
                         .map(Alert::toString).collect(Collectors.toList()));
         alertList.setItems(alertStrings);
     }
@@ -258,7 +260,7 @@ public class CalendarUI extends GraphicalUserInterface {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currAlert);
         updateDisplayedEvents();
-        updateAlerts();
+        updateDisplayedAlerts();
     }
 
     /**
