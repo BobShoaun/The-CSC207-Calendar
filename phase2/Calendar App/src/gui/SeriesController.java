@@ -33,20 +33,16 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
     private Label seriesErrorLabel;
     @FXML
     private TextField seriesField;
-
     @FXML
     private DatePicker endDate;
     @FXML
     private ChoiceBox<String> timeChoiceBox;
     @FXML
     private TextField repeatNumField;
-    @FXML
-    private TextField nameField;
 
     private Event baseEvent;
     private Series series;
     private user.Calendar calendar;
-    private String name;
     private String seriesName;
     private GregorianCalendar start;
     private GregorianCalendar end;
@@ -83,7 +79,7 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
         try {
             getUserInput();
             if (seriesName.equals("")) {
-                calendar.addEventSeries(name, start, end, timeSpan, baseEvent);
+                calendar.addEventSeries(baseEvent.getName(), start, end, timeSpan, baseEvent);
             } else {
                 getSeries();
                 series.addRepeatingEvent(baseEvent, start, end, timeSpan);
@@ -108,7 +104,6 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
 
 
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
-        name = nameField.getText();
         getTimeSpan();
         seriesName = seriesField.getText();
         end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
