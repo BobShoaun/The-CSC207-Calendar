@@ -148,7 +148,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         System.out.println("Repeat Series clicked");
         try {
             getUserInput();
-            SeriesController controller = showGUI("SeriesController.fxml");
+            SeriesController controller = showGUI("series.fxml");
             Event newEvent = createEvent(name, start, end);
             controller.setDetails(newEvent, calendar);
         } catch (InvalidDateException e) {

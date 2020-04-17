@@ -179,7 +179,7 @@ public class EditEventController extends AddEventController {
     private void handleDuplicate() {
         System.out.println("Duplicate clicked");
         //TODO: need date input...
-        AddEventController dup = openGUI("AddEventController.fxml");
+        AddEventController dup = openGUI("addEvent.fxml");
         dup.setCalendar(calendar);
         dup.setCalendarUIController(calendarUIController);
         dup.showEventDetails(event);
