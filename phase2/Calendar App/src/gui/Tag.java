@@ -47,7 +47,7 @@ public class Tag extends gui.GraphicalUserInterface {
         }
     }
 
-    public void showViewTagUI(ActionEvent actionEvent) {
+    public void showViewTagUI() {
         editTag();
         ViewTags controller = showGUI("viewTags.fxml");
         controller.setCalendar(calendar);

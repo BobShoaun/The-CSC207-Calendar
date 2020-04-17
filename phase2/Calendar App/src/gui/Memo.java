@@ -38,7 +38,7 @@ public class Memo extends GraphicalUserInterface {
 
 
     @FXML
-    private void editMemo(Event e) {
+    private void editMemo() {
         String newMemoTitle = memoTitleField.getText();
         String memoText = memoTextField.getText();
         boolean edited = !memoTitle.equals(newMemoTitle);
@@ -52,15 +52,15 @@ public class Memo extends GraphicalUserInterface {
         }
 
         if (edited) { memoTitle = newMemoTitle; }
-        showViewMemoUI(e);
+        showViewMemoUI();
     }
 
     @FXML
-    private void deleteMemo(Event e) {
+    private void deleteMemo() {
         String memoTitle = memoTitleField.getText();
         memotag.Memo memo = calendar.getMemo(memoTitle);
         calendar.removeMemo(memo);
-        showViewMemoUI(e);
+        showViewMemoUI();
     }
 
     private void loadEvents() {
@@ -73,7 +73,7 @@ public class Memo extends GraphicalUserInterface {
         eventsList.getItems().addAll(list);
     }
 
-    private void showViewMemoUI(Event e) {
+    private void showViewMemoUI() {
         ViewMemos controller = showGUI("viewMemos.fxml");
         controller.setCalendar(calendar);
     }
