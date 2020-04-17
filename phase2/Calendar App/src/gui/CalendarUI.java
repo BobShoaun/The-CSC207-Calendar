@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import memotag.Memo;
@@ -64,29 +63,30 @@ public class CalendarUI extends GraphicalUserInterface {
         eventList = FXCollections.observableArrayList();
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.equals("Date")) {
-                startDate.setVisible(true);
-                GregorianCalendar time = calendar.getTime();
-                LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
-                        time.get(GregorianCalendar.DATE));
-                startDate.setValue(date);
-                LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
-                        time.get(GregorianCalendar.DATE)).plusDays(14);
-                endDate.setVisible(true);
-                endDate.setValue(end);
-                searchTermField.setVisible(false);
-            } else if (newValue.equals("Tag")) {
-                startDate.setVisible(false);
-                endDate.setVisible(false);
-                searchTermField.setVisible(true);
-            } else if (newValue.equals("Memo name")) {
-                startDate.setVisible(false);
-                endDate.setVisible(false);
-                searchTermField.setVisible(true);
-            } else if (newValue.equals("Postponed")) {
-                startDate.setVisible(false);
-                endDate.setVisible(false);
-                searchTermField.setVisible(false);
+            switch (newValue) {
+                case "Date":
+                    startDate.setVisible(true);
+                    GregorianCalendar time = calendar.getTime();
+                    LocalDate date = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
+                            time.get(GregorianCalendar.DATE));
+                    startDate.setValue(date);
+                    LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
+                            time.get(GregorianCalendar.DATE)).plusDays(14);
+                    endDate.setVisible(true);
+                    endDate.setValue(end);
+                    searchTermField.setVisible(false);
+                    break;
+                case "Tag": // Tag and memo name cases merged
+                case "Memo name":
+                    startDate.setVisible(false);
+                    endDate.setVisible(false);
+                    searchTermField.setVisible(true);
+                    break;
+                case "Postponed":
+                    startDate.setVisible(false);
+                    endDate.setVisible(false);
+                    searchTermField.setVisible(false);
+                    break;
             }
         });
         ObservableList<String> searchOptions = FXCollections.observableArrayList(
@@ -94,12 +94,8 @@ public class CalendarUI extends GraphicalUserInterface {
         );
         searchByList.setItems(searchOptions);
         searchByList.setValue("Date");
-        startDate.valueProperty().addListener((time) -> {
-            updateDisplayedEvents();
-        });
-        endDate.valueProperty().addListener((time) -> {
-            updateDisplayedEvents();
-        });
+        startDate.valueProperty().addListener((time) -> updateDisplayedEvents());
+        endDate.valueProperty().addListener((time) -> updateDisplayedEvents());
 
         eventList.addListener((ListChangeListener<Event>) c -> {
             displayedEventList.getItems().clear();
@@ -166,42 +162,47 @@ public class CalendarUI extends GraphicalUserInterface {
 //        for (Series s:calendar.getSeries()) {
 //            System.out.println(s);
 //        }
-        String searchCriterion = (String) searchByList.getValue();
+        String searchCriterion = searchByList.getValue();
         if (searchCriterion == null) {
             return;
         }
         eventList.clear();
-        if (searchCriterion.equals("Date")) {
-            if (startDate.getValue() != null && endDate.getValue() != null) {
-                if (startDate.getValue().isBefore(endDate.getValue())) {
-                    GregorianCalendar start = calendar.getTime();
-                    start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
-                    start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue() - 1);
-                    start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth() - 1);
-                    GregorianCalendar end = calendar.getTime();
-                    end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
-                    end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
-                    end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
-                    List<Event> events = calendar.getEvents(start, end);
+        switch (searchCriterion) {
+            case "Date":
+                if (startDate.getValue() != null && endDate.getValue() != null) {
+                    if (startDate.getValue().isBefore(endDate.getValue())) {
+                        GregorianCalendar start = calendar.getTime();
+                        start.set(GregorianCalendar.YEAR, startDate.getValue().getYear());
+                        start.set(GregorianCalendar.MONTH, startDate.getValue().getMonthValue() - 1);
+                        start.set(GregorianCalendar.DATE, startDate.getValue().getDayOfMonth() - 1);
+                        GregorianCalendar end = calendar.getTime();
+                        end.set(GregorianCalendar.YEAR, endDate.getValue().getYear());
+                        end.set(GregorianCalendar.MONTH, endDate.getValue().getMonthValue() - 1);
+                        end.set(GregorianCalendar.DATE, endDate.getValue().getDayOfMonth() - 1);
+                        List<Event> events = calendar.getEvents(start, end);
+                        eventList.addAll(events);
+                    }
+                }
+                break;
+            case "Tag":
+                String tagString = searchTermField.getText();
+                Tag tag = calendar.getTag(tagString);
+                if (tag != null) {
+                    List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
                     eventList.addAll(events);
                 }
-            }
-        } else if (searchCriterion.equals("Tag")) {
-            String tagString = searchTermField.getText();
-            Tag tag = calendar.getTag(tagString);
-            if (tag != null) {
-                List<Event> events = tag.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                eventList.addAll(events);
-            }
-        } else if (searchCriterion.equals("Memo name")) {
-            String memoString = searchTermField.getText();
-            Memo memo = calendar.getMemo(memoString);
-            if (memo != null) {
-                List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
-                eventList.addAll(events);
-            }
-        } else if (searchCriterion.equals("Postponed")) {
-            eventList.addAll(calendar.getPostponedEvents());
+                break;
+            case "Memo name":
+                String memoString = searchTermField.getText();
+                Memo memo = calendar.getMemo(memoString);
+                if (memo != null) {
+                    List<Event> events = memo.getEvents().stream().map(e -> calendar.getEvent(e)).collect(Collectors.toList());
+                    eventList.addAll(events);
+                }
+                break;
+            case "Postponed":
+                eventList.addAll(calendar.getPostponedEvents());
+                break;
         }
     }
 
@@ -325,10 +326,11 @@ public class CalendarUI extends GraphicalUserInterface {
     private void clearNotification() {
         System.out.println("Clicked clear");
         if (currAlert != null) {
+            calendar.removeAlert(currAlert);
             ObservableList<String> temp = alertList.getItems();
             temp.remove(currAlert);
             alertList.setItems(temp);
-        } // TODO: actually delete the Alert?
+        }
     }
 
     /**
@@ -339,7 +341,7 @@ public class CalendarUI extends GraphicalUserInterface {
         System.out.println("Clicked clear all");
         ObservableList<String> empty = FXCollections.observableArrayList();
         alertList.setItems(empty);
-        // TODO: delete all shown Alerts
+        calendar.removeOldAlerts();
     }
 
     /**
@@ -370,10 +372,8 @@ public class CalendarUI extends GraphicalUserInterface {
 
     /**
      * Event when the search text has been changed
-     *
-     * @param keyEvent Event from new key
      */
-    public void searchTermValueChange(KeyEvent keyEvent) {
+    public void searchTermValueChange() {
         updateDisplayedEvents();
     }
 

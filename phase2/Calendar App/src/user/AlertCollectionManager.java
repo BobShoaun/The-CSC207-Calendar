@@ -3,6 +3,7 @@ package user;
 import alert.Alert;
 import alert.AlertCollection;
 import alert.AlertComparator;
+import event.IDManager;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -11,11 +12,21 @@ import java.util.List;
 public class AlertCollectionManager {
 
     private final List<AlertCollection> alertCollections;
-    private final DataSaver dataSaver;
 
-    public AlertCollectionManager(List<AlertCollection> alertCollections, DataSaver dataSaver) {
+    public AlertCollectionManager(List<AlertCollection> alertCollections) {
         this.alertCollections = alertCollections;
-        this.dataSaver = dataSaver;
+    }
+
+    /**
+     * Remove all alerts with a specified toString
+     *
+     * @param alertToString toString of alert to be removed
+     */
+    public void removeAlert(String alertToString) {
+        GregorianCalendar alertTime = IDManager.parseEventId(alertToString);
+        for (AlertCollection ac : alertCollections) {
+            ac.removeAlert(alertTime);
+        }
     }
 
     /**

@@ -66,7 +66,7 @@ public class Alert {
     }
 
     /**
-     * Get a string representation of this alert.
+     * Get a string representation of this alert, formatted like an Event ID.
      *
      * @return String representing the time of the alert
      */

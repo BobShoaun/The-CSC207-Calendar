@@ -37,7 +37,7 @@ public class Calendar {
         timeController = new TimeController();
         this.dataSaver = dataSaver;
 
-        this.alertCollectionManager = new AlertCollectionManager(new ArrayList<>(), dataSaver);
+        this.alertCollectionManager = new AlertCollectionManager(new ArrayList<>());
         tagManager = new TagManager(new ArrayList<>(), dataSaver);
     }
 
@@ -89,7 +89,7 @@ public class Calendar {
         timeController = new TimeController();
         this.dataSaver = dataSaver;
 
-        this.alertCollectionManager = new AlertCollectionManager(alertCollections, dataSaver);
+        this.alertCollectionManager = new AlertCollectionManager(alertCollections);
         tagManager = new TagManager(tags, dataSaver);
     }
 
@@ -447,9 +447,19 @@ public class Calendar {
 
     /**
      * Remove an event collection from the event manager
+     *
      * @param eventCollection Event collection to remove
      */
-    public void removeEventCollection(EventCollection eventCollection){
+    public void removeEventCollection(EventCollection eventCollection) {
         eventManager.removeEventCollection(eventCollection);
+    }
+
+    /**
+     * Remove all alerts with a specified toString
+     *
+     * @param alertToString toString of alert to be removed
+     */
+    public void removeAlert(String alertToString) {
+        alertCollectionManager.removeAlert(alertToString);
     }
 }
