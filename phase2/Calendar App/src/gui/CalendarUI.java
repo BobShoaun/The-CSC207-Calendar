@@ -274,7 +274,7 @@ public class CalendarUI extends GraphicalUserInterface {
         try {
             currSeries = calendar.getSeries(stringSeries);
         } catch (NoSuchSeriesException e){
-            e.printStackTrace();
+            System.out.println("Series does not exist: " + stringSeries);
         }
         currSubSeries = null;
         updateDisplayedSeries();
