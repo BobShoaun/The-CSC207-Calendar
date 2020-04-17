@@ -68,5 +68,4 @@ public class LoginController extends GraphicalUserInterface {
         g.setUserManager(userManager);
         g.setDarkTheme();
     }
-
 }

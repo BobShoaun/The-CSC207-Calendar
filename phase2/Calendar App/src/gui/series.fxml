@@ -39,6 +39,9 @@
                      <font>
                         <Font name="System Italic" size="16.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
                   </Label>
                   <VBox prefWidth="140.0">
                      <children>
@@ -88,6 +91,9 @@
                      <font>
                         <Font name="System Italic" size="16.0" />
                      </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
                   </Label>
                </children>
             </HBox>
