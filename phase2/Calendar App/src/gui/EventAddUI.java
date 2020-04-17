@@ -52,9 +52,33 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
-
-    protected void setCalendarUIController(CalendarUI c) {
+    public void setCalendarUIController(CalendarUI c) {
         this.calendarUIController = c;
+    }
+
+    public void showEventDetails(Event event) {
+        nameField.setText(event.getName());
+        if (!event.isPostponed()) {
+            startDate.setValue(gregorianCalendarToLocalDate(event.getStartDate()));
+            endDate.setValue(gregorianCalendarToLocalDate(event.getEndDate()));
+            startTime.setText(getTime(event.getStartDate()));
+            endTime.setText(getTime(event.getEndDate()));
+        }
+        System.out.println(event.getStartDate().getTime());
+        System.out.println(event.getEndDate().getTime());
+
+
+        memotag.Memo memo = calendar.getMemo(event);
+        List<Tag> tags = calendar.getTags(event);
+        if (memo != null) {
+            memosField.setText(memo.getTitle());
+            memoTextArea.setText(memo.getText());
+        }
+        List<String> tagsText = new ArrayList<>();
+        for (Tag t : tags) {
+            tagsText.add(t.getText());
+        }
+        tagsField.setText(String.join(",", tagsText));
     }
 
     /**
@@ -68,7 +92,17 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             getUserInput();
             Event newEvent = createEvent(name, start, end);
             if (newEvent != null) {
-                finalizeEvent(newEvent);
+                addEvent(newEvent);
+                addTags(newEvent.getId());
+                if(!memoTitle.equals("")){
+                    addMemo(memoTitle, memoContent, newEvent.getId());
+                }
+                calendarUIController.updateDisplayedEvents();
+                calendarUIController.updateDisplayedSeries();
+                calendarUIController.updateDisplayedSubSeries();
+                save();
+                closeGUI();
+                System.out.println(eventCollection.getEvents().size());
             }
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
@@ -76,16 +110,15 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
+
+
     @FXML
     private void handleCreateSeries(){
         System.out.println("Create Series clicked");
-        SeriesUI controller = showGUI("SeriesUI.fxml");
         try {
+            SeriesUI controller = showGUI("SeriesUI.fxml");
             getUserInput();
             Event newEvent = createEvent(name, start, end);
-            if (newEvent != null) {
-                finalizeEvent(newEvent);
-            }
             controller.setDetails(newEvent,calendar);
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
@@ -93,19 +126,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
-    private void finalizeEvent(Event newEvent){
-        addEvent(newEvent);
-        addTags(newEvent.getId());
-        if(!memoTitle.equals("")){
-            addMemo(memoTitle, memoContent, newEvent.getId());
-        }
-        calendarUIController.updateDisplayedEvents();
-        calendarUIController.updateDisplayedSeries();
-        calendarUIController.updateDisplayedSubSeries();
-        save();
-        closeGUI();
-        System.out.println(eventCollection.getEvents().size());
-    }
+
 
     protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
@@ -123,7 +144,8 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         try {
             setTime(start, end);
         } catch (InvalidTimeInputException e) {
-            e.printStackTrace();
+            dateTimeErrorLabel.setText("Invalid Time");
+            dateTimeErrorLabel.setVisible(true);
         }
     }
 
@@ -164,18 +186,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         eventCollection.addEvent(newEvent);
     }
 
-    public void getEventCollection() {
-        String SeriesName = seriesField.getText();
-        if (SeriesName.equals("") || SeriesName.equals("Default")) {
-            eventCollection = calendar.getSingleEventCollection();
-        } else {
-            try {
-                eventCollection = calendar.getSeries(SeriesName);
-            } catch (NoSuchSeriesException ex) {
-                seriesErrorLabel.setVisible(true);
-            }
-        }
-    }
+
     //TODO: use memoUI instead
 
     /**
@@ -216,6 +227,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
+
     /**
      * get the time from text field
      *
@@ -249,32 +261,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         end.set(java.util.Calendar.MINUTE, getTime(endTime.getText()).get(1));
     }
 
-    public void showEventDetails(Event event) {
-        nameField.setText(event.getName());
-        if (!event.isPostponed()) {
-            startDate.setValue(GregorianCalendarToLocalDate(event.getStartDate()));
-            endDate.setValue(GregorianCalendarToLocalDate(event.getEndDate()));
-            startTime.setText(getTime(event.getStartDate()));
-            endTime.setText(getTime(event.getEndDate()));
-        }
-        System.out.println(event.getStartDate().getTime());
-        System.out.println(event.getEndDate().getTime());
 
 
-        memotag.Memo memo = calendar.getMemo(event);
-        List<Tag> tags = calendar.getTags(event);
-        if (memo != null) {
-            memosField.setText(memo.getTitle());
-            memoTextArea.setText(memo.getText());
-        }
-        List<String> tagsText = new ArrayList<>();
-        for (Tag t : tags) {
-            tagsText.add(t.getText());
-        }
-        tagsField.setText(String.join(",", tagsText));
-    }
-
-    private LocalDate GregorianCalendarToLocalDate(GregorianCalendar GC) {
+    private LocalDate gregorianCalendarToLocalDate(GregorianCalendar GC) {
         return LocalDate.of(GC.get(GregorianCalendar.YEAR),GC.get(GregorianCalendar.MONTH) + 1, GC.get(GregorianCalendar.DATE));
     }
 
@@ -282,6 +271,19 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         String pattern = "HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(GC.getTime());
+    }
+
+    private void getEventCollection() {
+        String SeriesName = seriesField.getText();
+        if (SeriesName.equals("") || SeriesName.equals("Default")) {
+            eventCollection = calendar.getSingleEventCollection();
+        } else {
+            try {
+                eventCollection = calendar.getSeries(SeriesName);
+            } catch (NoSuchSeriesException ex) {
+                seriesErrorLabel.setVisible(true);
+            }
+        }
     }
 
     @Override

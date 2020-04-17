@@ -154,7 +154,9 @@ public class EventManager {
         } catch (NoSuchSeriesException e) {
             SeriesFactory seriesFactory = new SeriesFactory();
             Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
+            System.out.println(eventCollection.getClass());
             eventCollections.add(eventCollection);
+
             dataSaver.saveEvents(this);
         }
     }

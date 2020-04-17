@@ -36,7 +36,7 @@ public class CalendarUI extends GraphicalUserInterface {
     private user.Calendar calendar;
     private Event currEvent;
     private String currAlert;
-    private String currSeries = null;
+    private String currSeries;
     private String currSubSeries = null;
     private UserManager userManager;
 
@@ -131,8 +131,10 @@ public class CalendarUI extends GraphicalUserInterface {
     protected void updateDisplayedSubSeries() {
         ArrayList<String> stringSubSeries = new ArrayList<>();
         try {
-            for (SubSeries subSeries : calendar.getSeries(currSeries).getSubSeries()) {
-                stringSubSeries.add(subSeries.getString());
+            if(currSeries!=null) {
+                for (SubSeries subSeries : calendar.getSeries(currSeries).getSubSeries()) {
+                    stringSubSeries.add(subSeries.getString());
+                }
             }
         } catch (NoSuchSeriesException e){
             e.printStackTrace();

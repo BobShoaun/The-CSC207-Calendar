@@ -219,7 +219,9 @@ public class DataSaver {
                 AlertCollection alertCollection = loadAlertCollection(name);
             }
         }
-        return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, calendarDataSaver);
+        List<EventCollection> eventList = new ArrayList<>();
+        eventList.add(eventCollections);
+        return new Calendar(calendarName, eventList, alertCollections, memos, tags, calendarDataSaver);
     }
 
     /**
