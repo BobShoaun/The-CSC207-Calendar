@@ -389,7 +389,7 @@ public class CalendarController extends GraphicalUserInterface {
     private void handleNewEvent() {
         System.out.println(calendar.getSeries().size());
         System.out.println("New clicked");
-        AddEventController controller = openGUI("AddEventController.fxml");
+        AddEventController controller = openGUI("addEvent.fxml");
         controller.setCalendar(calendar);
         controller.setCalendarUIController(this);
     }
@@ -406,7 +406,7 @@ public class CalendarController extends GraphicalUserInterface {
             eventErrorLabel.setVisible(true);
         } else {
             eventErrorLabel.setVisible(false);
-            EditEventController controller = openGUI("EditEventController.fxml");
+            EditEventController controller = openGUI("editEvent.fxml");
             controller.setUserManager(userManager);
             controller.setCalendar(calendar);
             controller.setEvent(currEvent);

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1"
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.202"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CalendarController">
     <children>
         <SplitPane dividerPositions="0.41846153846153844, 0.6133333333333333, 0.8061538461538461" layoutX="100.0"
