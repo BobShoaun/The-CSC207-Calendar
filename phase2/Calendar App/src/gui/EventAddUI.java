@@ -350,12 +350,12 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
         String seriesName = seriesField.getText();
         if (seriesName.equals("") || seriesName.equals("Default")) {
-            eventCollection = calendar.getSingleEventCollection();
+            eventCollection = calendar.getManualEventCollection();
         } else {
             eventCollection = calendar.getSeries(seriesName);
         }
         if (oldEC == null) {
-            oldEC = calendar.getSingleEventCollection();
+            oldEC = calendar.getManualEventCollection();
         }
         return !oldEC.equals(eventCollection);
     }

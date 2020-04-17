@@ -364,8 +364,8 @@ public class DataSaver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        saveEventsToFile("events/", eventManager.getSingleEventCollection().getEvents());
-        saveEventsToFile("events/postponed/", eventManager.getSingleEventCollection().getPostponedEvents());
+        saveEventsToFile("events/", eventManager.getManualEventCollection().getEvents());
+        saveEventsToFile("events/postponed/", eventManager.getManualEventCollection().getPostponedEvents());
 
         //save Series
         for (Series series : eventManager.getSeries()) {

@@ -45,7 +45,7 @@ public class EventSharer {
             e.printStackTrace();
         }
 
-        recipientCal.getSingleEventCollection().addEvent(newEvent);
+        recipientCal.getManualEventCollection().addEvent(newEvent);
         recipientCal.getDataSaver().saveEvents(recipientCal.getEventManager());
     }
 }

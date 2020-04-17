@@ -264,7 +264,7 @@ public class CalendarUI extends UserInterface {
         } catch (InvalidDateException e) {
             System.out.println("Creating event failed... Try again!");
         }
-        EventCollection eventCollection = calendar.getSingleEventCollection();
+        EventCollection eventCollection = calendar.getManualEventCollection();
         eventCollection.addEvent(event);
         EventUI newEventUi = new EventUI(event, calendar, new DataSaver(user.getName()));
         newEventUi.show();
