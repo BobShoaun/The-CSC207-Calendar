@@ -21,6 +21,7 @@ import user.UserManager;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +40,7 @@ public class CalendarUI extends GraphicalUserInterface {
     private String currSubSeries = null;
     private UserManager userManager;
     private int subSeriesIndex;
+    private ObservableList<String> seriesNameList;
 
     @FXML private ListView<String> alertList;
     @FXML private ListView<String> displayedSubSeriesList;
@@ -62,6 +64,8 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     private void initialize() {
         eventList = FXCollections.observableArrayList();
+        seriesNameList = FXCollections.observableArrayList();
+        displayedSeriesList.setItems(seriesNameList);
 
         searchByList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
@@ -120,13 +124,10 @@ public class CalendarUI extends GraphicalUserInterface {
     }
 
     protected void updateDisplayedSeries() {
-//        System.out.println("Update");
-//        System.out.println("Series"+calendar.getSeries());
-        ArrayList<String> stringSeries = new ArrayList<>();
+        seriesNameList.clear();
         for (Series series : calendar.getSeries()) {
-            stringSeries.add(series.getName());
+            seriesNameList.add(series.getName());
         }
-        displayedSeriesList.setItems(FXCollections.observableArrayList(stringSeries));
     }
 
     protected void updateDisplayedSubSeries() {
@@ -136,7 +137,7 @@ public class CalendarUI extends GraphicalUserInterface {
                 stringSubSeries.add(subSeries.getString());
             }
         }
-        displayedSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
+        displayedSubSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
     }
 
     /*protected void updateDisplayedSeriesEvents() {
