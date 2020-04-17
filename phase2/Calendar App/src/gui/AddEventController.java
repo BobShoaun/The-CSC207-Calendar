@@ -55,6 +55,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
     protected EventCollection eventCollection;
 
     protected String name;
+    protected String seriesName;
     protected String memoTitle;
     protected String memoContent;
     protected String[] tags;
@@ -126,16 +127,20 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         try {
             getUserInput();
             Event newEvent = createEvent(name, start, end);
-            if (newEvent != null) {
-                addEvent(newEvent);
-                addTags(newEvent.getId());
-                editMemo(newEvent, "");
-                calendarUIController.updateDisplayedEvents();
-                calendarUIController.updateDisplayedSeries();
-                calendarUIController.updateDisplayedRepeatingEvents();
-                save();
-                closeGUI();
+            if (seriesName.equals("")) {
+                //Create event
+                if (newEvent != null) {
+                    addEvent(newEvent);
+                    addTags(newEvent.getId());
+                    editMemo(newEvent, "");
+                }
+            } else {
+                //Create Series
+                calendar.addEventSeries(newEvent);
             }
+
+            save();
+            closeGUI();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
@@ -157,22 +162,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         }
     }
 
-    @FXML
-    private void handleCreateSeries() {
-        System.out.println("Create new series");
-        try {
-            getUserInput();
-            Event newEvent = createEvent(name, start, end);
-            calendar.addEventSeries(newEvent);
-            calendarUIController.updateDisplayedEvents();
-            calendarUIController.updateDisplayedSeries();
-            calendarUIController.updateDisplayedRepeatingEvents();
-            closeGUI();
-        } catch (InvalidDateException e) {
-            dateTimeErrorLabel.setText("Invalid Date");
-            dateTimeErrorLabel.setVisible(true);
-        }
-    }
 
     /**
      * Set fields to the values in the GUI input.
@@ -183,6 +172,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         name = nameField.getText();
         memoTitle = memosField.getText();
         memoContent = memoTextArea.getText();
+        seriesName = seriesField.getText();
         tags = tagsField.getText().split(",");
         for (int i = 0; i < tags.length; i++) {
             tags[i] = tags[i].trim();
@@ -382,7 +372,9 @@ public class AddEventController extends GraphicalUserInterface implements Initia
     /**
      * Save the Event to file.
      */
+
     protected void save() {
         calendar.getDataSaver().saveCalendar(calendar);
+        calendarUIController.updateDisplays();
     }
 }

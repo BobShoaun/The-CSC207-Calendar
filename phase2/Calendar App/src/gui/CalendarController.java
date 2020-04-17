@@ -131,7 +131,6 @@ public class CalendarController extends GraphicalUserInterface {
         updateDisplayedEvents();
         updateDisplayedSeries();
         updateDisplayedRepeatingEvents();
-        updateDisplayedAlerts();
     }
 
     private EventHandler<MouseEvent> displayedEventListClickHandler() {
@@ -244,7 +243,7 @@ public class CalendarController extends GraphicalUserInterface {
         this.user = user;
         setActiveCalendar(user.getCalendar(0));
         initialize();
-        updateDisplays();
+        updateDisplayedAlerts();
 
         setTheme();
         lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
@@ -258,7 +257,7 @@ public class CalendarController extends GraphicalUserInterface {
     public void setActiveCalendar(user.Calendar calendar) {
         this.calendar = calendar;
         setWindowTitle(calendar.getName());
-        updateDisplays();
+        updateDisplayedEvents();
     }
 
     /**
@@ -278,7 +277,8 @@ public class CalendarController extends GraphicalUserInterface {
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
         System.out.println("Clicked on alert: " + currAlert);
-        updateDisplays();
+        updateDisplayedEvents();
+        updateDisplayedAlerts();
     }
 
     @FXML
@@ -291,7 +291,8 @@ public class CalendarController extends GraphicalUserInterface {
             System.out.println("Series does not exist: " + stringSeries);
         }
         currRepeatingEvent = null;
-        updateDisplays();
+        updateDisplayedRepeatingEvents();
+        //updateDisplayedSeriesEvents();
     }
 
     @FXML
@@ -300,7 +301,8 @@ public class CalendarController extends GraphicalUserInterface {
             calendar.removeEventCollection(currSeries);
         }
         calendar.getDataSaver().saveSeries(calendar.getEventManager());
-        updateDisplays();
+        updateDisplayedSeries();
+        updateDisplayedRepeatingEvents();
     }
 
     /**
@@ -310,7 +312,7 @@ public class CalendarController extends GraphicalUserInterface {
     private void repeatingEventListClicked() {
         repeatingEventIndex = displayedRepeatingEventList.getSelectionModel().getSelectedIndex();
         System.out.println("Clicked on sub series: " + currRepeatingEvent);
-        updateDisplays();
+        updateDisplayedRepeatingEvents();
     }
 
     @FXML
@@ -319,7 +321,7 @@ public class CalendarController extends GraphicalUserInterface {
             currSeries.getRepeatingEvents().remove(repeatingEventIndex);
         }
         calendar.getDataSaver().saveEvents(calendar.getEventManager());
-        updateDisplays();
+        updateDisplayedRepeatingEvents();
     }
 
     /**
@@ -386,7 +388,7 @@ public class CalendarController extends GraphicalUserInterface {
      * Event when the search text has been changed
      */
     public void searchTermValueChange() {
-        updateDisplays();
+        updateDisplayedEvents();
     }
 
     /**
