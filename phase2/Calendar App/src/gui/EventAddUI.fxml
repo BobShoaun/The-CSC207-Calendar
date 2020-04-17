@@ -214,7 +214,8 @@
             </VBox>
             <ButtonBar GridPane.rowIndex="8">
                <buttons>
-                  <Button fx:id="createSeriesButton" mnemonicParsing="false" onAction="#handleCreateSeries" text="Create Series" />
+                  <Button mnemonicParsing="false" text="Create Series" />
+                  <Button mnemonicParsing="false" onAction="#handleRepeatEvent" text="Repeat Event" />
                   <Button fx:id="doneButton" mnemonicParsing="false" onAction="#handleDone" text="Done" />
                </buttons>
             </ButtonBar>

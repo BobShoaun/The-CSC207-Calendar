@@ -8,9 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.Duration;
@@ -22,16 +20,26 @@ import java.util.Scanner;
 public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
+    @FXML
+    private CheckBox indefiniteEndDateChoice;
+    @FXML
+    private Label seriesErrorLabel;
+    @FXML
+    private TextField seriesField;
 
-    @FXML private DatePicker startDate;
-    @FXML private DatePicker endDate;
-    @FXML private ChoiceBox timeChoiceBox;
-    @FXML private TextField repeatNumField;
-    @FXML private TextField nameField;
+    @FXML
+    private DatePicker endDate;
+    @FXML
+    private ChoiceBox timeChoiceBox;
+    @FXML
+    private TextField repeatNumField;
+    @FXML
+    private TextField nameField;
 
     private Event baseEvent;
     private user.Calendar calendar;
     private String name;
+    private String seriesName;
     private GregorianCalendar start;
     private GregorianCalendar end;
     private Duration timeSpan;
@@ -39,6 +47,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     public void setDetails(Event baseEvent, user.Calendar calendar) {
         this.baseEvent = baseEvent;
         this.calendar = calendar;
+        this.start = baseEvent.getStartDate();
     }
 
     @Override
@@ -51,7 +60,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     private void handleCreateSeries() {
         try {
             getUserInput();
-            calendar.addEventSeries(name,start,end,timeSpan,baseEvent);
+            calendar.addEventSeries(name, start, end, timeSpan, baseEvent);
             System.out.println(calendar.getSeries(name));
         } catch (InvalidDateException e) {
             System.out.println("Invalid Time");
@@ -62,14 +71,21 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         }
     }
 
+    @FXML
+    private void handleCancel() {
+        closeGUI();
+    }
+
     private void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         name = nameField.getText();
-        if (startDate.getValue() == null || endDate.getValue() == null) {
+        getTimeSpan();
+        seriesName = seriesField.getText();
+        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        if (indefiniteEndDateChoice.isSelected()) {
+            end = null;
+        } else if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
             throw new InvalidDateException();
         }
-        start = GregorianCalendar.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-        getTimeSpan();
     }
 
     private void getTimeSpan() throws InvalidTimeInputException {
@@ -82,13 +98,13 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
                     timeSpan = Duration.ofDays(timeUnit);
                     break;
                 case "Week":
-                    timeSpan = Duration.ofDays(timeUnit*7);
+                    timeSpan = Duration.ofDays(timeUnit * 7);
                     break;
                 case "Month":
-                    timeSpan = Duration.ofDays(timeUnit*30);
+                    timeSpan = Duration.ofDays(timeUnit * 30);
                     break;
                 case "Years":
-                    timeSpan = Duration.ofDays(timeUnit*365);
+                    timeSpan = Duration.ofDays(timeUnit * 365);
                     break;
                 default:
                     System.out.println("Time input incorrect");

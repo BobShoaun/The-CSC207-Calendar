@@ -1,8 +1,10 @@
 package gui;
 
+import dates.CalendarGenerator;
 import event.Event;
 import event.EventCollection;
 import event.IDManager;
+import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.InvalidTimeInputException;
 import exceptions.NoSuchSeriesException;
@@ -15,6 +17,7 @@ import user.Calendar;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -24,7 +27,6 @@ import java.util.*;
  */
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
-    //    @FXML private Button createSeriesButton;
     @FXML
     protected TextField nameField;
     @FXML
@@ -47,7 +49,6 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected Label seriesErrorLabel;
     @FXML
     protected Label dateTimeErrorLabel;
-//    @FXML private Button doneButton;
 
     protected Calendar calendar;
     protected EventCollection eventCollection;
@@ -124,7 +125,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
 
     @FXML
-    private void handleCreateSeries() {
+    private void handleRepeatEvent() {
         System.out.println("Create Series clicked");
         try {
             SeriesUI controller = showGUI("SeriesUI.fxml");
@@ -135,6 +136,20 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
         }
+    }
+
+    @FXML
+    private void handleCreateSeries(){
+        try {
+            getUserInput();
+            Event newEvent = createEvent(name,start,end);
+            CalendarGenerator CG = new CalendarGenerator(start,Collections.singletonList(Duration.ofDays(7)),end);
+            Series newSeries = new Series(newEvent.getName(),newEvent,CG);
+//            calendar.addEventSeries();
+        } catch (InvalidDateException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -287,12 +302,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
     protected boolean isEventCollectionChanged(EventCollection oldEC) throws NoSuchSeriesException {
+
         String seriesName = seriesField.getText();
         if (seriesName.equals("") || seriesName.equals("Default")) {
             eventCollection = calendar.getSingleEventCollection();
         } else {
             eventCollection = calendar.getSeries(seriesName);
         }
+        if(oldEC==null){oldEC=calendar.getSingleEventCollection();}
         return !oldEC.equals(eventCollection);
     }
 
