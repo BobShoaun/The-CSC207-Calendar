@@ -1,3 +1,15 @@
 .root {
-   -fx-base: rgba(30, 30, 30, 255);
+   -fx-base: rgba(10, 10, 10, 255);
+}
+
+.list-view .list-cell:odd {
+-fx-background-color: rgba(62.5, 62.5, 62.5, 255);
+-fx-text-fill: white;
+}
+.list-view .list-cell:even {
+-fx-background-color: rgba(60, 60, 60, 255);
+-fx-text-fill: white;
+}
+.list-view{
+-fx-background-color: rgba(65, 65, 65, 255);
 }
