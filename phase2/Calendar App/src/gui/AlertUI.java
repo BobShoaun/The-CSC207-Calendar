@@ -18,7 +18,7 @@ import static event.IDManager.parseEventId;
 /**
  * GUI controller for alerts
  */
-public class Alert extends GraphicalUserInterface {
+public class AlertUI extends GraphicalUserInterface {
 
     private AlertCollection ac;
 
@@ -108,7 +108,7 @@ public class Alert extends GraphicalUserInterface {
     @FXML
     private void addManualAlert() {
         System.out.println("Clicked add manual alert");
-        ManualAlert controller = openGUI("manualAlert.fxml");
+        ManualAlertUI controller = openGUI("manualAlert.fxml");
         controller.initialize(this, ac);
         update();
     }
@@ -116,7 +116,7 @@ public class Alert extends GraphicalUserInterface {
     @FXML
     private void addRepeatingAlert() {
         System.out.println("Clicked add repeating alert");
-        AddRepeatingAlert controller = openGUI("addRepeatingAlert.fxml");
+        AddRepeatingAlertUI controller = openGUI("addRepeatingAlert.fxml");
         controller.initialize(this, ac);
         update();
     }
@@ -125,7 +125,7 @@ public class Alert extends GraphicalUserInterface {
     private void editManualAlert() {
         System.out.println("Clicked edit manual alert");
         if (currManAlert != null) {
-            ManualAlert controller = openGUI("manualAlert.fxml");
+            ManualAlertUI controller = openGUI("manualAlert.fxml");
             controller.setDate(parseEventId(currManAlert));
             controller.initialize(this, ac);
         }
@@ -136,7 +136,7 @@ public class Alert extends GraphicalUserInterface {
     private void editRepeatingAlert() {
         System.out.println("Clicked edit repeating alert");
         if (currRepAlert != null) {
-            ManualAlert controller = openGUI("manualAlert.fxml");
+            ManualAlertUI controller = openGUI("manualAlert.fxml");
             controller.initialize(this, ac);
             controller.setDate(parseEventId(currRepAlert));
         }

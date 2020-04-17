@@ -11,7 +11,7 @@ import user.Calendar;
 
 import java.util.List;
 
-public class ViewMemos extends gui.GraphicalUserInterface {
+public class ViewMemosUI extends gui.GraphicalUserInterface {
 
     @FXML
     private ListView<String> memoList;
@@ -68,8 +68,8 @@ public class ViewMemos extends gui.GraphicalUserInterface {
 
     @FXML
     private void showMemoUI(ActionEvent actionEvent) {
-        gui.Memo memo = showGUI("memo.fxml");
-        memo.setCalendar(calendar);
+        MemoUI memoUI = showGUI("memo.fxml");
+        memoUI.setCalendar(calendar);
     }
 
     @FXML

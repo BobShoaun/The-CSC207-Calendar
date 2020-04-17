@@ -1,6 +1,5 @@
 package gui;
 
-import exceptions.InvalidDateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -14,7 +13,7 @@ import javax.naming.InvalidNameException;
  *
  * @author Ng Bob Shoaun
  */
-public class CalendarSwitcher extends GraphicalUserInterface {
+public class CalendarSwitcherUI extends GraphicalUserInterface {
 
     private User user;
 
@@ -39,7 +38,7 @@ public class CalendarSwitcher extends GraphicalUserInterface {
     @FXML
     private void handleOK () {
         int index = calendarListView.getSelectionModel().getSelectedIndex();
-        gui.Calendar cal = showGUI("calendar.fxml");
+        CalendarUI cal = showGUI("calendar.fxml");
         cal.setUser(user);
         if (index != -1) //something is selected
             cal.setActiveCalendar(user.getCalendar(index));
@@ -47,7 +46,7 @@ public class CalendarSwitcher extends GraphicalUserInterface {
 
     @FXML
     private void handleCancel () {
-        gui.Calendar cal = showGUI("calendar.fxml");
+        CalendarUI cal = showGUI("calendar.fxml");
         cal.setUser(user);
     }
 

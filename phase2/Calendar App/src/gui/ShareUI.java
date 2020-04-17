@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import user.UserManager;
 
-public class Share extends GraphicalUserInterface{
+public class ShareUI extends GraphicalUserInterface{
     private Event event;
     private UserManager userManger;
     private String recipientUsername;

@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ViewTags">
+<AnchorPane prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ViewTagsUI">
    <children>
       <GridPane prefHeight="250.0" prefWidth="500.0">
         <columnConstraints>
@@ -24,7 +24,7 @@
               <items>
                 <Button mnemonicParsing="false" onAction="#editTag" text="Edit" />
                   <Button mnemonicParsing="false" onAction="#close" text="Done" />
-                  <Label fx:id="selectTagLabel" text="Please select a tag!" textFill="#ff4545">
+                  <Label fx:id="selectTagLabel" text="Please select a tagUI!" textFill="#ff4545">
                      <font>
                         <Font size="14.0" />
                      </font>

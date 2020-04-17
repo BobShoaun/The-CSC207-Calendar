@@ -59,14 +59,14 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected String[] tags;
     protected GregorianCalendar start;
     protected GregorianCalendar end;
-    protected gui.Calendar calendarController;
+    protected CalendarUI calendarUIController;
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
 
-    protected void setCalendarController(gui.Calendar c) {
-        this.calendarController = c;
+    protected void setCalendarUIController(CalendarUI c) {
+        this.calendarUIController = c;
     }
 
     /**
@@ -110,9 +110,9 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         if(!memoTitle.equals("")){
             addMemo(memoTitle, memoContent, newEvent.getId());
         }
-        calendarController.updateDisplayedEvents();
-        calendarController.updateDisplayedSeries();
-        calendarController.updateDisplayedSubSeries();
+        calendarUIController.updateDisplayedEvents();
+        calendarUIController.updateDisplayedSeries();
+        calendarUIController.updateDisplayedSubSeries();
         save();
         closeGUI();
         System.out.println(eventCollection.getEvents().size());
