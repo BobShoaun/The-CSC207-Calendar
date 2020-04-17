@@ -138,7 +138,6 @@ public class CalendarController extends GraphicalUserInterface {
 
     private EventHandler<MouseEvent> displayedEventListClickHandler() {
         return event -> {
-            System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             if (displayedEventList.getSelectionModel().getSelectedIndex() != -1) {
                 currEvent = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
             }
@@ -279,7 +278,6 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
-        System.out.println("Clicked on alert: " + currAlert);
         updateDisplayedEvents();
         updateDisplayedAlerts();
     }
@@ -287,11 +285,11 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void seriesListClicked() {
         String stringSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
-        System.out.println("Clicked on series: " + stringSeries);
+
         try {
             currSeries = calendar.getSeries(stringSeries);
         } catch (NoSuchSeriesException e) {
-            System.out.println("Series does not exist: " + stringSeries);
+            e.printStackTrace();
         }
         currRepeatingEvent = null;
         updateDisplayedRepeatingEvents();
@@ -314,7 +312,6 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void repeatingEventListClicked() {
         repeatingEventIndex = displayedRepeatingEventList.getSelectionModel().getSelectedIndex();
-        System.out.println("Clicked on sub series: " + currRepeatingEvent);
         updateDisplayedRepeatingEvents();
     }
 
@@ -342,7 +339,6 @@ public class CalendarController extends GraphicalUserInterface {
 
     @FXML
     private void clearNotification() {
-        System.out.println("Clicked clear");
         if (currAlert != null) {
             calendar.removeAlert(currAlert);
             ObservableList<String> temp = alertList.getItems();
@@ -356,7 +352,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void clearAllNotifications() {
-        System.out.println("Clicked clear all");
         ObservableList<String> empty = FXCollections.observableArrayList();
         alertList.setItems(empty);
         calendar.removeOldAlerts();
@@ -400,8 +395,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void handleNewEvent() {
-        System.out.println(calendar.getSeries().size());
-        System.out.println("New clicked");
         AddEventController controller = openGUI("addEvent.fxml");
         controller.setCalendar(calendar);
         controller.setCalendarUIController(this);
@@ -412,8 +405,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void handleEditEvent() {
-        System.out.println("Edit Clicked");
-
         if (currEvent == null) {
             eventErrorLabel.setText("No Event has been selected");
             eventErrorLabel.setVisible(true);
@@ -434,7 +425,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void showViewMemosUI() {
-        System.out.println("Memos clicked");
         ViewMemosController controller = openGUI("viewMemos.fxml");
         controller.setCalendar(calendar);
     }
@@ -444,7 +434,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void showViewTagsUI() {
-        System.out.println("Tags clicked");
         ViewTagsController controller = openGUI("viewTags.fxml");
         controller.setCalendar(calendar);
     }
@@ -465,7 +454,6 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     private void handleLogout() throws IOException {
-        System.out.println("logout: " + user.getName());
         user.logout();
         LoginController loginController = showGUI("login.fxml");
         loginController.setDarkTheme();
