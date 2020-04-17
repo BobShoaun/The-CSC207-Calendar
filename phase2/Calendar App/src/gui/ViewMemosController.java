@@ -70,7 +70,6 @@ public class ViewMemosController extends gui.GraphicalUserInterface {
     private void editMemo() {
         if (selectedMemo == null || selectedMemo.isEmpty()) {
             selectMemoLabel.setVisible(true);
-            System.out.println("No memo selected!");
         } else {
             showMemoUI();
         }

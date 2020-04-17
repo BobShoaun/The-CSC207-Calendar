@@ -52,7 +52,6 @@ public class RepeatingAlertController extends GraphicalUserInterface {
         String text = textField.getText();
         if (localDate != null && text != null) {
             if (!text.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
-                System.out.println("Invalid time");
                 return;
             }
             GregorianCalendar startTime = new GregorianCalendar(localDate.getYear(),
@@ -84,7 +83,7 @@ public class RepeatingAlertController extends GraphicalUserInterface {
                 controller.update();
 
             } catch (Exception e) {
-                System.out.println("Error in parsing integer");
+                e.printStackTrace();
             }
         }
     }

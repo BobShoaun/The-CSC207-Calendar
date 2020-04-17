@@ -100,9 +100,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
             startTime.setText(getTime(event.getStartDate()));
             endTime.setText(getTime(event.getEndDate()));
         }
-        System.out.println(event.getStartDate().getTime());
-        System.out.println(event.getEndDate().getTime());
-
 
         memotag.Memo memo = calendar.getMemo(event);
         List<Tag> tags = calendar.getTags(event);
@@ -122,7 +119,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
      */
     @FXML
     private void handleDone() {
-        System.out.println("Done clicked");
         setLabelInvisible();
         try {
             getUserInput();
@@ -150,7 +146,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
 
     @FXML
     private void handleRepeatEvent() {
-        System.out.println("Repeat Series clicked");
         try {
             getUserInput();
             SeriesController controller = showGUI("series.fxml");
@@ -204,7 +199,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
             String id = IDManager.generateEventId(name, start);
             setTime(start, end);
             Event newEvent = new Event(name, start, end);
-            System.out.println("Event created:" + newEvent);
             return newEvent;
         } catch (InvalidDateException ex) {
             dateTimeErrorLabel.setText("Invalid Date");

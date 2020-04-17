@@ -31,7 +31,7 @@ public class LoginController extends GraphicalUserInterface {
         try {
             userManager.loadUsers();
         } catch (IOException e) {
-            System.out.println("Problem loading users!");
+            e.printStackTrace();
         }
     }
 
@@ -44,16 +44,13 @@ public class LoginController extends GraphicalUserInterface {
             bottomMessage.setText("Sorry, that didn't work. Please try again.");
             bottomMessage.setFont(new Font("Source Code Pro", 14));
             bottomMessage.setBackground(Background.EMPTY);
-            System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
-            System.out.println("Logged in: " + usernameText);
             showCalendarUI();
         }
     }
 
     @FXML
     private void handleRegister() {
-        System.out.println("register clicked");
         showRegisterUI();
     }
 
