@@ -299,7 +299,7 @@ public class CalendarController extends GraphicalUserInterface {
         if (currSeries != null) {
             calendar.removeEventCollection(currSeries);
         }
-        calendar.getDataSaver().saveEvents(calendar.getEventManager());
+        calendar.getDataSaver().saveSeries(calendar.getEventManager());
         updateDisplays();
     }
 
