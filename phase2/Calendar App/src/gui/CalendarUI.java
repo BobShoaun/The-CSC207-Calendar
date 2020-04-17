@@ -1,10 +1,8 @@
 package gui;
 
-import alert.Alert;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SubSeries;
 import exceptions.NoSuchSeriesException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -17,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import memotag.Memo;
 import memotag.Tag;
-import sun.java2d.windows.GDIRenderer;
 import user.User;
 import user.UserManager;
 
@@ -37,13 +34,13 @@ public class CalendarUI extends GraphicalUserInterface {
     private Event currEvent;
     private String currAlert;
     private Series currSeries = null;
-    private String currSubSeries = null;
+    private String currRepeatingEvent = null;
     private UserManager userManager;
-    private int subSeriesIndex;
+    private int repeatingEventIndex;
     private ObservableList<String> seriesNameList;
 
     @FXML private ListView<String> alertList;
-    @FXML private ListView<String> displayedSubSeriesList;
+    @FXML private ListView<String> displayedRepeatingEventList;
     @FXML private ListView<String> displayedSeriesList;
     @FXML
     private CheckBox darkTheme;
@@ -115,7 +112,7 @@ public class CalendarUI extends GraphicalUserInterface {
         displayedEventList.setOnMouseClicked(displayedEventListClickHandler());
         updateDisplayedEvents();
         updateDisplayedSeries();
-        updateDisplayedSubSeries();
+        updateDisplayedRepeatingEvents();
     }
 
     private EventHandler<MouseEvent> displayedEventListClickHandler() {
@@ -134,14 +131,14 @@ public class CalendarUI extends GraphicalUserInterface {
         }
     }
 
-    protected void updateDisplayedSubSeries() {
-        ArrayList<String> stringSubSeries = new ArrayList<>();
+    protected void updateDisplayedRepeatingEvents() {
+        ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
-            for (SubSeries subSeries : currSeries.getSubSeries()) {
-                stringSubSeries.add(subSeries.getString());
+            for (event.repeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
+                stringRepeatingEvents.add(repeatingEvent.getString());
             }
         }
-        displayedSubSeriesList.setItems(FXCollections.observableArrayList(stringSubSeries));
+        displayedRepeatingEventList.setItems(FXCollections.observableArrayList(stringRepeatingEvents));
     }
 
 
@@ -278,8 +275,8 @@ public class CalendarUI extends GraphicalUserInterface {
         } catch (NoSuchSeriesException e){
             System.out.println("Series does not exist: " + stringSeries);
         }
-        currSubSeries = null;
-        updateDisplayedSubSeries();
+        currRepeatingEvent = null;
+        updateDisplayedRepeatingEvents();
         //updateDisplayedSeriesEvents();
     }
 
@@ -294,16 +291,16 @@ public class CalendarUI extends GraphicalUserInterface {
      * Handles when an event in a series is clicked
      */
     @FXML
-    private void subSeriesListClicked() {
-        subSeriesIndex = displayedSubSeriesList.getSelectionModel().getSelectedIndex();
-        System.out.println("Clicked on sub series: " + currSubSeries);
-        updateDisplayedSubSeries();
+    private void repeatingEventListClicked() {
+        repeatingEventIndex = displayedRepeatingEventList.getSelectionModel().getSelectedIndex();
+        System.out.println("Clicked on sub series: " + currRepeatingEvent);
+        updateDisplayedRepeatingEvents();
     }
 
     @FXML
-    private void deleteSubSeries() {
-        if (currSubSeries != null) {
-            currSeries.getSubSeries().remove(subSeriesIndex);
+    private void deleteRepeatingEvent() {
+        if (currRepeatingEvent != null) {
+            currSeries.getRepeatingEvents().remove(repeatingEventIndex);
         }
     }
 

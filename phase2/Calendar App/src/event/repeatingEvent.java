@@ -5,14 +5,14 @@ import dates.CalendarGenerator;
 import java.time.Duration;
 import java.util.GregorianCalendar;
 
-public class SubSeries {
+public class repeatingEvent {
     private Event base;
     private CalendarGenerator calGen;
     private GregorianCalendar startTime;
     private GregorianCalendar endTime;
     private boolean inf;
 
-    public SubSeries(Event base, CalendarGenerator calGen) {
+    public repeatingEvent(Event base, CalendarGenerator calGen) {
         this.base = base;
         this.calGen = calGen;
         this.startTime = calGen.getStartTime();

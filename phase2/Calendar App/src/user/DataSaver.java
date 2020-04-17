@@ -215,7 +215,7 @@ public class DataSaver {
                     }
                     System.out.println(newSeries);
 
-                    newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
+                    newSeries.setRepeatingEvents(loadRepeatingEvents(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
                     newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/"));
                     newSeries.setPostponedEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/postponed/"));
@@ -368,7 +368,7 @@ public class DataSaver {
             saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
             try {
-                saveSubSeries(series, series.getSubSeries());
+                saveRepeatingEvents(series, series.getRepeatingEvents());
                 saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
                 saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
             } catch (IOException e) {
@@ -412,22 +412,22 @@ public class DataSaver {
         return loadedEvents;
     }
 
-    private void saveSubSeries(Series series, List<SubSeries> subs) throws IOException {
+    private void saveRepeatingEvents(Series series, List<repeatingEvent> events) throws IOException {
         StringBuilder ret = new StringBuilder();
-        for (SubSeries sub:subs){
-            ret.append(sub.getString()).append("\n");
+        for (repeatingEvent event:events){
+            ret.append(event.getString()).append("\n");
         }
         saveToFile("series/" + series.getName() + "/SubSeries.txt", ret.toString());
     }
 
-    private List<SubSeries> loadSubSeries(Scanner subs) throws InvalidDateException {
-        List<SubSeries> ret = new ArrayList<>();
-        while (subs.hasNext()) {
-            String subData = subs.nextLine();
-            String[] parts = subData.split("§");
+    private List<repeatingEvent> loadRepeatingEvents(Scanner events) throws InvalidDateException {
+        List<repeatingEvent> ret = new ArrayList<>();
+        while (events.hasNext()) {
+            String eventData = events.nextLine();
+            String[] parts = eventData.split("§");
             Event baseEvent = stringsToEvent(parts);
             CalendarGenerator CG = loadCalendarGenerator(parts[4].replaceAll("\\|", "\n"));
-            ret.add(new SubSeries(baseEvent,CG));
+            ret.add(new repeatingEvent(baseEvent,CG));
         }
         return ret;
     }

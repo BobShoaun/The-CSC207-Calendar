@@ -1,6 +1,5 @@
 package gui;
 
-import dates.CalendarGenerator;
 import event.Event;
 import event.EventCollection;
 import event.IDManager;
@@ -17,7 +16,6 @@ import user.Calendar;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -117,7 +115,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
                 editMemo(newEvent, "");
                 calendarUIController.updateDisplayedEvents();
                 calendarUIController.updateDisplayedSeries();
-                calendarUIController.updateDisplayedSubSeries();
+                calendarUIController.updateDisplayedRepeatingEvents();
                 save();
                 closeGUI();
             }
@@ -151,7 +149,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             calendar.addEventSeries(newEvent);
             calendarUIController.updateDisplayedEvents();
             calendarUIController.updateDisplayedSeries();
-            calendarUIController.updateDisplayedSubSeries();
+            calendarUIController.updateDisplayedRepeatingEvents();
             closeGUI();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");

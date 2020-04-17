@@ -137,7 +137,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="event.SubSeries" project="phase2" 
+  <class id="16" language="java" name="event.repeatingEvent" project="phase2"
     file="/phase2/Calendar App/src/event/SubSeries.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="880" y="3292"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

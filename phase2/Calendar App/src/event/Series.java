@@ -13,7 +13,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     private String name;
     private Event baseEvent;
     private CalendarGenerator calGen;
-    private List<SubSeries> subSeries;
+    private List<repeatingEvent> repeatingEvents;
     //this attribute holds the events generated from calGen in memory, never saved nor loaded, but updated when CalGen is updated
     //To save memory...
     private List<Event> seriesEvents;
@@ -31,7 +31,7 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.baseEvent = baseEvent;
         this.calGen = calGen;
         this.startTime = calGen.getStartTime();
-        this.subSeries = new ArrayList<>();
+        this.repeatingEvents = new ArrayList<>();
         if (baseEvent != null) {
             this.seriesEvents = generateEvents();
         } else
@@ -68,8 +68,8 @@ public class Series extends EventCollection implements Iterable<Event> {
         }
     }
 
-    public void setSubSeries(List<SubSeries> subSeries) {
-        this.subSeries = subSeries;
+    public void setRepeatingEvents(List<repeatingEvent> repeatingEvents) {
+        this.repeatingEvents = repeatingEvents;
     }
     //TODO: test
 
@@ -85,8 +85,8 @@ public class Series extends EventCollection implements Iterable<Event> {
         return calGen;
     }
 
-    public List<SubSeries> getSubSeries() {
-        return subSeries;
+    public List<repeatingEvent> getRepeatingEvents() {
+        return repeatingEvents;
     }
 
     /**
@@ -220,7 +220,7 @@ public class Series extends EventCollection implements Iterable<Event> {
         List<Duration> dur = new ArrayList<>();
         dur.add(frequency);
         CalendarGenerator newCG = new CalendarGenerator(start, dur, end);
-        subSeries.add(new SubSeries(baseEvent, newCG));
+        repeatingEvents.add(new repeatingEvent(baseEvent, newCG));
     }
 
 
@@ -257,7 +257,7 @@ public class Series extends EventCollection implements Iterable<Event> {
             ret.addAll(generateEventsHelper(baseEvent, calGen));
         }
 
-        for (SubSeries s : subSeries) {
+        for (repeatingEvent s : repeatingEvents) {
             ret.addAll(generateEventsHelper(s.getBase(), s.getCalGen()));
         }
         return ret;

@@ -334,7 +334,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="38" language="java" name="event.SubSeries" project="phase2" 
+  <class id="38" language="java" name="event.repeatingEvent" project="phase2"
     file="/phase2/Calendar App/src/event/SubSeries.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="314" y="3689"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
