@@ -21,7 +21,7 @@ import java.util.Scanner;
 /**
  * GUI controller class for Series
  */
-public class SeriesController extends GraphicalUserInterface implements Initializable {
+public class RepeatingEventController extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day(s)", "Week(s)", "Month(s)", "Year(s)");
 

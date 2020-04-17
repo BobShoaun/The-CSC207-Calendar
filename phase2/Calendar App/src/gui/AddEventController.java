@@ -162,12 +162,12 @@ public class AddEventController extends GraphicalUserInterface implements Initia
             setLabelInvisible();
             System.out.println("repeat event clicked");
             if(seriesName.equals("")||seriesName.equals("Default")){
-                SeriesController controller = showGUI("series.fxml");
+                RepeatingEventController controller = showGUI("repeatingEvent.fxml");
                 Event newEvent = createEvent(name, start, end);
                 controller.setDetails(newEvent, calendar,seriesName);
             }else{
                 calendar.getSeries(seriesName);
-                SeriesController controller = showGUI("series.fxml");
+                RepeatingEventController controller = showGUI("repeatingEvent.fxml");
                 Event newEvent = createEvent(name, start, end);
                 controller.setDetails(newEvent, calendar,seriesName);
             }
