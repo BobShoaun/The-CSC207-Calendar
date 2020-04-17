@@ -428,4 +428,5 @@ public class Calendar extends GraphicalUserInterface {
         Login login = showGUI("login.fxml");
         login.setDarkTheme();
     }
+
 }

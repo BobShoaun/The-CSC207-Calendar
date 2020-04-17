@@ -15,16 +15,12 @@ import java.util.ResourceBundle;
 public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day","Week","Month","Year");
-    @FXML
-    public DatePicker startDate;
-    @FXML
-    public DatePicker endDate;
-    @FXML
-    public ChoiceBox timeChoiceBox;
-    @FXML
-    public TextField repeatNumField;
-    @FXML
-    public TextField nameField;
+
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+    @FXML private ChoiceBox timeChoiceBox;
+    @FXML private TextField repeatNumField;
+    @FXML private TextField nameField;
 
     private Event baseEvent;
 
@@ -37,7 +33,10 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         timeChoiceBox.setValue("Day");
         timeChoiceBox.setItems(timeChoice);
     }
-    public void handleCreateSeries(){
+
+    @FXML
+    private void handleCreateSeries(){
 
     }
+
 }

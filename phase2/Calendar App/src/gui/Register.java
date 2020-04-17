@@ -47,7 +47,7 @@ public class Register extends GraphicalUserInterface implements Initializable {
     }
 
     @FXML
-    private void handleRegister() throws IOException, InvalidDateException {
+    private void handleRegister() throws IOException {
         setLabelsNotVisible();
         System.out.println("Register");
         String username = usernameField.getText();
