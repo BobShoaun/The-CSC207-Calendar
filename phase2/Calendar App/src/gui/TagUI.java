@@ -1,51 +1,65 @@
 package gui;
 
+import event.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import memotag.Tag;
 import user.Calendar;
 
 import java.util.List;
 
 public class TagUI extends gui.GraphicalUserInterface {
 
-    private ObservableList list = FXCollections.observableArrayList();
+    private ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;
     private String tagName;
+    Tag tag;
 
     @FXML private TextField tagNameTextField;
-    @FXML private ListView tagEventList;
+    @FXML private ListView<String> tagEventList;
 
     public TagUI() {
-        tagName = tagNameTextField.getText();
+    }
+
+    public void setTag(Tag tag){
+        this.tag = tag;
+        tagNameTextField.setText(tag.getText());
+        tagName = tag.getText();
         loadEvents();
     }
 
-    protected void setCalendar(Calendar c) { this.calendar = c; }
+    protected void setCalendar(Calendar c) {
+        this.calendar = c;
+        tagEventList.setItems(list);
+    }
 
     private void loadEvents() {
-        list.remove(list);
+        list.clear();
         memotag.Tag tag = calendar.getTag(tagNameTextField.getText());
-        List<String> events = tag.getEvents();
-        for (String s: events) {
-            list.add(s);
+        if(tag != null){
+            List<String> events = tag.getEvents();
+            for (String s: events) {
+                Event event = calendar.getEvent(s);
+                list.add(event.getName() + " at " + event.getStartDate().getTime());
+            }
         }
-        tagEventList.getItems().addAll(list);
     }
 
     private void editTag() {
         String newTagName = tagNameTextField.getText();
         if ( !tagName.equals(newTagName) ) {
-            calendar.getTag(tagName).setText(newTagName);
+            if(!newTagName.equals("")){
+                calendar.getTag(tagName).setText(newTagName);
+            }
         }
     }
 
     public void showViewTagUI() {
         editTag();
-        ViewTagsUI controller = showGUI("viewTags.fxml");
-        controller.setCalendar(calendar);
+        closeGUI();
     }
 
 }

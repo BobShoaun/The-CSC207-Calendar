@@ -65,6 +65,7 @@ public class ViewTagsUI extends gui.GraphicalUserInterface{
     private void showTagUI(Event e) {
         TagUI tagUI = showGUI("tag.fxml");
         tagUI.setCalendar(calendar);
+        tagUI.setTag(calendar.getTag(tagList.getSelectionModel().getSelectedItem()));
     }
 
     public void close(ActionEvent actionEvent) {

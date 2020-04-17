@@ -279,7 +279,6 @@ public class CalendarUI extends GraphicalUserInterface {
             System.out.println("Series does not exist: " + stringSeries);
         }
         currSubSeries = null;
-        updateDisplayedSeries();
         updateDisplayedSubSeries();
         //updateDisplayedSeriesEvents();
     }
