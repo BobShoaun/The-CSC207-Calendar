@@ -299,6 +299,8 @@ public class CalendarController extends GraphicalUserInterface {
 
     @FXML
     private void seriesListClicked() {
+        if(displayedSeriesList.getSelectionModel().getSelectedIndex() == -1)
+            return;
         String stringSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
         if(stringSeries != null) {
             try {
