@@ -191,6 +191,11 @@ public class DataSaver {
         return new Calendar(calendarName, eventCollections, memos, tags, calendarDataSaver);
     }
 
+    /**
+     * load Series from file
+     * @param calendarName calendar name which these series belongs to
+     * @param eventCollections the eventCollection to save to
+     */
     private void loadSeries(String calendarName, ArrayList<EventCollection> eventCollections) {
 
         String[] filenames = getFileNamesInDirectory(calendarName + "/series/");
@@ -208,16 +213,6 @@ public class DataSaver {
                     List<Duration> durs = newCG.getPeriods();
 
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
-
-                    //for tests
-                    System.out.println(seriesName);
-                    System.out.println(baseEvent);
-                    System.out.println(newStart.getTime());
-                    System.out.println(newEnd.getTime());
-                    for(Duration d:durs){
-                        System.out.println(d.toDays());
-                    }
-                    System.out.println(newSeries);
 
                     newSeries.setRepeatingEvents(loadRepeatingEvents(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
