@@ -122,12 +122,15 @@ public class CalendarController extends GraphicalUserInterface {
         });
 
         displayedEventList.setOnMouseClicked(displayedEventListClickHandler());
+        updateDisplays();
     }
 
     /**
      * Update all the displays
      */
+    @FXML
     protected void updateDisplays(){
+        updateDisplayedAlerts();
         updateDisplayedEvents();
         updateDisplayedSeries();
         updateDisplayedRepeatingEvents();
