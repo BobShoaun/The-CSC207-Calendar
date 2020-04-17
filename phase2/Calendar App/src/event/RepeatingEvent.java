@@ -81,9 +81,9 @@ public class RepeatingEvent {
             endString = "onwards";
         }
         else{
-            endString = "to "+simpleDateFormat.format(calGen.getEndTime().getTime());
+            endString = " to "+simpleDateFormat.format(calGen.getEndTime().getTime());
         }
-        return base.getName()+" repeats every "+durString+" days from "+startString+endString;
+        return base.getName()+" repeats every "+durString+" day(s) from "+startString+endString;
     }
 
     /**
