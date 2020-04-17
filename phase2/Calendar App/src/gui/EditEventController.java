@@ -112,6 +112,7 @@ public class EditEventController extends AddEventController {
             editMemo(event, oldMemoTitle);
             editTags();
             closeGUI();
+            calendarUIController.updateDisplays();
             save();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");

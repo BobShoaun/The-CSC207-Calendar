@@ -4,7 +4,6 @@ import dates.CalendarGenerator;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;
@@ -180,8 +179,7 @@ public class EventManager {
             Series existingSeries = getSeries(name);
             existingSeries.addRepeatingEvent(baseEvent, start, end, difference);
         } catch (NoSuchSeriesException e) {
-            SeriesFactory seriesFactory = new SeriesFactory();
-            Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
+            Series eventCollection = new Series(name, baseEvent, new CalendarGenerator(start, Collections.singletonList(difference), end));
             System.out.println(eventCollection.getClass());
             eventCollections.add(eventCollection);
         }

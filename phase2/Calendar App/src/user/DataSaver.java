@@ -208,16 +208,7 @@ public class DataSaver {
             for (String seriesName :
                     filenames) {
                 try {
-                    String[] info = loadStringFromFile(calendarName + "/series/" + seriesName + "/BaseEvent.txt").split("\\n");
-                    Event baseEvent = stringsToEvent(info);
-
-                    String CG = loadStringFromFile(calendarName + "/series/" + seriesName + "/CalenderGenerator.txt");
-                    CalendarGenerator newCG = loadCalendarGenerator(CG);
-                    GregorianCalendar newStart = newCG.getStartTime();
-                    GregorianCalendar newEnd = newCG.getEndTime();
-                    List<Duration> durs = newCG.getPeriods();
-
-                    Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
+                    Series newSeries = new Series(seriesName, null, new CalendarGenerator(null, null, null));
 
                     newSeries.setRepeatingEvents(loadRepeatingEvents(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
@@ -392,8 +383,6 @@ public class DataSaver {
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
             try {
                 saveRepeatingEvents(series, series.getRepeatingEvents());
-                saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
-                saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
