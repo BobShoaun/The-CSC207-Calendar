@@ -30,13 +30,15 @@ public class EventManager {
      */
     public EventManager(List<EventCollection> eventCollections, DataSaver dataSaver) {
         this.eventCollections = eventCollections;
+        List<Event> defaultList = new ArrayList<>();
+        eventCollections.add(new EventCollection(defaultList));
         this.dataSaver = dataSaver;
     }
 
     /**
      * @return the single regular list of Event
      */
-    public EventCollection getSingleEventCollection() {
+    public EventCollection getManualEventCollection() {
         return eventCollections.stream().filter(eC -> !(eC instanceof Series)).findAny().get();
     }
 
@@ -87,7 +89,7 @@ public class EventManager {
             }
         }
         System.out.println("Didn't find any EventCollection");
-        return getSingleEventCollection();
+        return getManualEventCollection();
     }
 
     /**

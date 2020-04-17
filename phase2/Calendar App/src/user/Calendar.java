@@ -43,8 +43,8 @@ public class Calendar {
     /**
      * @return the single regular list of Event
      */
-    public EventCollection getSingleEventCollection() {
-        return eventManager.getSingleEventCollection();
+    public EventCollection getManualEventCollection() {
+        return eventManager.getManualEventCollection();
     }
 
     /**
