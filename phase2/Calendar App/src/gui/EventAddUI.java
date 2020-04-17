@@ -71,6 +71,13 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
 
     public void showEventDetails(Event event) {
         nameField.setText(event.getName());
+        EventCollection collection = calendar.getEventCollection(event);
+        if (collection instanceof Series){
+            seriesField.setText(((Series) collection).getName());
+        }
+        else {
+            seriesField.setText("Default");
+        }
         if (!event.isPostponed()) {
             startDate.setValue(gregorianCalendarToLocalDate(event.getStartDate()));
             endDate.setValue(gregorianCalendarToLocalDate(event.getEndDate()));
