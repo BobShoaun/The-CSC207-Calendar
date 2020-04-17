@@ -25,6 +25,8 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
     @FXML
+    private Label dateErrorLabel;
+    @FXML
     private CheckBox indefiniteEndDateChoice;
     @FXML
     private Label seriesErrorLabel;
@@ -75,20 +77,26 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     @FXML
     private void handleCreateSeries() {
+        seriesErrorLabel.setVisible(false);
+        dateErrorLabel.setVisible(false);
         try {
             getUserInput();
-            if(seriesName.equals("")){
-                calendar.addEventSeries(name, start, end, timeSpan, baseEvent);} else {
+            if (seriesName.equals("")) {
+                calendar.addEventSeries(name, start, end, timeSpan, baseEvent);
+            } else {
                 getSeries();
-                series.addRepeatingEvent(baseEvent,start,end,timeSpan);
+                series.addRepeatingEvent(baseEvent, start, end, timeSpan);
             }
-            System.out.println(calendar.getSeries(name));
+            calendar.getDataSaver().saveCalendar(calendar);
+            closeGUI();
         } catch (InvalidDateException e) {
-            System.out.println("Invalid Time");
+            dateErrorLabel.setVisible(true);
+            dateErrorLabel.setText("Invalid Date");
         } catch (InvalidTimeInputException e) {
-            System.out.println("Invalid date");
+            dateErrorLabel.setVisible(true);
+            dateErrorLabel.setText("Invalid Number");
         } catch (NoSuchSeriesException e) {
-            System.out.println("No such Series");
+            seriesErrorLabel.setVisible(true);
         }
     }
 
