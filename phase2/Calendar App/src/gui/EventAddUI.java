@@ -89,12 +89,19 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
     public void handleCreateSeries(){
+        System.out.println("Create Series clicked");
         SeriesUI controller = showGUI("SeriesUI.fxml");
-        Event newEvent = createEvent(name, start, end);
-        if (newEvent != null) {
-            finalizeEvent(newEvent);
+        try {
+            getUserInput();
+            Event newEvent = createEvent(name, start, end);
+            if (newEvent != null) {
+                finalizeEvent(newEvent);
+            }
+            controller.setBaseEvent(newEvent);
+        } catch (InvalidDateException e) {
+            dateTimeErrorLabel.setText("Invalid Date");
+            dateTimeErrorLabel.setVisible(true);
         }
-        controller.setBaseEvent(newEvent);
     }
 
     private void finalizeEvent(Event newEvent){
