@@ -12,8 +12,6 @@ public class ShareUI extends GraphicalUserInterface{
 
     private Event event;
     private UserManager userManger;
-    private String recipientUsername;
-    private String recipientCalendar;
 
     @FXML protected Label UsernameError;
     @FXML protected Label CalendarNameError;
@@ -28,14 +26,6 @@ public class ShareUI extends GraphicalUserInterface{
         this.userManger = userManger;
     }
 
-    public void setRecipientCalendar(){
-        this.recipientCalendar = CalendarName.getText();
-    }
-
-    public void setRecipientUsername(){
-        this.recipientUsername = Username.getText();
-    }
-
     public void exit(){
         closeGUI();
     }
@@ -43,6 +33,8 @@ public class ShareUI extends GraphicalUserInterface{
     public void ShareWith(){
         CalendarNameError.setOpacity(0);
         UsernameError.setOpacity(0);
+        String recipientUsername = Username.getText();
+        String recipientCalendar = CalendarName.getText();
         try {
             userManger.getEventSharer().share(event, recipientUsername, recipientCalendar);
             closeGUI();

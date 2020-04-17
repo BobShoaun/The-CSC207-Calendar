@@ -25,7 +25,7 @@ public class EventSharer {
      * @param recipientName the username of the user who the event is being shared with
      * @param recipientCalName the calendar name of the user with who the event is being shared calendar in which the event is added
      * @throws InvalidUsernameException if the username passed is invalid
-     * @throws InvalidCalendarNameException if the username calendarnName is invalid
+     * @throws InvalidCalendarNameException if the calendarName passed is invalid
      */
     public void share(Event event, String recipientName, String recipientCalName) throws InvalidUsernameException, InvalidCalendarNameException {
         User recipientUser = userManager.getUser(recipientName);
@@ -46,5 +46,6 @@ public class EventSharer {
         }
 
         recipientCal.getSingleEventCollection().addEvent(newEvent);
+        recipientCal.getDataSaver().saveEvents(recipientCal.getEventManager());
     }
 }

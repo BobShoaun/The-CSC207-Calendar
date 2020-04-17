@@ -21,8 +21,8 @@
           <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="Username" onAction="#setRecipientUsername" promptText="Recipient Username" GridPane.rowIndex="1" />
-            <TextField fx:id="CalendarName" onAction="#setRecipientCalendar" promptText="Recipient Calendar Name" GridPane.rowIndex="3" />
+            <TextField fx:id="Username" promptText="Recipient Username" GridPane.rowIndex="1" />
+            <TextField fx:id="CalendarName" promptText="Recipient Calendar Name" GridPane.rowIndex="3" />
             <Label text="Share" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="30.0" />
