@@ -2,13 +2,10 @@ package user;
 
 import alert.Alert;
 import alert.AlertCollection;
-import alert.AlertComparator;
-import dates.CalendarGenerator;
 import dates.TimeController;
 import event.Event;
 import event.EventCollection;
 import event.Series;
-import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;
@@ -16,54 +13,46 @@ import memotag.Tag;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
- * user.Calendar class
+ * Calendar class which manages all the data such as Events and Alerts
  */
 public class Calendar {
 
     private final String name;
-    private List<EventCollection> eventCollections;
-    private List<AlertCollection> alertCollections;
-    private List<Memo> memos;
-    private List<Tag> tags;
-    private final DataSaver dataSaver;
-    private TimeController timeController;
+    private final AlertCollectionManager alertCollectionManager;
+    private final MemoManager memoManager;
+    private final TagManager tagManager;
+    private final EventManager eventManager;
+    private final TimeController timeController;
+    private DataSaver dataSaver;
 
     /**
      * Constructor for creating a new calendar with no data
      */
     public Calendar(String name, DataSaver dataSaver) {
         this.name = name;
-        this.dataSaver = dataSaver;
-        eventCollections = new ArrayList<>();
-        alertCollections = new ArrayList<>();
-        memos = new ArrayList<>();
-        tags = new ArrayList<>();
-        eventCollections.add(new EventCollection(new ArrayList<>()));
+        this.memoManager = new MemoManager(new ArrayList<>(), dataSaver);
+        this.eventManager = new EventManager(new ArrayList<>(), dataSaver);
         timeController = new TimeController();
+        this.dataSaver = dataSaver;
+
+        this.alertCollectionManager = new AlertCollectionManager(new ArrayList<>(), dataSaver);
+        tagManager = new TagManager(new ArrayList<>(), dataSaver);
     }
 
     /**
-     * @return the SINGLE regular list of Event
+     * @return the single regular list of Event
      */
     public EventCollection getSingleEventCollection() {
-        return eventCollections.stream().filter(eC -> !(eC instanceof Series)).findAny().get();
+        return eventManager.getSingleEventCollection();
     }
 
     /**
      * @return the list of series
      */
     public List<Series> getSeries() {
-        List<Series> ret = new ArrayList<>();
-        for (EventCollection ec : this.eventCollections) {
-            if (ec instanceof Series) {
-                ret.add((Series) ec);
-            }
-        }
-        return ret;
+        return eventManager.getSeries();
     }
 
     /**
@@ -71,12 +60,7 @@ public class Calendar {
      * @return the Series with this name
      */
     public Series getSeries(String name) throws NoSuchSeriesException {
-        for (Series s : getSeries()) {
-            if (s.getName().equals(name)) {
-                return s;
-            }
-        }
-        throw new NoSuchSeriesException();
+        return eventManager.getSeries(name);
     }
 
     public String getName() {
@@ -90,18 +74,23 @@ public class Calendar {
      * @param eventCollections List of  event collections for new calendar
      * @param alertCollections List of alert collections for new calendar
      */
-    public Calendar(String name, List<EventCollection> eventCollections, List<AlertCollection> alertCollections,
-                    List<Memo> memos, List<Tag> tags, DataSaver dataSaver) {
+    public Calendar(String name,
+                    List<EventCollection> eventCollections,
+                    List<AlertCollection> alertCollections,
+                    List<Memo> memos,
+                    List<Tag> tags,
+                    DataSaver dataSaver) {
         if (eventCollections == null || alertCollections == null) {
             throw new NullPointerException();
         }
         this.name = name;
-        this.eventCollections = eventCollections;
-        this.alertCollections = alertCollections;
-        this.tags = tags;
-        this.memos = memos;
+        this.eventManager = new EventManager(eventCollections, dataSaver);
+        this.memoManager = new MemoManager(memos, dataSaver);
         timeController = new TimeController();
         this.dataSaver = dataSaver;
+
+        this.alertCollectionManager = new AlertCollectionManager(alertCollections, dataSaver);
+        tagManager = new TagManager(tags, dataSaver);
     }
 
     /**
@@ -109,7 +98,7 @@ public class Calendar {
      * @return List of all alert collections
      */
     public List<AlertCollection> getAlertCollections() {
-        return alertCollections;
+        return alertCollectionManager.getAlertCollections();
     }
 
     /**
@@ -118,7 +107,7 @@ public class Calendar {
      * @return List of all event collections including all series
      */
     public List<EventCollection> getEventCollections() {
-        return eventCollections;
+        return eventManager.getEventCollections();
     }
 
 
@@ -129,14 +118,8 @@ public class Calendar {
      * @return Unsorted list of all events which occur at that day
      */
     public List<Event> getEvents(GregorianCalendar date) {
-        List<Event> toReturn = new ArrayList<>();
 
-        for (EventCollection eventCollection :
-                eventCollections) {
-            toReturn.addAll(eventCollection.getEvents(date));
-        }
-
-        return toReturn;
+        return eventManager.getEvents(date);
     }
 
     /**
@@ -147,10 +130,7 @@ public class Calendar {
      * @return List of all events where start point <= end and end point >= start
      */
     public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
-        ArrayList<Event> toReturn = new ArrayList<>();
-        EventIterator eventIterator = new EventIterator(start.getTime(), event -> event.getStartDate().before(end));
-        eventIterator.forEachRemaining(toReturn::add);
-        return toReturn;
+        return eventManager.getEvents(start, end);
     }
 
     /**
@@ -161,10 +141,7 @@ public class Calendar {
      * @return Null if no event collections exist, otherwise an Iterator<alert.Event>
      */
     public Iterator<Event> getFutureEvents(Date start) {
-        if (eventCollections.size() == 0) {
-            return null;
-        }
-        return new EventIterator(start, null);
+        return eventManager.getFutureEvents(start);
     }
 
     /**
@@ -174,13 +151,7 @@ public class Calendar {
      * @return Return the event, if not found return null;
      */
     public Event getEvent(String id) {
-        for (EventCollection eventCollection :
-                eventCollections) {
-            Event event = eventCollection.getEvent(id);
-            if (event != null)
-                return event;
-        }
-        return null;
+        return eventManager.getEvent(id);
     }
 
     /**
@@ -191,16 +162,7 @@ public class Calendar {
      * @return All alerts in sorted order
      */
     public List<Alert> getAlerts(GregorianCalendar start, GregorianCalendar end) {
-        List<Alert> alerts = new ArrayList<>();
-
-        for (AlertCollection alertCollection :
-                alertCollections) {
-            alerts.addAll(alertCollection.getAlerts(start, end));
-        }
-
-        alerts.sort(new AlertComparator());
-
-        return alerts;
+        return alertCollectionManager.getAlerts(start, end);
     }
 
     /**
@@ -210,8 +172,7 @@ public class Calendar {
      * @throws InvalidDateException If incorrect data is passed in
      */
     public void addEventSeries(String eventSeriesName) throws InvalidDateException {
-        eventCollections.add(new Series(eventSeriesName, null, new CalendarGenerator(null, null, null)));
-        dataSaver.saveCalendar(this);
+        eventManager.addEventSeries(eventSeriesName);
     }
 
 
@@ -225,18 +186,7 @@ public class Calendar {
      * @param baseEvent  The event on which the other events will be based
      */
     public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException {
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection instanceof Series && ((Series) eventCollection).getName().equals(name)) {
-                // ((Series) eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
-                throw new Error();
-                //return;
-            }
-        }
-        SeriesFactory seriesFactory = new SeriesFactory();
-        Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
-        eventCollections.add(eventCollection);
-        dataSaver.saveCalendar(this);
+        eventManager.addEventSeries(name, start, end, difference, baseEvent);
     }
 
 
@@ -247,7 +197,7 @@ public class Calendar {
      * @return Memo, null if non is found
      */
     public Memo getMemo(Event event) {
-        return memos.stream().filter(m -> m.hasEvent(event)).findFirst().orElse(null);
+        return memoManager.getMemo(event);
     }
 
     /**
@@ -256,7 +206,7 @@ public class Calendar {
      * @return An unsorted list of memos
      */
     public List<Memo> getMemos() {
-        return memos;
+        return memoManager.getMemos();
     }
 
     /**
@@ -266,7 +216,7 @@ public class Calendar {
      * @return Returns the memo with the corresponding title, if no memo is found returns null
      */
     public Memo getMemo(String name) {
-        return memos.stream().filter(m -> m.getTitle().equals(name)).findAny().orElse(null);
+        return memoManager.getMemo(name);
     }
 
     /**
@@ -276,7 +226,7 @@ public class Calendar {
      * @return Returns the memo with the corresponding title and content, if no memo is found returns null
      */
     public Memo getMemo(String name, String content) {
-        return memos.stream().filter(m -> m.getTitle().equals(name) && m.getText().equals(content)).findAny().orElse(null);
+        return memoManager.getMemo(name, content);
     }
 
     /**
@@ -284,8 +234,7 @@ public class Calendar {
      * @param memo Memo to add
      */
     public void addMemo(Memo memo) {
-        memos.add(memo);
-        dataSaver.saveCalendar(this);
+        memoManager.addMemo(memo);
     }
 
     /**
@@ -295,9 +244,7 @@ public class Calendar {
      * @param newMemoName New name of the memo
      */
     public void editMemoTitle(String memoName, String newMemoName) {
-        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
-        memo.setTitle(newMemoName);
-        dataSaver.saveCalendar(this);
+        memoManager.editMemoTitle(memoName, newMemoName);
     }
 
     /**
@@ -307,9 +254,7 @@ public class Calendar {
      * @param newMemoText The new text for this memo
      */
     public void editMemoText(String memoName, String newMemoText) {
-        Memo memo = memos.stream().filter(m -> m.getTitle().equals(memoName)).findAny().orElseThrow(null);
-        memo.setText(newMemoText);
-        dataSaver.saveCalendar(this);
+        memoManager.editMemoText(memoName, newMemoText);
     }
 
     /**
@@ -318,8 +263,7 @@ public class Calendar {
      * @param memo Memo to remove
      */
     public void removeMemo(Memo memo) {
-        memos.remove(memo);
-        dataSaver.saveCalendar(this);
+        memoManager.removeMemo(memo);
     }
 
     /**
@@ -329,7 +273,7 @@ public class Calendar {
      * @return List of events with memo
      */
     public List<Event> getLinkedEvents(Memo memo) {
-        return memo.getEvents().stream().map(this::getEvent).collect(Collectors.toList());
+        return eventManager.getLinkedEvents(this, memo);
     }
 
     /**
@@ -338,8 +282,7 @@ public class Calendar {
      * @return Event collection if it exists otherwise null
      */
     public EventCollection getEventCollection(String eventSeriesName) {
-        return eventCollections.stream().filter(eC -> eC instanceof Series
-                && ((Series) eC).getName().equals(eventSeriesName)).findAny().orElse(null);
+        return eventManager.getEventCollection(eventSeriesName);
     }
 
     /**
@@ -348,7 +291,7 @@ public class Calendar {
      * @return Iterator with all events with same name
      */
     public Iterator<Event> getEvents(String eventName) {
-        return new EventIterator(new Date(0), (Event e) -> e.getName().equals(eventName));
+        return eventManager.getEvents(eventName);
     }
 
     /**
@@ -356,7 +299,7 @@ public class Calendar {
      * @return List of all tags
      */
     public List<Tag> getTags() {
-        return tags;
+        return tagManager.getTags();
     }
 
     /**
@@ -365,7 +308,7 @@ public class Calendar {
      * @return The corresponding tag, otherwise null
      */
     public Tag getTag(String tagName) {
-        return tags.stream().filter(t -> t.getText().equals(tagName)).findAny().orElse(null);
+        return tagManager.getTag(tagName);
     }
 
     /**
@@ -375,7 +318,7 @@ public class Calendar {
      * @return Unsorted list of tags
      */
     public List<Tag> getTags(Event event) {
-        return tags.stream().filter(m -> m.hasEvent(event)).collect(Collectors.toList());
+        return tagManager.getTags(event);
     }
 
     /**
@@ -383,8 +326,7 @@ public class Calendar {
      * @param tag The tag to add
      */
     public void addTag(Tag tag) {
-        tags.add(tag);
-        dataSaver.saveCalendar(this);
+        tagManager.addTag(tag);
     }
 
     /**
@@ -394,22 +336,14 @@ public class Calendar {
      * @param event Event to be removed
      */
     public void removeTag(String tag, Event event) {
-        for (Tag t : tags) {
-            if (t.getText().equals(tag)) {
-                t.removeEvent(event);
-            }
-        }
+        tagManager.removeTag(tag, event);
     }
 
     /**
      * Remove all old alerts
      */
     public void removeOldAlerts() {
-        for (AlertCollection aC :
-                alertCollections) {
-            aC.removeOldAlerts();
-        }
-        dataSaver.saveCalendar(this);
+        alertCollectionManager.removeOldAlerts();
     }
 
     /**
@@ -434,13 +368,7 @@ public class Calendar {
      * @return List of all postponed events
      */
     public List<Event> getPostponedEvents() {
-        ArrayList<Event> postponedEvents = new ArrayList<>();
-        for (EventCollection eventCollection :
-                eventCollections) {
-            postponedEvents.addAll(eventCollection.getPostponedEvents());
-        }
-        postponedEvents.sort(Event::compareTo);
-        return postponedEvents;
+        return eventManager.getPostponedEvents();
     }
 
     /**
@@ -449,117 +377,11 @@ public class Calendar {
      * @param name new name
      */
     public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
-        dataSaver.deleteFile("/events/" + event.getId() + ".txt");
-        event.setName(name);
-        dataSaver.saveCalendar(this);
+        eventManager.renameEvent(event, name);
     }
 
 
-    /**
-     * Event Iterator is used to iterate over the individual event collections to get the next time
-     */
-    private class EventIterator implements Iterator<Event> {
-        private Predicate<Event> isValid;
-        private List<Iterator<Event>> eventCollectionEventIterators;
-        private List<Event> possibleNext;
-
-        /**
-         * Initialise a new event iterator which iterates overall event collections at once returning events by their
-         * start time.
-         * This will not observe changes to the number of event collections so a new one must be created after that occurs
-         *
-         * @param start   The earliest possible time for an event
-         * @param isValid A predicate to filer events by. Can be null
-         */
-        public EventIterator(Date start, Predicate<Event> isValid) {
-            if (isValid == null)
-                this.isValid = e -> true;
-            else
-                this.isValid = isValid;
-            eventCollectionEventIterators = new ArrayList<>();
-            possibleNext = new ArrayList<>();
-
-            for (EventCollection eventCollection :
-                    eventCollections) {
-                eventCollectionEventIterators.add(eventCollection.getEventIterator(start));
-                possibleNext.add(null);
-            }
-        }
-
-        /**
-         * Returns true if any of the individualS event collection event iterators still has an item
-         *
-         * @return If there are further events in the future
-         */
-        @Override
-        public boolean hasNext() {
-            // Checks if any event is still cached
-            for (Event event :
-                    possibleNext) {
-                if (event != null) {
-                    return true;
-                }
-            }
-
-            // Checks if an additional event can be gotten from an iterator,
-            for (int i = 0; i < eventCollectionEventIterators.size(); i++) {
-                findNextInIterator(i);
-                if (possibleNext.get(i) != null)
-                    return true;
-            }
-            return false;
-        }
-
-        /**
-         * Return the next event in any of the collections sorted by start time
-         *
-         * @return The next event. This will never be null
-         */
-        @Override
-        public Event next() {
-            //Update the possible next list to include values from all event collection iterators which still have events
-            for (int i = 0; i < possibleNext.size(); i++) {
-                findNextInIterator(i);
-            }
-
-            // Select the earliest event
-            int index = -1;
-            Event first = null;
-            for (Event event :
-                    possibleNext) {
-                if (event != null) {
-                    if (first == null || first.getStartDate().after(event.getStartDate())) {
-                        first = event;
-                        index = possibleNext.indexOf(event);
-                    }
-                }
-            }
-
-            //Remove the returned item from the cache
-            possibleNext.set(index, null);
-
-            return first;
-        }
-
-        /**
-         * Find the next event in a certain event collection
-         * @param i The index of the event collection iterator
-         */
-        private void findNextInIterator(int i) {
-            if (possibleNext.get(i) == null && eventCollectionEventIterators.get(i).hasNext()) {
-                Event next = null;
-                while (eventCollectionEventIterators.get(i).hasNext()) {
-                    Event possible = eventCollectionEventIterators.get(i).next();
-                    if (isValid.test(possible)) {
-                        next = possible;
-                        break;
-                    }
-                }
-                if (next != null)
-                    possibleNext.set(i, next);
-            }
-        }
-    }
+    // TODO: extract this class
 
     /**
      * Get the current time of the calendar
@@ -577,7 +399,7 @@ public class Calendar {
      * @throws InvalidDateException Internal error
      */
     public void removeEvent(Event event) throws InvalidDateException {
-        eventCollections.stream().filter(eC -> eC.getEvent(event.getId()) != null).findAny().orElseThrow(null).removeEvent(event);
+        eventManager.removeEvent(event);
     }
 
     /**
@@ -586,16 +408,18 @@ public class Calendar {
      * @return A list containing all the names of all event series in order of internal representation
      */
     public List<String> getEventSeriesNames() {
-        return eventCollections.stream().filter(eC -> eC instanceof Series)
-                .map(eC -> ((Series) eC).getName()).filter(f -> !f.equals("")).collect(Collectors.toList());
+        return eventManager.getEventSeriesNames();
     }
 
-    /**
-     * Add a new alert collection
-     *
-     * @param alertCollection The alert collection to add
-     */
-    public void addAlertCollection(AlertCollection alertCollection) {
-        alertCollections.add(alertCollection); //TODO: remove unused method?
+    public MemoManager getMemoManager() {
+        return memoManager;
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+    public TagManager getTagManager() {
+        return tagManager;
     }
 }

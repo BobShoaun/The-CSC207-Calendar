@@ -143,8 +143,8 @@ public class DataSaver {
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
 
         //load EC
-        eventCollections = new EventCollection(ECLoadHelper(calendarName + "/events/"));
-        eventCollections.setPostponedEvents(ECLoadHelper(calendarName + "/events/postponed/"));
+        eventCollections = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
+        eventCollections.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
 
         //load memos
         try {
@@ -198,8 +198,8 @@ public class DataSaver {
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
                     newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
-                    newSeries.setEvents(ECLoadHelper(calendarName + "/series/" + seriesName + "/"));
-                    newSeries.setPostponedEvents(ECLoadHelper(calendarName + "/series/" + seriesName + "/postponed/"));
+                    newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/"));
+                    newSeries.setPostponedEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/postponed/"));
 
                     series.add(newSeries);
                 } catch (IOException | InvalidDateException e) {
@@ -223,49 +223,16 @@ public class DataSaver {
     }
 
     public void saveCalendar(Calendar calendar) {
-        //save EventCollection
-        try {
-            deleteDirectory("events/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ECSaveHelper("events/", calendar.getSingleEventCollection().getEvents());
-        ECSaveHelper("events/postponed/", calendar.getSingleEventCollection().getPostponedEvents());
+        saveTags(calendar.getTagManager());
+        saveMemos(calendar.getMemoManager());
+        saveEvents(calendar.getEventManager());
+    }
 
-        //save Series
-        for (Series series : calendar.getSeries()) {
-            ECSaveHelper("series/" + series.getName() + "/", series.getManualEvents());
-            ECSaveHelper("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
-            try {
-                saveSubSeries(series,series.getSubSeries());
-                saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
-                saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // save memos TODO: extract method
-        StringBuilder memoData = new StringBuilder();
-        for (Memo memo :
-                calendar.getMemos()) {
-            StringBuilder ids = new StringBuilder();
-            for (String id :
-                    memo.getEvents()) {
-                ids.append(id).append("|");
-            }
-            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("§").append(ids.toString()).append(String.format("%n"));
-        }
-        try {
-            saveToFile("memos.txt", memoData.toString());
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-
+    public void saveTags(TagManager tagManager) {
         // save tags TODO: extract method
         StringBuilder tagsData = new StringBuilder();
         for (Tag tag :
-                calendar.getTags()) {
+                tagManager.getTags()) {
             StringBuilder ids = new StringBuilder();
             for (String id :
                     tag.getEvents()) {
@@ -280,7 +247,48 @@ public class DataSaver {
         }
     }
 
-    private void ECSaveHelper(String path, List<Event> events) { //TODO: rename
+    public void saveMemos(MemoManager memoManager) {
+        StringBuilder memoData = new StringBuilder();
+        for (Memo memo :
+                memoManager.getMemos()) {
+            StringBuilder ids = new StringBuilder();
+            for (String id :
+                    memo.getEvents()) {
+                ids.append(id).append("|");
+            }
+            memoData.append(memo.getText()).append("§").append(memo.getTitle()).append("§").append(ids.toString()).append(String.format("%n"));
+        }
+        try {
+            saveToFile("memos.txt", memoData.toString());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public void saveEvents(EventManager eventManager) {
+        try {
+            deleteDirectory("events/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        saveEventsToFile("events/", eventManager.getSingleEventCollection().getEvents());
+        saveEventsToFile("events/postponed/", eventManager.getSingleEventCollection().getPostponedEvents());
+
+        //save Series
+        for (Series series : eventManager.getSeries()) {
+            saveEventsToFile("series/" + series.getName() + "/", series.getManualEvents());
+            saveEventsToFile("series/" + series.getName() + "/postponed/", series.getPostponedEvents());
+            try {
+                saveSubSeries(series, series.getSubSeries());
+                saveToFile("series/" + series.getName() + "/CalenderGenerator.txt", series.getCalGen().getString());
+                saveToFile("series/" + series.getName() + "/BaseEvent.txt", series.getBaseEvent().getString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveEventsToFile(String path, List<Event> events) {
         for (Event e : events) {
             try {
                 saveToFile(path + e.getId() + ".txt", e.getString());
@@ -290,14 +298,13 @@ public class DataSaver {
         }
     }
 
-    private List<Event> ECLoadHelper(String path) { // TODO: make use of ParseEventID() and rename
+    private List<Event> loadEventsFromFile(String path) { // TODO: make use of ParseEventID()
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
         for (File f : data) {
             String id = f.getName();
             id = id.replaceAll(".txt", "");
-            if(id.equals("postponed"))
-            {
+            if (id.equals("postponed")) {
                 continue;
             }
             try {
