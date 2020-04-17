@@ -228,7 +228,7 @@ public class EventManager {
      * @param event Event to change name of
      * @param name  new name
      */
-    public void renameEvent(Event event, String name) { //TODO: Maybe there is a better place for this function elsewhere
+    public void renameEvent(Event event, String name) {
         dataSaver.deleteFile("/events/" + event.getId() + ".txt");
         event.setName(name);
         dataSaver.saveEvents(this);

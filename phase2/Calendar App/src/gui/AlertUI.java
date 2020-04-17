@@ -1,15 +1,18 @@
 package gui;
 
+import alert.Alert;
 import alert.AlertCollection;
 import com.sun.istack.internal.NotNull;
 import event.IDManager;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
@@ -26,8 +29,13 @@ public class AlertUI extends GraphicalUserInterface {
     @FXML private ListView<String> repAlertList;
     @FXML private Label title;
 
-    private String currManAlert;
-    private String currRepAlert;
+    private Alert currManAlert;
+    private Alert currRepAlert;
+
+    private ObservableList<Alert> manualAlerts;
+    private ObservableList<String> manualAlertStrings;
+    private ObservableList<Alert> repeatingAlerts;
+    private ObservableList<String> repeatingAlertStrings;
 
     /**
      * Initialize this controller
@@ -38,6 +46,26 @@ public class AlertUI extends GraphicalUserInterface {
         this.ac = ac;
         title.setText("Alerts for " + ac.getEventId().substring(29).replace('%', ' ')
                 + " at " + IDManager.parseEventId(ac.getEventId()).getTime());
+        manualAlerts = FXCollections.observableArrayList();
+        manualAlerts.addListener((ListChangeListener<Alert>) c -> {
+            manualAlertStrings.clear();
+            for (Alert alert :
+                    manualAlerts) {
+                manualAlertStrings.add(alert.getTime().getTime().toString());
+            }
+        });
+        repeatingAlerts = FXCollections.observableArrayList();
+        repeatingAlerts.addListener((ListChangeListener<Alert>) c -> {
+            repeatingAlertStrings.clear();
+            for (Alert alert :
+                    repeatingAlerts) {
+                repeatingAlertStrings.add(alert.getTime().getTime().toString());
+            }
+        });
+        manualAlertStrings = FXCollections.observableArrayList();
+        repeatingAlertStrings = FXCollections.observableArrayList();
+        manAlertList.setItems(manualAlertStrings);
+        repAlertList.setItems(repeatingAlertStrings);
         updateRepeatingAlerts();
         updateManAlerts();
     }
@@ -48,10 +76,8 @@ public class AlertUI extends GraphicalUserInterface {
     private void updateManAlerts() {
         if (ac == null)
             System.out.println("AC has not been set!");
-        assert ac != null;
-        ObservableList<String> alertStrings = FXCollections.observableArrayList(
-                ac.getManAlerts().stream().map(alert.Alert::toString).collect(Collectors.toList()));
-        manAlertList.setItems(alertStrings);
+        manualAlerts.clear();
+        manualAlerts.addAll(ac.getManAlerts());
     }
 
     /**
@@ -60,24 +86,21 @@ public class AlertUI extends GraphicalUserInterface {
     private void updateRepeatingAlerts() {
         if (ac == null)
             System.out.println("AC has not been set!");
-        assert ac != null;
-        ObservableList<String> alertStrings = FXCollections.observableArrayList(
-                ac.getGeneratedAlerts(new GregorianCalendar(1950, Calendar.JANUARY, 0),
-                        new GregorianCalendar(2100, Calendar.JANUARY, 0))
-                        .stream().map(alert.Alert::toString).collect(Collectors.toList()));
-        repAlertList.setItems(alertStrings);
+        repeatingAlerts.clear();
+        repeatingAlerts.addAll(ac.getGeneratedAlerts(new GregorianCalendar(1950, Calendar.JANUARY, 0),
+                new GregorianCalendar(2100, Calendar.JANUARY, 0)));
     }
 
     @FXML
     private void manAlertListClicked() {
-        currManAlert = manAlertList.getSelectionModel().getSelectedItems().get(0);
+        currManAlert = manualAlerts.get(manAlertList.getSelectionModel().getSelectedIndex());
         System.out.println("Clicked on alert: " + currManAlert);
         update();
     }
 
     @FXML
     private void repAlertListClicked() {
-        currRepAlert = repAlertList.getSelectionModel().getSelectedItems().get(0);
+        currRepAlert = repeatingAlerts.get(repAlertList.getSelectionModel().getSelectedIndex());
         System.out.println("Clicked on alert: " + currRepAlert);
         update();
     }
@@ -86,8 +109,7 @@ public class AlertUI extends GraphicalUserInterface {
     private void deleteManualAlert() {
         System.out.println("Clicked delete manual alert");
         if (currManAlert != null) {
-            GregorianCalendar time = parseEventId(currManAlert.replace(' ', '%'));
-            ac.removeManualAlert(time);
+            ac.removeAlert(currManAlert.getTime());
             updateManAlerts();
         }
         update();
@@ -97,8 +119,7 @@ public class AlertUI extends GraphicalUserInterface {
     private void deleteRepeatingAlert() {
         System.out.println("Clicked delete repeating alert");
         if (currRepAlert != null) {
-            GregorianCalendar time = parseEventId(currRepAlert);
-            if (!ac.removeGeneratedAlert(time))
+            if (!ac.removeGeneratedAlert(currRepAlert.getTime()))
                 System.out.println("Could not remove generated alert");
             updateRepeatingAlerts();
         }
@@ -126,7 +147,7 @@ public class AlertUI extends GraphicalUserInterface {
         System.out.println("Clicked edit manual alert");
         if (currManAlert != null) {
             ManualAlertUI controller = openGUI("manualAlert.fxml");
-            controller.setDate(parseEventId(currManAlert));
+            controller.setDate(currManAlert.getTime());
             controller.initialize(this, ac);
         }
         update();
@@ -138,7 +159,7 @@ public class AlertUI extends GraphicalUserInterface {
         if (currRepAlert != null) {
             ManualAlertUI controller = openGUI("manualAlert.fxml");
             controller.initialize(this, ac);
-            controller.setDate(parseEventId(currRepAlert));
+            controller.setDate(currRepAlert.getTime());
         }
         update();
     }

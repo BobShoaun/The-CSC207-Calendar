@@ -240,7 +240,8 @@ public class CalendarUI extends GraphicalUserInterface {
         past.add(GregorianCalendar.DATE, -30);
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
                 calendar.getAlerts(past, calendar.getTime()).stream()
-                        .map(Alert::toString).collect(Collectors.toList()));
+                        .map(alert -> "For " + calendar.getEvent(alert.getEventId()).getName() + " at " + alert.getTime().getTime().toString())
+                        .collect(Collectors.toList()));
         alertList.setItems(alertStrings);
     }
 

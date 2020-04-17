@@ -1,5 +1,6 @@
 package gui;
 
+import alert.AlertCollection;
 import event.Event;
 import event.EventCollection;
 import event.Series;
@@ -171,7 +172,8 @@ public class EventEditUI extends EventAddUI {
         System.out.println("add clicked");
         AlertUI controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
-        controller.initialize(ds.loadAlertCollection(event.getId()));
+        AlertCollection alertCollection = ds.loadAlertCollection(event.getId());
+        controller.initialize(alertCollection);
     }
 
     @FXML
