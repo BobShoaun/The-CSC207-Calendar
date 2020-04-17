@@ -131,15 +131,26 @@ public class AddEventController extends GraphicalUserInterface implements Initia
                     editMemo(newEvent, "");
                 }
             } else {
-                //Create Series
-                calendar.addEventSeries(newEvent);
+                //Add event into existing series
+                Series s = calendar.getSeries(seriesName);
+                s.addEvent(newEvent);
             }
-
             save();
             closeGUI();
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
+        } catch (NoSuchSeriesException e) {
+            try {
+                //Create a new series
+                getUserInput();
+                Event newEvent = createEvent(name, start, end);
+                calendar.addEventSeries(newEvent, seriesName);
+                save();
+            } catch (InvalidDateException invalidDateException) {
+                dateTimeErrorLabel.setText("Invalid Date");
+                dateTimeErrorLabel.setVisible(true);
+            }
         }
     }
 
@@ -148,12 +159,26 @@ public class AddEventController extends GraphicalUserInterface implements Initia
     private void handleRepeatEvent() {
         try {
             getUserInput();
-            SeriesController controller = showGUI("series.fxml");
-            Event newEvent = createEvent(name, start, end);
-            controller.setDetails(newEvent, calendar);
+            setLabelInvisible();
+            System.out.println("repeat event clicked");
+            if(seriesName.equals("")||seriesName.equals("Default")){
+                SeriesController controller = showGUI("series.fxml");
+                Event newEvent = createEvent(name, start, end);
+                controller.setDetails(newEvent, calendar,seriesName);
+            }else{
+                calendar.getSeries(seriesName);
+                SeriesController controller = showGUI("series.fxml");
+                Event newEvent = createEvent(name, start, end);
+                controller.setDetails(newEvent, calendar,seriesName);
+            }
+            save();
+
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);
+        } catch (NoSuchSeriesException e) {
+            seriesErrorLabel.setVisible(true);
+            System.out.println("No such series");
         }
     }
 

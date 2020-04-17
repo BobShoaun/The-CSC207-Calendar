@@ -30,10 +30,6 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
     @FXML
     private CheckBox indefiniteEndDateChoice;
     @FXML
-    private Label seriesErrorLabel;
-    @FXML
-    private TextField seriesField;
-    @FXML
     private DatePicker endDate;
     @FXML
     private ChoiceBox<String> timeChoiceBox;
@@ -54,9 +50,10 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
      * @param baseEvent Base Event
      * @param calendar  Calendar
      */
-    public void setDetails(Event baseEvent, user.Calendar calendar) {
+    public void setDetails(Event baseEvent, user.Calendar calendar, String seriesName) {
         this.baseEvent = baseEvent;
         this.calendar = calendar;
+        this.seriesName = seriesName;
         this.start = baseEvent.getStartDate();
     }
 
@@ -74,11 +71,10 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
 
     @FXML
     private void handleCreateSeries() {
-        seriesErrorLabel.setVisible(false);
         dateErrorLabel.setVisible(false);
         try {
             getUserInput();
-            if (seriesName.equals("")) {
+            if (seriesName.equals("")||seriesName.equals("Default")) {
                 calendar.addEventSeries(baseEvent.getName(), start, end, timeSpan, baseEvent);
             } else {
                 getSeries();
@@ -93,7 +89,7 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
             dateErrorLabel.setVisible(true);
             dateErrorLabel.setText("Invalid Number");
         } catch (NoSuchSeriesException e) {
-            seriesErrorLabel.setVisible(true);
+            e.printStackTrace();
         }
     }
 
@@ -105,11 +101,11 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
 
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         getTimeSpan();
-        seriesName = seriesField.getText();
+        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         if (indefiniteEndDateChoice.isSelected()) {
             end = null;
-        } else {
-            end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        } else if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
+            throw new InvalidDateException();
         }
     }
 

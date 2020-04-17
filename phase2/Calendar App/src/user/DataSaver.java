@@ -372,7 +372,7 @@ public class DataSaver {
             try {
                 deleteDirectory("series/" + series.getName());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("No such file");
             }
             saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
