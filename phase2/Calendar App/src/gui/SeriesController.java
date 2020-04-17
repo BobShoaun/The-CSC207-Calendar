@@ -23,7 +23,7 @@ import java.util.Scanner;
  */
 public class SeriesController extends GraphicalUserInterface implements Initializable {
 
-    private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
+    private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day(s)", "Week(s)", "Month(s)", "Year(s)");
 
     @FXML
     private Label dateErrorLabel;
@@ -65,7 +65,7 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        timeChoiceBox.setValue("Day");
+        timeChoiceBox.setValue("Day(s)");
         timeChoiceBox.setItems(timeChoice);
     }
 
@@ -121,16 +121,16 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
         if (sc.hasNextInt()) {
             int timeUnit = sc.nextInt();
             switch (timeString) {
-                case "Day":
+                case "Day(s)":
                     timeSpan = Duration.ofDays(timeUnit);
                     break;
-                case "Week":
+                case "Week(s)":
                     timeSpan = Duration.ofDays(timeUnit * 7);
                     break;
-                case "Month":
+                case "Month(s)":
                     timeSpan = Duration.ofDays(timeUnit * 30);
                     break;
-                case "Years":
+                case "Years(s)":
                     timeSpan = Duration.ofDays(timeUnit * 365);
                     break;
                 default:
