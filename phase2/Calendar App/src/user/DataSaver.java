@@ -197,14 +197,15 @@ public class DataSaver {
 
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
 
-//                    System.out.println(seriesName);
-//                    System.out.println(baseEvent);
-//                    System.out.println(newStart.getTime());
-//                    System.out.println(newEnd.getTime());
-//                    for(Duration d:durs){
-//                        System.out.println(d.toDays());
-//                    }
-//                    System.out.println(newSeries);
+                    //for tests
+                    System.out.println(seriesName);
+                    System.out.println(baseEvent);
+                    System.out.println(newStart.getTime());
+                    System.out.println(newEnd.getTime());
+                    for(Duration d:durs){
+                        System.out.println(d.toDays());
+                    }
+                    System.out.println(newSeries);
 
                     newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 

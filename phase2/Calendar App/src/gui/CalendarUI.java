@@ -69,7 +69,7 @@ public class CalendarUI extends GraphicalUserInterface {
                         time.get(GregorianCalendar.DATE));
                 startDate.setValue(date);
                 LocalDate end = LocalDate.of(time.get(GregorianCalendar.YEAR), time.get(GregorianCalendar.MONTH) + 1,
-                        time.get(GregorianCalendar.DATE) + 14);
+                        time.get(GregorianCalendar.DATE)).plusDays(14);
                 endDate.setVisible(true);
                 endDate.setValue(end);
                 searchTermField.setVisible(false);
@@ -121,6 +121,7 @@ public class CalendarUI extends GraphicalUserInterface {
     }
 
     protected void updateDisplayedSeries() {
+        System.out.println(calendar.getSeries().size());
         ArrayList<String> stringSeries = new ArrayList<>();
         for(Series series : calendar.getSeries()){
             stringSeries.add(series.getName());
