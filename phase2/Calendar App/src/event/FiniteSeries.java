@@ -25,16 +25,15 @@ public class FiniteSeries extends Series {
     }
 
     /**
-     *
      * @param start startDisplay time of this Finite Series
-     * @param end endDisplay time of this Finite Series
+     * @param end   endDisplay time of this Finite Series
      */
     @Override
     public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
         setStartDisplayTime(start);
-        if(end.after(endTime)){
+        if (end.after(endTime)) {
             getCalGen().setEndTime(endTime);
-        }else{
+        } else {
             getCalGen().setEndTime(end);
         }
     }

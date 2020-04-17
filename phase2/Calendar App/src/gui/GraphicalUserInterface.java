@@ -10,6 +10,7 @@ import java.io.IOException;
 /**
  * General class for any graphical user interface
  * handles ui transitions and window management.
+ *
  * @author Ng Bob Shoaun
  */
 public class GraphicalUserInterface {
@@ -37,6 +38,7 @@ public class GraphicalUserInterface {
 
     /**
      * Set the title of the window
+     *
      * @param title
      */
     protected void setWindowTitle(String title) {
@@ -78,8 +80,9 @@ public class GraphicalUserInterface {
 
     /**
      * opens a scene in a new stage(window)
-     * @param fxml  File path of fxml file (including .fxml extension)
-     * @param <T>   Type of GUI
+     *
+     * @param fxml File path of fxml file (including .fxml extension)
+     * @param <T>  Type of GUI
      * @return Controller for the new GUI page
      */
     protected <T extends GraphicalUserInterface> T openGUI(String fxml) {
@@ -103,7 +106,7 @@ public class GraphicalUserInterface {
     /**
      * Closes the current stage (window)
      */
-    protected void closeGUI () {
+    protected void closeGUI() {
         window.close();
     }
 

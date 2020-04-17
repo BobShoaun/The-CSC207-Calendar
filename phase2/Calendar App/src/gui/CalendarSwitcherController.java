@@ -39,7 +39,7 @@ public class CalendarSwitcherController extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleOK () {
+    private void handleOK() {
         int index = calendarListView.getSelectionModel().getSelectedIndex();
         CalendarController cal = showGUI("calendar.fxml");
         cal.setUser(user);
@@ -48,13 +48,13 @@ public class CalendarSwitcherController extends GraphicalUserInterface {
     }
 
     @FXML
-    private void handleCancel () {
+    private void handleCancel() {
         CalendarController cal = showGUI("calendar.fxml");
         cal.setUser(user);
     }
 
     @FXML
-    private void handleAddCalendar () {
+    private void handleAddCalendar() {
         String newCalendarName = calendarNameField.getText();
         calendarNameField.clear();
         try {

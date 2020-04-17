@@ -53,7 +53,7 @@ public class TagController extends gui.GraphicalUserInterface {
         memotag.Tag tag = calendar.getTag(tagNameTextField.getText());
         if (tag != null) {
             List<String> events = tag.getEvents();
-            for (String s: events) {
+            for (String s : events) {
                 Event event = calendar.getEvent(s);
                 list.add(event.getName() + " at " + event.getStartDate().getTime());
             }

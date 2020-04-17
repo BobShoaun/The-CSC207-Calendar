@@ -43,9 +43,12 @@ public class CalendarController extends GraphicalUserInterface {
     private int repeatingEventIndex;
     private ObservableList<String> seriesNameList;
 
-    @FXML private ListView<String> alertList;
-    @FXML private ListView<String> displayedRepeatingEventList;
-    @FXML private ListView<String> displayedSeriesList;
+    @FXML
+    private ListView<String> alertList;
+    @FXML
+    private ListView<String> displayedRepeatingEventList;
+    @FXML
+    private ListView<String> displayedSeriesList;
     @FXML
     private CheckBox darkTheme;
     @FXML
