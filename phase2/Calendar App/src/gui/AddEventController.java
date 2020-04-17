@@ -160,7 +160,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         try {
             getUserInput();
             setLabelInvisible();
-            System.out.println("repeat event clicked");
             if(seriesName.equals("")||seriesName.equals("Default")){
                 RepeatingEventController controller = showGUI("repeatingEvent.fxml");
                 Event newEvent = createEvent(name, start, end);
