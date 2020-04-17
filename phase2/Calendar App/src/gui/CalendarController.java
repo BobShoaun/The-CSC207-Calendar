@@ -127,7 +127,7 @@ public class CalendarController extends GraphicalUserInterface {
     /**
      * Update all the displays
      */
-    private void updateDisplays(){
+    protected void updateDisplays(){
         updateDisplayedEvents();
         updateDisplayedSeries();
         updateDisplayedRepeatingEvents();
