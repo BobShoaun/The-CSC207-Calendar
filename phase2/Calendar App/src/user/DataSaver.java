@@ -364,7 +364,7 @@ public class DataSaver {
         try {
             deleteDirectory("events/");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Yeah, I know there is no such file...there will be very soon");
         }
         saveEventsToFile("events/", eventManager.getManualEventCollection().getEvents());
         saveEventsToFile("events/postponed/", eventManager.getManualEventCollection().getPostponedEvents());
@@ -380,6 +380,11 @@ public class DataSaver {
      */
     public void saveSeries(EventManager eventManager) {
         for (Series series : eventManager.getSeries()) {
+            try {
+                deleteDirectory("series/" + series.getName() + "/Manual Events/");
+            } catch (IOException e) {
+                System.out.println("Yeah, I know there is no such file...there will be very soon");
+            }
             saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
             try {
