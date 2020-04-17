@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ViewTagsUI">
-   <children>
-      <GridPane prefHeight="250.0" prefWidth="500.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="62.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="166.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.ViewTagsController">
+    <children>
+        <GridPane prefHeight="250.0" prefWidth="500.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="62.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="166.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2">
               <items>
                 <Button mnemonicParsing="false" onAction="#editTag" text="Edit" />
                   <Button mnemonicParsing="false" onAction="#close" text="Done" />
-                  <Label fx:id="selectTagLabel" text="Please select a tagUI!" textFill="#ff4545">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
+                  <Label fx:id="selectTagLabel" text="Please select a tagController!" textFill="#ff4545">
+                      <font>
+                          <Font size="14.0"/>
+                      </font>
+                      <padding>
+                          <Insets left="10.0"/>
+                      </padding>
                   </Label>
               </items>
             </ToolBar>

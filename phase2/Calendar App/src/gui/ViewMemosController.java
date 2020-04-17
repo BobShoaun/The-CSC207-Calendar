@@ -13,10 +13,12 @@ import java.util.List;
 /**
  * GUI controller class for viewing memos.
  */
-public class ViewMemosUI extends gui.GraphicalUserInterface {
+public class ViewMemosController extends gui.GraphicalUserInterface {
 
-    @FXML private ListView<String> memoList;
-    @FXML private Label selectMemoLabel;
+    @FXML
+    private ListView<String> memoList;
+    @FXML
+    private Label selectMemoLabel;
 
     private Calendar calendar;
     private String selectedMemo;
@@ -77,9 +79,9 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     @FXML
     private void showMemoUI() {
         if (memoList.getSelectionModel().getSelectedIndex() >= 0) {
-            MemoUI memoUI = showGUI("memo.fxml");
-            memoUI.setCalendar(calendar);
-            memoUI.setMemo(calendar.getMemos().get(memoList.getSelectionModel().getSelectedIndex()));
+            MemoController memoController = showGUI("memo.fxml");
+            memoController.setCalendar(calendar);
+            memoController.setMemo(calendar.getMemos().get(memoList.getSelectionModel().getSelectedIndex()));
         }
     }
 

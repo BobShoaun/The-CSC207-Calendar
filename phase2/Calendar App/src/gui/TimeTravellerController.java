@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 /**
  * GUI controller class for time-travel magic
  */
-public class TimeController extends Application {
+public class TimeTravellerController extends Application {
 
     @FXML
     private DatePicker timeView;
@@ -104,7 +104,7 @@ public class TimeController extends Application {
     // TODO: make this not extend Application
     @Override
     public void start(Stage mainStage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeController.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("timeTraveller.fxml"));
         Parent root = null;
         try {
             root = fxmlLoader.load();
@@ -113,8 +113,8 @@ public class TimeController extends Application {
             System.out.println("Somehow failed to load the fxml");
         }
 
-        TimeController timeController = fxmlLoader.getController();
-        timeController.setCalendar(calendar); // This is correct although I think we are creating a second instance of time controller, so this might not be the best design
+        TimeTravellerController timeTravellerController = fxmlLoader.getController();
+        timeTravellerController.setCalendar(calendar); // This is correct although I think we are creating a second instance of time controller, so this might not be the best design
         Stage stage = new Stage(); //Create a new stage, so we can have both windows visible at once
         assert root != null;
         Scene scene = new Scene(root);

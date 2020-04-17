@@ -11,15 +11,19 @@ import user.UserManager;
 /**
  * GUI controller class for sharing events between users.
  */
-public class ShareUI extends GraphicalUserInterface {
+public class ShareController extends GraphicalUserInterface {
 
     private Event event;
     private UserManager userManger;
 
-    @FXML private Label usernameError;
-    @FXML private Label calendarNameError;
-    @FXML private TextField username;
-    @FXML private TextField calendarName;
+    @FXML
+    private Label usernameError;
+    @FXML
+    private Label calendarNameError;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField calendarName;
 
     /**
      * Set the Event to be shared.

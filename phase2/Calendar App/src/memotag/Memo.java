@@ -68,6 +68,7 @@ public class Memo {
 
     /**
      * getter for title
+     *
      * @return
      */
     public String getTitle() {

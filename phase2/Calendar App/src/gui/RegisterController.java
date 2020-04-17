@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
  *
  * @author Ng Bob Shoaun
  */
-public class RegisterUI extends GraphicalUserInterface implements Initializable {
+public class RegisterController extends GraphicalUserInterface implements Initializable {
 
     @FXML
     private Label usernameErrorLabel;
@@ -69,7 +69,7 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-        if(!password.equals(confirmPassword)){
+        if (!password.equals(confirmPassword)) {
             confirmPasswordErrorLabel.setText("Passwords do not match!");
             confirmPasswordErrorLabel.setVisible(true);
             return;
@@ -98,14 +98,14 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
     }
 
     private void showCalendarUI() {
-        CalendarUI calendarUIController = showGUI("calendar.fxml");
+        CalendarController calendarUIController = showGUI("calendar.fxml");
         calendarUIController.setUserManager(userManager);
         calendarUIController.setUser(userManager.getCurrentUser());
     }
 
     private void showLoginUI() {
-        LoginUI loginUI = showGUI("login.fxml");
-        loginUI.setDarkTheme();
+        LoginController loginController = showGUI("login.fxml");
+        loginController.setDarkTheme();
     }
 
 }

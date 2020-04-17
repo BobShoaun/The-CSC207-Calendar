@@ -30,7 +30,7 @@ public class MemoUI extends UserInterface {
     }
 
     /**
-     * Start this MemoUI with menu options.
+     * Start this MemoController with menu options.
      */
     @Override
     public void show() {
@@ -49,7 +49,7 @@ public class MemoUI extends UserInterface {
                     calendar.editMemoText(memo.getTitle(), this.getStringInput("Enter new text: "));
                     break;
                 case 3:
-                    for(String id : memo.getEvents()){
+                    for (String id : memo.getEvents()) {
                         System.out.println(calendar.getEvent(id).toString());
                     }
                     break;

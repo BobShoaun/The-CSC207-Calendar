@@ -92,6 +92,7 @@ public class Calendar {
 
     /**
      * Get all alert collections
+     *
      * @return List of all alert collections
      */
     public List<AlertCollection> getAlertCollections() {
@@ -108,11 +109,10 @@ public class Calendar {
     }
 
     /**
-     *
      * @param event the Event to be searched
      * @return the EventCollection that this event belongs to
      */
-    public EventCollection getEventCollection(Event event){
+    public EventCollection getEventCollection(Event event) {
         return eventManager.getEventCollection(event);
     }
 
@@ -237,6 +237,7 @@ public class Calendar {
 
     /**
      * Add a new memo
+     *
      * @param memo Memo to add
      */
     public void addMemo(Memo memo) {
@@ -284,6 +285,7 @@ public class Calendar {
 
     /**
      * Get the event collection with a certain name
+     *
      * @param eventSeriesName Name of the event collection
      * @return Event collection if it exists otherwise null
      */
@@ -293,6 +295,7 @@ public class Calendar {
 
     /**
      * Get all events with a certain name
+     *
      * @param eventName The name of the event to search by
      * @return Iterator with all events with same name
      */
@@ -302,6 +305,7 @@ public class Calendar {
 
     /**
      * Get all tags
+     *
      * @return List of all tags
      */
     public List<Tag> getTags() {
@@ -310,6 +314,7 @@ public class Calendar {
 
     /**
      * Get tag with a certain name
+     *
      * @param tagName Name of the tag
      * @return The corresponding tag, otherwise null
      */
@@ -329,6 +334,7 @@ public class Calendar {
 
     /**
      * Add a new tag
+     *
      * @param tag The tag to add
      */
     public void addTag(Tag tag) {
@@ -363,6 +369,7 @@ public class Calendar {
 
     /**
      * Set the current time of the time controller
+     *
      * @param gregorianCalendar Value to be set
      */
     public void setTime(GregorianCalendar gregorianCalendar) {
@@ -371,6 +378,7 @@ public class Calendar {
 
     /**
      * Get all postponed events
+     *
      * @return List of all postponed events
      */
     public List<Event> getPostponedEvents() {
@@ -379,8 +387,9 @@ public class Calendar {
 
     /**
      * Changes the name of an event
+     *
      * @param event Event to change name of
-     * @param name new name
+     * @param name  new name
      */
     public void renameEvent(Event event, String name) {
         eventManager.renameEvent(event, name);

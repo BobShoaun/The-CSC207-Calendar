@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
-
  */
 public class DataSaver {
 
@@ -122,7 +121,7 @@ public class DataSaver {
         new File(basePath + path).mkdirs();
     }
 
-    public void deleteFile(String path){
+    public void deleteFile(String path) {
         File file = new File(basePath + path);
         file.delete();
     }
@@ -195,7 +194,8 @@ public class DataSaver {
 
     /**
      * load Series from file
-     * @param calendarName calendar name which these series belongs to
+     *
+     * @param calendarName     calendar name which these series belongs to
      * @param eventCollections the eventCollection to save to
      */
     private void loadSeries(String calendarName, ArrayList<EventCollection> eventCollections) {
@@ -364,7 +364,7 @@ public class DataSaver {
         try {
             deleteDirectory("events/");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Yeah, I know there is no such file...there will be very soon");
         }
         saveEventsToFile("events/", eventManager.getManualEventCollection().getEvents());
         saveEventsToFile("events/postponed/", eventManager.getManualEventCollection().getPostponedEvents());
@@ -380,6 +380,11 @@ public class DataSaver {
      */
     public void saveSeries(EventManager eventManager) {
         for (Series series : eventManager.getSeries()) {
+            try {
+                deleteDirectory("series/" + series.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
             try {
@@ -429,7 +434,7 @@ public class DataSaver {
 
     private void saveRepeatingEvents(Series series, List<RepeatingEvent> events) throws IOException {
         StringBuilder ret = new StringBuilder();
-        for (RepeatingEvent event:events){
+        for (RepeatingEvent event : events) {
             ret.append(event.getString()).append("\n");
         }
         saveToFile("series/" + series.getName() + "/SubSeries.txt", ret.toString());
@@ -442,7 +447,7 @@ public class DataSaver {
             String[] parts = eventData.split("§");
             Event baseEvent = stringsToEvent(parts);
             CalendarGenerator CG = loadCalendarGenerator(parts[4].replaceAll("\\|", "\n"));
-            ret.add(new RepeatingEvent(baseEvent,CG));
+            ret.add(new RepeatingEvent(baseEvent, CG));
         }
         return ret;
     }

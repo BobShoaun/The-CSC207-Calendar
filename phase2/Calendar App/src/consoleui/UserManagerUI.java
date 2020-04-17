@@ -16,6 +16,7 @@ public class UserManagerUI extends UserInterface {
 
     /**
      * Constructor for UserManagerUI
+     *
      * @param userManager the userManager to display
      */
     public UserManagerUI(UserManager userManager) {
@@ -83,12 +84,12 @@ public class UserManagerUI extends UserInterface {
         showCalendar();
     }
 
-    private void showRegisterMenu () {
+    private void showRegisterMenu() {
         displayLine();
         String username = getWordInput("Enter username: ");
         String password = getWordInput("Enter password: ");
         String confirmPassword = getWordInput("Confirm password: ");
-        if(!confirmPassword.equals(password)){
+        if (!confirmPassword.equals(password)) {
             System.out.println("Password mismatch!");
             showRegisterMenu();
             return;
@@ -123,11 +124,11 @@ public class UserManagerUI extends UserInterface {
      *
      * @param args Command-line arguments
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         UserManager userManager = new UserManager();
         try {
             userManager.loadUsers();
-        } catch(IOException ee){
+        } catch (IOException ee) {
             System.out.print("Unhandled exception: " + ee.toString());
         }
         new UserManagerUI(userManager).show();

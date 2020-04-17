@@ -21,24 +21,28 @@ import java.util.Scanner;
 /**
  * GUI controller class for Series
  */
-public class SeriesUI extends GraphicalUserInterface implements Initializable {
+public class SeriesController extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
 
-    @FXML private Label dateErrorLabel;
-    @FXML private CheckBox indefiniteEndDateChoice;
-    @FXML private Label seriesErrorLabel;
-    @FXML private TextField seriesField;
-
-    @FXML private DatePicker endDate;
-    @FXML private ChoiceBox<String> timeChoiceBox;
-    @FXML private TextField repeatNumField;
-    @FXML private TextField nameField;
+    @FXML
+    private Label dateErrorLabel;
+    @FXML
+    private CheckBox indefiniteEndDateChoice;
+    @FXML
+    private Label seriesErrorLabel;
+    @FXML
+    private TextField seriesField;
+    @FXML
+    private DatePicker endDate;
+    @FXML
+    private ChoiceBox<String> timeChoiceBox;
+    @FXML
+    private TextField repeatNumField;
 
     private Event baseEvent;
     private Series series;
     private user.Calendar calendar;
-    private String name;
     private String seriesName;
     private GregorianCalendar start;
     private GregorianCalendar end;
@@ -75,7 +79,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         try {
             getUserInput();
             if (seriesName.equals("")) {
-                calendar.addEventSeries(name, start, end, timeSpan, baseEvent);
+                calendar.addEventSeries(baseEvent.getName(), start, end, timeSpan, baseEvent);
             } else {
                 getSeries();
                 series.addRepeatingEvent(baseEvent, start, end, timeSpan);
@@ -100,7 +104,6 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
 
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
-        name = nameField.getText();
         getTimeSpan();
         seriesName = seriesField.getText();
         end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));

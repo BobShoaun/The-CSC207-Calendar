@@ -78,13 +78,12 @@ public class EventManager {
     }
 
     /**
-     *
      * @param event the Event to be searched
      * @return the EventCollection that this event belongs to
      */
     public EventCollection getEventCollection(Event event) {
         for (EventCollection e : getEventCollections()) {
-            if (e.getEvent(event.getId())!=null) {
+            if (e.getEvent(event.getId()) != null) {
                 return e;
             }
         }
@@ -178,7 +177,7 @@ public class EventManager {
     public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException {
         try {
             Series existingSeries = getSeries(name);
-            existingSeries.addRepeatingEvent(baseEvent,start,end,difference);
+            existingSeries.addRepeatingEvent(baseEvent, start, end, difference);
         } catch (NoSuchSeriesException e) {
             SeriesFactory seriesFactory = new SeriesFactory();
             Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
@@ -268,9 +267,10 @@ public class EventManager {
 
     /**
      * Remove the event collection
+     *
      * @param eventCollection Event collection to remove
      */
-    public void removeEventCollection(EventCollection eventCollection){
+    public void removeEventCollection(EventCollection eventCollection) {
         eventCollections.remove(eventCollection);
     }
 

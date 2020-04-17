@@ -218,8 +218,8 @@ public class EventUI extends UserInterface {
     private void editTag() {
         List<Tag> tags = calendar.getTags();
         String tagName = getStringInput("Enter tag name: ");
-        for (Tag t: tags) {
-            if ( t.getText().equals(tagName) )  {
+        for (Tag t : tags) {
+            if (t.getText().equals(tagName)) {
                 String newText = getStringInput("Enter new tag text: ");
                 t.setText(newText);
             }

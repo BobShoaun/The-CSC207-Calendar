@@ -24,8 +24,9 @@ public class Tag {
 
     /**
      * constructor for a tag
+     *
      * @param text Tag contents
-     * @param ids   IDs of events linked to this tag
+     * @param ids  IDs of events linked to this tag
      */
     public Tag(String text, List<String> ids) {
         this.text = text;
@@ -34,6 +35,7 @@ public class Tag {
 
     /**
      * getter for tag text
+     *
      * @return Tag text
      */
     public String getText() {
@@ -42,12 +44,16 @@ public class Tag {
 
     /**
      * setter for tag text
+     *
      * @param newText New Text for the Tag
      */
-    public void setText(String newText) { this.text = newText; }
+    public void setText(String newText) {
+        this.text = newText;
+    }
 
     /**
      * adds an event
+     *
      * @param eventId of the event
      */
     public void addEvent(String eventId) {
@@ -56,6 +62,7 @@ public class Tag {
 
     /**
      * removes an event
+     *
      * @param event the event to remove
      */
     public void removeEvent(Event event) {
@@ -64,6 +71,7 @@ public class Tag {
 
     /**
      * checks if this tag is applied to an event
+     *
      * @param event Event to check
      * @return True iff the tag has this event linked to it
      */
@@ -73,6 +81,7 @@ public class Tag {
 
     /**
      * getter for event ids
+     *
      * @return Event IDs for linked Events
      */
     public List<String> getEvents() {

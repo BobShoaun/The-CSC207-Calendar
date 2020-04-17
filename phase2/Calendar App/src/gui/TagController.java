@@ -14,15 +14,17 @@ import java.util.List;
 /**
  * GUI controller class for editing Event Tags.
  */
-public class TagUI extends gui.GraphicalUserInterface {
+public class TagController extends gui.GraphicalUserInterface {
 
     private final ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;
     private String tagName;
     private Tag tag;
 
-    @FXML private TextField tagNameTextField;
-    @FXML private ListView<String> tagEventList;
+    @FXML
+    private TextField tagNameTextField;
+    @FXML
+    private ListView<String> tagEventList;
 
     /**
      * Set the tag to edit
@@ -51,7 +53,7 @@ public class TagUI extends gui.GraphicalUserInterface {
         memotag.Tag tag = calendar.getTag(tagNameTextField.getText());
         if (tag != null) {
             List<String> events = tag.getEvents();
-            for (String s: events) {
+            for (String s : events) {
                 Event event = calendar.getEvent(s);
                 list.add(event.getName() + " at " + event.getStartDate().getTime());
             }

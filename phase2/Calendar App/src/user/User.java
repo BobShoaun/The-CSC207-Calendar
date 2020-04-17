@@ -1,7 +1,5 @@
 package user;
 
-import event.EventSharer;
-
 import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.IOException;
@@ -38,14 +36,16 @@ public class User {
 
     /**
      * sets the user's preference of dark theme
+     *
      * @param darkTheme True if the theme should be dark
      */
-    public void setDarkTheme(boolean darkTheme){
+    public void setDarkTheme(boolean darkTheme) {
         this.darkTheme = darkTheme;
     }
 
     /**
      * getter for the user's name
+     *
      * @return name
      */
     public String getName() {
@@ -77,6 +77,7 @@ public class User {
 
     /**
      * Remove a calendar from the user
+     *
      * @param index of calendar to remove
      */
     public void removeCalendar(int index) {
@@ -90,12 +91,13 @@ public class User {
 
     /**
      * Gets a calendar by name
+     *
      * @param name the name of the calendar you're looking for
      * @return the calendar with the title of name or null if one doesn't exist
      */
-    public Calendar getCalendar(String name){
-        for (Calendar calendar : calendars){
-            if (calendar.getName().equals(name)){
+    public Calendar getCalendar(String name) {
+        for (Calendar calendar : calendars) {
+            if (calendar.getName().equals(name)) {
                 return calendar;
             }
         }
@@ -104,12 +106,16 @@ public class User {
 
     /**
      * Get all of user's calendars
+     *
      * @return List of Calendars
      */
-    public List<Calendar> getCalendars () { return this.calendars; }
+    public List<Calendar> getCalendars() {
+        return this.calendars;
+    }
 
     /**
      * getter for firstLogin, whether if its the user's first time logging in
+     *
      * @return firstLogin
      */
     public boolean isFirstLogin() {
@@ -118,6 +124,7 @@ public class User {
 
     /**
      * Getter for last login time
+     *
      * @return lastLoginTime
      */
     public GregorianCalendar getLastLoginTime() {
@@ -126,24 +133,27 @@ public class User {
 
     /**
      * setter for last login time
+     *
      * @param time new last login time
      */
-    public void setLastLoginTime (GregorianCalendar time) {
+    public void setLastLoginTime(GregorianCalendar time) {
         this.lastLoginTime = time;
     }
 
     /**
      * Logout this user, and saves all necessary information
+     *
      * @throws IOException if there is an IO error
      */
-    public void logout () throws IOException {
+    public void logout() throws IOException {
         setLastLoginTime((GregorianCalendar) GregorianCalendar.getInstance());
         save();
     }
 
     /**
      * Constructor for User
-     * @param name the user's name
+     *
+     * @param name     the user's name
      * @param password the user's password
      */
     public User(String name, String password) {
@@ -163,9 +173,10 @@ public class User {
 
     /**
      * Constructor for User
+     *
      * @param credentials string containing the user's data.
      */
-    public User (String credentials) {
+    public User(String credentials) {
         firstLogin = false;
 
         String[] split = credentials.split(";");
@@ -189,20 +200,22 @@ public class User {
 
     /**
      * Check if the name and password matches this user's
-     * @param name name to check
+     *
+     * @param name     name to check
      * @param password password to check
      * @return whether the name and password are an exact match
      */
-    public boolean authenticate (String name, String password) {
+    public boolean authenticate(String name, String password) {
         return this.name.equals(name) && this.password.equals(password);
     }
 
     /**
      * Creates a string representation of this user
+     *
      * @return string representation
      */
     @Override
-    public String toString () {
+    public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         String dateFormatted = sdf.format(lastLoginTime.getTime());
         return name + ";" + password + ";" + darkTheme + ";" + dateFormatted;
@@ -211,7 +224,7 @@ public class User {
     private void loadCalendars() {
         File[] files = dataSaver.getFilesInDirectory("");
         for (File file : files) {
-            if (file.isFile()) // dont want credentials.txt
+            if (file.isFile()) // don't want credentials.txt
                 continue;
             this.calendars.add(dataSaver.loadCalendar(file.getName()));
         }
@@ -224,6 +237,7 @@ public class User {
 
     /**
      * Save the user's credentials and information into disc
+     *
      * @throws IOException if there was an error saving the user credentials.
      */
     public void save() throws IOException {
