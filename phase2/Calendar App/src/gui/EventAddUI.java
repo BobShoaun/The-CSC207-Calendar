@@ -107,9 +107,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             if (newEvent != null) {
                 addEvent(newEvent);
                 addTags(newEvent.getId());
-                if (!memoTitle.equals("")) {
-                    addMemo(memoTitle, memoContent, newEvent.getId());
-                }
+                editMemo(newEvent, "");
                 calendarUIController.updateDisplayedEvents();
                 calendarUIController.updateDisplayedSeries();
                 calendarUIController.updateDisplayedSubSeries();
@@ -218,23 +216,31 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
 
-    //TODO: use memoUI instead
-
-    /**
-     * add the memo to the event with this id
-     *
-     * @param memoTitle   the title of event memo
-     * @param memoContent the content of event memo
-     * @param id          of the event
-     */
-    protected void addMemo(String memoTitle, String memoContent, String id) {
-        if (!memosField.getText().equals("")) {
-            Memo memo = calendar.getMemo(memoTitle, memoContent);
-            if (memo == null) {
-                calendar.addMemo(new memotag.Memo(memoTitle, memoContent));
-                memo = calendar.getMemo(memoTitle, memoContent);
+    protected void editMemo(Event event, String oldMemoTitle) {
+        String newMemoTitle = memosField.getText();
+        if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
+            if (newMemoTitle.equals("")) {
+                if (calendar.getMemo(oldMemoTitle) != null)
+                    calendar.getMemo(oldMemoTitle).removeEvent(event);
+                return;
             }
-            eventCollection.addMemo(id, memo);
+            if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
+                calendar.getMemo(newMemoTitle).addEvent(event);
+                if(!memoTextArea.getText().equals("")){ //We only change the memo text if it does not exist before
+                    calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
+                }
+                if (calendar.getMemo(oldMemoTitle) != null) {
+                    calendar.getMemo(oldMemoTitle).removeEvent(event);
+                }
+            } else {
+                if (calendar.getMemo(oldMemoTitle) != null) {  //The new memo does not already exist so we change the old one
+                    calendar.getMemo(oldMemoTitle).setTitle(newMemoTitle);
+                    calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
+                } else { //Or we create a new one
+                    calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+                    calendar.getMemo(newMemoTitle).addEvent(event);
+                }
+            }
         }
     }
 

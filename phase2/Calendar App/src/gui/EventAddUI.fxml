@@ -181,12 +181,12 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="memosField" promptText="Title of the memoUI">
+                  <TextField fx:id="memosField" promptText="Title of the memo">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextArea fx:id="memoTextArea" prefRowCount="3" promptText="Content of the memoUI">
+                  <TextArea fx:id="memoTextArea" prefRowCount="3" promptText="Content of the memo. Keep empty if existing memo text should be kept">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
