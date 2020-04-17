@@ -64,7 +64,7 @@ public class RepeatingEvent {
      * @return String representation
      */
     public String getString() {
-        return (base.getString() + "\n").replaceAll("\n", "§") + (calGen.getString()).replaceAll("\n", "|");
+        return (base.getString() + "\n").replace("\n", "§") + (calGen.getString()).replace("\n", "|");
     }
 
     /**
