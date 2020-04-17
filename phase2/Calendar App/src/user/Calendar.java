@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * Calendar class which manages all the data such as Events and Alerts
+ * Calendar class which acts as a facade for Alerts, Memos, Tags, and Events
  */
 public class Calendar {
 
@@ -25,7 +25,7 @@ public class Calendar {
     private final TagManager tagManager;
     private final EventManager eventManager;
     private final TimeController timeController;
-    private DataSaver dataSaver;
+    private final DataSaver dataSaver;
 
     /**
      * Constructor for creating a new calendar with no data
@@ -411,14 +411,29 @@ public class Calendar {
         return eventManager.getEventSeriesNames();
     }
 
+    /**
+     * Get the memo manager
+     *
+     * @return This calendar's memoManager
+     */
     public MemoManager getMemoManager() {
         return memoManager;
     }
 
+    /**
+     * Get the event manager
+     *
+     * @return This calendar's eventManager
+     */
     public EventManager getEventManager() {
         return eventManager;
     }
 
+    /**
+     * Get the tag manager
+     *
+     * @return This calendar's tagManager
+     */
     public TagManager getTagManager() {
         return tagManager;
     }

@@ -222,12 +222,22 @@ public class DataSaver {
         return new Calendar(calendarName, Collections.singletonList(eventCollections), alertCollections, memos, tags, calendarDataSaver);
     }
 
+    /**
+     * Save everything in the calendar
+     *
+     * @param calendar Calendar to be saved
+     */
     public void saveCalendar(Calendar calendar) {
         saveTags(calendar.getTagManager());
         saveMemos(calendar.getMemoManager());
         saveEvents(calendar.getEventManager());
     }
 
+    /**
+     * Save the tags to files
+     *
+     * @param tagManager TagManager to save
+     */
     public void saveTags(TagManager tagManager) {
         // save tags TODO: extract method
         StringBuilder tagsData = new StringBuilder();
@@ -247,6 +257,11 @@ public class DataSaver {
         }
     }
 
+    /**
+     * Save Memos to files
+     *
+     * @param memoManager MemoManager to save
+     */
     public void saveMemos(MemoManager memoManager) {
         StringBuilder memoData = new StringBuilder();
         for (Memo memo :
@@ -265,6 +280,11 @@ public class DataSaver {
         }
     }
 
+    /**
+     * Save EventCollections to file
+     *
+     * @param eventManager EventManager to save
+     */
     public void saveEvents(EventManager eventManager) {
         try {
             deleteDirectory("events/");
@@ -322,6 +342,7 @@ public class DataSaver {
         }
         return loadedEvents;
     }
+
     private void saveSubSeries(Series series, List<SubSeries> subs) throws IOException {
         StringBuilder ret = new StringBuilder();
         for (SubSeries sub:subs){
@@ -329,6 +350,7 @@ public class DataSaver {
         }
         saveToFile("series/" + series.getName() + "/SubSeries.txt", ret.toString());
     }
+
     private List<SubSeries> loadSubSeries(Scanner subs) throws InvalidDateException {
         List<SubSeries> ret = new ArrayList<>();
         while (subs.hasNext()) {
@@ -340,6 +362,7 @@ public class DataSaver {
         }
         return ret;
     }
+
     private Event stringsToEvent(String[] parts) throws InvalidDateException {
         GregorianCalendar start = new GregorianCalendar();
         GregorianCalendar end = new GregorianCalendar();
@@ -348,6 +371,11 @@ public class DataSaver {
         return new Event(parts[1], start, end);
     }
 
+    /**
+     * Save an AlertCollection to file.
+     *
+     * @param ac AlertCollection to save
+     */
     public void saveAlertCollection(AlertCollection ac) {
         List<String> contents = Arrays.asList(ac.getString().split("\\n+"));
         try {
