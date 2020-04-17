@@ -2,8 +2,11 @@ package event;
 
 import dates.CalendarGenerator;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Repeating Events.
@@ -29,7 +32,7 @@ public class RepeatingEvent {
             //set default display end time to 1 year if it's infinite sub series
             inf = true;
             GregorianCalendar newTime = new GregorianCalendar();
-            newTime.setTimeInMillis(startTime.getTimeInMillis() + Duration.ofDays(365).toMillis());
+            newTime.setTimeInMillis(startTime.getTimeInMillis() + Duration.ofDays(1).toMillis());
             this.endTime = newTime;
         } else {
             inf = false;
@@ -62,6 +65,25 @@ public class RepeatingEvent {
      */
     public String getString() {
         return (base.getString() + "\n").replaceAll("\n", "§") + (calGen.getString()).replaceAll("\n", "|");
+    }
+
+    /**
+     * Get a string representation of repeating events for viewing
+     * @return string representation
+     */
+    @Override
+    public String toString(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String startString = simpleDateFormat.format(calGen.getStartTime().getTime());
+        String endString;
+        String durString = ""+calGen.getPeriods().get(0).toDays();
+        if(calGen.getEndTime()==null){
+            endString = "onwards";
+        }
+        else{
+            endString = "to "+simpleDateFormat.format(calGen.getEndTime().getTime());
+        }
+        return base.getName()+" repeats every "+durString+" days from "+startString+endString;
     }
 
     /**

@@ -150,7 +150,7 @@ public class CalendarUI extends GraphicalUserInterface {
         ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
             for (RepeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
-                stringRepeatingEvents.add(repeatingEvent.getString());
+                stringRepeatingEvents.add(repeatingEvent.toString());
             }
         }
         displayedRepeatingEventList.setItems(FXCollections.observableArrayList(stringRepeatingEvents));
