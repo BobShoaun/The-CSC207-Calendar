@@ -144,8 +144,11 @@ public class DataSaver {
         GregorianCalendar startTime = new GregorianCalendar();
         startTime.setTimeInMillis(Long.parseLong(information[0].trim()));
 
-        GregorianCalendar endTime = (new GregorianCalendar());
-        endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
+        GregorianCalendar endTime = new GregorianCalendar();
+        if(!information[1].equals(""))
+            endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
+        else
+            endTime = null;
 
         List<Duration> periods = new ArrayList<>();
         if (information.length > 2) {
