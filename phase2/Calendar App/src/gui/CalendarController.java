@@ -148,6 +148,8 @@ public class CalendarController extends GraphicalUserInterface {
      * Update the displayed series ListView.
      */
     private void updateDisplayedSeries() {
+    	if(seriesNameList == null)
+    		return;
         seriesNameList.clear();
         for (Series series : calendar.getSeries()) {
             seriesNameList.add(series.getName());
@@ -158,6 +160,8 @@ public class CalendarController extends GraphicalUserInterface {
      * Update the displayed SubSeries (Repeating events) ListView.
      */
     private void updateDisplayedRepeatingEvents() {
+    	if(displayedRepeatingEventList != null)
+    		return;
         ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
             for (RepeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
