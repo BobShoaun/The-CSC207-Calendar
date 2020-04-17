@@ -56,13 +56,6 @@ public class EditEventController extends AddEventController {
      * @param e EventCollection to be set
      */
     public void setEventCollection(EventCollection e) {
-        if (e instanceof Series) {
-            System.out.println("EventC set to:" + ((Series) e).getName());
-        } else if (e instanceof EventCollection) {
-            System.out.println("EventC set to default");
-        } else {
-            System.out.println("Something is wrong");
-        }
         this.eventCollection = e;
     }
 
@@ -77,7 +70,6 @@ public class EditEventController extends AddEventController {
 
     @FXML
     private void handleEdit() {
-        System.out.println("Done (edit) clicked");
         try {
             getUserInput();
             if (!event.getName().equals(name)) {
@@ -103,7 +95,6 @@ public class EditEventController extends AddEventController {
             }
             EventCollection old = eventCollection;
             if (isEventCollectionChanged(eventCollection)) {
-                System.out.println("removed:::" + old.removeEvent(event));
                 eventCollection.addEvent(event);
             } else {
                 eventCollection.rescheduleEvent(event, start, end);
@@ -131,20 +122,17 @@ public class EditEventController extends AddEventController {
 
     @FXML
     private void handleDelete() {
-        System.out.println("delete clicked");
         try {
             eventCollection.removeEvent(event);
             save();
             closeGUI();
         } catch (InvalidDateException e) {
             e.printStackTrace();
-            System.out.println("Something is wrong with event Generator then");
         }
     }
 
     @FXML
     private void handleAddAlert() {
-        System.out.println("add clicked");
         AlertController controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
         AlertCollection alertCollection = ds.loadAlertCollection(event.getId());
@@ -161,12 +149,11 @@ public class EditEventController extends AddEventController {
 
     private void postponeEvent() {
         if (postponeCheckbox.isSelected() && !event.isPostponed()) {
-            System.out.println("postpone clicked");
             try {
                 eventCollection.postponeEvent(event);
                 save();
             } catch (InvalidDateException e) {
-                System.out.println("Something is wrong with event generator");
+                e.printStackTrace();
             }
         }
     }
@@ -178,7 +165,6 @@ public class EditEventController extends AddEventController {
 
     @FXML
     private void handleDuplicate() {
-        System.out.println("Duplicate clicked");
         //TODO: need date input...
         AddEventController dup = openGUI("addEvent.fxml");
         dup.setCalendar(calendar);

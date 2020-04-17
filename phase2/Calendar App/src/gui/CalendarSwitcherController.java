@@ -68,7 +68,6 @@ public class CalendarSwitcherController extends GraphicalUserInterface {
     @FXML
     private void handleDelete() {
         if (user.getCalendars().size() == 1) {
-            System.out.println("Not allowed to delete the last calendar");
             return;
         }
         int index = calendarListView.getSelectionModel().getSelectedIndex();

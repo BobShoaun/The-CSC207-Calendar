@@ -65,7 +65,6 @@ public class RegisterController extends GraphicalUserInterface implements Initia
     @FXML
     private void handleRegister() throws IOException {
         setLabelsNotVisible();
-        System.out.println("Register");
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
@@ -93,7 +92,6 @@ public class RegisterController extends GraphicalUserInterface implements Initia
 
     @FXML
     private void handleCancel() { // go back to login page
-        System.out.println("Cancel");
         showLoginUI();
     }
 

@@ -70,7 +70,6 @@ public class ViewTagsController extends gui.GraphicalUserInterface {
     private void editTag(Event e) {
         if (selectedTag == null || selectedTag.isEmpty()) {
             selectTagLabel.setVisible(true);
-            System.out.println("No tag selected!");
         } else {
             showTagUI(e);
         }

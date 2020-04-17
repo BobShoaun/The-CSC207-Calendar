@@ -60,7 +60,6 @@ public class ManualAlertController extends GraphicalUserInterface {
         String text = textField.getText();
         if (localDate != null && text != null) {
             if (!text.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
-                System.out.println("Invalid time");
                 return;
             }
             GregorianCalendar time = new GregorianCalendar(localDate.getYear(),
@@ -70,7 +69,6 @@ public class ManualAlertController extends GraphicalUserInterface {
                     Integer.parseInt(text.substring(3)));
             ac.removeManualAlert(time);
             ac.addAlert(time);
-            System.out.println("Added alert " + time.getTime());
             closeGUI();
             controller.update();
         }
