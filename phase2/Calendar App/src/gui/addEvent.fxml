@@ -158,9 +158,10 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0" promptText="Tags seperated by commas">
+                  <TextField fx:id="tagsField" prefHeight="25.0" prefWidth="336.0"
+                             promptText="Tags separated by commas">
                      <VBox.margin>
-                        <Insets top="3.0" />
+                        <Insets top="3.0"/>
                      </VBox.margin>
                   </TextField>
                </children>
