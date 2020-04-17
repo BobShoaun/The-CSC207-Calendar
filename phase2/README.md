@@ -7,7 +7,7 @@
 * Infinitely recurring event series
 * GUI created using JavaFX and FXML
 * Postponing (possibly indefinitely), rescheduling, and duplicating events
-
+* [Deprecated] Console ui for part 1 functionality
 ## Configuration Files
 * Project files are inside the 'Calendar App' folder.
 * Each user has its own directory in users/, with the username as the directory name.
