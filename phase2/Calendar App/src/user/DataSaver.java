@@ -369,7 +369,16 @@ public class DataSaver {
         saveEventsToFile("events/", eventManager.getSingleEventCollection().getEvents());
         saveEventsToFile("events/postponed/", eventManager.getSingleEventCollection().getPostponedEvents());
 
-        //save Series
+        saveSeries(eventManager);
+
+    }
+
+    /**
+     * Save a series to file
+     *
+     * @param eventManager Event Manager
+     */
+    public void saveSeries(EventManager eventManager) {
         for (Series series : eventManager.getSeries()) {
             saveEventsToFile("series/" + series.getName() + "/Manual Events/", series.getManualEvents());
             saveEventsToFile("series/" + series.getName() + "/Manual Events/postponed/", series.getPostponedEvents());
