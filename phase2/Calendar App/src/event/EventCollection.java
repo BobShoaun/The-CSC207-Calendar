@@ -6,11 +6,13 @@ import memotag.Tag;
 
 import java.util.*;
 
+/**
+ * A collection of events
+ */
 public class EventCollection implements Iterable<Event>, Observer{
     private List<Event> events;
     //discuss implementation of postponed (maybe extend event or events extends postponed event?)
     private List<Event> postponedEvents;
-
 
     /**
      * constructor for a finite/manually created series, or a list of regular events if name == ""
@@ -22,12 +24,22 @@ public class EventCollection implements Iterable<Event>, Observer{
         this.postponedEvents = new ArrayList<>();
     }
 
+    /**
+     * Set the list of manual events
+     *
+     * @param events Manual events list
+     */
     public void setEvents(List<Event> events) {
         this.events = events;
     }
 
+    /**
+     * Set the list of postponed events
+     *
+     * @param postponedEvents List of postponed events
+     */
     public void setPostponedEvents(List<Event> postponedEvents) {
-        this.postponedEvents = postponedEvents;
+        this.postponedEvents = postponedEvents; // TODO: check if they are postponed
     }
 
 
@@ -86,6 +98,11 @@ public class EventCollection implements Iterable<Event>, Observer{
         return getEvents(startTime, endTime);
     }
 
+    /**
+     * Get the list of postponed events
+     *
+     * @return Postponed events List
+     */
     public List<Event> getPostponedEvents() {
         return postponedEvents;
     }
@@ -104,7 +121,7 @@ public class EventCollection implements Iterable<Event>, Observer{
     /**
      * remove the given event from events/ or ignore if it is an infinite series
      *
-     * @param event the event to br removed
+     * @param event the event to be removed
      * @return if the event is removed or not
      */
     public boolean removeEvent(Event event) throws InvalidDateException{
@@ -151,8 +168,16 @@ public class EventCollection implements Iterable<Event>, Observer{
         return false;
     }
 
+    /**
+     * Reschedule an event.
+     *
+     * @param event    Event to reschedule
+     * @param newStart New start time
+     * @param newEnd   New end time
+     * @throws InvalidDateException if the date is bad
+     */
     public void rescheduleEvent(Event event, GregorianCalendar newStart, GregorianCalendar newEnd) throws InvalidDateException {
-        if(!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
+        if (!newStart.before(event.getStartDate()) && !newStart.after(event.getStartDate())
                 && !newEnd.before(event.getEndDate()) && !newEnd.after(event.getEndDate()))
             return;
         event.setStartDate(newStart);
@@ -185,15 +210,11 @@ public class EventCollection implements Iterable<Event>, Observer{
     }
 
     /**
-     * Remove the event from the tag
-     *
-     * @param eventId the id of the event to be removed
-     * @param tag     the tag that needs to remove the event
+     * Add a memo to an event
+     * @param eventId   ID of the event
+     * @param memo      Memo to add
+     * @return True iff the memo could be added
      */
-    public void removeTag(String eventId, Tag tag) {
-        tag.removeEvent(getEvent(eventId));
-    }
-
     public boolean addMemo(String eventId, Memo memo) {
         for (Event e : this.events) {
             //check if the event ID is valid
@@ -205,6 +226,11 @@ public class EventCollection implements Iterable<Event>, Observer{
         return false;
     }
 
+    /**
+     * toString method for easy reading
+     *
+     * @return String representation of the EventCollection
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("===== EVENTS =====\n");
@@ -287,6 +313,12 @@ public class EventCollection implements Iterable<Event>, Observer{
         event.setPostponed(true);
     }
 
+    /**
+     * Update the observers
+     *
+     * @param o   Observable object
+     * @param arg The update
+     */
     @Override
     public void update(Observable o, Object arg) {
         //TODO: implement update
@@ -343,7 +375,6 @@ public class EventCollection implements Iterable<Event>, Observer{
             return res;
         }
     }
-
 
     //Legacy method for console UI
     public String[] getEventOptions() {

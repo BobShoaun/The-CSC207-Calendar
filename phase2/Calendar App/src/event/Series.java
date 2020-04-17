@@ -8,16 +8,19 @@ import memotag.Tag;
 import java.time.Duration;
 import java.util.*;
 
+/**
+ * A series of events, made up of manual and repeating events.
+ */
 public class Series extends EventCollection implements Iterable<Event> {
 
-    private String name;
-    private Event baseEvent;
-    private CalendarGenerator calGen;
-    private List<repeatingEvent> repeatingEvents;
+    private final String name;
+    private final Event baseEvent;
+    private final CalendarGenerator calGen;
+    private List<SubSeries> subSeries;
     //this attribute holds the events generated from calGen in memory, never saved nor loaded, but updated when CalGen is updated
     //To save memory...
     private List<Event> seriesEvents;
-    protected GregorianCalendar startTime;
+    private final GregorianCalendar startTime;
 
     /**
      * @param name      the name of this Infinite Series
@@ -39,15 +42,6 @@ public class Series extends EventCollection implements Iterable<Event> {
     }
 
     /**
-     * set the startTime of this Series manually
-     *
-     * @param startTime the new start Time of this Series
-     */
-    public void setStartTime(GregorianCalendar startTime) {
-        this.startTime = startTime;
-    }
-
-    /**
      * Set the display period of this series up given user input
      *
      * @param start the start display time of this Series
@@ -59,6 +53,11 @@ public class Series extends EventCollection implements Iterable<Event> {
         this.calGen.setEndTime(end);
     }
 
+    /**
+     * Set the start time for the display 'window'.
+     *
+     * @param start Display window start time
+     */
     protected void setStartDisplayTime(GregorianCalendar start) {
         if (start.before(startTime)) {
             //The anchor for the startTime
@@ -68,6 +67,11 @@ public class Series extends EventCollection implements Iterable<Event> {
         }
     }
 
+    /**
+     * Set the subseries (repeating events) for
+     *
+     * @param repeatingEvents
+     */
     public void setRepeatingEvents(List<repeatingEvent> repeatingEvents) {
         this.repeatingEvents = repeatingEvents;
     }
@@ -80,11 +84,20 @@ public class Series extends EventCollection implements Iterable<Event> {
         return name;
     }
 
-
+    /**
+     * Get the calendar Generator.
+     *
+     * @return CalendarGenerator instance
+     */
     public CalendarGenerator getCalGen() {
         return calGen;
     }
 
+    /**
+     * Get the list of subseries (repeating events)
+     *
+     * @return SubSeries list
+     */
     public List<repeatingEvent> getRepeatingEvents() {
         return repeatingEvents;
     }
@@ -101,14 +114,30 @@ public class Series extends EventCollection implements Iterable<Event> {
         return ret;
     }
 
+    /**
+     * Get the list of manual events
+     *
+     * @return List of manual events.
+     */
     public List<Event> getManualEvents() {
         return super.getEvents();
     }
 
+    /**
+     * Get the starting/base event
+     *
+     * @return Base event
+     */
     public Event getBaseEvent() {
         return baseEvent;
     }
 
+    /**
+     * Search for an Event by its ID
+     *
+     * @param id of the event to be searched for
+     * @return Event with the corresponding id.
+     */
     @Override
     public Event getEvent(String id) {
         Event ret = super.getEvent(id);
@@ -122,7 +151,13 @@ public class Series extends EventCollection implements Iterable<Event> {
         return ret;
     }
 
-
+    /**
+     * Get all events between a set of times
+     *
+     * @param start Earliest time for an event to end
+     * @param end   Latest time for an event to end
+     * @return Events between start and end.
+     */
     @Override
     public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
         List<Event> ret = super.getEvents(start, end);
@@ -135,6 +170,12 @@ public class Series extends EventCollection implements Iterable<Event> {
         return ret;
     }
 
+    /**
+     * Get the events at a certain time.
+     *
+     * @param date date of events demanded
+     * @return Events at that date.
+     */
     @Override
     public List<Event> getEvents(GregorianCalendar date) {
         GregorianCalendar startTime = roundUp(date);
@@ -142,6 +183,13 @@ public class Series extends EventCollection implements Iterable<Event> {
         return getEvents(startTime, endTime);
     }
 
+    /**
+     * Remove an event.
+     *
+     * @param event the event to be removed
+     * @return True iff the event could be removed
+     * @throws InvalidDateException if the time is invalid
+     */
     @Override
     public boolean removeEvent(Event event) throws InvalidDateException {
         boolean removed = super.removeEvent(event);
@@ -158,6 +206,14 @@ public class Series extends EventCollection implements Iterable<Event> {
         return removed;
     }
 
+    /**
+     * Edit an event.
+     *
+     * @param oldEvent an Event that has been edited
+     * @param newEvent the replacement event
+     * @return True iff the event was successfully swapped.
+     * @throws InvalidDateException if there is a date error
+     */
     @Override
     public boolean editEvent(Event oldEvent, Event newEvent) throws InvalidDateException {
         boolean edited = super.editEvent(oldEvent, newEvent);
@@ -168,6 +224,13 @@ public class Series extends EventCollection implements Iterable<Event> {
         return edited;
     }
 
+    /**
+     * Postpone an event.
+     *
+     * @param event the event to be postponed
+     * @return True iff the event could be postponed
+     * @throws InvalidDateException If there is a date error.
+     */
     @Override
     public boolean postponeEvent(Event event) throws InvalidDateException {
         if (!super.postponeEvent(event)) {
@@ -183,6 +246,13 @@ public class Series extends EventCollection implements Iterable<Event> {
         return false;
     }
 
+    /**
+     * Add a tag to an event.
+     *
+     * @param eventId the id of the event to be tagged
+     * @param tag     the tag
+     * @return True iff the tag could be added.
+     */
     @Override
     public boolean addTag(String eventId, Tag tag) {
         if (!super.addTag(eventId, tag)) {
@@ -196,6 +266,13 @@ public class Series extends EventCollection implements Iterable<Event> {
         return false;
     }
 
+    /**
+     * Add a memo to an event.
+     *
+     * @param eventId ID of the event
+     * @param memo    Memo to add
+     * @return True iff the memo could be added.
+     */
     @Override
     public boolean addMemo(String eventId, Memo memo) {
         if (!super.addMemo(eventId, memo)) {
@@ -215,7 +292,6 @@ public class Series extends EventCollection implements Iterable<Event> {
      * @param end       the end of the sub series
      * @param frequency the frequency of repetition of the series
      */
-
     public void addRepeatingEvent(Event baseEvent, GregorianCalendar start, GregorianCalendar end, Duration frequency) {
         List<Duration> dur = new ArrayList<>();
         dur.add(frequency);
@@ -223,7 +299,11 @@ public class Series extends EventCollection implements Iterable<Event> {
         repeatingEvents.add(new repeatingEvent(baseEvent, newCG));
     }
 
-
+    /**
+     * Get a nice String representation of this Series.
+     *
+     * @return String representation of the Series.
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("===== Series =====\n");
@@ -296,6 +376,12 @@ public class Series extends EventCollection implements Iterable<Event> {
         return newGC;
     }
 
+    /**
+     * Get the EventIterator.
+     *
+     * @param start the earliest start date of events in this iterator
+     * @return Event Iterator
+     */
     //TODO: Not too sure how this work/ if it works
     @Override
     public Iterator<Event> getEventIterator(Date start) {

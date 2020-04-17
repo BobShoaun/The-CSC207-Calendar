@@ -9,7 +9,10 @@ import exceptions.InvalidTimeInputException;
 import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import memotag.Memo;
 import memotag.Tag;
 import user.Calendar;
@@ -59,21 +62,35 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     protected GregorianCalendar end;
     protected CalendarUI calendarUIController;
 
+    /**
+     * Set the Calendar to which the Events belong.
+     *
+     * @param calendar Calendar to set
+     */
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
 
+    /**
+     * Set the CalendarUI controller class (for updating ListViews)
+     *
+     * @param c CalendarUI controller
+     */
     public void setCalendarUIController(CalendarUI c) {
         this.calendarUIController = c;
     }
 
+    /**
+     * Display the details of the event.
+     *
+     * @param event Event for which
+     */
     public void showEventDetails(Event event) {
         nameField.setText(event.getName());
         EventCollection collection = calendar.getEventCollection(event);
-        if (collection instanceof Series){
+        if (collection instanceof Series) {
             seriesField.setText(((Series) collection).getName());
-        }
-        else {
+        } else {
             seriesField.setText("Default");
         }
         if (!event.isPostponed()) {
@@ -141,11 +158,11 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
     }
 
     @FXML
-    private void handleCreateSeries(){
+    private void handleCreateSeries() {
         System.out.println("Create new series");
         try {
             getUserInput();
-            Event newEvent = createEvent(name,start,end);
+            Event newEvent = createEvent(name, start, end);
             calendar.addEventSeries(newEvent);
             calendarUIController.updateDisplayedEvents();
             calendarUIController.updateDisplayedSeries();
@@ -157,7 +174,11 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
-
+    /**
+     * Set fields to the values in the GUI input.
+     *
+     * @throws InvalidDateException if user has entered bad dates.
+     */
     protected void getUserInput() throws InvalidDateException {
         name = nameField.getText();
         memoTitle = memosField.getText();
@@ -220,7 +241,12 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         }
     }
 
-
+    /**
+     * Edit the memo for this Event.
+     *
+     * @param event        Event to edit the Memo for
+     * @param oldMemoTitle The title of the original memo
+     */
     protected void editMemo(Event event, String oldMemoTitle) {
         String newMemoTitle = memosField.getText();
         if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
@@ -231,7 +257,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             }
             if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
                 calendar.getMemo(newMemoTitle).addEvent(event);
-                if(!memoTextArea.getText().equals("")){ //We only change the memo text if it does not exist before
+                if (!memoTextArea.getText().equals("")) { //We only change the memo text if it does not exist before
                     calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
                 }
                 if (calendar.getMemo(oldMemoTitle) != null) {
@@ -303,7 +329,6 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         end.set(java.util.Calendar.MINUTE, getTime(endTime.getText()).get(1));
     }
 
-
     private LocalDate gregorianCalendarToLocalDate(GregorianCalendar GC) {
         return LocalDate.of(GC.get(GregorianCalendar.YEAR), GC.get(GregorianCalendar.MONTH) + 1, GC.get(GregorianCalendar.DATE));
     }
@@ -314,6 +339,13 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         return simpleDateFormat.format(GC.getTime());
     }
 
+    /**
+     * Returns True iff the event collection has changed.
+     *
+     * @param oldEC Old Event Collection to monitor
+     * @return True iff the event collection has changed.
+     * @throws NoSuchSeriesException if the Series does not exist
+     */
     protected boolean isEventCollectionChanged(EventCollection oldEC) throws NoSuchSeriesException {
 
         String seriesName = seriesField.getText();
@@ -322,20 +354,34 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
         } else {
             eventCollection = calendar.getSeries(seriesName);
         }
-        if(oldEC==null){oldEC=calendar.getSingleEventCollection();}
+        if (oldEC == null) {
+            oldEC = calendar.getSingleEventCollection();
+        }
         return !oldEC.equals(eventCollection);
     }
 
+    /**
+     * Initialize the GUI to have an invisible label.
+     *
+     * @param location  URL
+     * @param resources ResourceBundle
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setLabelInvisible();
     }
 
+    /**
+     * Set the error labels to be invisible.
+     */
     protected void setLabelInvisible() {
         seriesErrorLabel.setVisible(false);
         dateTimeErrorLabel.setVisible(false);
     }
 
+    /**
+     * Save the Event to file.
+     */
     protected void save() {
         calendar.getDataSaver().saveCalendar(calendar);
     }

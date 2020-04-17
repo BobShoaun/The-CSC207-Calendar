@@ -3,20 +3,35 @@ package consoleui;
 import memotag.Memo;
 import user.Calendar;
 
+/**
+ * Terminal UI for Memos.
+ */
 public class MemoUI extends UserInterface {
     Memo memo;
     Calendar calendar;
 
+    /**
+     * Constructor for Memo UI.
+     *
+     * @param memo     Memo to display.
+     * @param calendar Calendar to which this memo belongs.
+     */
     public MemoUI(Memo memo, Calendar calendar) {
         this.memo = memo;
         this.calendar = calendar;
     }
 
+    /**
+     * Display the contents of the Memo.
+     */
     @Override
-    public void display(){
+    public void display() {
         System.out.println(memo.getTitle() + "\n\n" + memo.getText());
     }
 
+    /**
+     * Start this MemoUI with menu options.
+     */
     @Override
     public void show() {
         boolean running = true;

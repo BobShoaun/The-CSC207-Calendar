@@ -19,26 +19,27 @@ import java.util.List;
  */
 public class User {
 
-    private String name;
+    private final String name;
     private String password;
-    private List<Calendar> calendars;
+    private final List<Calendar> calendars;
     private GregorianCalendar lastLoginTime;
-    private boolean firstLogin;
-    private DataSaver dataSaver;
-    private EventSharer eventSharer;
+    private final boolean firstLogin;
+    private final DataSaver dataSaver;
+    private EventSharer eventSharer; // TODO: bug?
     private boolean darkTheme;
 
     /**
      * getter for the user's preference of a dark theme or not
-     * @return
+     *
+     * @return True iff theme is dark
      */
-    public boolean getDarkTheme(){
+    public boolean getDarkTheme() {
         return darkTheme;
     }
 
     /**
      * sets the user's preference of dark theme
-     * @param darkTheme
+     * @param darkTheme True if the theme should be dark
      */
     public void setDarkTheme(boolean darkTheme){
         this.darkTheme = darkTheme;
@@ -54,6 +55,7 @@ public class User {
 
     /**
      * getter for one of the user's calendar
+     *
      * @param index of the calendar
      * @return calendar
      */
@@ -61,6 +63,12 @@ public class User {
         return calendars.get(index);
     }
 
+    /**
+     * Add a new Calendar to the User
+     *
+     * @param calendarName Name of new Calendar
+     * @throws InvalidNameException if the name is invalid
+     */
     public void addCalendar(String calendarName) throws InvalidNameException {
         if (calendarName.equals(" ") | calendarName.equals(""))
             throw new InvalidNameException();
@@ -97,7 +105,7 @@ public class User {
 
     /**
      * Get all of user's calendars
-     * @return
+     * @return List of Calendars
      */
     public List<Calendar> getCalendars () { return this.calendars; }
 
@@ -127,7 +135,7 @@ public class User {
 
     /**
      * Logout this user, and saves all necessary information
-     * @throws IOException
+     * @throws IOException if there is an IO error
      */
     public void logout () throws IOException {
         setLastLoginTime((GregorianCalendar) GregorianCalendar.getInstance());
@@ -219,7 +227,7 @@ public class User {
 
     /**
      * Save the user's credentials and information into disc
-     * @throws IOException
+     * @throws IOException if there was an error saving the user credentials.
      */
     public void save() throws IOException {
         System.out.println("Saving user: " + toString());

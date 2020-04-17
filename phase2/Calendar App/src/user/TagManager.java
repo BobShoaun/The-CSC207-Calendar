@@ -6,11 +6,20 @@ import memotag.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Manages a Calendar's tags
+ */
 public class TagManager {
 
     private final List<Tag> tags;
     private final DataSaver dataSaver;
 
+    /**
+     * Initializes the TagManager with a List of Tags
+     *
+     * @param tags      Tags list
+     * @param dataSaver For saving to files
+     */
     public TagManager(List<Tag> tags, DataSaver dataSaver) {
         this.tags = tags;
         this.dataSaver = dataSaver;

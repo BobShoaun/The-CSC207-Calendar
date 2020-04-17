@@ -116,6 +116,12 @@ public abstract class UserInterface {
         return getDurationInput("Please re-enter a valid duration <amount> <{w,d,h,m,s}>: ");
     }
 
+    /**
+     * Get the date input, not allowing null values.
+     *
+     * @param prompt Prompt from user
+     * @return The GregorianCalendar with the time
+     */
     protected GregorianCalendar getDateInput(String prompt) {
         return getDateInput(prompt, false);
     }

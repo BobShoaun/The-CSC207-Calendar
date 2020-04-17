@@ -231,13 +231,6 @@ public class AlertCollection implements Observer {
         return getAlerts(time, time).get(0);
     }
 
-    /**
-     * Get manually created Alerts for the event between a set of times.
-     *
-     * @param start The start time delimiter
-     * @param end   The end time delimiter
-     * @return The list of Alerts between start and end time.
-     */
     private List<Alert> getManualAlerts(GregorianCalendar start, GregorianCalendar end) {
         List<Alert> alerts = new ArrayList<>();
         for (Alert a : manAlerts) {

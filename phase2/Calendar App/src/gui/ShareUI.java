@@ -8,29 +8,52 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import user.UserManager;
 
-public class ShareUI extends GraphicalUserInterface{
+/**
+ * GUI controller class for sharing events between users.
+ */
+public class ShareUI extends GraphicalUserInterface {
 
     private Event event;
     private UserManager userManger;
 
-    @FXML protected Label UsernameError;
-    @FXML protected Label CalendarNameError;
-    @FXML protected TextField Username;
-    @FXML protected TextField CalendarName;
+    @FXML
+    protected Label UsernameError;
+    @FXML
+    protected Label CalendarNameError;
+    @FXML
+    protected TextField Username;
+    @FXML
+    protected TextField CalendarName;
 
-    public void setEvent(Event event){
+    /**
+     * Set the Event to be shared.
+     *
+     * @param event Event to share
+     */
+    public void setEvent(Event event) {
         this.event = event;
     }
 
-    public void setUserManger(UserManager userManger){
+    /**
+     * Set the UserManager for saving/loading and users
+     *
+     * @param userManger UserManager to set
+     */
+    public void setUserManger(UserManager userManger) {
         this.userManger = userManger;
     }
 
-    public void exit(){
+    /**
+     * Close the window.
+     */
+    public void exit() {
         closeGUI();
     }
 
-    public void ShareWith(){
+    /**
+     * Share the event with the set user.
+     */
+    public void shareWith() {
         CalendarNameError.setOpacity(0);
         UsernameError.setOpacity(0);
         String recipientUsername = Username.getText();
@@ -40,7 +63,7 @@ public class ShareUI extends GraphicalUserInterface{
             closeGUI();
         } catch (InvalidCalendarNameException e) {
             CalendarNameError.setOpacity(1);
-        } catch (InvalidUsernameException e){
+        } catch (InvalidUsernameException e) {
             UsernameError.setOpacity(1);
         }
     }

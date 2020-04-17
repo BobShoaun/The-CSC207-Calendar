@@ -13,8 +13,10 @@ import java.util.GregorianCalendar;
  */
 public class ManualAlertUI extends GraphicalUserInterface {
 
-    @FXML private DatePicker datePicker;
-    @FXML private TextField textField;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private TextField textField;
 
     private AlertCollection ac;
     private AlertUI controller;

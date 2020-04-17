@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Terminal interface for alert.Event.
+ * Terminal interface for Event.
  */
 
 public class EventUI extends UserInterface {

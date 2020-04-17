@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="224.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ShareUI">
    <children>
       <GridPane layoutX="1.0" layoutY="-1.0" prefHeight="211.0" prefWidth="297.0">
@@ -28,11 +27,12 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#ShareWith" text="Send" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </Button>
+             <Button mnemonicParsing="false" onAction="#shareWith" text="Send" GridPane.halignment="RIGHT"
+                     GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                 <GridPane.margin>
+                     <Insets/>
+                 </GridPane.margin>
+             </Button>
             <Label fx:id="UsernameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Username!" textFill="#ff4545" GridPane.rowIndex="2" />
             <Label fx:id="CalendarNameError" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" opacity="0.0" text="Invalid Calendar!" textFill="#ff4545" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#exit" text="Cancel" GridPane.rowIndex="5" />

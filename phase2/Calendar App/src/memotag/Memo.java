@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * a class representing a memo
+ * A class representing a Memo
  */
 public class Memo {
 

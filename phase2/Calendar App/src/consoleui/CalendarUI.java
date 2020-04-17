@@ -14,6 +14,9 @@ import user.User;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Console UI class for the main calendar screen.
+ */
 public class CalendarUI extends UserInterface {
     private User user;
     private Calendar calendar;
@@ -22,12 +25,21 @@ public class CalendarUI extends UserInterface {
     List<EventUI> visibleEvents = new ArrayList<>();
     List<EventCollectionUI> visibleEventCollections = new ArrayList<>();
 
+    /**
+     * Initialize the UI with the correct data.
+     *
+     * @param user     User to which the Calendar belongs
+     * @param calendar Calendar to display
+     */
     public CalendarUI(User user, Calendar calendar) {
         this.user = user;
 
         this.calendar = calendar;
     }
 
+    /**
+     * Display the contents of the calendar.
+     */
     @Override
     public void display() {
         System.out.println("======= " + user.getName() + "'s Calendar =======");
@@ -56,6 +68,9 @@ public class CalendarUI extends UserInterface {
         }
     }
 
+    /**
+     * Start the console UI with menu options.
+     */
     @Override
     public void show() {
         visibleAlerts = calendar.getAlerts(user.getLastLoginTime(), calendar.getTime());

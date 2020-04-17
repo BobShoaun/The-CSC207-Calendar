@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * The CalendarGenerator class
+ * CalendarGenerator, which is an Iterable to go through GregorianCalendars.
  */
 public class CalendarGenerator implements Iterable<GregorianCalendar> {
 
@@ -98,26 +98,56 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
         ignoreList.add(newIgnoreTime);
     }
 
+    /**
+     * Get the list of ignored times.
+     *
+     * @return IgnoreList
+     */
     public List<GregorianCalendar> getIgnoreList() {
         return ignoreList;
     }
 
+    /**
+     * Get the list of periods of repetition.
+     *
+     * @return List of Durations
+     */
     public List<Duration> getPeriods() {
         return periods;
     }
 
+    /**
+     * Get the time the GregorianCalendars start.
+     *
+     * @return Start Time
+     */
     public GregorianCalendar getStartTime() {
         return startTime;
     }
 
+    /**
+     * Get the time the GregorianCalendars end.
+     *
+     * @return End Time
+     */
     public GregorianCalendar getEndTime() {
         return endTime;
     }
 
+    /**
+     * Set the end time for the Iterator.
+     *
+     * @param endTime End Time GregorianCalendar
+     */
     public void setEndTime(GregorianCalendar endTime) {
         this.endTime = endTime;
     }
 
+    /**
+     * Set the start time for the Iterator.
+     *
+     * @param startTime Start Time GregorianCalendar
+     */
     public void setStartTime(GregorianCalendar startTime) {
         this.startTime = startTime;
     }
@@ -163,11 +193,21 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
             return candidates;
         }
 
+        /**
+         * Returns true iff the next GregorianCalendar is within the range (StartTime, EndTime)
+         *
+         * @return True iff the Iterator has next
+         */
         @Override
         public boolean hasNext() {
             return nextSet().size() != 0;
         }
 
+        /**
+         * Get the next GregorianCalendar in the Iterator
+         *
+         * @return Next GregorianCalendar
+         */
         @Override
         public GregorianCalendar next() {
             if (hasNext()) {

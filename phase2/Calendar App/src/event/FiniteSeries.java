@@ -5,9 +5,11 @@ import exceptions.InvalidDateException;
 
 import java.util.GregorianCalendar;
 
+/**
+ * A finite series of Events. Must have an end time, unlike infinite series.
+ */
 public class FiniteSeries extends Series {
-    //the end date where the repeating series definitively ends, unlike infinite series that goes
-    //on forever as long its within the period that user inputs
+
     private GregorianCalendar endTime;
 
     /**
@@ -20,15 +22,6 @@ public class FiniteSeries extends Series {
     public FiniteSeries(String name, Event baseEvent, CalendarGenerator calGen) throws InvalidDateException {
         super(name, baseEvent, calGen);
         this.endTime = calGen.getEndTime();
-    }
-
-    /**
-     * set the endTime of this FiniteSeries manually
-     * @param endTime the endTime of this series
-     */
-    public void setEndTime(GregorianCalendar endTime) {
-        this.endTime = endTime;
-        getCalGen().setEndTime(endTime);
     }
 
     /**
