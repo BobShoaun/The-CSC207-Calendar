@@ -397,7 +397,7 @@ public class DataSaver {
         }
     }
 
-    private List<Event> loadEventsFromFile(String path) { // TODO: make use of ParseEventID()
+    private List<Event> loadEventsFromFile(String path) {
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
         for (File f : data) {
