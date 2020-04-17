@@ -291,6 +291,9 @@ public class CalendarUI extends GraphicalUserInterface {
         if (currSeries != null) {
             calendar.removeEventCollection(currSeries);
         }
+        calendar.getDataSaver().saveEvents(calendar.getEventManager());
+        updateDisplayedSeries();
+        updateDisplayedRepeatingEvents();
     }
 
     /**
@@ -308,6 +311,8 @@ public class CalendarUI extends GraphicalUserInterface {
         if (currRepeatingEvent != null) {
             currSeries.getRepeatingEvents().remove(repeatingEventIndex);
         }
+        calendar.getDataSaver().saveEvents(calendar.getEventManager());
+        updateDisplayedRepeatingEvents();
     }
 
     /**
