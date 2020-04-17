@@ -20,12 +20,11 @@ import java.util.stream.Collectors;
 
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
- *
- * @author Ng Bob Shoaun
+
  */
 public class DataSaver {
 
-    private String basePath;
+    private final String basePath;
 
     /**
      * Initializes DataSaver
@@ -168,13 +167,18 @@ public class DataSaver {
 
     }
 
+    /**
+     * Load a Calendar from its files
+     *
+     * @param calendarName Name of Calendar
+     * @return Loaded Calendar
+     */
     public Calendar loadCalendar(String calendarName) {
 
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags;
         ArrayList<EventCollection> eventCollections = new ArrayList<>();
-        EventCollection manualEvents;
 
         loadEvents(calendarName, eventCollections);
 
@@ -242,14 +246,19 @@ public class DataSaver {
                 }
                 tags.add(new Tag(parts[0], idStrings));
             }
-    	} catch (FileNotFoundException ignored) {
+        } catch (FileNotFoundException ignored) {
 
         }
         return tags;
     }
 
+    /**
+     * Load AlertCollections from files.
+     *
+     * @return Loaded AlertCollections.
+     */
     public List<AlertCollection> loadAlertCollections() {
-        ArrayList<AlertCollection>  alertCollections = new ArrayList<>();
+        ArrayList<AlertCollection> alertCollections = new ArrayList<>();
         //Load existing alert collection series
         File[] files = getFilesInDirectory("/alerts/");
         if (files != null) {

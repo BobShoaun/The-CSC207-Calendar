@@ -6,9 +6,9 @@ import java.util.GregorianCalendar;
 import java.util.Observable;
 
 /**
- * Event class
+ * Event class representing an Event
  */
-public class Event extends Observable implements Cloneable, Comparable<Event>{
+public class Event extends Observable implements Cloneable, Comparable<Event> {
 
     private String id;
     private String name;
@@ -16,10 +16,20 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
     private GregorianCalendar endDate;
     private boolean postponed;
 
+    /**
+     * Get postponed status for this event
+     *
+     * @return True iff this Event is postponed
+     */
     public boolean isPostponed() {
         return postponed;
     }
 
+    /**
+     * Set postponed status for this Event
+     *
+     * @param postponed Boolean for postponedness
+     */
     public void setPostponed(boolean postponed) {
         this.postponed = postponed;
     }
@@ -134,8 +144,7 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
         if (startDate.equals(endDate)) {
             return 0;
         } else {
-            long dur = endDate.getTime().getTime() - startDate.getTime().getTime();
-            return dur;
+            return endDate.getTime().getTime() - startDate.getTime().getTime();
         }
     }
 
@@ -153,13 +162,11 @@ public class Event extends Observable implements Cloneable, Comparable<Event>{
      * Return the String representation of this Event with Date as milliseconds
      * @return the String representation of this Event
      */
-    public String getString()
-    {
-        String result = id + "\n" +
+    public String getString() {
+        return id + "\n" +
                 name + "\n" +
                 startDate.getTimeInMillis() + "\n" +
                 endDate.getTimeInMillis();
-        return result;
     }
     /**
      * @param compareEvent the Event to be compared.

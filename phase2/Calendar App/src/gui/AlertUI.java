@@ -12,11 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.stream.Collectors;
-
-import static event.IDManager.parseEventId;
 
 /**
  * GUI controller for alerts
@@ -25,9 +21,12 @@ public class AlertUI extends GraphicalUserInterface {
 
     private AlertCollection ac;
 
-    @FXML private ListView<String> manAlertList;
-    @FXML private ListView<String> repAlertList;
-    @FXML private Label title;
+    @FXML
+    private ListView<String> manAlertList;
+    @FXML
+    private ListView<String> repAlertList;
+    @FXML
+    private Label title;
 
     private Alert currManAlert;
     private Alert currRepAlert;
@@ -70,9 +69,6 @@ public class AlertUI extends GraphicalUserInterface {
         updateManAlerts();
     }
 
-    /**
-     * Update the manual alerts list.
-     */
     private void updateManAlerts() {
         if (ac == null)
             System.out.println("AC has not been set!");
@@ -80,9 +76,6 @@ public class AlertUI extends GraphicalUserInterface {
         manualAlerts.addAll(ac.getManAlerts());
     }
 
-    /**
-     * Update the repeating alerts list.
-     */
     private void updateRepeatingAlerts() {
         if (ac == null)
             System.out.println("AC has not been set!");

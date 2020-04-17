@@ -8,7 +8,6 @@ import exceptions.UsernameTakenException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -20,32 +19,41 @@ public class UserManager {
 
     private List<User> users;
     private User currentUser;
-    private DataSaver dataSaver;
-    private EventSharer eventSharer;
+    private final DataSaver dataSaver;
+    private final EventSharer eventSharer;
 
     /**
      * Getter for current logged in user
+     *
      * @return current logged in user
      */
-    public User getCurrentUser () { return currentUser; }
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     /**
      * Constructor for UserManager
      */
-    public UserManager () {
+    public UserManager() {
         dataSaver = new DataSaver("./users/");
-        users = new ArrayList<> ();
+        users = new ArrayList<>();
         currentUser = null;
         eventSharer = new EventSharer(this);
     }
 
+    /**
+     * Get the EventSharer
+     *
+     * @return EventSharer
+     */
     public EventSharer getEventSharer() {
         return eventSharer;
     }
 
     /**
      * Loads all users from the file system into memory
-     * @throws IOException
+     *
+     * @throws IOException if users could not be loaded
      */
     public void loadUsers() throws IOException {
         File[] files = dataSaver.getFilesInDirectory("");
@@ -56,8 +64,8 @@ public class UserManager {
     }
 
     /**
-     * Serializes all users from memory into the file system
-     * @throws IOException
+     * Saves all users from memory into the file system
+     * @throws IOException if user credentials could not be saved
      */
     public void saveUsers() throws IOException {
         for (User user : users)
@@ -65,20 +73,12 @@ public class UserManager {
     }
 
     /**
-     * Serializes a user from memory into the file system
+     * Saves a user from memory into the file system
      * @param user to save
-     * @throws IOException
+     * @throws IOException if the user could not be saved
      */
     public void saveUser(User user) throws IOException {
         user.save();
-    }
-
-    /**
-     * Prints out all registered users
-     */
-    public void displayUsers() {
-        for (User user : users)
-            System.out.println(user);
     }
 
     /**
@@ -102,8 +102,8 @@ public class UserManager {
      * Register a new user
      * @param username new username
      * @param password new password
-     * @throws UsernameTakenException
-     * @throws IOException
+     * @throws UsernameTakenException if username has been taken
+     * @throws IOException  if user could not be saved
      */
     public void registerUser(String username, String password)
             throws UsernameTakenException,  InvalidUsernameException, InvalidPasswordException, IOException {

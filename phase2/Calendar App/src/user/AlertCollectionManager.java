@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Manager for Calendar's AlertCollections
+ */
 public class AlertCollectionManager {
 
     private List<AlertCollection> alertCollections;
@@ -32,8 +35,8 @@ public class AlertCollectionManager {
         for (AlertCollection ac : alertCollections) {
             ac.removeAlert(alertTime);
         }
-	}
-    
+    }
+
     /**
      * Get all alert collections
      *

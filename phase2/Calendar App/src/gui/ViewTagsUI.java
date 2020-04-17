@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,20 +11,33 @@ import user.Calendar;
 
 import java.util.List;
 
-public class ViewTagsUI extends gui.GraphicalUserInterface{
+/**
+ * GUI controller for viewing Tags
+ */
+public class ViewTagsUI extends gui.GraphicalUserInterface {
 
-    @FXML private ListView<String> tagList;
-    @FXML private Label selectTagLabel;
+    @FXML
+    private ListView<String> tagList;
+    @FXML
+    private Label selectTagLabel;
 
     private Calendar calendar;
     private String selectedTag;
     private ObservableList<String> list = FXCollections.observableArrayList();
 
+    /**
+     * Set the GUI to the correct config upon start
+     */
     public void initialize() {
         selectTagLabel.setVisible(false);
         tagList.setItems(list);
     }
 
+    /**
+     * Set the calendar
+     *
+     * @param c Calendar to be set
+     */
     public void setCalendar(Calendar c) {
         this.calendar = c;
         loadTag();
@@ -33,14 +45,17 @@ public class ViewTagsUI extends gui.GraphicalUserInterface{
 
     private void loadTag() {
         List<Tag> tags = calendar.getTags();
-        for (Tag t: tags) {
+        for (Tag t : tags) {
             String s = t.getText();
             list.add(s);
         }
     }
 
+    /**
+     * Set the Tag to the one selected by the user
+     */
     @FXML
-    public void chooseTag(javafx.scene.input.MouseEvent mouseEvent) {
+    public void chooseTag() {
         String tag = tagList.getSelectionModel().getSelectedItem();
         if (tag == null || tag.isEmpty()) {
             selectedTag = null;
@@ -68,7 +83,10 @@ public class ViewTagsUI extends gui.GraphicalUserInterface{
         tagUI.setTag(calendar.getTag(tagList.getSelectionModel().getSelectedItem()));
     }
 
-    public void close(ActionEvent actionEvent) {
+    /**
+     * Exit window
+     */
+    public void close() {
         closeGUI();
     }
 

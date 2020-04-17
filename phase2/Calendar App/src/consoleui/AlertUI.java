@@ -6,6 +6,8 @@ import exceptions.PeriodAlreadyExistsException;
 
 /**
  * Terminal interface for AlertCollection.
+ *
+ * @author Colin De Vlieghere
  */
 public class AlertUI extends UserInterface {
 

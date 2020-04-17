@@ -14,11 +14,20 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Manages a Calendar's EventCollections.
+ */
 public class EventManager {
 
     private final DataSaver dataSaver;
     private final List<EventCollection> eventCollections;
 
+    /**
+     * Constructor for EventManager
+     *
+     * @param eventCollections Calendar's EventCollections.
+     * @param dataSaver        DataSaver for saving
+     */
     public EventManager(List<EventCollection> eventCollections, DataSaver dataSaver) {
         this.eventCollections = eventCollections;
         this.dataSaver = dataSaver;
@@ -268,9 +277,9 @@ public class EventManager {
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
-        private Predicate<Event> isValid;
-        private List<Iterator<Event>> eventCollectionEventIterators;
-        private List<Event> possibleNext;
+        private final Predicate<Event> isValid;
+        private final List<Iterator<Event>> eventCollectionEventIterators;
+        private final List<Event> possibleNext;
 
         /**
          * Initialise a new event iterator which iterates overall event collections at once returning events by their

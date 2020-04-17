@@ -4,26 +4,27 @@ import event.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import memotag.Memo;
 import user.Calendar;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
+/**
+ * GUI class for editing/adding memos to events
+ */
 public class MemoUI extends GraphicalUserInterface {
 
-    private ObservableList<String> list = FXCollections.observableArrayList();
+    private final ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;
     private Memo memo;
 
     /**
      * Set the memo which is edited by this
-     * @param memo
+     *
+     * @param memo Memo to be edited
      */
     public void setMemo(Memo memo){
         this.memo = memo;
@@ -34,14 +35,20 @@ public class MemoUI extends GraphicalUserInterface {
         loadEvents();
     }
 
-    @FXML private TextField memoTitleField;
-    @FXML private TextField memoTextField;
-    @FXML private Label memoExistsLabel;
-    @FXML private ListView<String> eventsList;
+    @FXML
+    private TextField memoTitleField;
+    @FXML
+    private TextField memoTextField;
+    @FXML
+    private Label memoExistsLabel;
+    @FXML
+    private ListView<String> eventsList;
 
-    public MemoUI() {
-    }
-
+    /**
+     * Set the Calendar
+     *
+     * @param c Calendar to be set
+     */
     public void setCalendar(Calendar c) {
         this.calendar = c;
     }

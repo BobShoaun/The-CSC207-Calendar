@@ -7,46 +7,31 @@ import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import memotag.Memo;
 import memotag.Tag;
 import user.DataSaver;
 import user.UserManager;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * GUI controller for editing events
  */
 public class EventEditUI extends EventAddUI {
 
-    @FXML private CheckBox postponeCheckbox;
-//    @FXML
-//    private Button shareEventButton;
-//    @FXML
-//    private Button addAlertButton;
-//    @FXML
-//    private Button deleteButton;
-//    @FXML
-//    private Button editButton;
-//    @FXML
-//    private Button duplicateButton;
-
+    @FXML
+    private CheckBox postponeCheckbox;
     private Event event;
     private String oldMemoTitle;
-//    private String[] oldTags;
-
     private String username;
     private UserManager userManager;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setLabelInvisible();
-    }
-
+    /**
+     * Set the Event to edit, with the correct fields in the GUI.
+     *
+     * @param event Event to edit.
+     */
     public void setEvent(Event event) {
         this.event = event;
         if (calendar.getMemo(event) != null) {
@@ -56,21 +41,36 @@ public class EventEditUI extends EventAddUI {
         postponeCheckbox.setSelected(event.isPostponed());
     }
 
+    /**
+     * Set the User Manager (for event sharing and such)
+     *
+     * @param userManager UserManager to set
+     */
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Set the EventCollection to edit
+     *
+     * @param e EventCollection to be set
+     */
     public void setEventCollection(EventCollection e) {
-        if(e instanceof Series){
-            System.out.println("EventC set to:"+((Series) e).getName());
-        }else if(e instanceof EventCollection){
+        if (e instanceof Series) {
+            System.out.println("EventC set to:" + ((Series) e).getName());
+        } else if (e instanceof EventCollection) {
             System.out.println("EventC set to default");
-        }else{
+        } else {
             System.out.println("Something is wrong");
         }
         this.eventCollection = e;
     }
 
+    /**
+     * Set the name of the user
+     *
+     * @param username Username
+     */
     protected void setUsername(String username) {
         this.username = username;
     }
@@ -101,13 +101,13 @@ public class EventEditUI extends EventAddUI {
 
             }
             EventCollection old = eventCollection;
-            if(isEventCollectionChanged(eventCollection)){
-                System.out.println("removed:::"+old.removeEvent(event));
+            if (isEventCollectionChanged(eventCollection)) {
+                System.out.println("removed:::" + old.removeEvent(event));
                 eventCollection.addEvent(event);
-            }else {
+            } else {
                 eventCollection.rescheduleEvent(event, start, end);
             }
-            postPoneEvent();
+            postponeEvent();
             editMemo(event, oldMemoTitle);
             editTags();
             calendarUIController.updateDisplayedEvents();
@@ -158,7 +158,7 @@ public class EventEditUI extends EventAddUI {
         save();
     }
 
-    private void postPoneEvent() {
+    private void postponeEvent() {
         if (postponeCheckbox.isSelected() && !event.isPostponed()) {
             System.out.println("postpone clicked");
             try {

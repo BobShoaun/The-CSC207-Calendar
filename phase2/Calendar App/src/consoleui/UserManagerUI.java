@@ -8,7 +8,7 @@ import user.UserManager;
 import java.io.IOException;
 
 /**
- * consoleui.UserManagerUI, the starting point of the program
+ * UserManagerUI, the starting point of the program
  */
 public class UserManagerUI extends UserInterface {
 
@@ -120,7 +120,8 @@ public class UserManagerUI extends UserInterface {
 
     /**
      * Main Method
-     * @param args
+     *
+     * @param args Command-line arguments
      */
     public static void main (String[] args) {
         UserManager userManager = new UserManager();

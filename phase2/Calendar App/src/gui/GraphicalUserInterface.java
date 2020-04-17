@@ -50,8 +50,9 @@ public class GraphicalUserInterface {
 
     /**
      * changes the scene within the same stage(window)
-     * @param fxml fmxl file of the scene
-     * @param <T> type of GUI controller
+     *
+     * @param fxml fxml file of the scene (including .fxml extension)
+     * @param <T>  type of GUI controller
      * @return GUI controller
      */
     protected <T extends GraphicalUserInterface> T showGUI (String fxml) {
@@ -75,9 +76,9 @@ public class GraphicalUserInterface {
 
     /**
      * opens a scene in a new stage(window)
-     * @param fxml
-     * @param <T>
-     * @return
+     * @param fxml  File path of fxml file (including .fxml extension)
+     * @param <T>   Type of GUI
+     * @return Controller for the new GUI page
      */
     protected <T extends GraphicalUserInterface> T openGUI(String fxml) {
         Stage newWindow = new Stage();

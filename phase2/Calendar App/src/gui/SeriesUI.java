@@ -1,7 +1,6 @@
 package gui;
 
 import event.Event;
-import event.EventCollection;
 import event.Series;
 import exceptions.InvalidDateException;
 import exceptions.InvalidTimeInputException;
@@ -19,6 +18,9 @@ import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * GUI controller class for Series
+ */
 public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
@@ -32,7 +34,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     @FXML
     private DatePicker endDate;
     @FXML
-    private ChoiceBox timeChoiceBox;
+    private ChoiceBox<String> timeChoiceBox;
     @FXML
     private TextField repeatNumField;
     @FXML
@@ -47,12 +49,24 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     private GregorianCalendar end;
     private Duration timeSpan;
 
+    /**
+     * Set the details for this Series.
+     *
+     * @param baseEvent Base Event
+     * @param calendar  Calendar
+     */
     public void setDetails(Event baseEvent, user.Calendar calendar) {
         this.baseEvent = baseEvent;
         this.calendar = calendar;
         this.start = baseEvent.getStartDate();
     }
 
+    /**
+     * Initialize the GUI to have the correct values
+     *
+     * @param location  URL
+     * @param resources ResourceBundle
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         timeChoiceBox.setValue("Day");
@@ -64,8 +78,7 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         try {
             getUserInput();
             if(seriesName.equals("")){
-            calendar.addEventSeries(name, start, end, timeSpan, baseEvent);}
-            else {
+                calendar.addEventSeries(name, start, end, timeSpan, baseEvent);} else {
                 getSeries();
                 series.addRepeatingEvent(baseEvent,start,end,timeSpan);
             }

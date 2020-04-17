@@ -5,11 +5,20 @@ import memotag.Memo;
 
 import java.util.List;
 
+/**
+ * Manages Memos for a Calendar
+ */
 public class MemoManager {
 
-    private List<Memo> memos;
+    private final List<Memo> memos;
     private final DataSaver dataSaver;
 
+    /**
+     * Initialize this MemoManager with a list of memos.
+     *
+     * @param memos     Memo List
+     * @param dataSaver For saving to files
+     */
     public MemoManager(List<Memo> memos, DataSaver dataSaver) {
         this.memos = memos;
         this.dataSaver = dataSaver;

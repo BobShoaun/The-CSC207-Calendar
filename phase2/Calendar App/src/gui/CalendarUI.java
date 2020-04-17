@@ -1,6 +1,5 @@
 package gui;
 
-import alert.Alert;
 import event.Event;
 import event.EventCollection;
 import event.Series;
@@ -17,13 +16,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import memotag.Memo;
 import memotag.Tag;
-import sun.java2d.windows.GDIRenderer;
 import user.User;
 import user.UserManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,20 +43,28 @@ public class CalendarUI extends GraphicalUserInterface {
     private int subSeriesIndex;
     private ObservableList<String> seriesNameList;
 
-    @FXML private ListView<String> alertList;
-    @FXML private ListView<String> displayedSubSeriesList;
-    @FXML private ListView<String> displayedSeriesList;
+    @FXML
+    private ListView<String> alertList;
+    @FXML
+    private ListView<String> displayedSubSeriesList;
+    @FXML
+    private ListView<String> displayedSeriesList;
     @FXML
     private CheckBox darkTheme;
     @FXML
     private ChoiceBox<String> searchByList;
     @FXML
     private DatePicker startDate;
-    @FXML private DatePicker endDate;
-    @FXML private TextField searchTermField;
-    @FXML private ListView<String> displayedEventList;
-    @FXML private Label lastLoginLabel;
-    @FXML private Label eventErrorLabel;
+    @FXML
+    private DatePicker endDate;
+    @FXML
+    private TextField searchTermField;
+    @FXML
+    private ListView<String> displayedEventList;
+    @FXML
+    private Label lastLoginLabel;
+    @FXML
+    private Label eventErrorLabel;
 
     private ObservableList<Event> eventList;
 
@@ -127,6 +136,9 @@ public class CalendarUI extends GraphicalUserInterface {
         };
     }
 
+    /**
+     * Update the displayed series ListView.
+     */
     protected void updateDisplayedSeries() {
         seriesNameList.clear();
         for (Series series : calendar.getSeries()) {
@@ -134,6 +146,9 @@ public class CalendarUI extends GraphicalUserInterface {
         }
     }
 
+    /**
+     * Update the displayed SubSeries (Repeating events) ListView.
+     */
     protected void updateDisplayedSubSeries() {
         ArrayList<String> stringSubSeries = new ArrayList<>();
         if (currSeries != null) {
@@ -145,6 +160,11 @@ public class CalendarUI extends GraphicalUserInterface {
     }
 
 
+    /**
+     * Set the UserManager for the Calendar.
+     *
+     * @param userManager UserManager
+     */
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
@@ -154,6 +174,7 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     protected void updateDisplayedEvents() {
+        // TODO: extract methods
         String searchCriterion = searchByList.getValue();
         if (searchCriterion == null) {
             return;
@@ -246,18 +267,6 @@ public class CalendarUI extends GraphicalUserInterface {
         alertList.setItems(alertStrings);
     }
 
-//    /**
-//     * Handles when the event list is clicked
-//     */
-//    @FXML
-//    private void eventListClicked() {
-//        currEvent = displayedEventList.getSelectionModel().getSelectedItem();
-//        System.out.println("Clicked on alert: " + currEvent);
-//    }
-
-    /**
-     * Handles when the alert list is clicked, displays information about current alert
-     */
     @FXML
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
@@ -266,16 +275,13 @@ public class CalendarUI extends GraphicalUserInterface {
         updateDisplayedAlerts();
     }
 
-    /**
-     * Handles when the series list is clicked
-     */
     @FXML
     private void seriesListClicked() {
         String stringSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
         System.out.println("Clicked on series: " + stringSeries);
         try {
             currSeries = calendar.getSeries(stringSeries);
-        } catch (NoSuchSeriesException e){
+        } catch (NoSuchSeriesException e) {
             System.out.println("Series does not exist: " + stringSeries);
         }
         currSubSeries = null;
@@ -319,9 +325,6 @@ public class CalendarUI extends GraphicalUserInterface {
         timeController.start(stage);
     }
 
-    /**
-     * Clear the selected alert, if none selected, nothing happens
-     */
     @FXML
     private void clearNotification() {
         System.out.println("Clicked clear");
