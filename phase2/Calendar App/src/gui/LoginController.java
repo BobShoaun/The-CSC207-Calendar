@@ -46,7 +46,6 @@ public class LoginController extends GraphicalUserInterface {
             bottomMessage.setBackground(Background.EMPTY);
             System.out.println(usernameText + " " + passwordText + " failed to log in");
         } else {
-            System.out.println("Logged in: " + usernameText);
             showCalendarUI();
         }
     }

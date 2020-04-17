@@ -75,7 +75,6 @@ public class DataSaver {
             newFile.createNewFile();
             saveToFile(path, contents);
         }
-        System.out.println("Saved multiple lines to " + basePath + path);
     }
 
     /**
@@ -358,7 +357,6 @@ public class DataSaver {
         try {
             deleteDirectory("events/");
         } catch (IOException e) {
-            System.out.println("Yeah, I know there is no such file...there will be very soon");
         }
         saveEventsToFile("events/", eventManager.getManualEventCollection().getEvents());
         saveEventsToFile("events/postponed/", eventManager.getManualEventCollection().getPostponedEvents());
