@@ -255,6 +255,14 @@ public class EventManager {
     }
 
     /**
+     * Remove the event collection
+     * @param eventCollection Event collection to remove
+     */
+    public void removeEventCollection(EventCollection eventCollection){
+        eventCollections.remove(eventCollection);
+    }
+
+    /**
      * Event Iterator is used to iterate over the individual event collections to get the next time
      */
     private class EventIterator implements Iterator<Event> {
