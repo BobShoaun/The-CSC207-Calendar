@@ -14,13 +14,10 @@ import java.util.*;
 public class Series extends EventCollection implements Iterable<Event> {
 
     private final String name;
-    private final Event baseEvent;
-    private final CalendarGenerator calGen;
     private List<RepeatingEvent> repeatingEvents;
     //this attribute holds the events generated from calGen in memory, never saved nor loaded, but updated when CalGen is updated
     //To save memory...
     private List<Event> seriesEvents;
-    private final GregorianCalendar startTime;
 
     /**
      * @param name      the name of this Infinite Series
@@ -31,71 +28,31 @@ public class Series extends EventCollection implements Iterable<Event> {
     public Series(String name, Event baseEvent, CalendarGenerator calGen) throws InvalidDateException {
         super(new ArrayList<>());
         this.name = name;
-        this.baseEvent = baseEvent;
-        this.calGen = calGen;
-        this.startTime = calGen.getStartTime();
-        this.repeatingEvents = new ArrayList<>();
-        if (baseEvent != null) {
-            this.seriesEvents = generateEvents();
-        } else
-            this.seriesEvents = new ArrayList<>();
-    }
-
-    /**
-     * Set the display period of this series up given user input
-     *
-     * @param start the start display time of this Series
-     * @param end   the end display time of this Series
-     */
-    public void setDisplayPeriod(GregorianCalendar start, GregorianCalendar end) {
-        //TODO: set display time for all sub series
-        setStartDisplayTime(start);
-        this.calGen.setEndTime(end);
-    }
-
-    /**
-     * Set the start time for the display 'window'.
-     *
-     * @param start Display window start time
-     */
-    protected void setStartDisplayTime(GregorianCalendar start) {
-        if (start.before(startTime)) {
-            //The anchor for the startTime
-            calGen.setStartTime(startTime);
-        } else {
-            calGen.setStartTime(start);
+        repeatingEvents = new ArrayList<>();
+        if(baseEvent != null){
+            repeatingEvents.add(new RepeatingEvent(baseEvent, calGen));
         }
+        this.seriesEvents = generateEvents();
     }
 
     /**
      * Set the subseries (repeating events) for
      *
-     * @param RepeatingEvents
+     * @param RepeatingEvents new repeating events
      */
     public void setRepeatingEvents(List<RepeatingEvent> RepeatingEvents) {
-        this.repeatingEvents = RepeatingEvents;
+        this.repeatingEvents.addAll(RepeatingEvents);
         try {
             this.seriesEvents = generateEvents();
         } catch (InvalidDateException ignored) {
-
         }
     }
-    //TODO: test
 
     /**
      * @return name of this Infinite Series
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Get the calendar Generator.
-     *
-     * @return CalendarGenerator instance
-     */
-    public CalendarGenerator getCalGen() {
-        return calGen;
     }
 
     /**
@@ -114,7 +71,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     public List<Event> getEvents() {
         List<Event> ret = new ArrayList<>();
         ret.addAll(getManualEvents());
-        ret.addAll(this.seriesEvents);
+        ret.addAll(seriesEvents);
         Collections.sort(ret);
         return ret;
     }
@@ -127,16 +84,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     public List<Event> getManualEvents() {
         return super.getEvents();
     }
-
-    /**
-     * Get the starting/base event
-     *
-     * @return Base event
-     */
-    public Event getBaseEvent() {
-        return baseEvent;
-    }
-
+    
     /**
      * Search for an Event by its ID
      *
@@ -146,7 +94,7 @@ public class Series extends EventCollection implements Iterable<Event> {
     @Override
     public Event getEvent(String id) {
         Event ret = super.getEvent(id);
-        if (null == ret) {
+        if (ret == null) {
             for (Event e : this.seriesEvents) {
                 if (e.getId().equals(id)) {
                     return e;
@@ -202,8 +150,12 @@ public class Series extends EventCollection implements Iterable<Event> {
             String eventId = event.getId();
             for (Event e : seriesEvents) {
                 if (e.getId().equals(eventId)) {
-                    calGen.addIgnore(e.getStartDate());
-                    seriesEvents = generateEvents();
+                    for (RepeatingEvent repeatingEvent :
+                            repeatingEvents) {
+                        if (repeatingEvent.getBase().getName().equals(event.getName())){
+                            repeatingEvent.getCalGen().addIgnore(event.getStartDate());
+                        }
+                    }
                     return true;
                 }
             }
@@ -239,14 +191,10 @@ public class Series extends EventCollection implements Iterable<Event> {
     @Override
     public boolean postponeEvent(Event event) throws InvalidDateException {
         if (!super.postponeEvent(event)) {
-            for (Event e : seriesEvents) {
-                if (e.getId().equals(event.getId())) {
-                    calGen.addIgnore(e.getStartDate());
-                    addPostponedEvent(e);
-                    seriesEvents = generateEvents();
-                    return true;
-                }
-            }
+            removeEvent(event);
+            addPostponedEvent(event);
+            seriesEvents = generateEvents();
+            return true;
         }
         return false;
     }
@@ -339,14 +287,6 @@ public class Series extends EventCollection implements Iterable<Event> {
      */
     private List<Event> generateEvents() throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
-        if (calGen.getEndTime() == null) {
-            CalendarGenerator defaultCG = defaultCG(calGen);
-            this.setDisplayPeriod(defaultCG.getStartTime(), defaultCG.getEndTime());
-            ret.addAll(generateEventsHelper(baseEvent, defaultCG));
-        } else {
-            ret.addAll(generateEventsHelper(baseEvent, calGen));
-        }
-
         for (RepeatingEvent s : repeatingEvents) {
             ret.addAll(generateEventsHelper(s.getBase(), s.getCalGen()));
         }
@@ -355,20 +295,16 @@ public class Series extends EventCollection implements Iterable<Event> {
 
     private List<Event> generateEventsHelper(Event base, CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
+        int max = 20;
         for (GregorianCalendar startDates : CG) {
             Event event = new Event(base.getName(), startDates, addTime(startDates, base.getDuration()));
             ret.add(event);
+            max--;
+            if(max == 0)
+                break;
         }
         return ret;
     }
-
-    private CalendarGenerator defaultCG(CalendarGenerator CG) {
-        long time = Duration.ofDays(31).toMillis();
-        GregorianCalendar startTime = CG.getStartTime();
-        GregorianCalendar endTime = addTime(startTime, time);
-        return new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
-    }
-
 
     /**
      * Adds time (in millis) to a begin date and return it
