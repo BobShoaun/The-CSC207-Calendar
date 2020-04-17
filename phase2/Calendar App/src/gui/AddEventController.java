@@ -168,7 +168,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
                 try {
                     calendar.getSeries(seriesName);
                 } catch (NoSuchSeriesException e) {
-                    calendar.addEventSeries(name, null, null, null, null);
+                    calendar.addEventSeries(seriesName, null, null, null, null);
                 }
                 RepeatingEventController controller = showGUI("repeatingEvent.fxml");
                 Event newEvent = createEvent(name, start, end);

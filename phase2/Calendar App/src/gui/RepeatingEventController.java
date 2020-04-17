@@ -74,7 +74,7 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
         dateErrorLabel.setVisible(false);
         try {
             getUserInput();
-            if (seriesName.equals("")||seriesName.equals("Default")) {
+            if (seriesName.equals("") || seriesName.equals("Default")) {
                 calendar.addEventSeries(baseEvent.getName(), start, end, timeSpan, baseEvent);
             } else {
                 getSeries();
@@ -101,11 +101,13 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
 
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         getTimeSpan();
-        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         if (indefiniteEndDateChoice.isSelected()) {
             end = null;
-        } else if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
-            throw new InvalidDateException();
+        } else {
+            end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+            if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
+                throw new InvalidDateException();
+            }
         }
     }
 
