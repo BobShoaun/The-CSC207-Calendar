@@ -20,17 +20,18 @@ import java.util.ResourceBundle;
  */
 public class EventEditUI extends EventAddUI {
 
-    public CheckBox postponeCheckbox;
     @FXML
-    protected Button shareEventButton;
-    @FXML
-    protected Button addAlertButton;
-    @FXML
-    protected Button deleteButton;
-    @FXML
-    protected Button editButton;
-    @FXML
-    protected Button duplicateButton;
+    private CheckBox postponeCheckbox;
+//    @FXML
+//    private Button shareEventButton;
+//    @FXML
+//    private Button addAlertButton;
+//    @FXML
+//    private Button deleteButton;
+//    @FXML
+//    private Button editButton;
+//    @FXML
+//    private Button duplicateButton;
 
     private Event event;
     private String oldMemoTitle;
