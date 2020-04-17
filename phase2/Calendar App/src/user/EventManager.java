@@ -148,18 +148,15 @@ public class EventManager {
      * @param baseEvent  The event on which the other events will be based
      */
     public void addEventSeries(String name, GregorianCalendar start, GregorianCalendar end, Duration difference, Event baseEvent) throws InvalidDateException {
-        for (EventCollection eventCollection :
-                eventCollections) {
-            if (eventCollection instanceof Series && ((Series) eventCollection).getName().equals(name)) {
-                // ((Series) eventCollection).addRepeatingEvent(baseEvent, start, end, difference);
-                throw new Error();
-                //return;
-            }
+        try {
+            Series existingSeries = getSeries(name);
+            existingSeries.addRepeatingEvent(baseEvent,start,end,difference);
+        } catch (NoSuchSeriesException e) {
+            SeriesFactory seriesFactory = new SeriesFactory();
+            Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
+            eventCollections.add(eventCollection);
+            dataSaver.saveEvents(this);
         }
-        SeriesFactory seriesFactory = new SeriesFactory();
-        Series eventCollection = seriesFactory.getSeries(name, baseEvent, start, end, Collections.singletonList(difference));
-        eventCollections.add(eventCollection);
-        dataSaver.saveEvents(this);
     }
 
     /**

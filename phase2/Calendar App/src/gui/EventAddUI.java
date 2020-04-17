@@ -97,7 +97,7 @@ public class EventAddUI extends GraphicalUserInterface implements Initializable 
             if (newEvent != null) {
                 finalizeEvent(newEvent);
             }
-            controller.setBaseEvent(newEvent);
+            controller.setDetails(newEvent,calendar);
         } catch (InvalidDateException e) {
             dateTimeErrorLabel.setText("Invalid Date");
             dateTimeErrorLabel.setVisible(true);

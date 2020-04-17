@@ -6,6 +6,7 @@ import dates.TimeController;
 import event.Event;
 import event.EventCollection;
 import event.Series;
+import event.SeriesFactory;
 import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;

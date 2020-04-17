@@ -23,9 +23,11 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
     @FXML private TextField nameField;
 
     private Event baseEvent;
+    private user.Calendar calendar;
 
-    public void setBaseEvent(Event baseEvent) {
+    public void setDetails(Event baseEvent, user.Calendar calendar) {
         this.baseEvent = baseEvent;
+        this.calendar = calendar;
     }
 
     @Override
