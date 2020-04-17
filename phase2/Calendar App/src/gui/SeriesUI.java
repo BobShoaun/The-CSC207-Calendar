@@ -23,16 +23,11 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
 
-    @FXML
-    private DatePicker startDate;
-    @FXML
-    private DatePicker endDate;
-    @FXML
-    private ChoiceBox timeChoiceBox;
-    @FXML
-    private TextField repeatNumField;
-    @FXML
-    private TextField nameField;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+    @FXML private ChoiceBox timeChoiceBox;
+    @FXML private TextField repeatNumField;
+    @FXML private TextField nameField;
 
     private Event baseEvent;
     private user.Calendar calendar;
@@ -104,7 +99,5 @@ public class SeriesUI extends GraphicalUserInterface implements Initializable {
         }
 
     }
-
-
 
 }

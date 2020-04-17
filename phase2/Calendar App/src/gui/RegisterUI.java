@@ -91,4 +91,5 @@ public class RegisterUI extends GraphicalUserInterface implements Initializable 
         LoginUI loginUI = showGUI("login.fxml");
         loginUI.setDarkTheme();
     }
+
 }

@@ -14,18 +14,12 @@ import java.util.List;
 
 public class ViewTagsUI extends gui.GraphicalUserInterface{
 
-    @FXML
-    private ListView<String> tagList;
-
-    @FXML
-    private Label selectTagLabel;
+    @FXML private ListView<String> tagList;
+    @FXML private Label selectTagLabel;
 
     private Calendar calendar;
-
     private String selectedTag;
-
-    ObservableList<String> list = FXCollections.observableArrayList();
-
+    private ObservableList<String> list = FXCollections.observableArrayList();
 
     public void initialize() {
         selectTagLabel.setVisible(false);
@@ -76,4 +70,5 @@ public class ViewTagsUI extends gui.GraphicalUserInterface{
     public void close(ActionEvent actionEvent) {
         closeGUI();
     }
+
 }

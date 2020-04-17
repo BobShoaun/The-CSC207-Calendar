@@ -19,14 +19,11 @@ import java.util.stream.Stream;
  */
 public class AddRepeatingAlertUI extends GraphicalUserInterface {
 
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private TextField textField;
-    @FXML
-    private TextField durationAmount;
-    @FXML
-    private ChoiceBox<String> durationUnit;
+    @FXML private DatePicker datePicker;
+    @FXML private TextField textField;
+    @FXML private TextField durationAmount;
+    @FXML private ChoiceBox<String> durationUnit;
+
     private AlertCollection ac;
     private AlertUI controller;
 
@@ -87,4 +84,5 @@ public class AddRepeatingAlertUI extends GraphicalUserInterface {
             }
         }
     }
+
 }

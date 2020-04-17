@@ -11,16 +11,12 @@ import java.util.List;
 
 public class TagUI extends gui.GraphicalUserInterface {
 
-    ObservableList list = FXCollections.observableArrayList();
-
+    private ObservableList list = FXCollections.observableArrayList();
     private Calendar calendar;
     private String tagName;
 
-    @FXML
-    private TextField tagNameTextField;
-
-    @FXML
-    private ListView tagEventList;
+    @FXML private TextField tagNameTextField;
+    @FXML private ListView tagEventList;
 
     public TagUI() {
         tagName = tagNameTextField.getText();

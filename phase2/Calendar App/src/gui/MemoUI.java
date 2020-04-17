@@ -12,20 +12,14 @@ import java.util.List;
 
 public class MemoUI extends GraphicalUserInterface {
 
-    ObservableList list = FXCollections.observableArrayList();
-
+    private ObservableList list = FXCollections.observableArrayList();
     private Calendar calendar;
     private String memoTitle;
 
-    @FXML
-    private TextField memoTitleField;
-    @FXML
-    private TextField memoTextField;
-    @FXML
-    private Label memoExistsLabel;
-    @FXML
-    private ListView<String> eventsList;
-
+    @FXML private TextField memoTitleField;
+    @FXML private TextField memoTextField;
+    @FXML private Label memoExistsLabel;
+    @FXML private ListView<String> eventsList;
 
     public MemoUI() {
         memoExistsLabel.setVisible(false);

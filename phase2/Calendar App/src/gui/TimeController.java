@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import java.util.GregorianCalendar;
 
 public class TimeController extends Application {
-    @FXML
-    DatePicker timeView;
+
+    @FXML private DatePicker timeView;
 
     private Calendar calendar;
 
@@ -90,4 +90,5 @@ public class TimeController extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 }

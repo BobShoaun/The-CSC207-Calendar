@@ -40,28 +40,17 @@ public class CalendarUI extends GraphicalUserInterface {
     private String currSubSeries = null;
     private UserManager userManager;
 
-    @FXML
-    private ListView<String> alertList;
-    @FXML
-    private ListView<String> displayedSubSeriesList;
-    @FXML
-    private ListView<String> displayedSeriesList;
-    @FXML
-    private CheckBox darkTheme;
-    @FXML
-    private ChoiceBox searchByList;
-    @FXML
-    private DatePicker startDate;
-    @FXML
-    private DatePicker endDate;
-    @FXML
-    private TextField searchTermField;
-    @FXML
-    private ListView<String> displayedEventList;
-    @FXML
-    private Label lastLoginLabel;
-    @FXML
-    private Label eventErrorLabel;
+    @FXML private ListView<String> alertList;
+    @FXML private ListView<String> displayedSubSeriesList;
+    @FXML private ListView<String> displayedSeriesList;
+    @FXML private CheckBox darkTheme;
+    @FXML private ChoiceBox searchByList;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+    @FXML private TextField searchTermField;
+    @FXML private ListView<String> displayedEventList;
+    @FXML private Label lastLoginLabel;
+    @FXML private Label eventErrorLabel;
 
     private ObservableList<Event> eventList;
 

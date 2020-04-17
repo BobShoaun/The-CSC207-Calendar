@@ -9,22 +9,16 @@ import javafx.scene.control.TextField;
 import user.UserManager;
 
 public class ShareUI extends GraphicalUserInterface{
+
     private Event event;
     private UserManager userManger;
     private String recipientUsername;
     private String recipientCalendar;
 
-    @FXML
-    protected Label UsernameError;
-
-    @FXML
-    protected Label CalendarNameError;
-
-    @FXML
-    protected TextField Username;
-
-    @FXML
-    protected TextField CalendarName;
+    @FXML protected Label UsernameError;
+    @FXML protected Label CalendarNameError;
+    @FXML protected TextField Username;
+    @FXML protected TextField CalendarName;
 
     public void setEvent(Event event){
         this.event = event;
@@ -58,4 +52,5 @@ public class ShareUI extends GraphicalUserInterface{
             UsernameError.setOpacity(1);
         }
     }
+
 }

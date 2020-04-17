@@ -20,8 +20,7 @@ import java.util.ResourceBundle;
  */
 public class EventEditUI extends EventAddUI {
 
-    @FXML
-    private CheckBox postponeCheckbox;
+    @FXML private CheckBox postponeCheckbox;
 //    @FXML
 //    private Button shareEventButton;
 //    @FXML
@@ -159,7 +158,8 @@ public class EventEditUI extends EventAddUI {
         controller.initialize(ds.loadAlertCollection(event.getId()));
     }
 
-    public void handleShareEvent() throws InvalidDateException {
+    @FXML
+    private void handleShareEvent() {
         ShareUI controller = openGUI("Share.fxml");
         controller.setEvent(event);
         controller.setUserManger(userManager);

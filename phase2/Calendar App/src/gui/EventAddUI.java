@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class EventAddUI extends GraphicalUserInterface implements Initializable {
 
-    @FXML Button createSeriesButton;
+//    @FXML private Button createSeriesButton;
     @FXML protected TextField nameField;
     @FXML protected DatePicker startDate;
     @FXML protected TextField startTime;
