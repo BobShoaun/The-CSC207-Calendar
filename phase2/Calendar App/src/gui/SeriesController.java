@@ -138,7 +138,6 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
                     timeSpan = Duration.ofDays(timeUnit * 365);
                     break;
                 default:
-                    System.out.println("Time input incorrect");
                     break;
             }
         } else {

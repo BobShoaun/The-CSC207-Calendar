@@ -118,7 +118,6 @@ public class TimeTravellerController {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Somehow failed to load the fxml");
         }
 
         TimeTravellerController timeTravellerController = fxmlLoader.getController();
