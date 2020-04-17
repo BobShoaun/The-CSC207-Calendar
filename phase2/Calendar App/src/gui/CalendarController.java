@@ -147,7 +147,7 @@ public class CalendarController extends GraphicalUserInterface {
     /**
      * Update the displayed series ListView.
      */
-    protected void updateDisplayedSeries() {
+    private void updateDisplayedSeries() {
         seriesNameList.clear();
         for (Series series : calendar.getSeries()) {
             seriesNameList.add(series.getName());
@@ -157,7 +157,7 @@ public class CalendarController extends GraphicalUserInterface {
     /**
      * Update the displayed SubSeries (Repeating events) ListView.
      */
-    protected void updateDisplayedRepeatingEvents() {
+    private void updateDisplayedRepeatingEvents() {
         ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
             for (RepeatingEvent repeatingEvent : currSeries.getRepeatingEvents()) {
@@ -261,7 +261,7 @@ public class CalendarController extends GraphicalUserInterface {
         this.user = user;
         setActiveCalendar(user.getCalendar(0));
         initialize();
-        updateDisplayedAlerts();
+        updateDisplays();
 
         setTheme();
         lastLoginLabel.setText("Last login on: " + user.getLastLoginTime().getTime());
@@ -275,13 +275,13 @@ public class CalendarController extends GraphicalUserInterface {
     public void setActiveCalendar(user.Calendar calendar) {
         this.calendar = calendar;
         setWindowTitle(calendar.getName());
-        updateDisplayedEvents();
+        updateDisplays();
     }
 
     /**
      * Update the visible alerts
      */
-    protected void updateDisplayedAlerts() {
+    private void updateDisplayedAlerts() {
         GregorianCalendar past = calendar.getTime();
         past.add(GregorianCalendar.DATE, -30);
         ObservableList<String> alertStrings = FXCollections.observableArrayList(
@@ -294,22 +294,23 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void alertListClicked() {
         currAlert = alertList.getSelectionModel().getSelectedItems().get(0);
-        updateDisplayedEvents();
-        updateDisplayedAlerts();
+        updateDisplays();
     }
 
     @FXML
     private void seriesListClicked() {
+        if(displayedSeriesList.getSelectionModel().getSelectedIndex() == -1)
+            return;
         String stringSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
-
-        try {
-            currSeries = calendar.getSeries(stringSeries);
-        } catch (NoSuchSeriesException e) {
-            e.printStackTrace();
+        if(stringSeries != null) {
+            try {
+                currSeries = calendar.getSeries(stringSeries);
+            } catch (NoSuchSeriesException e) {
+                e.printStackTrace();
+            }
         }
         currRepeatingEvent = null;
-        updateDisplayedRepeatingEvents();
-        //updateDisplayedSeriesEvents();
+        updateDisplays();
     }
 
     @FXML
@@ -318,8 +319,7 @@ public class CalendarController extends GraphicalUserInterface {
             calendar.removeEventCollection(currSeries);
         }
         calendar.getDataSaver().saveSeries(calendar.getEventManager());
-        updateDisplayedSeries();
-        updateDisplayedRepeatingEvents();
+        updateDisplays();
     }
 
     /**
@@ -328,7 +328,7 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void repeatingEventListClicked() {
         repeatingEventIndex = displayedRepeatingEventList.getSelectionModel().getSelectedIndex();
-        updateDisplayedRepeatingEvents();
+        updateDisplays();
     }
 
     @FXML
@@ -337,7 +337,7 @@ public class CalendarController extends GraphicalUserInterface {
             currSeries.getRepeatingEvents().remove(repeatingEventIndex);
         }
         calendar.getDataSaver().saveEvents(calendar.getEventManager());
-        updateDisplayedRepeatingEvents();
+        updateDisplays();
     }
 
     /**
@@ -403,7 +403,7 @@ public class CalendarController extends GraphicalUserInterface {
      * Event when the search text has been changed
      */
     public void searchTermValueChange() {
-        updateDisplayedEvents();
+        updateDisplays();
     }
 
     /**

@@ -177,7 +177,6 @@ public class DataSaver {
      * @return Loaded Calendar
      */
     public Calendar loadCalendar(String calendarName) {
-
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags;
@@ -201,7 +200,6 @@ public class DataSaver {
      * @param eventCollections the eventCollection to save to
      */
     private void loadSeries(String calendarName, ArrayList<EventCollection> eventCollections) {
-
         String[] filenames = getFileNamesInDirectory(calendarName + "/series/");
         if (filenames != null) {
             for (String seriesName :
@@ -264,7 +262,6 @@ public class DataSaver {
     }
 
     private ArrayList<Memo> loadMemos(String calendarName, ArrayList<Memo> memos) {
-
         try {
             memos = new ArrayList<>();
             Scanner scanner = loadScannerFromFile(calendarName + "/memos.txt");

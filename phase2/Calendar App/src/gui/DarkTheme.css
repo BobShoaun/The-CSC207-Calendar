@@ -7,6 +7,7 @@
 
 .list-view .list-cell:odd {
     -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-text-fill: white;
 }
 .list-view .list-cell:even {
     -fx-background-color: rgba(60, 60, 60, 255);
