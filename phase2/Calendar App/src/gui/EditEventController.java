@@ -110,7 +110,6 @@ public class EditEventController extends AddEventController {
             postponeEvent();
             editMemo(event, oldMemoTitle);
             editTags();
-            calendarUIController.updateDisplayedEvents();
             closeGUI();
             save();
         } catch (InvalidDateException e) {
