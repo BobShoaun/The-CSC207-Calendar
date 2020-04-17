@@ -171,6 +171,11 @@ public class EventEditUI extends EventAddUI {
     }
 
     @FXML
+    private void handleCancel(){
+        closeGUI();
+    }
+
+    @FXML
     private void handleDuplicate() {
         System.out.println("Duplicate clicked");
         //TODO: need date input...
