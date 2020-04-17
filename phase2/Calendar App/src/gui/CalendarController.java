@@ -285,15 +285,15 @@ public class CalendarController extends GraphicalUserInterface {
     @FXML
     private void seriesListClicked() {
         String stringSeries = displayedSeriesList.getSelectionModel().getSelectedItem();
-
-        try {
-            currSeries = calendar.getSeries(stringSeries);
-        } catch (NoSuchSeriesException e) {
-            e.printStackTrace();
+        if(stringSeries != null) {
+            try {
+                currSeries = calendar.getSeries(stringSeries);
+            } catch (NoSuchSeriesException e) {
+                e.printStackTrace();
+            }
         }
         currRepeatingEvent = null;
-        updateDisplayedRepeatingEvents();
-        //updateDisplayedSeriesEvents();
+        updateDisplays();
     }
 
     @FXML
