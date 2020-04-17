@@ -49,18 +49,14 @@ public class LoginController extends GraphicalUserInterface {
         }
     }
 
-    @FXML
-    private void handleRegister() {
-        showRegisterUI();
-    }
-
     private void showCalendarUI() {
         CalendarController calendarUIController = showGUI("calendar.fxml");
         calendarUIController.setUserManager(userManager);
         calendarUIController.setUser(userManager.getCurrentUser());
     }
 
-    private void showRegisterUI() {
+    @FXML
+    private void handleRegister() {
         RegisterController g = showGUI("register.fxml");
         g.setUserManager(userManager);
         g.setDarkTheme();
