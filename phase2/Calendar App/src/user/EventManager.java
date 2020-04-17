@@ -9,6 +9,7 @@ import exceptions.InvalidDateException;
 import exceptions.NoSuchSeriesException;
 import memotag.Memo;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
@@ -271,6 +272,14 @@ public class EventManager {
      * @param eventCollection Event collection to remove
      */
     public void removeEventCollection(EventCollection eventCollection) {
+        Series series = (Series)eventCollection;
+        if(series != null){
+            try {
+                dataSaver.deleteDirectory("/series/"+series.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         eventCollections.remove(eventCollection);
     }
 
