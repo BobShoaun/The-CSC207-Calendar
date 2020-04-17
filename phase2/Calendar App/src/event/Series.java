@@ -74,6 +74,11 @@ public class Series extends EventCollection implements Iterable<Event> {
      */
     public void setRepeatingEvents(List<RepeatingEvent> RepeatingEvents) {
         this.repeatingEvents = RepeatingEvents;
+        try {
+            this.seriesEvents = generateEvents();
+        } catch (InvalidDateException ignored) {
+
+        }
     }
     //TODO: test
 
@@ -297,6 +302,11 @@ public class Series extends EventCollection implements Iterable<Event> {
         dur.add(frequency);
         CalendarGenerator newCG = new CalendarGenerator(start, dur, end);
         repeatingEvents.add(new RepeatingEvent(baseEvent, newCG));
+        try {
+            this.seriesEvents = generateEvents();
+        } catch (InvalidDateException ignored) {
+
+        }
     }
 
     /**

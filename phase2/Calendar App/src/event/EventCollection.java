@@ -135,6 +135,7 @@ public class EventCollection implements Iterable<Event>, Observer {
         if (removed) {
             event.addObserver(this);
         }
+        System.out.println("Is is removed?"+removed);
         return removed;
     }
 
