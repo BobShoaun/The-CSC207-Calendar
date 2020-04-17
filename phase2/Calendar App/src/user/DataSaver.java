@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Responsible for serializing data into the file system, and deserializing data to be loaded into memory
@@ -134,53 +135,75 @@ public class DataSaver {
                 .forEach(File::delete);
     }
 
+    /**
+     * Load a CalendarGenerator from its getString output
+     *
+     * @param cgStr String input
+     * @return CalendarGenerator
+     */
+    public CalendarGenerator loadCalendarGenerator(String cgStr) {
+        String[] information = cgStr.split("\n");
+        GregorianCalendar startTime = new GregorianCalendar();
+        startTime.setTimeInMillis(Long.parseLong(information[0].trim()));
+
+        GregorianCalendar endTime = (new GregorianCalendar());
+        endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
+
+        List<Duration> periods = Arrays.stream(information[2].split(" "))
+                .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
+
+        List<GregorianCalendar> ignoreList = new ArrayList<>();
+        if (information.length > 3) {
+            String[] ignoreMillisStr = information[3].split(" ");
+            List<GregorianCalendar> ignored = new ArrayList<>();
+            for (String s : ignoreMillisStr) {
+                GregorianCalendar gc = new GregorianCalendar();
+                gc.setTimeInMillis(Long.parseLong(s));
+                ignored.add(gc);
+            }
+            ignoreList = ignored;
+        }
+
+        return new CalendarGenerator(startTime, periods, endTime, ignoreList);
+
+    }
+
     public Calendar loadCalendar(String calendarName) {
+
         DataSaver calendarDataSaver = new DataSaver(basePath + calendarName);
         ArrayList<Memo> memos = new ArrayList<>();
         ArrayList<Tag> tags = new ArrayList<>();
         ArrayList<EventCollection> eventCollections = new ArrayList<>();
         ArrayList<AlertCollection> alertCollections = new ArrayList<>();
-        EventCollection manualEvents;
 
-        //load EC
-        manualEvents = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
-        manualEvents.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
-        eventCollections.add(manualEvents);
-        //load memos
-        try {
-            memos = new ArrayList<>();
-            Scanner scanner = loadScannerFromFile(calendarName + "/memos.txt");
-            while (scanner.hasNext()) {
-                String memoData = scanner.nextLine();
-                String[] parts = memoData.split("[§]+");
-                //Split ids
-                List<String> idStrings = new ArrayList<>();
-                if(parts.length == 3){
-                    idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
-                }
-                memos.add(new Memo(parts[1], parts[0], idStrings));
+        loadEvents(calendarName, eventCollections);
+
+        memos = loadMemos(calendarName, memos);
+
+        tags = loadTags(calendarName, tags);
+
+        loadSeries(calendarName, eventCollections);
+
+        loadAlertCollections(calendarName, calendarDataSaver, alertCollections);
+
+        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags, calendarDataSaver);
+    }
+
+    private void loadAlertCollections(String calendarName, DataSaver calendarDataSaver, ArrayList<AlertCollection> alertCollections) {
+        //Load existing alert collection series
+        File[] files = calendarDataSaver.getFilesInDirectory(calendarName + "/alerts/");
+        if (files != null) {
+            for (File file : files) {
+                String name = file.getName();
+                name = name.replaceAll(".txt", "");
+                AlertCollection alertCollection = loadAlertCollection(name);
+                alertCollections.add(alertCollection);
             }
-        } catch (FileNotFoundException ignored) {
-
         }
-        //load tags
-        try {
-            tags = new ArrayList<>();
-            Scanner scanner = loadScannerFromFile(calendarName + "/tags.txt");
-            while (scanner.hasNext()) {
-                String tagData = scanner.nextLine();
-                String[] parts = tagData.split("[§]+");
-                //Split ids
-                List<String> idStrings = new ArrayList<>();
-                if(parts.length == 2){
-                    idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
-                }
-                tags.add(new Tag(parts[0], idStrings));
-            }
-        } catch (FileNotFoundException ignored) {
+    }
 
-        }
-        //Load existing series
+    private void loadSeries(String calendarName, ArrayList<EventCollection> eventCollections) {
+
         String[] filenames = getFileNamesInDirectory(calendarName + "/series/");
         if (filenames != null) {
             for (String seriesName :
@@ -190,7 +213,7 @@ public class DataSaver {
                     Event baseEvent = stringsToEvent(info);
 
                     String CG = loadStringFromFile(calendarName + "/series/" + seriesName + "/CalenderGenerator.txt");
-                    CalendarGenerator newCG = new CalendarGenerator(CG);
+                    CalendarGenerator newCG = loadCalendarGenerator(CG);
                     GregorianCalendar newStart = newCG.getStartTime();
                     GregorianCalendar newEnd = newCG.getEndTime();
                     List<Duration> durs = newCG.getPeriods();
@@ -220,18 +243,56 @@ public class DataSaver {
 
             }
         }
-        //Load existing alert collection series
-        File[] files = calendarDataSaver.getFilesInDirectory(calendarName +"/alerts/");
-        if (files != null) {
-            for (File file :
-                    files) {
-                String name = file.getName();
-                name = name.replaceAll(".txt", "");
-                AlertCollection alertCollection = loadAlertCollection(name);
-            }
-        }
+    }
 
-        return new Calendar(calendarName, eventCollections, alertCollections, memos, tags, calendarDataSaver);
+    private ArrayList<Tag> loadTags(String calendarName, ArrayList<Tag> tags) {
+
+        try {
+            tags = new ArrayList<>();
+            Scanner scanner = loadScannerFromFile(calendarName + "/tags.txt");
+            while (scanner.hasNext()) {
+                String tagData = scanner.nextLine();
+                String[] parts = tagData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>();
+                if (parts.length == 2) {
+                    idStrings = new ArrayList<>(Arrays.asList(parts[1].split("[|]+")));
+                }
+                tags.add(new Tag(parts[0], idStrings));
+            }
+        } catch (FileNotFoundException ignored) {
+
+        }
+        return tags;
+    }
+
+    private ArrayList<Memo> loadMemos(String calendarName, ArrayList<Memo> memos) {
+
+        try {
+            memos = new ArrayList<>();
+            Scanner scanner = loadScannerFromFile(calendarName + "/memos.txt");
+            while (scanner.hasNext()) {
+                String memoData = scanner.nextLine();
+                String[] parts = memoData.split("[§]+");
+                //Split ids
+                List<String> idStrings = new ArrayList<>();
+                if (parts.length == 3) {
+                    idStrings = new ArrayList<>(Arrays.asList(parts[2].split("[|]+")));
+                }
+                memos.add(new Memo(parts[1], parts[0], idStrings));
+            }
+        } catch (FileNotFoundException ignored) {
+
+        }
+        return memos;
+    }
+
+    private void loadEvents(String calendarName, ArrayList<EventCollection> eventCollections) {
+
+        EventCollection manualEvents;
+        manualEvents = new EventCollection(loadEventsFromFile(calendarName + "/events/"));
+        manualEvents.setPostponedEvents(loadEventsFromFile(calendarName + "/events/postponed/"));
+        eventCollections.add(manualEvents);
     }
 
     /**
@@ -251,7 +312,7 @@ public class DataSaver {
      * @param tagManager TagManager to save
      */
     public void saveTags(TagManager tagManager) {
-        // save tags TODO: extract method
+
         StringBuilder tagsData = new StringBuilder();
         for (Tag tag :
                 tagManager.getTags()) {
@@ -369,7 +430,7 @@ public class DataSaver {
             String subData = subs.nextLine();
             String[] parts = subData.split("§");
             Event baseEvent = stringsToEvent(parts);
-            CalendarGenerator CG = new CalendarGenerator(parts[4].replaceAll("\\|","\n"));
+            CalendarGenerator CG = loadCalendarGenerator(parts[4].replaceAll("\\|", "\n"));
             ret.add(new SubSeries(baseEvent,CG));
         }
         return ret;
@@ -433,7 +494,7 @@ public class DataSaver {
         }
         if (!cgStr.toString().equals("")) {
             cgStr.deleteCharAt(cgStr.length() - 1);
-            ac.setCalGen(new CalendarGenerator(cgStr.toString()));
+            ac.setCalGen(loadCalendarGenerator(cgStr.toString()));
         }
 
         return ac;

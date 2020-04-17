@@ -1,8 +1,10 @@
 package dates;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The CalendarGenerator class
@@ -14,7 +16,14 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     private List<Duration> periods;
     private GregorianCalendar endTime;
 
-    // end==null means forever
+    /**
+     * Initialize the CalendarGenerator.
+     * end==null means it goes on forever
+     *
+     * @param start   Start time
+     * @param periods The duration of repetition
+     * @param end     End time
+     */
     public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end) {
         this.startTime = start;
         this.periods = periods;
@@ -22,34 +31,21 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
     }
 
     /**
-     * Create a CalendarGenerator from a String.
+     * Initialize the CalendarGenerator.
+     * end==null means it goes on forever
      *
-     * @param input
+     * @param start      Start time
+     * @param periods    The duration of repetition
+     * @param end        End time
+     * @param ignoreList List of ignored times
      */
-    // TODO: move to DataSaver class
-    public CalendarGenerator(String input) {
-        String[] information = input.split("\n");
-        startTime = new GregorianCalendar();
-        startTime.setTimeInMillis(Long.parseLong(information[0].trim()));
-
-        endTime = (new GregorianCalendar());
-        endTime.setTimeInMillis(Long.parseLong(information[1].trim()));
-
-        periods = Arrays.stream(information[2].split(" "))
-                .map(s -> Duration.ofSeconds(Long.parseLong(s))).collect(Collectors.toList());
-
-        if (information.length > 3) {
-            String[] ignoreMillisStr = information[3].split(" ");
-            List<GregorianCalendar> ignored = new ArrayList<>();
-            for (String s : ignoreMillisStr) {
-                GregorianCalendar gc = new GregorianCalendar();
-                gc.setTimeInMillis(Long.parseLong(s));
-                ignored.add(gc);
-            }
-            this.ignoreList = ignored;
-        }
+    public CalendarGenerator(GregorianCalendar start, List<Duration> periods, GregorianCalendar end, List<GregorianCalendar> ignoreList) {
+        this.startTime = start;
+        this.periods = periods;
+        this.endTime = end;
+        this.ignoreList = ignoreList;
     }
-    // TODO: move to DataSaver?
+
 
     /**
      * Outputs all data in this CG into a String.
