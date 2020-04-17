@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 /**
  * GUI controller class for time-travel magic
  */
-public class TimeTravellerController {
+public class TimeTravellerController extends gui.GraphicalUserInterface{
 
     @FXML
     private DatePicker timeView;
