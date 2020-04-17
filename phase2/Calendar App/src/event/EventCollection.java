@@ -39,7 +39,11 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @param postponedEvents List of postponed events
      */
     public void setPostponedEvents(List<Event> postponedEvents) {
-        this.postponedEvents = postponedEvents; // TODO: check if they are postponed
+        for (Event event :
+                postponedEvents) {
+            event.setPostponed(true);
+        }
+        this.postponedEvents = postponedEvents;
     }
 
 
@@ -268,13 +272,7 @@ public class EventCollection implements Iterable<Event>, Observer {
      * @return true if the event's start time is within the start and end time
      */
     protected boolean isOnTime(Event event, GregorianCalendar startTime, GregorianCalendar endTime) {
-        //TODO: not inclusive of end points, test this
         return event.getStartDate().before(endTime) && event.getEndDate().after(startTime);
-//        Date startEvent = GCToDate(event.getStartDate());
-//        Date endEvent = GCToDate(event.getEndDate());
-//        boolean within1 = startTime.before(startEvent) && endTime.after(startEvent);
-//        boolean within2 = startTime.before(endEvent) && endTime.after(endEvent);
-//        return within1 && within2;
     }
 
     /**

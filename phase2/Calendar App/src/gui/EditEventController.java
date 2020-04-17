@@ -165,7 +165,6 @@ public class EditEventController extends AddEventController {
 
     @FXML
     private void handleDuplicate() {
-        //TODO: need date input...
         AddEventController dup = openGUI("addEvent.fxml");
         dup.setCalendar(calendar);
         dup.setCalendarUIController(calendarUIController);

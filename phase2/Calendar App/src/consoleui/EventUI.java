@@ -61,7 +61,7 @@ public class EventUI extends UserInterface {
     @Override
     public void show() {
         boolean running = true;
-        getMemoUIs();
+        getMemoUI();
         while (running) {
             display();
             int option = getOptionsInput(new String[]{"Exit",
@@ -210,7 +210,8 @@ public class EventUI extends UserInterface {
         }
     }
 
-    private void getMemoUIs() {
+
+    private void getMemoUI() {
         Memo memo = calendar.getMemo(event);
         memoUIs.add(new MemoUI(memo, calendar));
     }
