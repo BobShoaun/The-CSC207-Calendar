@@ -45,7 +45,7 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     }
 
     @FXML
-    public void chooseMemo(javafx.scene.input.MouseEvent mouseEvent) {
+    public void chooseMemo() {
         String memo = memoList.getSelectionModel().getSelectedItem();
         if (memo == null || memo.isEmpty()) {
             selectedMemo = null;
@@ -57,12 +57,12 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     }
 
     @FXML
-    private void editMemo(ActionEvent actionEvent) {
+    private void editMemo() {
         if (selectedMemo == null || selectedMemo.isEmpty()) {
             selectMemoLabel.setVisible(true);
             System.out.println("No memo selected!");
         } else {
-            showMemoUI(actionEvent);
+            showMemoUI();
         }
     }
 
@@ -73,7 +73,7 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     }
 
     @FXML
-    private void close(ActionEvent actionEvent) {
+    private void close() {
         closeGUI();
     }
 }

@@ -65,7 +65,8 @@ public class EventEditUI extends EventAddUI {
         this.username = username;
     }
 
-    public void handleEdit() {
+    @FXML
+    private void handleEdit() {
         System.out.println("Done (edit) clicked");
         try {
             getUserInput();
@@ -136,7 +137,8 @@ public class EventEditUI extends EventAddUI {
         addTags(event.getId());
     }
 
-    public void handleDelete() {
+    @FXML
+    private void handleDelete() {
         System.out.println("delete clicked");
         try {
             eventCollection.removeEvent(event);
@@ -148,7 +150,8 @@ public class EventEditUI extends EventAddUI {
         }
     }
 
-    public void handleAddAlert() {
+    @FXML
+    private void handleAddAlert() {
         System.out.println("add clicked");
         AlertUI controller = openGUI("alert.fxml");
         DataSaver ds = new DataSaver("users/" + username + "/" + calendar.getName());
@@ -162,7 +165,7 @@ public class EventEditUI extends EventAddUI {
         save();
     }
 
-    public void postPoneEvent() {
+    private void postPoneEvent() {
         if (postponeCheckbox.isSelected() && !event.isPostponed()) {
             System.out.println("postpone clicked");
             try {
@@ -174,7 +177,8 @@ public class EventEditUI extends EventAddUI {
         }
     }
 
-    public void handleDuplicate() {
+    @FXML
+    private void handleDuplicate() {
         System.out.println("Duplicate clicked");
         //TODO: need date input...
         EventAddUI dup = openGUI("EventAddUI.fxml");
