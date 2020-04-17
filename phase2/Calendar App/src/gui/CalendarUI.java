@@ -151,6 +151,10 @@ public class CalendarUI extends GraphicalUserInterface {
      */
     @FXML
     protected void updateDisplayedEvents() {
+//        System.out.println(calendar.getSeries().size());
+//        for (Series s:calendar.getSeries()) {
+//            System.out.println(s);
+//        }
         String searchCriterion = (String) searchByList.getValue();
         if (searchCriterion == null) {
             return;

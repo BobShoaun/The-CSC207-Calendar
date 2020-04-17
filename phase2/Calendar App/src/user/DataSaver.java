@@ -192,10 +192,20 @@ public class DataSaver {
                     String CG = loadStringFromFile(calendarName + "/series/" + seriesName + "/CalenderGenerator.txt");
                     CalendarGenerator newCG = new CalendarGenerator(CG);
                     GregorianCalendar newStart = newCG.getStartTime();
-                    GregorianCalendar newEnd = newCG.getStartTime();
+                    GregorianCalendar newEnd = newCG.getEndTime();
                     List<Duration> durs = newCG.getPeriods();
 
                     Series newSeries = new SeriesFactory().getSeries(seriesName, baseEvent, newStart, newEnd, durs);
+
+//                    System.out.println(seriesName);
+//                    System.out.println(baseEvent);
+//                    System.out.println(newStart.getTime());
+//                    System.out.println(newEnd.getTime());
+//                    for(Duration d:durs){
+//                        System.out.println(d.toDays());
+//                    }
+//                    System.out.println(newSeries);
+
                     newSeries.setSubSeries(loadSubSeries(loadScannerFromFile(calendarName + "/series/" + seriesName + "/SubSeries.txt")));
 
                     newSeries.setEvents(loadEventsFromFile(calendarName + "/series/" + seriesName + "/Manual Events/"));
@@ -323,9 +333,6 @@ public class DataSaver {
     private List<Event> loadEventsFromFile(String path) { // TODO: make use of ParseEventID()
         List<Event> loadedEvents = new ArrayList<>();
         File[] data = getFilesInDirectory(path);
-        for(File f: data){
-            System.out.println(f.getName());
-        }
         for (File f : data) {
             String id = f.getName();
             id = id.replaceAll(".txt", "");

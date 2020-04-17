@@ -94,7 +94,8 @@ public class Series extends EventCollection implements Iterable<Event> {
      */
     @Override
     public List<Event> getEvents() {
-        List<Event> ret = super.getEvents();
+        List<Event> ret = new ArrayList<>();
+        ret.addAll(getManualEvents());
         ret.addAll(this.seriesEvents);
         Collections.sort(ret);
         return ret;
@@ -197,7 +198,7 @@ public class Series extends EventCollection implements Iterable<Event> {
 
     @Override
     public boolean addMemo(String eventId, Memo memo) {
-        if (!super.addMemo(eventId, memo)){
+        if (!super.addMemo(eventId, memo)) {
             for (Event e : seriesEvents) {
                 if (e.getId().equals(eventId)) {
                     memo.addEvent(e);
@@ -223,8 +224,6 @@ public class Series extends EventCollection implements Iterable<Event> {
     }
 
 
-
-
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("===== Series =====\n");
@@ -237,7 +236,6 @@ public class Series extends EventCollection implements Iterable<Event> {
             result.append(e.toString()).append("\n");
         }
         result.append(postponedToString());
-
         return result.toString();
     }
 
@@ -282,8 +280,8 @@ public class Series extends EventCollection implements Iterable<Event> {
 
     private List<Event> generateEventsHelper(Event base, CalendarGenerator CG) throws InvalidDateException {
         List<Event> ret = new ArrayList<>();
-        for (GregorianCalendar GC : CG) {
-            Event event = new Event(base.getName(), GC, addTime(GC, base.getDuration()));
+        for (GregorianCalendar startDates : CG) {
+            Event event = new Event(base.getName(), startDates, addTime(startDates, base.getDuration()));
             ret.add(event);
         }
         return ret;
@@ -291,7 +289,7 @@ public class Series extends EventCollection implements Iterable<Event> {
 
     private CalendarGenerator defaultCG(CalendarGenerator CG) {
         long time = Duration.ofDays(365).toMillis();
-        GregorianCalendar startTime = calGen.getStartTime();
+        GregorianCalendar startTime = CG.getStartTime();
         GregorianCalendar endTime = addTime(startTime, time);
         return new CalendarGenerator(startTime, calGen.getPeriods(), endTime);
     }
