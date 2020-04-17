@@ -63,8 +63,11 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
 
     @FXML
     private void showMemoUI() {
-        MemoUI memoUI = showGUI("memo.fxml");
-        memoUI.setCalendar(calendar);
+        if(memoList.getSelectionModel().getSelectedIndex() >= 0){
+            MemoUI memoUI = showGUI("memo.fxml");
+            memoUI.setCalendar(calendar);
+            memoUI.setMemo(calendar.getMemos().get(memoList.getSelectionModel().getSelectedIndex()));
+        }
     }
 
     @FXML

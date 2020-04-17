@@ -1,20 +1,38 @@
 package gui;
 
+import event.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import memotag.Memo;
 import user.Calendar;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class MemoUI extends GraphicalUserInterface {
 
-    private ObservableList list = FXCollections.observableArrayList();
+    private ObservableList<String> list = FXCollections.observableArrayList();
     private Calendar calendar;
-    private String memoTitle;
+    private Memo memo;
+
+    /**
+     * Set the memo which is edited by this
+     * @param memo
+     */
+    public void setMemo(Memo memo){
+        this.memo = memo;
+        eventsList.setItems(list);
+        memoExistsLabel.setVisible(false);
+        memoTitleField.setText(memo.getTitle());
+        memoTextField.setText(memo.getText());
+        loadEvents();
+    }
 
     @FXML private TextField memoTitleField;
     @FXML private TextField memoTextField;
@@ -22,53 +40,46 @@ public class MemoUI extends GraphicalUserInterface {
     @FXML private ListView<String> eventsList;
 
     public MemoUI() {
-        memoExistsLabel.setVisible(false);
-        memoTitle = memoTitleField.getText();
-        loadEvents();
     }
 
-    public void setCalendar(Calendar c) { this.calendar = c; }
+    public void setCalendar(Calendar c) {
+        this.calendar = c;
+    }
 
     @FXML
     private void editMemo() {
         String newMemoTitle = memoTitleField.getText();
         String memoText = memoTextField.getText();
-        boolean edited = !memoTitle.equals(newMemoTitle);
-
         try {
-            calendar.editMemoTitle(memoTitle, newMemoTitle);
-            calendar.editMemoText(memoTitle, memoText);
+            String oldTitle = memo.getTitle();
+            calendar.editMemoTitle(oldTitle, newMemoTitle);
+            calendar.editMemoText(newMemoTitle, memoText);
         } catch (IllegalArgumentException ex) {
             memoExistsLabel.setText("Memo name already exists!");
             memoExistsLabel.setVisible(true);
         }
-
-        if (edited) { memoTitle = newMemoTitle; }
         showViewMemoUI();
     }
 
     @FXML
     private void deleteMemo() {
-        String memoTitle = memoTitleField.getText();
-        memotag.Memo memo = calendar.getMemo(memoTitle);
         calendar.removeMemo(memo);
         showViewMemoUI();
     }
 
     private void loadEvents() {
-        list.remove(list);
-        memotag.Memo memo = calendar.getMemo(memoTextField.getText());
-        List<String> events = memo.getEvents();
-        for (String s: events) {
-            list.add(s);
+        list.clear();
+        if(memo != null){
+            List<String> events = memo.getEvents();
+            for (String eventId :
+                    events) {
+                Event event = calendar.getEvent(eventId);
+                list.add(event.getName() + " " + event.getStartDate().getTime().toString());
+            }
         }
-        eventsList.getItems().addAll(list);
     }
 
     private void showViewMemoUI() {
-        ViewMemosUI controller = showGUI("viewMemos.fxml");
-        controller.setCalendar(calendar);
+        closeGUI();
     }
-
-
 }
