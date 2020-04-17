@@ -127,7 +127,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         try {
             getUserInput();
             Event newEvent = createEvent(name, start, end);
-            if (seriesName.equals("")) {
+            if (seriesName.equals("") || seriesName.equals("Default")) {
                 //Create event
                 if (newEvent != null) {
                     addEvent(newEvent);
