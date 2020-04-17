@@ -67,7 +67,7 @@ public class ViewMemosUI extends gui.GraphicalUserInterface {
     }
 
     @FXML
-    private void showMemoUI(ActionEvent actionEvent) {
+    private void showMemoUI() {
         MemoUI memoUI = showGUI("memo.fxml");
         memoUI.setCalendar(calendar);
     }
