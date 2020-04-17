@@ -2,12 +2,14 @@ package gui;
 
 import alert.Alert;
 import event.Event;
+import event.EventCollection;
 import event.Series;
 import event.SubSeries;
 import exceptions.NoSuchSeriesException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -15,15 +17,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import memotag.Memo;
 import memotag.Tag;
+import sun.java2d.windows.GDIRenderer;
 import user.User;
 import user.UserManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,6 +81,7 @@ public class CalendarUI extends GraphicalUserInterface {
                     endDate.setValue(end);
                     searchTermField.setVisible(false);
                     break;
+                case "Series name":
                 case "Tag": // Tag and memo name cases merged
                 case "Memo name":
                     startDate.setVisible(false);
@@ -95,7 +96,7 @@ public class CalendarUI extends GraphicalUserInterface {
             }
         });
         ObservableList<String> searchOptions = FXCollections.observableArrayList(
-                Stream.of("Date", "Tag", "Memo name", "Postponed").collect(Collectors.toList())
+                Stream.of("Date", "Tag", "Memo name", "Postponed", "Series name").collect(Collectors.toList())
         );
         searchByList.setItems(searchOptions);
         searchByList.setValue("Date");
@@ -111,16 +112,19 @@ public class CalendarUI extends GraphicalUserInterface {
             displayedEventList.refresh();
         });
 
-        // TODO: refactor this into a separate method
-        displayedEventList.setOnMouseClicked(event -> {
+        displayedEventList.setOnMouseClicked(displayedEventListClickHandler());
+        updateDisplayedEvents();
+        updateDisplayedSeries();
+        updateDisplayedSubSeries();
+    }
+
+    private EventHandler<MouseEvent> displayedEventListClickHandler() {
+        return event -> {
             System.out.println("Clicked on event at id: " + displayedEventList.getSelectionModel().getSelectedIndex());
             if (displayedEventList.getSelectionModel().getSelectedIndex() != -1) {
                 currEvent = eventList.get(displayedEventList.getSelectionModel().getSelectedIndex());
             }
-        });
-        updateDisplayedEvents();
-        updateDisplayedSeries();
-        updateDisplayedSubSeries();
+        };
     }
 
     protected void updateDisplayedSeries() {
@@ -203,6 +207,15 @@ public class CalendarUI extends GraphicalUserInterface {
                 break;
             case "Postponed":
                 eventList.addAll(calendar.getPostponedEvents());
+                break;
+            case "Series name":
+                try {
+                    EventCollection eventCollection = calendar.getSeries(searchTermField.getText());
+                    eventList.addAll(eventCollection.getEvents(new GregorianCalendar(0, Calendar.JANUARY, 1),
+                            new GregorianCalendar(2100, Calendar.JANUARY, 1)));
+                } catch (NoSuchSeriesException ignored) {
+
+                }
                 break;
         }
     }
