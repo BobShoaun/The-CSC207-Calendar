@@ -24,23 +24,16 @@ import java.util.Scanner;
 public class SeriesUI extends GraphicalUserInterface implements Initializable {
 
     private final ObservableList<String> timeChoice = FXCollections.observableArrayList("Day", "Week", "Month", "Year");
-    @FXML
-    private Label dateErrorLabel;
-    @FXML
-    private CheckBox indefiniteEndDateChoice;
-    @FXML
-    private Label seriesErrorLabel;
-    @FXML
-    private TextField seriesField;
 
-    @FXML
-    private DatePicker endDate;
-    @FXML
-    private ChoiceBox<String> timeChoiceBox;
-    @FXML
-    private TextField repeatNumField;
-    @FXML
-    private TextField nameField;
+    @FXML private Label dateErrorLabel;
+    @FXML private CheckBox indefiniteEndDateChoice;
+    @FXML private Label seriesErrorLabel;
+    @FXML private TextField seriesField;
+
+    @FXML private DatePicker endDate;
+    @FXML private ChoiceBox<String> timeChoiceBox;
+    @FXML private TextField repeatNumField;
+    @FXML private TextField nameField;
 
     private Event baseEvent;
     private Series series;
