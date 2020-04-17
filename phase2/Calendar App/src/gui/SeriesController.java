@@ -106,11 +106,10 @@ public class SeriesController extends GraphicalUserInterface implements Initiali
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         getTimeSpan();
         seriesName = seriesField.getText();
-        end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         if (indefiniteEndDateChoice.isSelected()) {
             end = null;
-        } else if (endDate.getValue() == null && !indefiniteEndDateChoice.isSelected()) {
-            throw new InvalidDateException();
+        } else {
+            end = GregorianCalendar.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
         }
     }
 

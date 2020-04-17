@@ -24,7 +24,6 @@ public class SeriesFactory {
      * @throws InvalidDateException if incorrect dates are passed
      */
     public Series getSeries(String name, Event baseEvent, GregorianCalendar start, GregorianCalendar end, List<Duration> durs) throws InvalidDateException {
-
         CalendarGenerator calGen = new CalendarGenerator(start, durs, end);
         if (end == null) {
             return new Series(name, baseEvent, calGen);

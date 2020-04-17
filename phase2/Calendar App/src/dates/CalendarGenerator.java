@@ -53,9 +53,11 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      * @return A savable representation of the data
      */
     public String getString() {
-
-        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n"
-                + endTime.getTimeInMillis() + "\n");
+        StringBuilder result = new StringBuilder(startTime.getTimeInMillis() + "\n");
+        if(endTime != null)
+                result.append(endTime.getTimeInMillis()).append("\n");
+        else
+            result.append("\n");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(" ");
         }
@@ -73,7 +75,8 @@ public class CalendarGenerator implements Iterable<GregorianCalendar> {
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + endTime.getTime().toString() + "\nRepeat Durations: ");
+        StringBuilder result = new StringBuilder(startTime.getTime().toString() + "\nEnd: " + (endTime != null ? endTime.getTime().toString() : "")
+                + "\nRepeat Durations: ");
         for (Duration period : periods) {
             result.append(period.getSeconds()).append(", ");
         }
