@@ -17,3 +17,6 @@
 -fx-background-color: rgba(65, 65, 65, 255);
 }
 
+.date-picker-popup{
+   -fx-shadow-highlight-color: rgba(255, 255, 255, 255);
+}
