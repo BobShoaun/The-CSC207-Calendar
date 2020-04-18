@@ -259,8 +259,7 @@ public class AddEventController extends GraphicalUserInterface implements Initia
                 if (calendar.getMemo(oldMemoTitle) != null)
                     calendar.getMemo(oldMemoTitle).removeEvent(event);
                 return;
-            }
-            if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
+            } else if (calendar.getMemo(newMemoTitle) != null) { //The changed memo already exists, so we move the event to the new one
                 calendar.getMemo(newMemoTitle).addEvent(event);
                 if (!memoTextArea.getText().equals("")) { //We only change the memo text if it does not exist before
                     calendar.getMemo(newMemoTitle).setText(memoTextArea.getText());
