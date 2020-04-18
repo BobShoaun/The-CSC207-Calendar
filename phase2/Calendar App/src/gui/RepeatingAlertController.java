@@ -1,7 +1,6 @@
 package gui;
 
 import alert.AlertCollection;
-import com.sun.tools.javac.comp.Check;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
