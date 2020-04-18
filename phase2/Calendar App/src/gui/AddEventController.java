@@ -278,6 +278,12 @@ public class AddEventController extends GraphicalUserInterface implements Initia
                 }
             }
         }
+        else{
+            if(!newMemoTitle.equals("")){
+                calendar.addMemo(new Memo(newMemoTitle, memoTextArea.getText()));
+                calendar.getMemo(newMemoTitle).addEvent(event);
+            }
+        }
     }
 
     //TODO: use tag UI instead
