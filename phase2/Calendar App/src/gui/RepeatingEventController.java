@@ -49,7 +49,6 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
         endDate.setDisable(indefiniteEndDateChoice.isSelected());
     }
 
-
     /**
      * Set the details for this Series.
      *
