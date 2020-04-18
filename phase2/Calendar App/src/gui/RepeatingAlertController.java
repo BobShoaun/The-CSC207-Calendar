@@ -1,6 +1,7 @@
 package gui;
 
 import alert.AlertCollection;
+import com.sun.tools.javac.comp.Check;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
@@ -27,9 +29,16 @@ public class RepeatingAlertController extends GraphicalUserInterface {
     private TextField durationAmount;
     @FXML
     private ChoiceBox<String> durationUnit;
+    @FXML
+    private Checkbox indefiniteEndDateChoice;
 
     private AlertCollection ac;
     private AlertController controller;
+
+    @FXML
+    protected void handleNDED(){
+        datePicker.setDisable(!indefiniteEndDateChoice.getState());
+    }
 
     /**
      * Initialize the controller to the correct config

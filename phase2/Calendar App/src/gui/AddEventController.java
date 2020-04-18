@@ -207,7 +207,6 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         }
     }
 
-
     /**
      * Create the Event and its related info
      *
