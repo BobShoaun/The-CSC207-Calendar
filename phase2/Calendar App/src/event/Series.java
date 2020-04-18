@@ -105,7 +105,7 @@ public class Series extends EventCollection implements Iterable<Event> {
      */
     @Override
     public List<Event> getEvents(GregorianCalendar start, GregorianCalendar end) {
-        List<Event> ret = super.getEvents(start, end);
+        List<Event> ret = new ArrayList<>();
         for (Event e : generateEvents(new GregorianCalendar(0, Calendar.JANUARY, 0))) {
             if (isOnTime(e, start, end)) {
                 ret.add(e);
