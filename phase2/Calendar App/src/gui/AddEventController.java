@@ -161,19 +161,16 @@ public class AddEventController extends GraphicalUserInterface implements Initia
             getUserInput();
             setLabelInvisible();
             if(seriesName.equals("")||seriesName.equals("Default")){
-                RepeatingEventController controller = showGUI("repeatingEvent.fxml");
-                Event newEvent = createEvent(name, start, end);
-                controller.setDetails(newEvent, calendar,seriesName);
-            }else{
-                try {
-                    calendar.getSeries(seriesName);
-                } catch (NoSuchSeriesException e) {
-                    calendar.addEventSeries(seriesName, null, null, null, null);
-                }
-                RepeatingEventController controller = showGUI("repeatingEvent.fxml");
-                Event newEvent = createEvent(name, start, end);
-                controller.setDetails(newEvent, calendar,seriesName);
+                seriesName = name;
             }
+            try {
+                calendar.getSeries(seriesName);
+            } catch (NoSuchSeriesException e) {
+                calendar.addEventSeries(seriesName, null, null, null, null);
+            }
+            RepeatingEventController controller = showGUI("repeatingEvent.fxml");
+            Event newEvent = createEvent(name, start, end);
+            controller.setDetails(newEvent, calendar,seriesName);
             save();
 
         } catch (InvalidDateException e) {
