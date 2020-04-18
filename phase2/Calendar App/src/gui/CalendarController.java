@@ -160,7 +160,7 @@ public class CalendarController extends GraphicalUserInterface {
      * Update the displayed SubSeries (Repeating events) ListView.
      */
     private void updateDisplayedRepeatingEvents() {
-    	if(displayedRepeatingEventList != null)
+    	if(displayedRepeatingEventList == null)
     		return;
         ArrayList<String> stringRepeatingEvents = new ArrayList<>();
         if (currSeries != null) {
@@ -314,7 +314,9 @@ public class CalendarController extends GraphicalUserInterface {
             }
         }
         currRepeatingEvent = null;
-        updateDisplays();
+        updateDisplayedAlerts();
+        updateDisplayedEvents(); //We cant use updateDisplays here because updating series list, will remove index
+        updateDisplayedRepeatingEvents();
     }
 
     @FXML

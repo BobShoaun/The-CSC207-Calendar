@@ -4,9 +4,7 @@ import dates.CalendarGenerator;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * Repeating Events.
@@ -64,7 +62,7 @@ public class RepeatingEvent {
      * @return String representation
      */
     public String getString() {
-        return (base.getString() + "\n").replaceAll("\n", "§") + (calGen.getString()).replaceAll("\n", "|");
+        return (base.getString() + "\n").replace("\n", "§") + (calGen.getString()).replace("\n", "|");
     }
 
     /**
@@ -79,7 +77,7 @@ public class RepeatingEvent {
         String endString;
         String durString = "" + calGen.getPeriods().get(0).toDays();
         if (calGen.getEndTime() == null) {
-            endString = "onwards";
+            endString = " onwards";
         } else {
             endString = " to " + simpleDateFormat.format(calGen.getEndTime().getTime());
         }

@@ -63,7 +63,6 @@ public class Series extends EventCollection implements Iterable<Event> {
     @Override
     public List<Event> getEvents() {
         List<Event> ret = new ArrayList<>();
-        ret.addAll(getManualEvents());
         ret.addAll(generateEvents(new GregorianCalendar(0, GregorianCalendar.JANUARY, 1)));
         Collections.sort(ret);
         return ret;
