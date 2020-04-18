@@ -310,7 +310,7 @@ public class CalendarController extends GraphicalUserInterface {
             try {
                 currSeries = calendar.getSeries(stringSeries);
             } catch (NoSuchSeriesException e) {
-                e.printStackTrace();
+                currSeries = null;
             }
         }
         currRepeatingEvent = null;
