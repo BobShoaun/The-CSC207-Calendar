@@ -44,6 +44,12 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
     private GregorianCalendar end;
     private Duration timeSpan;
 
+    @FXML
+    private void handleNDED(){
+        endDate.setDisable(!indefiniteEndDateChoice.isSelected());
+    }
+
+
     /**
      * Set the details for this Series.
      *

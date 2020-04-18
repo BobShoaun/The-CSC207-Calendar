@@ -34,11 +34,6 @@ public class RepeatingAlertController extends GraphicalUserInterface {
     private AlertCollection ac;
     private AlertController controller;
 
-    @FXML
-    protected void handleNDED(){
-        datePicker.setDisable(!indefiniteEndDateChoice.getState());
-    }
-
     /**
      * Initialize the controller to the correct config
      *
