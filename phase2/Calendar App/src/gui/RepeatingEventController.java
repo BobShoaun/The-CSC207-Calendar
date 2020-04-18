@@ -103,7 +103,6 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
         closeGUI();
     }
 
-
     protected void getUserInput() throws InvalidDateException, InvalidTimeInputException {
         getTimeSpan();
         if (indefiniteEndDateChoice.isSelected()) {
@@ -115,6 +114,7 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
             }
         }
     }
+
 
     private void getSeries() throws NoSuchSeriesException {
         if (!seriesName.equals("")) {

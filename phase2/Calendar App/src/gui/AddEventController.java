@@ -143,9 +143,11 @@ public class AddEventController extends GraphicalUserInterface implements Initia
         } catch (NoSuchSeriesException e) {
             try {
                 //Create a new series
+                System.out.println("here");
                 getUserInput();
                 Event newEvent = createEvent(name, start, end);
                 calendar.addEventSeries(newEvent, seriesName);
+                closeGUI();
                 save();
             } catch (InvalidDateException invalidDateException) {
                 dateTimeErrorLabel.setText("Invalid Date");

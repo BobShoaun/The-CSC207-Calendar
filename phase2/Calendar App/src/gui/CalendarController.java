@@ -130,6 +130,7 @@ public class CalendarController extends GraphicalUserInterface {
      */
     @FXML
     protected void updateDisplays(){
+        System.out.println(calendar.getSeries());
         updateDisplayedAlerts();
         updateDisplayedEvents();
         updateDisplayedSeries();
