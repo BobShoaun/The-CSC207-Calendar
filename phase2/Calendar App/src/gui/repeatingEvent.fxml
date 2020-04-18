@@ -83,7 +83,7 @@
                   <Button fx:id="createSeriesButton" mnemonicParsing="false" onAction="#handleCreateSeries" text="Done" />
               </buttons>
             </ButtonBar>
-            <CheckBox fx:id="indefiniteEndDateChoice" mnemonicParsing="false" text="No definite end date" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <CheckBox fx:id="indefiniteEndDateChoice" mnemonicParsing="false" onAction="#handleNDED" text="No definite end date" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <TextField fx:id="repeatNumField" prefHeight="25.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="20.0" top="5.0" />
