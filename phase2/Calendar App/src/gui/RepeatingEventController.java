@@ -46,7 +46,7 @@ public class RepeatingEventController extends GraphicalUserInterface implements 
 
     @FXML
     private void handleNDED(){
-        endDate.setDisable(!indefiniteEndDateChoice.isSelected());
+        endDate.setDisable(indefiniteEndDateChoice.isSelected());
     }
 
 
